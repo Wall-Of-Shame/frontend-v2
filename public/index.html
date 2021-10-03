@@ -42,8 +42,10 @@
         margin: 0 !important;
       }
       ._initial_screen img {
-        width: 70vw;
-        height: 70vw;
+        width: 100vw;
+        height: 100vw;
+        max-width: 15rem;
+        max-height: 15rem;
       }
       @media (prefers-color-scheme: dark) {
         ._initial_screen {
@@ -54,7 +56,7 @@
   </head>
 
   <body>
-    <div id="root">
+    <div id="root" className="root-container">
       <div class="_initial_screen">
         <img src="%PUBLIC_URL%/assets/splash.png" />
       </div>

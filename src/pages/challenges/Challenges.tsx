@@ -543,7 +543,7 @@ const Challenges: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader className='ion-no-border'>
+      <IonHeader className={isPlatform("ios") ? "ion-no-border" : ""}>
         <IonToolbar>
           <IonTitle>Challenges</IonTitle>
           {!isPlatform("ios") && (
@@ -562,7 +562,10 @@ const Challenges: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonHeader collapse='condense' className='ion-no-border'>
+        <IonHeader
+          collapse='condense'
+          className={isPlatform("ios") ? "ion-no-border" : ""}
+        >
           <IonToolbar>
             <IonTitle size='large'>Challenges</IonTitle>
             <IonButtons slot='end'>

@@ -18,6 +18,7 @@ import {
   IonText,
   IonToolbar,
   IonPopover,
+  isPlatform,
 } from "@ionic/react";
 import { useEffect } from "react";
 import {
@@ -119,7 +120,10 @@ const Profile: React.FC = () => {
         </IonList>
       </IonPopover>
 
-      <IonHeader>
+      <IonHeader
+        className={isPlatform("ios") ? "ion-no-border" : ""}
+        translucent
+      >
         <IonToolbar>
           <IonButtons slot='end'>
             <IonButton

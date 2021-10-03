@@ -29,7 +29,7 @@ const AuthenticatedApp: React.FC = () => {
   return (
     <IonApp>
       <IonReactRouter>
-        <IonSplitPane contentId='main'>
+        <IonSplitPane contentId='main' className='split-pane-main'>
           <Menu />
           <IonRouterOutlet id='main'>
             <Route path='/challenges' render={() => <Tabs />} />
