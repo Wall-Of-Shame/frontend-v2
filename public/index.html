@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Wall Of Shame</title>
+
+    <base href="/" />
+
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.webmanifest" />
+
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="%PUBLIC_URL%/assets/icon/favicon.png"
+    />
+
+    <!-- add to homescreen for ios -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Wall of Shame" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link
+      rel="apple-touch-icon"
+      href="%PUBLIC_URL%/assets/icon/icon-192x192.png"
+    />
+
+    <style>
+      ._initial_screen {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+        margin: 0 !important;
+      }
+      ._initial_screen img {
+        width: 70vw;
+        height: 70vw;
+      }
+      @media (prefers-color-scheme: dark) {
+        ._initial_screen {
+          background-color: black;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root">
+      <div class="_initial_screen">
+        <img src="%PUBLIC_URL%/assets/splash.png" />
+      </div>
+    </div>
+  </body>
+</html>
