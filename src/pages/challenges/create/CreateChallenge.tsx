@@ -45,6 +45,7 @@ import LoadingSpinner from "../../../components/loadingSpinner";
 import Alert from "../../../components/alert";
 import AvatarImg from "../../../components/avatar";
 import OfflineToast from "../../../components/offlineToast";
+import { useHistory } from "react-router";
 
 interface CreateChallengeProps {}
 
@@ -69,6 +70,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
   props: CreateChallengeProps
 ) => {
   const { user } = useUser();
+  const history = useHistory();
   const { createChallenge } = useChallenge();
   const [showModal, setShowModal] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -147,7 +149,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
               }}
               color='dark'
               onClick={() => {
-                window.location.href = "challenges";
+                history.goBack();
               }}
             >
               <IonIcon icon={arrowBackOutline} size='large' />

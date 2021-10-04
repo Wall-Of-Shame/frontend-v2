@@ -529,11 +529,6 @@ const Challenges: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     setTimeout(() => {
       if (!user?.username || !user?.name) {
         setShowModal(true);
@@ -551,12 +546,12 @@ const Challenges: React.FC = () => {
             <IonButtons slot='end'>
               <IonButton
                 style={{
-                  marginRight: "1rem",
+                  marginRight: "0.5rem",
                 }}
                 color='dark'
                 routerLink='challenges/create'
               >
-                <IonIcon slot='end' icon={addOutline} />
+                <IonIcon icon={addOutline} />
               </IonButton>
             </IonButtons>
           )}
@@ -572,16 +567,12 @@ const Challenges: React.FC = () => {
             <IonButtons slot='end'>
               <IonButton
                 style={{
-                  marginRight: "1rem",
+                  marginRight: "0.5rem",
                 }}
                 color='dark'
                 routerLink='challenges/create'
               >
-                <IonIcon
-                  slot='end'
-                  icon={addOutline}
-                  style={{ fontSize: "2rem" }}
-                />
+                <IonIcon icon={addOutline} style={{ fontSize: "2rem" }} />
               </IonButton>
             </IonButtons>
           </IonToolbar>
@@ -591,7 +582,11 @@ const Challenges: React.FC = () => {
             onIonChange={(e) => setTab(e.detail.value ?? "active")}
             value={tab}
             mode='md'
-            style={{ marginTop: "1rem" }}
+            style={{
+              marginTop: "1rem",
+              paddingRight: "0.5rem",
+              paddingLeft: "0.5rem",
+            }}
           >
             <IonSegmentButton value='ongoing'>
               <IonLabel>Ongoing</IonLabel>
@@ -603,7 +598,6 @@ const Challenges: React.FC = () => {
               <IonLabel>History</IonLabel>
             </IonSegmentButton>
           </IonSegment>
-
           {renderChallenges()}
         </Scrollbars>
         <IonFab vertical='bottom' horizontal='end' slot='fixed'>
