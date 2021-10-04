@@ -109,27 +109,14 @@ const Challenges: React.FC = () => {
   }, [location.pathname]);
 
   const fetchData = async () => {
-    setState({ isLoading: true });
     try {
       const allChallenges = await getAllChallenges();
       setOngoing(allChallenges.ongoing);
       setPendingStart(allChallenges.pendingStart);
       setPendingResponse(allChallenges.pendingResponse);
       setCompleted(allChallenges.history);
-      setTimeout(() => {
-        setState({ isLoading: false });
-      }, 500);
     } catch (error) {
       console.log(error);
-      setTimeout(() => {
-        setState({
-          isLoading: false,
-          alertHeader: "Ooooops",
-          alertMessage:
-            "Our server is taking a break, come back later please :)",
-          showAlert: true,
-        });
-      }, 500);
     }
   };
 
@@ -529,6 +516,11 @@ const Challenges: React.FC = () => {
   };
 
   useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     setTimeout(() => {
       if (!user?.username || !user?.name) {
         setShowModal(true);
@@ -592,7 +584,7 @@ const Challenges: React.FC = () => {
               <IonLabel>Ongoing</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton value='pending'>
-              <IonLabel>Pending</IonLabel>
+              <IonLabel>Upcoming</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton value='history'>
               <IonLabel>History</IonLabel>

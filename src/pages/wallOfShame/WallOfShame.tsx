@@ -109,28 +109,12 @@ const WallOfShame: React.FC = () => {
   });
 
   const fetchData = async (): Promise<void> => {
-    setState({ isLoading: true });
     try {
       const global = await getGlobalRankings();
       const friends = await getFriendsRankings();
       setGlobalRankings(global);
       setFriendsRankings(friends);
-      if (hasSynced) {
-        setTimeout(() => {
-          setState({ isLoading: false });
-        }, 1000);
-      } else {
-        setState({ isLoading: false });
-      }
     } catch (error) {
-      setState({
-        isLoading: false,
-        showAlert: true,
-        hasConfirm: false,
-        alertHeader: "Ooooops",
-        alertMessage:
-          "Could not retrieve the Wall of Shame at the moment, please come back later :)",
-      });
       return Promise.reject(error);
     }
   };
