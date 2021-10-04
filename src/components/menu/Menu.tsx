@@ -12,8 +12,6 @@ import {
   IonMenuToggle,
 } from "@ionic/react";
 import {
-  hammer,
-  bug,
   storefrontOutline,
   flashlightOutline,
   personOutline,
@@ -64,22 +62,11 @@ const Menu: React.FC = () => {
   }
 
   return (
-    <IonMenu type='overlay' contentId='main' className='nav-menu'>
+    <IonMenu contentId='main' className='nav-menu' side='start'>
       <IonContent forceOverscroll={false}>
-        <IonList lines='none'>
+        <IonList lines='none' mode='md'>
           <IonListHeader>Welcome</IonListHeader>
           {renderlistItems(routes.appPages)}
-        </IonList>
-        <IonList lines='none'>
-          <IonListHeader>Help</IonListHeader>
-          <IonItem button>
-            <IonIcon slot='start' icon={hammer} />
-            Tutorial
-          </IonItem>
-          <IonItem button>
-            <IonIcon slot='start' icon={bug} />
-            Report a bug
-          </IonItem>
         </IonList>
       </IonContent>
     </IonMenu>

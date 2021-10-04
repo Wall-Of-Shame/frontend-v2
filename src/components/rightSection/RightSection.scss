@@ -1,14 +1,20 @@
 @media screen and (min-width: 1240px) {
-  .nav-menu {
-    margin-left: calc((100vw - 1240px) / 2);
+  .right-section {
+    margin-right: calc((100vw - 1240px) / 2);
   }
 }
 
-.nav-menu {
+@media screen and (min-width: 992px) and (max-width: 1200px) {
+  .right-section {
+    display: none;
+  }
+}
+
+.right-section {
   max-width: 240px;
 }
 
-.nav-menu ion-content {
+.right-section ion-content {
   --padding-top: 20px;
   --padding-bottom: 20px;
 
@@ -16,22 +22,22 @@
 }
 
 /* Remove background transitions for switching themes */
-.nav-menu ion-item {
+.right-section ion-item {
   --transition: none;
 }
 
-.nav-menu .selected {
+.right-section .selected {
   --color: var(--ion-color-secondary);
 }
 
 /*
  * Material Design Menu
 */
-.nav-menu.md ion-list {
+.right-section.md ion-list {
   padding: 20px 0;
 }
 
-.nav-menu.md ion-list-header {
+.right-section.md ion-list-header {
   padding-left: 2rem;
   padding-right: 2rem;
   margin-bottom: 0.5rem;
@@ -41,7 +47,7 @@
   font-size: 1.5rem;
 }
 
-.nav-menu.md ion-item {
+.right-section.md ion-item {
   --padding-start: 2rem;
 
   border-radius: 50px 0px 0px 50px;
@@ -49,19 +55,19 @@
   font-weight: 500;
 }
 
-.nav-menu.md ion-item.selected {
+.right-section.md ion-item.selected {
   --background: rgba(var(--ion-color-secondary-rgb), 0.14);
 }
 
-.nav-menu.md ion-item.selected ion-icon {
+.right-section.md ion-item.selected ion-icon {
   color: var(--ion-color-secondary);
 }
 
-.nav-menu.md ion-list-header,
-.nav-menu.md ion-item ion-icon {
+.right-section.md ion-list-header,
+.right-section.md ion-item ion-icon {
   color: var(--ion-color-step-650, #5f6368);
 }
 
-.nav-menu.md ion-list:not(:last-of-type) {
+.right-section.md ion-list:not(:last-of-type) {
   border-bottom: 1px solid var(--ion-color-step-150, #d7d8da);
 }

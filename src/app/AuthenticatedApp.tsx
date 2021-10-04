@@ -24,6 +24,7 @@ import "../theme/variables.scss";
 import "./App.scss";
 import Menu from "../components/menu";
 import Tabs from "../pages/tabs";
+import RightSection from "../components/rightSection";
 
 const AuthenticatedApp: React.FC = () => {
   return (
@@ -31,10 +32,11 @@ const AuthenticatedApp: React.FC = () => {
       <IonReactRouter>
         <IonSplitPane contentId='main' className='split-pane-main'>
           <Menu />
-          <IonRouterOutlet id='main'>
+          <IonRouterOutlet id='main' className='split-pane-content'>
             <Route path='/challenges' render={() => <Tabs />} />
             <Route path='/' render={() => <Tabs />} />
           </IonRouterOutlet>
+          <RightSection />
         </IonSplitPane>
       </IonReactRouter>
     </IonApp>
