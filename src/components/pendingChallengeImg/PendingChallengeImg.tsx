@@ -15,7 +15,7 @@ const PendingChallengeImg: React.FunctionComponent<PendingChallengeImgProps> = (
   return (
     <div className='bg-pending-div'>
       <div className='bg-pending'>
-        <img src={bg}></img>
+        <img src={bg} alt='background'></img>
       </div>
       {waitingToStartSliced.map((u, index) => {
         return (
@@ -28,7 +28,10 @@ const PendingChallengeImg: React.FunctionComponent<PendingChallengeImgProps> = (
             }}
             key={index}
           >
-            <img src={waitingAnimalMap[u.avatar.animal][u.avatar.color]}></img>
+            <img
+              src={waitingAnimalMap[u.avatar.animal][u.avatar.color]}
+              alt={u.avatar.animal.toString()}
+            ></img>
           </div>
         );
       })}

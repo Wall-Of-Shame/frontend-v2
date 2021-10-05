@@ -23,6 +23,8 @@ import CreateChallenge from "../challenges/create";
 import ChallengeDetails from "../challenges/details";
 import EditProfile from "../profile/edit";
 import Settings from "../profile/settings";
+import Explore from "../explore";
+import Store from "../store";
 
 const redirectToChallenges = (): React.ReactNode => (
   <Redirect to={"/challenges"} />
@@ -41,8 +43,14 @@ const Tabs: React.FC = () => {
         <Route exact path='/challenges/:id/details'>
           <ChallengeDetails />
         </Route>
+        <Route exact path='/explore'>
+          <Explore />
+        </Route>
         <Route exact path='/wall-of-shame'>
           <WallOfShame />
+        </Route>
+        <Route exact path='/store'>
+          <Store />
         </Route>
         <Route exact path='/profile'>
           <Profile />

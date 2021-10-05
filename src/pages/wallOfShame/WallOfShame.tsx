@@ -39,6 +39,7 @@ import LoadingSpinner from "../../components/loadingSpinner";
 import Alert from "../../components/alert";
 import AvatarImg from "../../components/avatar";
 import { isPlatform } from "@ionic/core";
+import Scrollbars from "react-custom-scrollbars";
 
 interface WallOfShameState {
   isLoading: boolean;
@@ -388,39 +389,41 @@ const WallOfShame: React.FC = () => {
             </div>
           </IonToolbar>
         </IonHeader>
-        <IonGrid>
-          <IonRow>
-            <IonCol size='6' style={{ paddingRight: "0px" }}>
-              <IonButton
-                mode='ios'
-                color={tab === "live" ? "quaternary" : "tertiary"}
-                expand='block'
-                style={{
-                  fontWeight: tab === "live" ? "900" : "normal",
-                  textDecoration: tab === "live" ? "underline" : "none",
-                }}
-                onClick={() => setTab("live")}
-              >
-                Live
-              </IonButton>
-            </IonCol>
-            <IonCol size='6' style={{ paddingLeft: "0px" }}>
-              <IonButton
-                mode='ios'
-                color={tab !== "live" ? "quaternary" : "tertiary"}
-                expand='block'
-                style={{
-                  fontWeight: tab !== "live" ? "900" : "normal",
-                  textDecoration: tab !== "live" ? "underline" : "none",
-                }}
-                onClick={() => setTab("shameful")}
-              >
-                Shameful 100
-              </IonButton>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
-        {renderWall()}
+        <Scrollbars>
+          <IonGrid>
+            <IonRow>
+              <IonCol size='6' style={{ paddingRight: "0px" }}>
+                <IonButton
+                  mode='ios'
+                  color={tab === "live" ? "quaternary" : "tertiary"}
+                  expand='block'
+                  style={{
+                    fontWeight: tab === "live" ? "900" : "normal",
+                    textDecoration: tab === "live" ? "underline" : "none",
+                  }}
+                  onClick={() => setTab("live")}
+                >
+                  Live
+                </IonButton>
+              </IonCol>
+              <IonCol size='6' style={{ paddingLeft: "0px" }}>
+                <IonButton
+                  mode='ios'
+                  color={tab !== "live" ? "quaternary" : "tertiary"}
+                  expand='block'
+                  style={{
+                    fontWeight: tab !== "live" ? "900" : "normal",
+                    textDecoration: tab !== "live" ? "underline" : "none",
+                  }}
+                  onClick={() => setTab("shameful")}
+                >
+                  Shameful 100
+                </IonButton>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+          {renderWall()}
+        </Scrollbars>
         <IonFab vertical='bottom' horizontal='end' slot='fixed'>
           <IonFabButton color='senary' onClick={fetchData} mode='ios'>
             <IonIcon icon={refreshOutline} />

@@ -112,11 +112,9 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   );
 
   const fetchData = async () => {
-    setState({ isLoading: true });
     try {
       const locationState = location.state as ChallengeData;
       if (!locationState) {
-        setState({ isLoading: false });
         return;
       }
       const challenge = await getChallenge(locationState.challengeId);
@@ -124,11 +122,9 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
       if (challenge) {
         setChallenge(challenge);
       }
-      setState({ isLoading: false });
     } catch (error) {
       console.log(error);
       setState({
-        isLoading: false,
         hasConfirm: false,
         showAlert: true,
         alertHeader: "Ooooops",

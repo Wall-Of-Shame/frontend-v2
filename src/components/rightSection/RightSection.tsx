@@ -12,8 +12,12 @@ import "./RightSection.scss";
 
 const RightSection = () => {
   return (
-    <IonMenu contentId='right' className='right-section' side='end'>
-      <IonContent forceOverscroll={false}>
+    <IonMenu
+      contentId='right-section-menu'
+      className='right-section'
+      side='end'
+    >
+      <IonContent forceOverscroll={false} id='right-section-menu'>
         <IonList lines='none'>
           <IonListHeader>Help</IonListHeader>
           <IonItem button>
