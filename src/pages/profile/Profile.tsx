@@ -19,6 +19,8 @@ import {
   IonToolbar,
   IonPopover,
   isPlatform,
+  IonCardHeader,
+  IonCardTitle,
 } from "@ionic/react";
 import { useEffect } from "react";
 import {
@@ -26,6 +28,7 @@ import {
   createOutline,
   settingsOutline,
   logOutOutline,
+  chevronForward,
 } from "ionicons/icons";
 import { useHistory, useLocation } from "react-router";
 import { useAuth } from "../../contexts/AuthContext";
@@ -33,6 +36,11 @@ import { hideTabs, showTabs } from "../../utils/TabsUtils";
 import "./Profile.scss";
 import { useUser } from "../../contexts/UserContext";
 import AvatarImg from "../../components/avatar";
+import { useSelector } from "react-redux";
+import { RootState } from "../../reducers/RootReducer";
+import { ChallengeDux } from "../../reducers/ChallengeDux";
+import { ChallengeData } from "../../interfaces/models/Challenges";
+import { format, parseISO } from "date-fns";
 
 const Profile: React.FC = () => {
   const { logout } = useAuth();
@@ -43,6 +51,11 @@ const Profile: React.FC = () => {
     showPopover: false,
     event: undefined,
   });
+  const selectChallenges = (state: RootState): ChallengeDux => state.challenges;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [completed, setCompleted] = useState<ChallengeData[]>(
+    useSelector(selectChallenges).history
+  );
 
   useEffect(() => {
     if (
@@ -55,6 +68,96 @@ const Profile: React.FC = () => {
       hideTabs();
     }
   }, [location.pathname]);
+
+  const renderChallengeHistory = () => {
+    if (completed && completed.length > 0) {
+      return (
+        <>
+          {completed?.map((c) => {
+            const acceptedCount = c.participants.accepted.completed.concat(
+              c.participants.accepted.notCompleted
+            ).length;
+            return (
+              <IonCard
+                mode='ios'
+                button
+                key={c.challengeId}
+                onClick={() => {
+                  history.push(`challenges/${c.challengeId}/details`, c);
+                }}
+              >
+                <IonGrid className='ion-no-padding'>
+                  <IonRow className='ion-align-items-center'>
+                    <IonCol size='11'>
+                      <IonCardHeader style={{ paddingBottom: "0.75rem" }}>
+                        <IonRow>
+                          <IonCardTitle style={{ fontSize: "1.2rem" }}>
+                            {c.title}
+                          </IonCardTitle>
+                        </IonRow>
+                      </IonCardHeader>
+                      <IonCardContent>
+                        <IonRow>
+                          <IonText
+                            style={{
+                              fontSize: "0.8rem",
+                              fontWeight: "bold",
+                              marginBottom: "0.25rem",
+                            }}
+                          >
+                            {`Ended on ${format(
+                              parseISO(c.endAt),
+                              "dd MMM yyyy, HH:mm"
+                            )}`}
+                          </IonText>
+                        </IonRow>
+                        <IonRow style={{ marginTop: "0.5rem" }}>
+                          <IonText style={{ fontSize: "0.8rem" }}>
+                            {acceptedCount} participant
+                            {acceptedCount === 1 ? "" : "s"}
+                          </IonText>
+                        </IonRow>
+                        <IonRow
+                          style={{ paddingTop: "0.5rem" }}
+                          className='ion-align-items-center'
+                        >
+                          {c.participants.accepted.completed
+                            .concat(c.participants.accepted.notCompleted)
+                            .map((p) => {
+                              return (
+                                <IonAvatar
+                                  className='avatar'
+                                  key={p.userId}
+                                  style={{ marginRight: "0.25rem" }}
+                                >
+                                  <AvatarImg avatar={p.avatar} />
+                                </IonAvatar>
+                              );
+                            })}
+                        </IonRow>
+                      </IonCardContent>
+                    </IonCol>
+                    <IonCol size='1'>
+                      <IonIcon
+                        icon={chevronForward}
+                        style={{ fontSize: "1.5rem" }}
+                      />
+                    </IonCol>
+                  </IonRow>
+                </IonGrid>
+              </IonCard>
+            );
+          })}
+        </>
+      );
+    } else {
+      return (
+        <IonRow className='ion-padding ion-justify-content-center'>
+          <IonText color='medium'>No challenges yet</IonText>
+        </IonRow>
+      );
+    }
+  };
 
   return (
     <IonPage>
@@ -143,56 +246,62 @@ const Profile: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        <IonGrid>
-          <IonRow
-            className='ion-align-items-center'
-            style={{ marginTop: "1rem" }}
+        <IonRow
+          className='ion-align-items-center ion-margin'
+          style={{ marginTop: "2.5rem" }}
+        >
+          <IonCol>
+            <IonRow className='ion-justify-content-center'>
+              <IonAvatar id='profile-avatar'>
+                <AvatarImg avatar={user?.avatar ?? null} />
+              </IonAvatar>
+            </IonRow>
+          </IonCol>
+        </IonRow>
+        <IonRow className='ion-justify-content-center'>
+          <IonText
+            style={{
+              fontSize: "1.5rem",
+              fontWeight: 600,
+              marginTop: "0.5rem",
+              marginLeft: "0.5rem",
+              marginRight: "0.5rem",
+            }}
           >
-            <IonCol size='4'>
-              <IonRow className='ion-justify-content-center ion-no-padding'>
-                <IonAvatar id='profile-avatar'>
-                  <AvatarImg avatar={user?.avatar ?? null} />
-                </IonAvatar>
-              </IonRow>
-            </IonCol>
-            <IonCol size='8'>
-              <IonRow>
-                <IonText
-                  style={{
-                    fontSize: "1.5rem",
-                    fontWeight: 600,
-                    paddingBottom: "0.5rem",
-                    marginRight: "0.5rem",
-                  }}
-                >
-                  {user?.name ?? "Display name not set"}
-                </IonText>
-              </IonRow>
-              <IonRow>
-                <IonText
-                  style={{
-                    fontSize: "1.2rem",
-                    fontWeight: 600,
-                    marginRight: "0.5rem",
-                  }}
-                >
-                  {`@${user?.username ?? "Username not set"}`}
-                </IonText>
-              </IonRow>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
+            {user?.name ?? "Display name not set"}
+          </IonText>
+        </IonRow>
+        <IonRow className='ion-justify-content-center'>
+          <IonText
+            style={{
+              fontSize: "1.2rem",
+              fontWeight: 500,
+              margin: "0.5rem",
+            }}
+            color='medium'
+          >
+            {`@${user?.username ?? "Username not set"}`}
+          </IonText>
+        </IonRow>
 
         <IonGrid style={{ paddingBottom: "2rem" }}>
           <IonRow className='ion-align-items-center'>
-            <IonCol>
+            <IonCol size='4' className='ion-no-padding'>
               <IonCard
                 mode='ios'
                 className='profile-statistic ion-text-center'
                 color='quaternary'
               >
-                <IonCardContent>
-                  <IonRow className='ion-justify-content-center ion-align-items-center'>
+                <IonCardHeader
+                  className='ion-no-padding'
+                  style={{
+                    paddingTop: "1rem",
+                    paddingBottom: "0.5rem",
+                    paddingLeft: "0.5rem",
+                    paddingRight: "0.5rem",
+                  }}
+                >
+                  <IonCardTitle>
                     <IonText
                       style={{
                         fontSize: "1.5rem",
@@ -201,24 +310,35 @@ const Profile: React.FC = () => {
                     >
                       {user?.completedChallengeCount ?? 0}
                     </IonText>
-                    <IonText style={{ fontSize: "1rem", fontWeight: 400 }}>
-                      &nbsp;&nbsp;Challenge
+                  </IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  <IonRow className='ion-justify-content-center ion-align-items-center'>
+                    <IonText style={{ fontSize: "0.9rem", fontWeight: 400 }}>
+                      Challenge
+                      <br />
                       {user?.completedChallengeCount !== 1 && "s"} Completed
                     </IonText>
                   </IonRow>
                 </IonCardContent>
               </IonCard>
             </IonCol>
-          </IonRow>
-          <IonRow className='ion-align-items-center'>
-            <IonCol>
+            <IonCol size='4' className='ion-no-padding'>
               <IonCard
                 mode='ios'
                 className='profile-statistic ion-text-center'
                 color='tertiary'
               >
-                <IonCardContent>
-                  <IonRow className='ion-justify-content-center ion-align-items-center'>
+                <IonCardHeader
+                  className='ion-no-padding'
+                  style={{
+                    paddingTop: "1rem",
+                    paddingBottom: "0.5rem",
+                    paddingLeft: "0.5rem",
+                    paddingRight: "0.5rem",
+                  }}
+                >
+                  <IonCardTitle>
                     <IonText
                       style={{
                         fontSize: "1.5rem",
@@ -227,24 +347,36 @@ const Profile: React.FC = () => {
                     >
                       {user?.failedChallengeCount ?? 0}
                     </IonText>
-                    <IonText style={{ fontSize: "1rem", fontWeight: 400 }}>
-                      &nbsp;&nbsp;Shameful Failure
+                  </IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  <IonRow className='ion-justify-content-center ion-align-items-center'>
+                    <IonText style={{ fontSize: "0.9rem", fontWeight: 400 }}>
+                      Shameful
+                      <br />
+                      Failure
                       {user?.failedChallengeCount !== 1 && "s"}
                     </IonText>
                   </IonRow>
                 </IonCardContent>
               </IonCard>
             </IonCol>
-          </IonRow>
-          <IonRow className='ion-align-items-center'>
-            <IonCol>
+            <IonCol size='4' className='ion-no-padding'>
               <IonCard
                 mode='ios'
                 className='profile-statistic ion-text-center'
                 color='quinary'
               >
-                <IonCardContent>
-                  <IonRow className='ion-justify-content-center ion-align-items-center'>
+                <IonCardHeader
+                  className='ion-no-padding'
+                  style={{
+                    paddingTop: "1rem",
+                    paddingBottom: "0.5rem",
+                    paddingLeft: "0.5rem",
+                    paddingRight: "0.5rem",
+                  }}
+                >
+                  <IonCardTitle>
                     <IonText
                       style={{
                         fontSize: "1.5rem",
@@ -253,8 +385,14 @@ const Profile: React.FC = () => {
                     >
                       {user?.vetoedChallengeCount ?? 0}
                     </IonText>
-                    <IonText style={{ fontSize: "1rem", fontWeight: 400 }}>
-                      &nbsp;&nbsp;Shameless Cheat
+                  </IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  <IonRow className='ion-justify-content-center ion-align-items-center'>
+                    <IonText style={{ fontSize: "0.9rem", fontWeight: 400 }}>
+                      Shameless
+                      <br />
+                      Cheat
                       {user?.vetoedChallengeCount !== 1 && "s"}
                     </IonText>
                   </IonRow>
@@ -263,6 +401,12 @@ const Profile: React.FC = () => {
             </IonCol>
           </IonRow>
         </IonGrid>
+        <IonRow className='ion-padding-horizontal ion-justify-content-center'>
+          <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
+            Past challenges
+          </IonText>
+        </IonRow>
+        {renderChallengeHistory()}
       </IonContent>
     </IonPage>
   );

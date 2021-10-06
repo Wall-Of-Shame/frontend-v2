@@ -75,10 +75,6 @@ const Challenges: React.FC = () => {
     useSelector(selectChallenges).pendingStart
   );
 
-  const [completed, setCompleted] = useState<ChallengeData[]>(
-    useSelector(selectChallenges).history
-  );
-
   const [state, setState] = useReducer(
     (s: ChallengesState, a: Partial<ChallengesState>) => ({
       ...s,
@@ -116,7 +112,6 @@ const Challenges: React.FC = () => {
       setOngoing(allChallenges.ongoing);
       setPendingStart(allChallenges.pendingStart);
       setPendingResponse(allChallenges.pendingResponse);
-      setCompleted(allChallenges.history);
     } catch (error) {
       console.log(error);
     }
@@ -419,101 +414,6 @@ const Challenges: React.FC = () => {
             </IonGrid>
           );
         }
-      case "history":
-        if (completed && completed.length > 0) {
-          return (
-            <>
-              {completed?.map((c) => {
-                const acceptedCount = c.participants.accepted.completed.concat(
-                  c.participants.accepted.notCompleted
-                ).length;
-                return (
-                  <IonCard
-                    mode='ios'
-                    button
-                    key={c.challengeId}
-                    onClick={() => {
-                      history.push(`challenges/${c.challengeId}/details`, c);
-                    }}
-                  >
-                    <IonGrid className='ion-no-padding'>
-                      <IonRow className='ion-align-items-center'>
-                        <IonCol size='11'>
-                          <IonCardHeader style={{ paddingBottom: "0.75rem" }}>
-                            <IonRow>
-                              <IonCardTitle style={{ fontSize: "1.2rem" }}>
-                                {c.title}
-                              </IonCardTitle>
-                            </IonRow>
-                          </IonCardHeader>
-                          <IonCardContent>
-                            <IonRow>
-                              <IonText
-                                style={{
-                                  fontSize: "0.8rem",
-                                  fontWeight: "bold",
-                                  marginBottom: "0.25rem",
-                                }}
-                              >
-                                {`Ended on ${format(
-                                  parseISO(c.endAt),
-                                  "dd MMM yyyy, HH:mm"
-                                )}`}
-                              </IonText>
-                            </IonRow>
-                            <IonRow style={{ marginTop: "0.5rem" }}>
-                              <IonText style={{ fontSize: "0.8rem" }}>
-                                {acceptedCount} participant
-                                {acceptedCount === 1 ? "" : "s"}
-                              </IonText>
-                            </IonRow>
-                            <IonRow
-                              style={{ paddingTop: "0.5rem" }}
-                              className='ion-align-items-center'
-                            >
-                              {c.participants.accepted.completed
-                                .concat(c.participants.accepted.notCompleted)
-                                .map((p) => {
-                                  return (
-                                    <IonAvatar
-                                      className='avatar'
-                                      key={p.userId}
-                                      style={{ marginRight: "0.25rem" }}
-                                    >
-                                      <AvatarImg avatar={p.avatar} />
-                                    </IonAvatar>
-                                  );
-                                })}
-                            </IonRow>
-                          </IonCardContent>
-                        </IonCol>
-                        <IonCol size='1'>
-                          <IonIcon
-                            icon={chevronForward}
-                            style={{ fontSize: "1.5rem" }}
-                          />
-                        </IonCol>
-                      </IonRow>
-                    </IonGrid>
-                  </IonCard>
-                );
-              })}
-            </>
-          );
-        } else {
-          return (
-            <IonGrid
-              style={{
-                display: "flex",
-                height: "80%",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <IonRow className='ion-padding'>No challenges yet</IonRow>
-            </IonGrid>
-          );
-        }
     }
   };
 
@@ -587,9 +487,6 @@ const Challenges: React.FC = () => {
             </IonSegmentButton>
             <IonSegmentButton value='pending'>
               <IonLabel>Upcoming</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton value='history'>
-              <IonLabel>History</IonLabel>
             </IonSegmentButton>
           </IonSegment>
           {renderChallenges()}
