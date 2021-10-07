@@ -132,9 +132,8 @@ const Settings: React.FC = () => {
         <IonToolbar>
           <IonTitle
             style={{
-              marginTop: "0.75rem",
               textAlign: "left",
-              fontSize: "1.5rem",
+              fontSize: "1.2rem",
             }}
           >
             Settings
@@ -165,6 +164,7 @@ const Settings: React.FC = () => {
               <IonLabel slot='start'>Deadline Reminders</IonLabel>
               <IonToggle
                 slot='end'
+                mode='ios'
                 className='toggle'
                 checked={settings.deadlineReminder}
                 onIonChange={handleReminderChange}
@@ -174,6 +174,7 @@ const Settings: React.FC = () => {
               <IonLabel slot='start'>Invitations</IonLabel>
               <IonToggle
                 slot='end'
+                mode='ios'
                 className='toggle'
                 checked={settings.invitations}
                 onIonChange={handleInvitationsChange}

@@ -281,8 +281,6 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
     );
   };
 
-  console.log(userData);
-
   return (
     <IonModal
       isOpen={showModal}

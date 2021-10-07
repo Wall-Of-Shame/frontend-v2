@@ -137,7 +137,6 @@ const EditProfile: React.FC = () => {
         <IonToolbar>
           <IonTitle
             style={{
-              marginBottom: "1rem",
               textAlign: "left",
               fontSize: "1.2rem",
             }}

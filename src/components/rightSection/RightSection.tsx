@@ -7,10 +7,12 @@ import {
   IonItem,
   IonIcon,
 } from "@ionic/react";
-import { hammer, bug } from "ionicons/icons";
+import { hammerOutline, bugOutline } from "ionicons/icons";
 import "./RightSection.scss";
+import { useLocation } from "react-router";
 
 const RightSection = () => {
+  const location = useLocation();
   return (
     <IonMenu
       contentId='right-section-menu'
@@ -20,13 +22,27 @@ const RightSection = () => {
       <IonContent forceOverscroll={false} id='right-section-menu'>
         <IonList lines='none'>
           <IonListHeader>Help</IonListHeader>
-          <IonItem button>
-            <IonIcon slot='start' icon={hammer} />
+          <IonItem
+            button
+            routerLink={"/tutorial"}
+            routerDirection='none'
+            className={
+              location.pathname.startsWith("/tutorial") ? "selected" : undefined
+            }
+          >
+            <IonIcon slot='start' icon={hammerOutline} />
             Tutorial
           </IonItem>
-          <IonItem button>
-            <IonIcon slot='start' icon={bug} />
-            Report a bug
+          <IonItem
+            button
+            routerLink={"/feedback"}
+            routerDirection='none'
+            className={
+              location.pathname.startsWith("/feedback") ? "selected" : undefined
+            }
+          >
+            <IonIcon slot='start' icon={bugOutline} />
+            Feedback
           </IonItem>
         </IonList>
       </IonContent>
