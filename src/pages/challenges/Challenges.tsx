@@ -40,7 +40,6 @@ import { format } from "date-fns";
 import parseISO from "date-fns/parseISO";
 import AvatarImg from "../../components/avatar";
 import { isPlatform } from "@ionic/core";
-import { Scrollbars } from "react-custom-scrollbars";
 
 interface ChallengesState {
   isLoading: boolean;
@@ -471,26 +470,24 @@ const Challenges: React.FC = () => {
             </IonButtons>
           </IonToolbar>
         </IonHeader>
-        <Scrollbars>
-          <IonSegment
-            onIonChange={(e) => setTab(e.detail.value ?? "active")}
-            value={tab}
-            mode='md'
-            style={{
-              marginTop: "1rem",
-              paddingRight: "0.5rem",
-              paddingLeft: "0.5rem",
-            }}
-          >
-            <IonSegmentButton value='ongoing'>
-              <IonLabel>Ongoing</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton value='pending'>
-              <IonLabel>Upcoming</IonLabel>
-            </IonSegmentButton>
-          </IonSegment>
-          {renderChallenges()}
-        </Scrollbars>
+        <IonSegment
+          onIonChange={(e) => setTab(e.detail.value ?? "active")}
+          value={tab}
+          mode='md'
+          style={{
+            marginTop: "1rem",
+            paddingRight: "0.5rem",
+            paddingLeft: "0.5rem",
+          }}
+        >
+          <IonSegmentButton value='ongoing'>
+            <IonLabel>Ongoing</IonLabel>
+          </IonSegmentButton>
+          <IonSegmentButton value='pending'>
+            <IonLabel>Upcoming</IonLabel>
+          </IonSegmentButton>
+        </IonSegment>
+        {renderChallenges()}
         <IonFab vertical='bottom' horizontal='end' slot='fixed'>
           <IonFabButton color='senary' onClick={fetchData} mode='ios'>
             <IonIcon icon={refreshOutline} />

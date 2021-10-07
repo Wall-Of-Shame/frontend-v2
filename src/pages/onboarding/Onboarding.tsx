@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { IonButton, IonContent, IonFab, IonIcon, IonPage } from "@ionic/react";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useReducer, useState } from "react";
 
 import "./Onboarding.scss";
 import OnboardingSlides from "./OnboardingSlides";
@@ -27,8 +26,6 @@ const Onboarding: React.FC = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [atStart, setAtStart] = useState(true);
   const [completed, setCompleted] = useState(false);
-  const [pageNumber, setPageNumber] = useState(0);
-  const [animationDirection, setAnimationDirection] = useState("left");
 
   const [state, setState] = useReducer(
     (s: OnboardingState, a: Partial<OnboardingState>) => ({

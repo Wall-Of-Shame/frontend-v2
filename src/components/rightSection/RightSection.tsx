@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   IonMenu,
   IonContent,
@@ -9,10 +9,10 @@ import {
 } from "@ionic/react";
 import { hammerOutline, bugOutline } from "ionicons/icons";
 import "./RightSection.scss";
-import { useLocation } from "react-router";
+import FeedbackModal from "../feedback";
 
 const RightSection = () => {
-  const location = useLocation();
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   return (
     <IonMenu
       contentId='right-section-menu'
@@ -22,29 +22,19 @@ const RightSection = () => {
       <IonContent forceOverscroll={false} id='right-section-menu'>
         <IonList lines='none'>
           <IonListHeader>Help</IonListHeader>
-          <IonItem
-            button
-            routerLink={"/tutorial"}
-            routerDirection='none'
-            className={
-              location.pathname.startsWith("/tutorial") ? "selected" : undefined
-            }
-          >
+          <IonItem button>
             <IonIcon slot='start' icon={hammerOutline} />
             Tutorial
           </IonItem>
-          <IonItem
-            button
-            routerLink={"/feedback"}
-            routerDirection='none'
-            className={
-              location.pathname.startsWith("/feedback") ? "selected" : undefined
-            }
-          >
+          <IonItem button onClick={() => setShowFeedbackModal(true)}>
             <IonIcon slot='start' icon={bugOutline} />
             Feedback
           </IonItem>
         </IonList>
+        <FeedbackModal
+          showModal={showFeedbackModal}
+          setShowModal={setShowFeedbackModal}
+        />
       </IonContent>
     </IonMenu>
   );
