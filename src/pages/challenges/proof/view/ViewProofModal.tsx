@@ -13,6 +13,7 @@ import { arrowBackOutline } from "ionicons/icons";
 import Container from "../../../../components/container";
 import "./ViewProofModal.scss";
 import { UserMini } from "../../../../interfaces/models/Challenges";
+import Scrollbars from "react-custom-scrollbars";
 
 interface ViewProofModalProps {
   userData: UserMini | undefined;
@@ -45,15 +46,17 @@ const ViewProofModal: React.FC<ViewProofModalProps> = (
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <Container>
-          <IonRow className='ion-justify-content-center ion-margin-top'>
-            <img
-              src={userData?.evidenceLink}
-              alt='Proof'
-              className='uploaded-proof'
-            />
-          </IonRow>
-        </Container>
+        <Scrollbars>
+          <Container>
+            <IonRow className='ion-justify-content-center ion-padding-vertical'>
+              <img
+                src={userData?.evidenceLink}
+                alt='Proof'
+                className='uploaded-proof'
+              />
+            </IonRow>
+          </Container>
+        </Scrollbars>
       </IonContent>
     </IonModal>
   );

@@ -25,6 +25,7 @@ import {
 import imageCompression from "browser-image-compression";
 import isAfter from "date-fns/isAfter";
 import parseISO from "date-fns/parseISO";
+import Scrollbars from "react-custom-scrollbars";
 
 interface UploadProofModalProps {
   challenge: ChallengeData;
@@ -38,6 +39,7 @@ export interface UploadProofModalState {
   challenge?: ChallengeData;
   uploadMode: boolean;
   evidenceLink?: string;
+  hasCompleted: boolean;
   isLoading: boolean;
   showAlert: boolean;
   alertHeader: string;
@@ -53,7 +55,7 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
 ) => {
   const { challenge, userData, uploadCallback, showModal, setShowModal } =
     props;
-  const { getChallenge, uploadProof } = useChallenge();
+  const { getChallenge, uploadProof, completeChallenge } = useChallenge();
 
   const [state, setState] = useReducer(
     (s: UploadProofModalState, a: Partial<UploadProofModalState>) => ({
@@ -65,6 +67,7 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
       uploadMode:
         userData?.evidenceLink === undefined || userData?.evidenceLink === "",
       evidenceLink: userData?.evidenceLink,
+      hasCompleted: userData?.completedAt !== undefined,
       isLoading: false,
       showAlert: false,
       alertHeader: "",
@@ -117,6 +120,7 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
       reader.onloadend = async () => {
         if (reader.result && typeof reader.result === "string") {
           await uploadProof(challenge.challengeId, reader.result);
+          await completeChallenge(challenge.challengeId);
           await fetchData();
           setState({
             isLoading: false,
@@ -186,25 +190,64 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
               imgExtension={[".jpg", ".png", ".gif", "jpeg"]}
               maxFileSize={Infinity}
             />
-            <IonButton
-              mode='ios'
-              fill='solid'
-              shape='round'
-              color='secondary'
-              className='ion-padding-horizontal'
-              disabled={file === null}
-              onClick={handleSubmit}
-            >
-              <IonText style={{ marginLeft: "1.5rem", marginRight: "1.5rem" }}>
-                Confirm
-              </IonText>
-            </IonButton>
+            <IonRow className='ion-no-padding ion-justify-content-center'>
+              <IonButton
+                mode='ios'
+                fill='solid'
+                shape='round'
+                color='secondary'
+                className='ion-padding-horizontal'
+                disabled={file === null}
+                onClick={handleSubmit}
+                style={{ marginBottom: "2rem" }}
+              >
+                <IonText
+                  style={{
+                    marginLeft: "1.5rem",
+                    marginRight: "1.5rem",
+                  }}
+                >
+                  {state.hasCompleted ? "Re-upload proof" : "Upload proof"}
+                </IonText>
+              </IonButton>
+            </IonRow>
+            {!state.hasCompleted && (
+              <IonRow className='ion-no-padding ion-justify-content-center'>
+                <IonButton
+                  mode='ios'
+                  fill='solid'
+                  shape='round'
+                  color='tertiary'
+                  className='ion-padding-horizontal'
+                  onClick={() => {
+                    setShowModal(false);
+                    setTimeout(() => {
+                      setState({
+                        uploadMode:
+                          userData?.evidenceLink === undefined ||
+                          userData?.evidenceLink === "",
+                      });
+                    }, 200);
+                  }}
+                  style={{ marginBottom: "2rem" }}
+                >
+                  <IonText
+                    style={{
+                      marginLeft: "1.5rem",
+                      marginRight: "1.5rem",
+                    }}
+                  >
+                    Jk I haven't done it
+                  </IonText>
+                </IonButton>
+              </IonRow>
+            )}
           </>
         ) : (
           <>
             <IonRow className='ion-justify-content-center ion-margin-top'>
               <img
-                src={state.evidenceLink}
+                src={userData?.evidenceLink}
                 alt='Proof'
                 className='uploaded-proof'
               />
@@ -216,7 +259,7 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
                 shape='round'
                 color='secondary'
                 className='ion-padding-horizontal'
-                style={{ marginTop: "2rem" }}
+                style={{ marginTop: "2rem", marginBottom: "2rem" }}
                 onClick={handleReUpload}
               >
                 <IonText
@@ -238,14 +281,25 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
     );
   };
 
+  console.log(userData);
+
   return (
     <IonModal
       isOpen={showModal}
-      onDidDismiss={() => setShowModal(false)}
+      onDidDismiss={() => {
+        setShowModal(false);
+        setTimeout(() => {
+          setState({
+            uploadMode:
+              userData?.evidenceLink === undefined ||
+              userData?.evidenceLink === "",
+          });
+        }, 200);
+      }}
       backdropDismiss={false}
     >
       <IonHeader translucent>
-        <IonToolbar style={{ marginTop: "1.25rem" }}>
+        <IonToolbar style={{ paddingTop: "0.5rem" }}>
           <IonTitle>My proof</IonTitle>
           <IonButtons slot='start'>
             <IonButton
@@ -258,7 +312,11 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonRow style={{ marginTop: "0.75rem" }}>{renderProof()}</IonRow>
+        <Scrollbars>
+          <IonRow style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
+            {renderProof()}
+          </IonRow>
+        </Scrollbars>
         <LoadingSpinner
           loading={state.isLoading}
           message={"Loading"}

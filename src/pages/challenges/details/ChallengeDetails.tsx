@@ -76,7 +76,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     getChallenge,
     acceptChallenge,
     rejectChallenge,
-    completeChallenge,
     getVotes,
     releaseResults,
   } = useChallenge();
@@ -245,7 +244,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
         alertHeader: "Ooooops",
         alertMessage: "Our server is taking a break, come back later please :)",
       });
-      setShowOfflineToast(true);
     }
   };
 
@@ -253,7 +251,8 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     if (challenge === null) {
       return;
     }
-    setState({ isLoading: true });
+    setState({ showUploadProofModal: true });
+    /*
     try {
       await completeChallenge(challenge.challengeId);
       const updatedChallenge = await getChallenge(challenge.challengeId);
@@ -278,6 +277,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
       });
       setShowOfflineToast(true);
     }
+    */
   };
 
   const handleReleaseResults = async () => {
