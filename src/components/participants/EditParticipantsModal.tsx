@@ -18,7 +18,7 @@ import {
 import "./EditParticipantsModal.scss";
 import { useCallback, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
-import { addOutline, removeOutline } from "ionicons/icons";
+import { addOutline, checkmark, close, removeOutline } from "ionicons/icons";
 import { UserMini } from "../../interfaces/models/Challenges";
 import AvatarImg from "../avatar";
 import lodash from "lodash";
@@ -89,16 +89,27 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
     >
       <IonHeader translucent>
         <IonToolbar className='modal-search'>
+          <IonButtons slot='start'>
+            <IonButton
+              style={{
+                margin: "0.5rem",
+              }}
+              color='dark'
+              onClick={() => setShowModal(false)}
+            >
+              <IonIcon icon={close} size='large' />
+            </IonButton>
+          </IonButtons>
           <IonTitle>Invite participants</IonTitle>
           <IonButtons slot='end'>
             <IonButton
               style={{
-                marginRight: "0.5rem",
+                margin: "0.5rem",
               }}
               color='dark'
               onClick={() => completionCallback(invitedUsers)}
             >
-              Done
+              <IonIcon icon={checkmark} size='large' />
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -243,26 +254,8 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
           >
             <IonButton
               mode='ios'
-              color='danger'
-              shape='round'
-              onClick={() => setShowModal(false)}
-              style={{ color: "black" }}
-            >
-              <IonText
-                style={{
-                  marginLeft: "1rem",
-                  marginRight: "1rem",
-                  fontSize: 19,
-                }}
-              >
-                Cancel
-              </IonText>
-            </IonButton>
-            <IonButton
-              mode='ios'
               color='secondary'
               shape='round'
-              onClick={() => completionCallback(invitedUsers)}
               style={{ color: "black" }}
             >
               <IonText
@@ -272,7 +265,7 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
                   fontSize: 19,
                 }}
               >
-                Confirm
+                Share link
               </IonText>
             </IonButton>
           </IonRow>

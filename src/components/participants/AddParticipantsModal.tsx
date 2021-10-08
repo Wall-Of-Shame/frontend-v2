@@ -82,7 +82,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
           <IonButtons slot='end'>
             <IonButton
               style={{
-                marginRight: "0.5rem",
+                margin: "0.5rem",
               }}
               color='dark'
               onClick={() => completionCallback(invitedUsers)}

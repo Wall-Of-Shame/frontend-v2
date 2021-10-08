@@ -18,11 +18,20 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { useReducer, useState } from "react";
-import { arrowBackOutline, pencil, refreshOutline } from "ionicons/icons";
+import {
+  arrowBackOutline,
+  pencil,
+  personAdd,
+  refreshOutline,
+} from "ionicons/icons";
 import { useEffect } from "react";
 import { Redirect, useHistory, useLocation } from "react-router";
 import { useChallenge } from "../../../contexts/ChallengeContext";
-import { ChallengeData, UserMini } from "../../../interfaces/models/Challenges";
+import {
+  ChallengeData,
+  ChallengePost,
+  UserMini,
+} from "../../../interfaces/models/Challenges";
 import "./ChallengeDetails.scss";
 import { format, formatISO, parseISO } from "date-fns";
 import { useUser } from "../../../contexts/UserContext";
@@ -47,6 +56,7 @@ import OfflineToast from "../../../components/offlineToast";
 import Countdown from "./CountDown";
 import Participants from "./Participants";
 import FooterActions from "./FooterActions";
+import EditParticipantsModal from "../../../components/participants/EditParticipantsModal";
 
 interface ChallengeDetailsProps {}
 
@@ -56,6 +66,15 @@ interface ChallengeDetailsState {
   showViewProofModal: boolean;
   userUnderViewing: UserMini | undefined;
   showVoteModal: boolean;
+  showParticipantModal: boolean;
+  participants: {
+    accepted: {
+      completed: UserMini[];
+      notCompleted: UserMini[];
+    };
+    pending: UserMini[];
+  };
+  invitedUsers: UserMini[];
   isLoading: boolean;
   showAlert: boolean;
   alertHeader: string;
@@ -78,6 +97,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     rejectChallenge,
     getVotes,
     releaseResults,
+    updateChallenge,
   } = useChallenge();
 
   const [challenge, setChallenge] = useState<ChallengeData | null>(
@@ -98,6 +118,15 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
       showViewProofModal: false,
       userUnderViewing: undefined,
       showVoteModal: false,
+      showParticipantModal: false,
+      participants: challenge?.participants ?? {
+        accepted: { completed: [], notCompleted: [] },
+        pending: [],
+      },
+      invitedUsers:
+        challenge?.participants.accepted.notCompleted.concat(
+          challenge.participants.pending
+        ) ?? [],
       isLoading: false,
       showAlert: false,
       alertHeader: "",
@@ -445,6 +474,10 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     );
   }
 
+  const startsIn = Math.round(
+    (parseISO(challenge.startAt!).getTime() - new Date().getTime()) / 1000
+  );
+
   return (
     <IonPage>
       <IonHeader>
@@ -463,61 +496,71 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
             </IonButton>
           </IonButtons>
           {user?.userId === challenge.owner.userId && (
-            <IonButtons slot='end'>
-              <IonButton
-                style={{
-                  margin: "0.5rem",
-                }}
-                color='dark'
-                onClick={async () => {
-                  setState({ isLoading: true });
-                  const updatedChallenge = await getChallenge(
-                    challenge.challengeId
-                  );
-                  if (updatedChallenge) {
-                    setChallenge(updatedChallenge);
-                    if (isAfter(Date.now(), parseISO(updatedChallenge.endAt))) {
-                      setState({
-                        isLoading: false,
-                        showAlert: true,
-                        hasConfirm: false,
-                        alertHeader: "Notice",
-                        alertMessage:
-                          "This challenge has already ended, it cannot be edited anymore :)",
-                      });
-                    } else if (
-                      isAfter(Date.now(), parseISO(updatedChallenge.startAt!))
-                    ) {
-                      setState({
-                        isLoading: false,
-                        showAlert: true,
-                        hasConfirm: false,
-                        alertHeader: "Notice",
-                        alertMessage:
-                          "This challenge has already started, it cannot be edited anymore :)",
-                      });
-                    } else if (
-                      updatedChallenge.participants.accepted.completed.concat(
-                        updatedChallenge.participants.accepted.notCompleted
-                      ).length > 1
-                    ) {
-                      setState({
-                        isLoading: false,
-                        showAlert: true,
-                        hasConfirm: false,
-                        alertHeader: "Notice",
-                        alertMessage:
-                          "One or more participants have accepted the challenge, this challenge cannot be edited anymore :)",
-                      });
-                    } else {
-                      setState({ editMode: true, isLoading: false });
+            <>
+              <IonButtons slot='end'>
+                <IonButton
+                  color='dark'
+                  onClick={() => setState({ showParticipantModal: true })}
+                >
+                  <IonIcon slot='end' icon={personAdd} />
+                </IonButton>
+                <IonButton
+                  style={{
+                    marginRight: "0.5rem",
+                  }}
+                  color='dark'
+                  onClick={async () => {
+                    setState({ isLoading: true });
+                    const updatedChallenge = await getChallenge(
+                      challenge.challengeId
+                    );
+                    if (updatedChallenge) {
+                      setChallenge(updatedChallenge);
+                      if (
+                        isAfter(Date.now(), parseISO(updatedChallenge.endAt))
+                      ) {
+                        setState({
+                          isLoading: false,
+                          showAlert: true,
+                          hasConfirm: false,
+                          alertHeader: "Notice",
+                          alertMessage:
+                            "This challenge has already ended, it cannot be edited anymore :)",
+                        });
+                      } else if (
+                        isAfter(Date.now(), parseISO(updatedChallenge.startAt!))
+                      ) {
+                        setState({
+                          isLoading: false,
+                          showAlert: true,
+                          hasConfirm: false,
+                          alertHeader: "Notice",
+                          alertMessage:
+                            "This challenge has already started, it cannot be edited anymore :)",
+                        });
+                      } else if (
+                        updatedChallenge.participants.accepted.completed.concat(
+                          updatedChallenge.participants.accepted.notCompleted
+                        ).length > 1
+                      ) {
+                        setState({
+                          isLoading: false,
+                          showAlert: true,
+                          hasConfirm: false,
+                          alertHeader: "Notice",
+                          alertMessage:
+                            "One or more participants have accepted the challenge, this challenge cannot be edited anymore :)",
+                        });
+                      } else {
+                        setState({ editMode: true, isLoading: false });
+                      }
                     }
-                  }
-                }}
-              >
-                <IonIcon slot='end' icon={pencil} />
-              </IonButton>
-            </IonButtons>
+                  }}
+                >
+                  <IonIcon slot='end' icon={pencil} />
+                </IonButton>
+              </IonButtons>
+            </>
           )}
         </IonToolbar>
       </IonHeader>
@@ -557,7 +600,31 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
             {isAfter(Date.now(), parseISO(challenge.startAt!)) && (
               <Countdown countdown={countdown} />
             )}
+
             <IonGrid style={{ marginBottom: "0.5rem" }}>
+              {startsIn < 86400 && (
+                <IonRow
+                  className='ion-justify-content-center'
+                  style={{ marginTop: "0.25rem", marginBottom: "1.5rem" }}
+                >
+                  <IonText
+                    style={{ fontWeight: "bold", fontSize: "1.5rem" }}
+                    color={startsIn < 3600 ? "danger" : "medium"}
+                  >
+                    {`Starts in: ${
+                      intervalToDuration({
+                        start: new Date(),
+                        end: parseISO(challenge.startAt!),
+                      }).hours
+                    }h ${
+                      intervalToDuration({
+                        start: new Date(),
+                        end: parseISO(challenge.startAt!),
+                      }).minutes
+                    }min`}
+                  </IonText>
+                </IonRow>
+              )}
               <IonRow className='ion-padding-horizontal ion-padding-bottom'>
                 <IonText style={{ fontWeight: "bold" }}>
                   What do we need to do?
@@ -642,6 +709,40 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
             challenge.participants.accepted.completed.length +
             challenge.participants.accepted.notCompleted.length
           }
+        />
+        <EditParticipantsModal
+          accepted={state.participants.accepted.notCompleted}
+          pending={state.participants.pending}
+          showModal={state.showParticipantModal}
+          setShowModal={(showModal) =>
+            setState({ showParticipantModal: showModal })
+          }
+          completionCallback={async (invitedUsers) => {
+            setState({ invitedUsers: invitedUsers });
+            setState({ showParticipantModal: false });
+            const updatedParticipants: string[] = invitedUsers.map(
+              (u) => u.userId
+            );
+            const data: ChallengePost = {
+              title: challenge.title,
+              description: challenge.description,
+              startAt: challenge.startAt!,
+              endAt: challenge.endAt,
+              type: challenge.type,
+              participants: updatedParticipants,
+            };
+            setState({ isLoading: true });
+            await updateChallenge(challenge.challengeId, data)
+              .then(() => {
+                setState({ isLoading: false });
+                window.location.reload();
+              })
+              .catch((error) => {
+                console.log(error);
+                setState({ isLoading: false });
+                setShowOfflineToast(true);
+              });
+          }}
         />
         <OfflineToast
           message='Sorry, we need the internets to do that :('

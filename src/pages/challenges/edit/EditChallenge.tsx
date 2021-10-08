@@ -1,8 +1,6 @@
 import {
-  IonAvatar,
   IonButton,
   IonButtons,
-  IonCol,
   IonContent,
   IonDatetime,
   IonFooter,
@@ -19,12 +17,14 @@ import {
   IonTextarea,
   IonToolbar,
 } from "@ionic/react";
-import { arrowBackOutline, personAdd } from "ionicons/icons";
+import { arrowBackOutline } from "ionicons/icons";
 import { useState, useReducer, useEffect } from "react";
 import {
   addYears,
   format,
+  formatDuration,
   formatISO,
+  intervalToDuration,
   isAfter,
   isBefore,
   parseISO,
@@ -37,11 +37,7 @@ import {
   UserMini,
 } from "../../../interfaces/models/Challenges";
 import { useChallenge } from "../../../contexts/ChallengeContext";
-import { trimDisplayName } from "../../../utils/ProfileUtils";
-import EditParticipantsModal from "../../../components/participants/EditParticipantsModal";
-import { useUser } from "../../../contexts/UserContext";
 import { hideTabs } from "../../../utils/TabsUtils";
-import AvatarImg from "../../../components/avatar";
 import OfflineToast from "../../../components/offlineToast";
 
 interface EditChallengeProps {
@@ -76,10 +72,8 @@ interface EditChallengeState {
 const EditChallenge: React.FC<EditChallengeProps> = (
   props: EditChallengeProps
 ) => {
-  const { user } = useUser();
   const { challenge, backAction } = props;
   const { updateChallenge } = useChallenge();
-  const [showModal, setShowModal] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [showOfflineToast, setShowOfflineToast] = useState(false);
 
@@ -310,6 +304,19 @@ const EditChallenge: React.FC<EditChallengeProps> = (
               ></IonDatetime>
             </IonItem>
           </IonList>
+          <IonRow
+            className='ion-padding-horizontal ion-justify-content-end ion-text-end'
+            style={{ marginTop: "0.5rem" }}
+          >
+            <IonText style={{ fontSize: "14px", color: "#adadad" }}>
+              {`Duration: ${formatDuration(
+                intervalToDuration({
+                  start: parseISO(state.startAt),
+                  end: parseISO(state.endAt),
+                })
+              )}`}
+            </IonText>
+          </IonRow>
           {hasError && isAfter(parseISO(state.startAt), parseISO(state.endAt)) && (
             <IonRow
               className='ion-padding-horizontal'
@@ -331,114 +338,6 @@ const EditChallenge: React.FC<EditChallengeProps> = (
             </IonRow>
           )}
         </IonGrid>
-        <div
-          style={{
-            width: "100%",
-            height: "0.5rem",
-            backgroundColor: "#E5E5E5",
-            marginTop: "0.5rem",
-            marginBottom: "0.5rem",
-          }}
-        />
-        <IonGrid>
-          <IonRow
-            className='ion-align-items-center'
-            style={{
-              marginBottom: "0.5rem",
-              marginLeft: "0.5rem",
-              marginRight: "0.5rem",
-            }}
-          >
-            <IonCol size='10'>
-              <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
-                Participants
-              </IonText>
-            </IonCol>
-            <IonCol size='2'>
-              <IonRow className='ion-justify-content-end'>
-                <IonIcon
-                  icon={personAdd}
-                  style={{ fontSize: "1.5rem", padding: "0.25rem" }}
-                  onClick={() => setShowModal(true)}
-                />
-              </IonRow>
-            </IonCol>
-          </IonRow>
-          <IonRow
-            className='ion-align-items-center'
-            style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
-          >
-            <IonCol>
-              <IonText>
-                {challenge.participantCount + 1} participant
-                {challenge.participantCount + 1 !== 1 ? "s are " : " is "}
-                ready to start the challenge
-              </IonText>
-            </IonCol>
-          </IonRow>
-          {challenge.participants.accepted.notCompleted.length > 0 && (
-            <IonList style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}>
-              {challenge.participants.accepted.notCompleted.map((u) => {
-                return (
-                  <IonItem key={u.userId} lines='none'>
-                    <IonAvatar slot='start'>
-                      <AvatarImg avatar={u.avatar} />
-                    </IonAvatar>
-                    <IonLabel>
-                      {u.userId === user?.userId
-                        ? "You"
-                        : trimDisplayName(u.name)}
-                    </IonLabel>
-                  </IonItem>
-                );
-              })}
-            </IonList>
-          )}
-          {challenge.participants.pending.length > 0 && (
-            <>
-              <IonRow
-                className='ion-align-items-center'
-                style={{
-                  marginLeft: "0.5rem",
-                  marginRight: "0.5rem",
-                }}
-              >
-                <IonCol>
-                  <IonText>
-                    {challenge.participants.pending.length} burden
-                    {challenge.participants.pending.length !== 1
-                      ? "s are "
-                      : " is "}
-                    still questioning life
-                  </IonText>
-                </IonCol>
-              </IonRow>
-
-              <IonList style={{ marginTop: "0.5rem" }}>
-                {challenge.participants.pending.map((u) => {
-                  return (
-                    <IonItem key={u.userId} lines='none'>
-                      <IonAvatar slot='start'>
-                        <AvatarImg avatar={u.avatar} />
-                      </IonAvatar>
-                      <IonLabel>{trimDisplayName(u.name)}</IonLabel>
-                    </IonItem>
-                  );
-                })}
-              </IonList>
-            </>
-          )}
-        </IonGrid>
-        <EditParticipantsModal
-          accepted={state.participants.accepted.notCompleted}
-          pending={state.participants.pending}
-          showModal={showModal}
-          setShowModal={setShowModal}
-          completionCallback={(invitedUsers) => {
-            setState({ invitedUsers: invitedUsers });
-            setShowModal(false);
-          }}
-        />
         <OfflineToast
           message='Sorry, we need the internets to edit a challenge :('
           showToast={showOfflineToast}
