@@ -190,7 +190,10 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
               imgExtension={[".jpg", ".png", ".gif", "jpeg"]}
               maxFileSize={Infinity}
             />
-            <IonRow className='ion-no-padding ion-justify-content-center'>
+            <IonRow
+              className='ion-no-padding ion-justify-content-center'
+              style={{ marginTop: "2.5rem" }}
+            >
               <IonButton
                 mode='ios'
                 fill='solid'
@@ -199,7 +202,7 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
                 className='ion-padding-horizontal'
                 disabled={file === null}
                 onClick={handleSubmit}
-                style={{ marginBottom: "2rem" }}
+                style={{ marginBottom: "0.5rem" }}
               >
                 <IonText
                   style={{

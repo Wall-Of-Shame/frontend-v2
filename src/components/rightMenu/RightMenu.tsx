@@ -8,10 +8,10 @@ import {
   IonIcon,
 } from "@ionic/react";
 import { hammerOutline, bugOutline } from "ionicons/icons";
-import "./RightSection.scss";
+import "./RightMenu.scss";
 import FeedbackModal from "../feedback";
 
-const RightSection = () => {
+const RightMenu = () => {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   return (
     <IonMenu
@@ -40,4 +40,4 @@ const RightSection = () => {
   );
 };
 
-export default RightSection;
+export default RightMenu;

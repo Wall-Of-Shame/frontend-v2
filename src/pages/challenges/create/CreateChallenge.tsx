@@ -166,6 +166,13 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
             </IonText>
           </IonRow>
         </IonGrid>
+        <IonButton
+          onClick={() => {
+            history.replace("/store");
+          }}
+        >
+          Replace
+        </IonButton>
         <IonGrid>
           <IonRow className='ion-padding-bottom ion-padding-horizontal'>
             <IonText>

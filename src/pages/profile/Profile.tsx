@@ -354,8 +354,8 @@ const Profile: React.FC = () => {
                   <IonRow className='ion-justify-content-center ion-align-items-center'>
                     <IonText style={{ fontSize: "0.9rem", fontWeight: 400 }}>
                       Challenge
-                      <br />
-                      {user?.completedChallengeCount !== 1 && "s"} Completed
+                      {user?.completedChallengeCount !== 1 && "s"} <br />
+                      Completed
                     </IonText>
                   </IonRow>
                 </IonCardContent>

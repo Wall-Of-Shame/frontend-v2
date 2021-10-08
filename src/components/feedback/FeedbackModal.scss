@@ -1,0 +1,15 @@
+.fileUploader .uploadPicturesWrapper .uploadPictureContainer {
+  width: 50% !important;
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  transition: none !important;
+  padding: 0rem !important;
+  margin: 1rem !important;
+  .deleteImage {
+    background: #eb445a !important;
+    font-size: 1rem !important;
+    right: -0.9rem !important;
+    top: -0.9rem !important;
+  }
+}
