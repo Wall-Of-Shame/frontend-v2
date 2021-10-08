@@ -27,6 +27,9 @@ const Participants: React.FC<ParticipantsProps> = (
 ) => {
   const { user } = useUser();
   const { challenge, viewProofCallback } = props;
+  const totalParticipantsCount =
+    challenge.participants.accepted.completed.length +
+    challenge.participants.accepted.notCompleted.length;
 
   if (challenge.hasReleasedResult) {
     const cheaters = challenge.participants.accepted.completed.filter(
@@ -47,7 +50,9 @@ const Participants: React.FC<ParticipantsProps> = (
         >
           <IonCol>
             <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
-              Participants
+              {`${totalParticipantsCount} Participant${
+                totalParticipantsCount !== 1 ? "s" : ""
+              }`}
             </IonText>
           </IonCol>
         </IonRow>
@@ -221,7 +226,9 @@ const Participants: React.FC<ParticipantsProps> = (
         >
           <IonCol>
             <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
-              Participants
+              {`${totalParticipantsCount} Participant${
+                totalParticipantsCount !== 1 ? "s" : ""
+              }`}
             </IonText>
           </IonCol>
         </IonRow>
@@ -338,7 +345,9 @@ const Participants: React.FC<ParticipantsProps> = (
         >
           <IonCol>
             <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
-              Participants
+              {`${totalParticipantsCount} Participant${
+                totalParticipantsCount !== 1 ? "s" : ""
+              }`}
             </IonText>
           </IonCol>
         </IonRow>
@@ -442,7 +451,9 @@ const Participants: React.FC<ParticipantsProps> = (
       >
         <IonCol>
           <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
-            Participants
+            {`${totalParticipantsCount} Participant${
+              totalParticipantsCount !== 1 ? "s" : ""
+            }`}
           </IonText>
         </IonCol>
       </IonRow>

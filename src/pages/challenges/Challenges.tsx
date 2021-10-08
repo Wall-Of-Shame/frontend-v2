@@ -485,17 +485,17 @@ const Challenges: React.FC = () => {
         <IonSegment
           onIonChange={(e) => setTab(e.detail.value ?? "active")}
           value={tab}
-          mode='md'
+          color='secondary'
           style={{
             marginTop: "1rem",
             paddingRight: "0.5rem",
             paddingLeft: "0.5rem",
           }}
         >
-          <IonSegmentButton value='ongoing'>
+          <IonSegmentButton value='ongoing' className='ion-text-capitalize'>
             <IonLabel>Ongoing</IonLabel>
           </IonSegmentButton>
-          <IonSegmentButton value='pending'>
+          <IonSegmentButton value='pending' className='ion-text-capitalize'>
             <IonLabel>Upcoming</IonLabel>
           </IonSegmentButton>
         </IonSegment>

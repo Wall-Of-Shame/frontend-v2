@@ -8,8 +8,11 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
+  IonLabel,
   IonPage,
   IonRow,
+  IonSegment,
+  IonSegmentButton,
   IonText,
   IonToast,
   IonToolbar,
@@ -80,6 +83,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   const [challenge, setChallenge] = useState<ChallengeData | null>(
     location.state as ChallengeData
   );
+  const [tab, setTab] = useState("details");
   const [countdown, setCountdown] = useState<Duration | null>(null);
   const [didFinish, setDidFinish] = useState(false);
   const [showOfflineToast, setShowOfflineToast] = useState(false);
@@ -519,7 +523,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        <IonGrid style={{ marginBottom: "0.5rem" }}>
+        <IonGrid>
           {renderHeader()}
           <IonRow className='ion-padding-horizontal ion-padding-bottom'>
             <IonText style={{ fontWeight: "bold", fontSize: "1.5rem" }}>
@@ -527,62 +531,84 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
             </IonText>
           </IonRow>
         </IonGrid>
-        {renderImage()}
-        {isAfter(Date.now(), parseISO(challenge.startAt!)) && (
-          <Countdown countdown={countdown} />
+        <IonRow style={{ paddingLeft: "1rem", paddingRight: "1rem" }}>
+          <IonSegment
+            onIonChange={(e) => setTab(e.detail.value ?? "active")}
+            value={tab}
+            color='secondary'
+            style={{
+              marginBottom: "2rem",
+            }}
+          >
+            <IonSegmentButton value='details' className='ion-text-capitalize'>
+              <IonLabel>Details</IonLabel>
+            </IonSegmentButton>
+            <IonSegmentButton
+              value='participants'
+              className='ion-text-capitalize'
+            >
+              <IonLabel>Participants</IonLabel>
+            </IonSegmentButton>
+          </IonSegment>
+        </IonRow>
+        {tab === "details" ? (
+          <>
+            {renderImage()}
+            {isAfter(Date.now(), parseISO(challenge.startAt!)) && (
+              <Countdown countdown={countdown} />
+            )}
+            <IonGrid style={{ marginBottom: "0.5rem" }}>
+              <IonRow className='ion-padding-horizontal ion-padding-bottom'>
+                <IonText style={{ fontWeight: "bold" }}>
+                  What do we need to do?
+                </IonText>
+              </IonRow>
+              <IonRow className='ion-padding-horizontal ion-padding-bottom'>
+                <IonText>{challenge.description}</IonText>
+              </IonRow>
+            </IonGrid>
+            <IonGrid style={{ marginBottom: "0.5rem" }}>
+              <IonRow className='ion-padding-horizontal ion-padding-bottom'>
+                <IonText style={{ fontWeight: "bold" }}>
+                  This challenge starts at
+                </IonText>
+              </IonRow>
+              <IonRow className='ion-padding-horizontal ion-padding-bottom'>
+                <IonText>
+                  {format(
+                    parseISO(challenge.startAt!),
+                    "EEEE, dd MMM yyyy, HH:mm"
+                  )}
+                </IonText>
+              </IonRow>
+            </IonGrid>
+            <IonGrid style={{ marginBottom: "0.5rem" }}>
+              <IonRow className='ion-padding-horizontal ion-padding-bottom'>
+                <IonText style={{ fontWeight: "bold" }}>
+                  Complete the challenge and upload your proof by
+                </IonText>
+              </IonRow>
+              <IonRow className='ion-padding-horizontal ion-padding-bottom'>
+                <IonText>
+                  {format(
+                    parseISO(challenge.endAt),
+                    "EEEE, dd MMM yyyy, HH:mm"
+                  )}
+                </IonText>
+              </IonRow>
+            </IonGrid>
+          </>
+        ) : (
+          <Participants
+            challenge={challenge}
+            viewProofCallback={(userUnderViewing) => {
+              setState({
+                userUnderViewing,
+                showViewProofModal: true,
+              });
+            }}
+          />
         )}
-        <IonGrid style={{ marginBottom: "0.5rem" }}>
-          <IonRow className='ion-padding-horizontal ion-padding-bottom'>
-            <IonText style={{ fontWeight: "bold" }}>
-              What do we need to do?
-            </IonText>
-          </IonRow>
-          <IonRow className='ion-padding-horizontal ion-padding-bottom'>
-            <IonText>{challenge.description}</IonText>
-          </IonRow>
-        </IonGrid>
-        <IonGrid style={{ marginBottom: "0.5rem" }}>
-          <IonRow className='ion-padding-horizontal ion-padding-bottom'>
-            <IonText style={{ fontWeight: "bold" }}>
-              This challenge starts at
-            </IonText>
-          </IonRow>
-          <IonRow className='ion-padding-horizontal ion-padding-bottom'>
-            <IonText>
-              {format(parseISO(challenge.startAt!), "EEEE, dd MMM yyyy, HH:mm")}
-            </IonText>
-          </IonRow>
-        </IonGrid>
-        <IonGrid style={{ marginBottom: "0.5rem" }}>
-          <IonRow className='ion-padding-horizontal ion-padding-bottom'>
-            <IonText style={{ fontWeight: "bold" }}>
-              Complete the challenge and upload your proof by
-            </IonText>
-          </IonRow>
-          <IonRow className='ion-padding-horizontal ion-padding-bottom'>
-            <IonText>
-              {format(parseISO(challenge.endAt), "EEEE, dd MMM yyyy, HH:mm")}
-            </IonText>
-          </IonRow>
-        </IonGrid>
-        <div
-          style={{
-            width: "100%",
-            height: "0.5rem",
-            backgroundColor: "#E5E5E5",
-            marginTop: "0.5rem",
-            marginBottom: "0.5rem",
-          }}
-        />
-        <Participants
-          challenge={challenge}
-          viewProofCallback={(userUnderViewing) => {
-            setState({
-              userUnderViewing,
-              showViewProofModal: true,
-            });
-          }}
-        />
         <IonFab vertical='bottom' horizontal='end' slot='fixed'>
           <IonFabButton color='senary' onClick={fetchData} mode='ios'>
             <IonIcon icon={refreshOutline} />
