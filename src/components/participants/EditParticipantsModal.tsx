@@ -12,6 +12,8 @@ import {
   IonGrid,
   IonIcon,
   IonSearchbar,
+  IonButtons,
+  IonTitle,
 } from "@ionic/react";
 import "./EditParticipantsModal.scss";
 import { useCallback, useState } from "react";
@@ -85,25 +87,37 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
       backdropDismiss={false}
       cssClass='modal-container'
     >
-      <IonHeader>
+      <IonHeader translucent>
         <IonToolbar className='modal-search'>
-          <IonSearchbar
-            mode='ios'
-            key='modal-search'
-            value={searchText}
-            onIonChange={(e) => {
-              setSearchText(e.detail.value ?? "");
-              debouncedSearch(e.detail.value ?? "");
-            }}
-            debounce={0}
-            placeholder='Search for a name or username'
-            showCancelButton='never'
-            className='ion-margin-top'
-            color='white'
-          ></IonSearchbar>
+          <IonTitle>Invite participants</IonTitle>
+          <IonButtons slot='end'>
+            <IonButton
+              style={{
+                marginRight: "0.5rem",
+              }}
+              color='dark'
+              onClick={() => completionCallback(invitedUsers)}
+            >
+              Done
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+        <IonSearchbar
+          mode='ios'
+          key='modal-search'
+          value={searchText}
+          onIonChange={(e) => {
+            setSearchText(e.detail.value ?? "");
+            debouncedSearch(e.detail.value ?? "");
+          }}
+          debounce={0}
+          placeholder='Search for a name or username'
+          showCancelButton='never'
+          className='ion-margin-top users-search'
+          showClearButton='always'
+        ></IonSearchbar>
         <IonGrid className='ion-margin-top'>
           <IonText
             className='ion-margin'

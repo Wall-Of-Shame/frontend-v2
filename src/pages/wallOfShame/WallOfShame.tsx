@@ -40,6 +40,8 @@ import Alert from "../../components/alert";
 import AvatarImg from "../../components/avatar";
 import { isPlatform } from "@ionic/core";
 import Scrollbars from "react-custom-scrollbars";
+import io from "socket.io-client";
+import { Socket } from "socket.io-client";
 
 interface WallOfShameState {
   isLoading: boolean;
@@ -56,6 +58,7 @@ const WallOfShame: React.FC = () => {
   const location = useLocation();
   const { getGlobalRankings, getFriendsRankings } = useUser();
 
+  const [socket, setSocket] = useState<Socket | null>(null);
   const [tab, setTab] = useState("live");
   const [shames, setShames] = useState<Shame[]>([]);
   const [lastUpdated, setLastUpdated] = useState(Date.now());
@@ -119,6 +122,16 @@ const WallOfShame: React.FC = () => {
       return Promise.reject(error);
     }
   };
+
+  useEffect(() => {
+    const newSocket = io("wss://localhost:3001", {
+      transports: ["websocket", "polling"], // use WebSocket first, if available
+    });
+    setSocket(newSocket);
+    return () => {
+      newSocket.close();
+    };
+  }, [setSocket]);
 
   useEffect(() => {
     fetchData();

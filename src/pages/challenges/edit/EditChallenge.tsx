@@ -203,7 +203,6 @@ const EditChallenge: React.FC<EditChallengeProps> = (
             >
               <IonInput
                 value={state.title}
-                debounce={300}
                 placeholder='Enter title*'
                 style={{ marginLeft: "0.5rem", marginRight: "5rem" }}
                 onIonChange={(event) => {
@@ -242,7 +241,6 @@ const EditChallenge: React.FC<EditChallengeProps> = (
             >
               <IonTextarea
                 value={state.description}
-                debounce={300}
                 rows={4}
                 placeholder='Enter challenge description*'
                 style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}

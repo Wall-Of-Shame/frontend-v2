@@ -48,6 +48,10 @@ import ActiveChallengeImg from "../../../components/activeChallengeImg";
 import PendingChallengeImg from "../../../components/pendingChallengeImg";
 import highground from "../../../assets/onboarding/highground.png";
 import OfflineToast from "../../../components/offlineToast";
+import io from "socket.io-client";
+import { Socket } from "socket.io-client";
+import Countdown from "./CountDown";
+import Participants from "./Participants";
 
 interface ChallengeDetailsProps {}
 
@@ -80,6 +84,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     releaseResults,
   } = useChallenge();
 
+  const [socket, setSocket] = useState<Socket | null>(null);
   const [challenge, setChallenge] = useState<ChallengeData | null>(
     location.state as ChallengeData
   );
@@ -360,6 +365,18 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [didFinish]);
 
+  /*
+  useEffect(() => {
+    const newSocket = io(process.env.REACT_APP_BACKEND_API!, {
+      transports: ["websocket"],
+    });
+    setSocket(newSocket);
+    return () => {
+      newSocket.close();
+    };
+  }, [setSocket]);
+  */
+
   const renderImage = () => {
     if (challenge === null) {
       return <Redirect to={"challenges"} />;
@@ -391,516 +408,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
           alt='Challenge Completed!'
         ></img>
       </div>
-    );
-  };
-
-  const renderParticipants = () => {
-    if (challenge === null) {
-      return <Redirect to={"challenges"} />;
-    }
-    if (challenge.hasReleasedResult) {
-      const cheaters = challenge.participants.accepted.completed.filter(
-        (p) => p.hasBeenVetoed
-      );
-      const nonCheaters = challenge.participants.accepted.completed.filter(
-        (p) => !p.hasBeenVetoed
-      );
-      return (
-        <IonGrid>
-          <IonRow
-            className='ion-align-items-center'
-            style={{
-              marginBottom: "0.5rem",
-              marginLeft: "0.5rem",
-              marginRight: "0.5rem",
-            }}
-          >
-            <IonCol>
-              <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
-                Participants
-              </IonText>
-            </IonCol>
-          </IonRow>
-          {nonCheaters.length > 0 && (
-            <IonRow
-              className='ion-align-items-center'
-              style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
-            >
-              <IonCol>
-                <IonText>
-                  {nonCheaters.length}{" "}
-                  <strong>
-                    participant
-                    {nonCheaters.length !== 1 ? "s" : ""}
-                  </strong>
-                  {nonCheaters.length !== 1 ? " are " : " is "}
-                  safe from the Wall of Shame
-                </IonText>
-              </IonCol>
-            </IonRow>
-          )}
-          {nonCheaters.length > 0 && (
-            <IonList className='ion-margin-vertical'>
-              {challenge.participants.accepted.completed.map((u) => {
-                return (
-                  <IonItem key={u.userId} lines='none'>
-                    <IonAvatar slot='start'>
-                      <AvatarImg avatar={u.avatar} />
-                    </IonAvatar>
-                    <IonLabel slot='start'>
-                      {u.userId === user?.userId
-                        ? "You"
-                        : trimDisplayName(u.name)}
-                    </IonLabel>
-
-                    {u.evidenceLink !== undefined && u.evidenceLink !== "" && (
-                      <IonButton
-                        mode='ios'
-                        slot='end'
-                        shape='round'
-                        color='tertiary'
-                        onClick={() => {
-                          setState({
-                            userUnderViewing: u,
-                            showViewProofModal: true,
-                          });
-                        }}
-                      >
-                        &nbsp;View proof&nbsp;
-                      </IonButton>
-                    )}
-                  </IonItem>
-                );
-              })}
-            </IonList>
-          )}
-          {cheaters.length > 0 && (
-            <IonRow
-              className='ion-align-items-center'
-              style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
-            >
-              <IonCol>
-                <IonText>
-                  {cheaters.length}{" "}
-                  <strong>
-                    cheater
-                    {cheaters.length !== 1 ? "s" : ""}
-                  </strong>
-                  {cheaters.length !== 1 ? " have " : " has "}
-                  been banished to the Wall of Shame
-                </IonText>
-              </IonCol>
-            </IonRow>
-          )}
-          {cheaters.length > 0 && (
-            <IonList className='ion-margin-vertical'>
-              {cheaters.map((u) => {
-                return (
-                  <IonItem key={u.userId} lines='none'>
-                    <IonAvatar slot='start'>
-                      <AvatarImg avatar={u.avatar} />
-                    </IonAvatar>
-                    <IonLabel slot='start'>
-                      {u.userId === user?.userId
-                        ? "You"
-                        : trimDisplayName(u.name)}
-                    </IonLabel>
-
-                    {u.evidenceLink !== undefined && u.evidenceLink !== "" && (
-                      <IonButton
-                        mode='ios'
-                        slot='end'
-                        shape='round'
-                        color='tertiary'
-                        onClick={() => {
-                          setState({
-                            userUnderViewing: u,
-                            showViewProofModal: true,
-                          });
-                        }}
-                      >
-                        &nbsp;View proof&nbsp;
-                      </IonButton>
-                    )}
-                  </IonItem>
-                );
-              })}
-            </IonList>
-          )}
-          {challenge.participants.accepted.notCompleted.length > 0 && (
-            <IonRow
-              className='ion-align-items-center'
-              style={{
-                marginLeft: "0.5rem",
-                marginRight: "0.5rem",
-              }}
-            >
-              <IonCol>
-                {challenge.hasReleasedResult ? (
-                  <IonText>
-                    {challenge.participants.accepted.notCompleted.length}{" "}
-                    <strong>
-                      burden
-                      {challenge.participants.accepted.notCompleted.length !== 1
-                        ? "s"
-                        : ""}
-                    </strong>
-                    {challenge.participants.accepted.notCompleted.length !== 1
-                      ? " have "
-                      : " has "}
-                    been banished to the Wall of Shame :')
-                  </IonText>
-                ) : (
-                  <IonText>
-                    {challenge.participants.accepted.notCompleted.length}{" "}
-                    participant
-                    {challenge.participants.accepted.notCompleted.length !== 1
-                      ? "s have "
-                      : " has "}
-                    failed to complete the challenge on time :')
-                  </IonText>
-                )}
-              </IonCol>
-            </IonRow>
-          )}
-          {challenge.participants.accepted.notCompleted.length > 0 && (
-            <IonList className='ion-margin-vertical'>
-              {challenge.participants.accepted.notCompleted.map((u) => {
-                return (
-                  <IonItem key={u.userId} lines='none'>
-                    <IonAvatar slot='start'>
-                      <AvatarImg avatar={u.avatar} />
-                    </IonAvatar>
-                    <IonLabel>
-                      {u.userId === user?.userId
-                        ? "You"
-                        : trimDisplayName(u.name)}
-                    </IonLabel>
-                  </IonItem>
-                );
-              })}
-            </IonList>
-          )}
-        </IonGrid>
-      );
-    }
-    if (isAfter(Date.now(), parseISO(challenge.endAt!))) {
-      return (
-        <IonGrid>
-          <IonRow
-            className='ion-align-items-center'
-            style={{
-              marginBottom: "0.5rem",
-              marginLeft: "0.5rem",
-              marginRight: "0.5rem",
-            }}
-          >
-            <IonCol>
-              <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
-                Participants
-              </IonText>
-            </IonCol>
-          </IonRow>
-          {challenge.participants.accepted.completed.length > 0 && (
-            <IonRow
-              className='ion-align-items-center'
-              style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
-            >
-              <IonCol>
-                <IonText>
-                  {challenge.participants.accepted.completed.length} participant
-                  {challenge.participants.accepted.completed.length !== 1
-                    ? "s are "
-                    : " is "}
-                  safe from the Wall of Shame
-                </IonText>
-              </IonCol>
-            </IonRow>
-          )}
-          {challenge.participants.accepted.completed.length > 0 && (
-            <IonList className='ion-margin-vertical'>
-              {challenge.participants.accepted.completed.map((u) => {
-                return (
-                  <IonItem key={u.userId} lines='none'>
-                    <IonAvatar slot='start'>
-                      <AvatarImg avatar={u.avatar} />
-                    </IonAvatar>
-                    <IonLabel slot='start'>
-                      {u.userId === user?.userId
-                        ? "You"
-                        : trimDisplayName(u.name)}
-                    </IonLabel>
-
-                    {u.evidenceLink !== undefined && u.evidenceLink !== "" && (
-                      <IonButton
-                        mode='ios'
-                        slot='end'
-                        shape='round'
-                        color='tertiary'
-                        onClick={() => {
-                          setState({
-                            userUnderViewing: u,
-                            showViewProofModal: true,
-                          });
-                        }}
-                      >
-                        &nbsp;View proof&nbsp;
-                      </IonButton>
-                    )}
-                  </IonItem>
-                );
-              })}
-            </IonList>
-          )}
-          {challenge.participants.accepted.notCompleted.length > 0 && (
-            <IonRow
-              className='ion-align-items-center'
-              style={{
-                marginLeft: "0.5rem",
-                marginRight: "0.5rem",
-              }}
-            >
-              <IonCol>
-                {challenge.hasReleasedResult ? (
-                  <IonText>
-                    {challenge.participants.accepted.notCompleted.length}{" "}
-                    participant
-                    {challenge.participants.accepted.notCompleted.length !== 1
-                      ? "s have "
-                      : " has "}
-                    been banished to the Wall of Shame :')
-                  </IonText>
-                ) : (
-                  <IonText>
-                    {challenge.participants.accepted.notCompleted.length}{" "}
-                    participant
-                    {challenge.participants.accepted.notCompleted.length !== 1
-                      ? "s have "
-                      : " has "}
-                    failed to complete the challenge on time :')
-                  </IonText>
-                )}
-              </IonCol>
-            </IonRow>
-          )}
-          {challenge.participants.accepted.notCompleted.length > 0 && (
-            <IonList className='ion-margin-vertical'>
-              {challenge.participants.accepted.notCompleted.map((u) => {
-                return (
-                  <IonItem key={u.userId} lines='none'>
-                    <IonAvatar slot='start'>
-                      <AvatarImg avatar={u.avatar} />
-                    </IonAvatar>
-                    <IonLabel>
-                      {u.userId === user?.userId
-                        ? "You"
-                        : trimDisplayName(u.name)}
-                    </IonLabel>
-                  </IonItem>
-                );
-              })}
-            </IonList>
-          )}
-        </IonGrid>
-      );
-    }
-    if (isAfter(Date.now(), parseISO(challenge.startAt!))) {
-      return (
-        <IonGrid>
-          <IonRow
-            className='ion-align-items-center'
-            style={{
-              marginBottom: "0.5rem",
-              marginLeft: "0.5rem",
-              marginRight: "0.5rem",
-            }}
-          >
-            <IonCol>
-              <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
-                Participants
-              </IonText>
-            </IonCol>
-          </IonRow>
-          {challenge.participants.accepted.completed.length > 0 && (
-            <IonRow
-              className='ion-align-items-center'
-              style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
-            >
-              <IonCol>
-                <IonText>
-                  {challenge.participants.accepted.completed.length} participant
-                  {challenge.participants.accepted.completed.length !== 1
-                    ? "s are "
-                    : " is "}
-                  safe from the Wall of Shame
-                </IonText>
-              </IonCol>
-            </IonRow>
-          )}
-          {challenge.participants.accepted.completed.length > 0 && (
-            <IonList className='ion-margin-vertical'>
-              {challenge.participants.accepted.completed.map((u) => {
-                return (
-                  <IonItem key={u.userId} lines='none'>
-                    <IonAvatar slot='start'>
-                      <AvatarImg avatar={u.avatar} />
-                    </IonAvatar>
-                    <IonLabel slot='start'>
-                      {u.userId === user?.userId
-                        ? "You"
-                        : trimDisplayName(u.name)}
-                    </IonLabel>
-                    {u.evidenceLink !== undefined && u.evidenceLink !== "" && (
-                      <IonButton
-                        mode='ios'
-                        slot='end'
-                        shape='round'
-                        color='tertiary'
-                        onClick={() => {
-                          setState({
-                            userUnderViewing: u,
-                            showViewProofModal: true,
-                          });
-                        }}
-                      >
-                        &nbsp;View proof&nbsp;
-                      </IonButton>
-                    )}
-                  </IonItem>
-                );
-              })}
-            </IonList>
-          )}
-          {challenge.participants.accepted.notCompleted.length > 0 && (
-            <IonRow
-              className='ion-align-items-center'
-              style={{
-                marginLeft: "0.5rem",
-                marginRight: "0.5rem",
-              }}
-            >
-              <IonCol>
-                <IonText>
-                  {challenge.participants.accepted.notCompleted.length}{" "}
-                  participant
-                  {challenge.participants.accepted.notCompleted.length !== 1
-                    ? "s are "
-                    : " is "}
-                  still trying their best
-                </IonText>
-              </IonCol>
-            </IonRow>
-          )}
-          {challenge.participants.accepted.notCompleted.length > 0 && (
-            <IonList className='ion-margin-vertical'>
-              {challenge.participants.accepted.notCompleted.map((u) => {
-                return (
-                  <IonItem key={u.userId} lines='none'>
-                    <IonAvatar slot='start'>
-                      <AvatarImg avatar={u.avatar} />
-                    </IonAvatar>
-                    <IonLabel>
-                      {u.userId === user?.userId
-                        ? "You"
-                        : trimDisplayName(u.name)}
-                    </IonLabel>
-                  </IonItem>
-                );
-              })}
-            </IonList>
-          )}
-        </IonGrid>
-      );
-    }
-    return (
-      <IonGrid>
-        <IonRow
-          className='ion-align-items-center'
-          style={{
-            marginBottom: "0.5rem",
-            marginLeft: "0.5rem",
-            marginRight: "0.5rem",
-          }}
-        >
-          <IonCol>
-            <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
-              Participants
-            </IonText>
-          </IonCol>
-        </IonRow>
-        {challenge.participants.accepted.notCompleted.length > 0 && (
-          <IonRow
-            className='ion-align-items-center'
-            style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
-          >
-            <IonCol>
-              <IonText>
-                {challenge.participants.accepted.notCompleted.length}{" "}
-                participant
-                {challenge.participants.accepted.notCompleted.length !== 1
-                  ? "s are "
-                  : " is "}
-                ready to start the challenge
-              </IonText>
-            </IonCol>
-          </IonRow>
-        )}
-        {challenge.participants.accepted.notCompleted.length > 0 && (
-          <IonList className='ion-margin-vertical'>
-            {challenge.participants.accepted.notCompleted.map((u) => {
-              return (
-                <IonItem key={u.userId} lines='none'>
-                  <IonAvatar slot='start'>
-                    <AvatarImg avatar={u.avatar} />
-                  </IonAvatar>
-                  <IonLabel>
-                    {u.userId === user?.userId
-                      ? "You"
-                      : trimDisplayName(u.name)}
-                  </IonLabel>
-                </IonItem>
-              );
-            })}
-          </IonList>
-        )}
-        {challenge.participants.pending.length > 0 && (
-          <IonRow
-            className='ion-align-items-center'
-            style={{
-              marginLeft: "0.5rem",
-              marginRight: "0.5rem",
-            }}
-          >
-            <IonCol>
-              <IonText>
-                {challenge.participants.pending.length} burden
-                {challenge.participants.pending.length !== 1
-                  ? "s are "
-                  : " is "}
-                still questioning life
-              </IonText>
-            </IonCol>
-          </IonRow>
-        )}
-        {challenge.participants.pending.length > 0 && (
-          <IonList className='ion-margin-vertical'>
-            {challenge.participants.pending.map((u) => {
-              return (
-                <IonItem key={u.userId} lines='none'>
-                  <IonAvatar slot='start'>
-                    <AvatarImg avatar={u.avatar} />
-                  </IonAvatar>
-                  <IonLabel slot='start'>
-                    {u.userId === user?.userId
-                      ? "You"
-                      : trimDisplayName(u.name)}
-                  </IonLabel>
-                </IonItem>
-              );
-            })}
-          </IonList>
-        )}
-      </IonGrid>
     );
   };
 
@@ -1281,52 +788,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
         </IonGrid>
         {renderImage()}
         {isAfter(Date.now(), parseISO(challenge.startAt!)) && (
-          <IonGrid style={{ marginBottom: "0.5rem" }}>
-            <IonRow className='ion-padding-horizontal'>
-              <IonCol size='3'>
-                <IonRow className='ion-justify-content-center'>
-                  <IonText style={{ fontWeight: "800", fontSize: "2rem" }}>
-                    {countdown?.days ?? "-"}
-                  </IonText>
-                </IonRow>
-              </IonCol>
-              <IonCol size='3'>
-                <IonRow className='ion-justify-content-center'>
-                  <IonText style={{ fontWeight: "800", fontSize: "2rem" }}>
-                    {countdown?.hours ?? "-"}
-                  </IonText>
-                </IonRow>
-              </IonCol>
-              <IonCol size='3'>
-                <IonRow className='ion-justify-content-center'>
-                  <IonText style={{ fontWeight: "800", fontSize: "2rem" }}>
-                    {countdown?.minutes ?? "-"}
-                  </IonText>
-                </IonRow>
-              </IonCol>
-              <IonCol size='3'>
-                <IonRow className='ion-justify-content-center'>
-                  <IonText style={{ fontWeight: "800", fontSize: "2rem" }}>
-                    {countdown?.seconds ?? "-"}
-                  </IonText>
-                </IonRow>
-              </IonCol>
-            </IonRow>
-            <IonRow className='ion-padding-horizontal ion-padding-bottom'>
-              <IonCol size='3'>
-                <IonRow className='ion-justify-content-center'>Days</IonRow>
-              </IonCol>
-              <IonCol size='3'>
-                <IonRow className='ion-justify-content-center'>Hours</IonRow>
-              </IonCol>
-              <IonCol size='3'>
-                <IonRow className='ion-justify-content-center'>Minutes</IonRow>
-              </IonCol>
-              <IonCol size='3'>
-                <IonRow className='ion-justify-content-center'>Seconds</IonRow>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
+          <Countdown countdown={countdown} />
         )}
         <IonGrid style={{ marginBottom: "0.5rem" }}>
           <IonRow className='ion-padding-horizontal ion-padding-bottom'>
@@ -1371,7 +833,15 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
             marginBottom: "0.5rem",
           }}
         />
-        {renderParticipants()}
+        <Participants
+          challenge={challenge}
+          viewProofCallback={(userUnderViewing) => {
+            setState({
+              userUnderViewing,
+              showViewProofModal: true,
+            });
+          }}
+        />
         <IonFab vertical='bottom' horizontal='end' slot='fixed'>
           <IonFabButton color='senary' onClick={fetchData} mode='ios'>
             <IonIcon icon={refreshOutline} />
