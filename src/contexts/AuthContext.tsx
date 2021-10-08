@@ -21,6 +21,7 @@ import { FirebaseError } from "@firebase/util";
 import TokenUtils from "../utils/TokenUtils";
 import { UserData } from "../interfaces/models/Users";
 import { getToken } from "@firebase/messaging";
+import { useSocket } from "./SocketContext";
 
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
@@ -31,6 +32,7 @@ const AuthContext = React.createContext<AuthContextInterface | undefined>(
 
 const AuthProvider: React.FunctionComponent = (props) => {
   const [firstAttemptFinished, setFirstAttemptFinished] = React.useState(false);
+  const { connect } = useSocket();
   const {
     data = null,
     error,
@@ -94,6 +96,7 @@ const AuthProvider: React.FunctionComponent = (props) => {
       const token = await result.user.getIdToken();
       const messagingToken = await getToken(messaging).catch((_) => undefined);
       await AuthService.login(token, messagingToken);
+      await connect();
       await AuthService.getUser();
     } catch (error) {
       return Promise.reject(error);
@@ -107,6 +110,7 @@ const AuthProvider: React.FunctionComponent = (props) => {
       const token = await result.user.getIdToken();
       const messagingToken = await getToken(messaging).catch((_) => undefined);
       await AuthService.login(token, messagingToken);
+      await connect();
       await AuthService.getUser();
     } catch (error) {
       return Promise.reject(error);
@@ -124,6 +128,7 @@ const AuthProvider: React.FunctionComponent = (props) => {
       const token = await user.getIdToken();
       const messagingToken = await getToken(messaging).catch((_) => undefined);
       await AuthService.login(token, messagingToken);
+      await connect();
       await AuthService.getUser();
     } catch (error) {
       return Promise.reject(error);

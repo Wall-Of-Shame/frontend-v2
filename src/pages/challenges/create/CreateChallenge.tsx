@@ -77,15 +77,6 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
   const [showModal, setShowModal] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [showOfflineToast, setShowOfflineToast] = useState(false);
-  const formatDistanceLocale = {
-    xSeconds: "{{count}} sec",
-    xMinutes: "{{count}} min",
-    xHours: "{{count}} h",
-  };
-  const shortEnLocale = {
-    formatDistance: (token: "xSeconds" | "xMinutes" | "xHours", count: any) =>
-      formatDistanceLocale[token].replace("{{count}}", count),
-  };
 
   const [state, setState] = useReducer(
     (s: CreateChallengeState, a: Partial<CreateChallengeState>) => ({

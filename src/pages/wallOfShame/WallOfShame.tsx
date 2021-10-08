@@ -40,8 +40,8 @@ import Alert from "../../components/alert";
 import AvatarImg from "../../components/avatar";
 import { isPlatform } from "@ionic/core";
 import Scrollbars from "react-custom-scrollbars";
-import io from "socket.io-client";
 import { Socket } from "socket.io-client";
+import { useSocket } from "../../contexts/SocketContext";
 
 interface WallOfShameState {
   isLoading: boolean;
@@ -56,9 +56,9 @@ interface WallOfShameState {
 
 const WallOfShame: React.FC = () => {
   const location = useLocation();
+  const { connect } = useSocket();
   const { getGlobalRankings, getFriendsRankings } = useUser();
 
-  const [socket, setSocket] = useState<Socket | null>(null);
   const [tab, setTab] = useState("live");
   const [shames, setShames] = useState<Shame[]>([]);
   const [lastUpdated, setLastUpdated] = useState(Date.now());
@@ -70,6 +70,8 @@ const WallOfShame: React.FC = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [type, setType] = useState("Global");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [socket, setSocket] = useState<Socket | undefined>(undefined);
 
   const [state, setState] = useReducer(
     (s: WallOfShameState, a: Partial<WallOfShameState>) => ({
@@ -123,18 +125,20 @@ const WallOfShame: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    const newSocket = io("wss://localhost:3001", {
-      transports: ["websocket", "polling"], // use WebSocket first, if available
+  const connectToSocket = async () => {
+    const globalSocket = await connect();
+    setSocket(globalSocket);
+    globalSocket?.emit("globalLeaderboard", {}, (data: UserList[]) => {
+      setGlobalRankings(data);
     });
-    setSocket(newSocket);
-    return () => {
-      newSocket.close();
-    };
-  }, [setSocket]);
+    globalSocket?.on("globalLeaderboard", (data: UserList[]) => {
+      setGlobalRankings(data);
+    });
+  };
 
   useEffect(() => {
-    fetchData();
+    // fetchData();
+    connectToSocket();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

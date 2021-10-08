@@ -40,8 +40,7 @@ import { format } from "date-fns";
 import parseISO from "date-fns/parseISO";
 import AvatarImg from "../../components/avatar";
 import { isPlatform } from "@ionic/core";
-import io from "socket.io-client";
-import { Socket } from "socket.io-client";
+import { useSocket } from "../../contexts/SocketContext";
 
 interface ChallengesState {
   isLoading: boolean;
@@ -56,12 +55,12 @@ interface ChallengesState {
 
 const Challenges: React.FC = () => {
   const { user } = useUser();
+  const { connect } = useSocket();
   const location = useLocation();
   const history = useHistory();
   const { getAllChallenges } = useChallenge();
   const selectChallenges = (state: RootState): ChallengeDux => state.challenges;
 
-  const [socket, setSocket] = useState<Socket | null>(null);
   const [tab, setTab] = useState("ongoing");
   const [showModal, setShowModal] = useState(false);
 
@@ -94,15 +93,15 @@ const Challenges: React.FC = () => {
     }
   );
 
+  const connectToSocket = async () => {
+    await connect();
+  };
+
   useEffect(() => {
-    const newSocket = io("ws://localhost:3001", {
-      transports: ["websocket"],
-    });
-    setSocket(newSocket);
-    return () => {
-      newSocket.close();
-    };
-  }, [setSocket]);
+    fetchData();
+    connectToSocket();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (
