@@ -1,8 +1,6 @@
 import {
-  IonAvatar,
   IonButton,
   IonButtons,
-  IonCol,
   IonContent,
   IonDatetime,
   IonFooter,
@@ -19,7 +17,7 @@ import {
   IonTextarea,
   IonToolbar,
 } from "@ionic/react";
-import { arrowBackOutline, personAdd } from "ionicons/icons";
+import { arrowBackOutline } from "ionicons/icons";
 import { useState, useReducer, useEffect } from "react";
 import {
   addHours,
@@ -39,12 +37,9 @@ import {
 } from "../../../interfaces/models/Challenges";
 import { useChallenge } from "../../../contexts/ChallengeContext";
 import { UserList } from "../../../interfaces/models/Users";
-import { trimDisplayName } from "../../../utils/ProfileUtils";
-import { useUser } from "../../../contexts/UserContext";
 import { hideTabs } from "../../../utils/TabsUtils";
 import LoadingSpinner from "../../../components/loadingSpinner";
 import Alert from "../../../components/alert";
-import AvatarImg from "../../../components/avatar";
 import OfflineToast from "../../../components/offlineToast";
 import { useHistory } from "react-router";
 import { intervalToDuration } from "date-fns/esm";
@@ -71,7 +66,6 @@ interface CreateChallengeState {
 const CreateChallenge: React.FC<CreateChallengeProps> = (
   props: CreateChallengeProps
 ) => {
-  const { user } = useUser();
   const history = useHistory();
   const { createChallenge } = useChallenge();
   const [showModal, setShowModal] = useState(false);

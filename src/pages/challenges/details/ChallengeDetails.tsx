@@ -1,8 +1,6 @@
 import {
-  IonAvatar,
   IonButton,
   IonButtons,
-  IonCol,
   IonContent,
   IonFab,
   IonFabButton,
@@ -10,9 +8,6 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
   IonPage,
   IonRow,
   IonText,
@@ -22,14 +17,13 @@ import {
 import { useReducer, useState } from "react";
 import { arrowBackOutline, pencil, refreshOutline } from "ionicons/icons";
 import { useEffect } from "react";
-import { Redirect, useLocation } from "react-router";
+import { Redirect, useHistory, useLocation } from "react-router";
 import { useChallenge } from "../../../contexts/ChallengeContext";
 import { ChallengeData, UserMini } from "../../../interfaces/models/Challenges";
 import "./ChallengeDetails.scss";
 import { format, formatISO, parseISO } from "date-fns";
 import { useUser } from "../../../contexts/UserContext";
 import EditChallenge from "../edit";
-import { trimDisplayName } from "../../../utils/ProfileUtils";
 import LoadingSpinner from "../../../components/loadingSpinner";
 import Alert from "../../../components/alert";
 import isAfter from "date-fns/isAfter";
@@ -43,15 +37,13 @@ import { hideTabs } from "../../../utils/TabsUtils";
 import { database } from "../../../firebase";
 import { ref, set } from "firebase/database";
 import { VoteData } from "../../../interfaces/models/Votes";
-import AvatarImg from "../../../components/avatar";
 import ActiveChallengeImg from "../../../components/activeChallengeImg";
 import PendingChallengeImg from "../../../components/pendingChallengeImg";
 import highground from "../../../assets/onboarding/highground.png";
 import OfflineToast from "../../../components/offlineToast";
-import io from "socket.io-client";
-import { Socket } from "socket.io-client";
 import Countdown from "./CountDown";
 import Participants from "./Participants";
+import FooterActions from "./FooterActions";
 
 interface ChallengeDetailsProps {}
 
@@ -75,6 +67,7 @@ interface ChallengeDetailsState {
 
 const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   const location = useLocation();
+  const history = useHistory();
   const { user } = useUser()!;
   const {
     getChallenge,
@@ -84,7 +77,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     releaseResults,
   } = useChallenge();
 
-  const [socket, setSocket] = useState<Socket | null>(null);
   const [challenge, setChallenge] = useState<ChallengeData | null>(
     location.state as ChallengeData
   );
@@ -365,18 +357,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [didFinish]);
 
-  /*
-  useEffect(() => {
-    const newSocket = io(process.env.REACT_APP_BACKEND_API!, {
-      transports: ["websocket"],
-    });
-    setSocket(newSocket);
-    return () => {
-      newSocket.close();
-    };
-  }, [setSocket]);
-  */
-
   const renderImage = () => {
     if (challenge === null) {
       return <Redirect to={"challenges"} />;
@@ -448,245 +428,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     return <></>;
   };
 
-  const renderFooter = () => {
-    if (challenge === null) {
-      return <Redirect to={"challenges"} />;
-    }
-    if (challenge.hasReleasedResult) {
-      return (
-        <IonRow
-          className='ion-justify-content-center'
-          style={{ margin: "0.5rem" }}
-        >
-          <IonButton
-            mode='ios'
-            shape='round'
-            color='secondary'
-            expand='block'
-            fill='solid'
-            onClick={() => setState({ showVoteModal: true })}
-          >
-            <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>
-              View voting results
-            </IonText>
-          </IonButton>
-        </IonRow>
-      );
-    }
-    if (isAfter(Date.now(), parseISO(challenge.endAt!))) {
-      return (
-        <>
-          {user?.userId === challenge.owner.userId ? (
-            <IonRow
-              className='ion-justify-content-around'
-              style={{ margin: "0.5rem" }}
-            >
-              <IonButton
-                mode='ios'
-                shape='round'
-                color='secondary'
-                expand='block'
-                fill='solid'
-                onClick={() => setState({ showVoteModal: true })}
-              >
-                <IonText
-                  style={{ marginLeft: "1.5rem", marginRight: "1.5rem" }}
-                >
-                  Vote out cheaters
-                </IonText>
-              </IonButton>
-              <IonButton
-                mode='ios'
-                shape='round'
-                color='senary'
-                expand='block'
-                fill='solid'
-                onClick={() => {
-                  setState({
-                    showAlert: true,
-                    hasConfirm: true,
-                    alertHeader: "Are you sure?",
-                    alertMessage:
-                      "This will confirm the challenge and voting results and banish those who failed the challenge or cheated to the Wall of Shame :')",
-                    confirmHandler: handleReleaseResults,
-                  });
-                }}
-              >
-                <IonText
-                  style={{ marginLeft: "1.5rem", marginRight: "1.5rem" }}
-                >
-                  Release Results
-                </IonText>
-              </IonButton>
-            </IonRow>
-          ) : (
-            <IonRow
-              className='ion-justify-content-center'
-              style={{ margin: "0.5rem" }}
-            >
-              <IonButton
-                mode='ios'
-                shape='round'
-                color='secondary'
-                expand='block'
-                fill='solid'
-                onClick={() => setState({ showVoteModal: true })}
-              >
-                <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>
-                  Vote out cheaters
-                </IonText>
-              </IonButton>
-            </IonRow>
-          )}
-        </>
-      );
-    }
-    if (
-      challenge.participants.accepted.completed.findIndex(
-        (p) => p.userId === user?.userId
-      ) !== -1
-    ) {
-      const viewingUser = challenge.participants.accepted.completed.find(
-        (p) => p.userId === user?.userId
-      );
-      const evidenceLink = viewingUser?.evidenceLink ?? "";
-      return (
-        <IonRow
-          className='ion-justify-content-around'
-          style={{ margin: "0.5rem" }}
-        >
-          <IonButton
-            mode='ios'
-            shape='round'
-            color='secondary'
-            expand='block'
-            fill='solid'
-            onClick={() =>
-              setState({
-                showUploadProofModal: true,
-              })
-            }
-          >
-            <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>
-              {evidenceLink !== "" ? "Re-upload proof" : "Upload proof"}
-            </IonText>
-          </IonButton>
-        </IonRow>
-      );
-    }
-
-    if (isAfter(Date.now(), parseISO(challenge.startAt!))) {
-      return (
-        <IonRow
-          className='ion-justify-content-around'
-          style={{ margin: "0.5rem" }}
-        >
-          <IonButton
-            mode='ios'
-            shape='round'
-            color='secondary'
-            expand='block'
-            fill='solid'
-            onClick={handleComplete}
-          >
-            <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>
-              I've completed the challenge
-            </IonText>
-          </IonButton>
-        </IonRow>
-      );
-    }
-
-    if (user?.userId === challenge.owner.userId) {
-      return (
-        <IonRow
-          className='ion-justify-content-center'
-          style={{ margin: "0.5rem" }}
-        >
-          <IonButton shape='round' color='secondary-shade' mode='ios'>
-            <IonText style={{ marginLeft: "1.5rem", marginRight: "1.5rem" }}>
-              Waiting for the challenge to start
-            </IonText>
-          </IonButton>
-        </IonRow>
-      );
-    }
-
-    if (
-      challenge.participants.pending.findIndex(
-        (p) => p.userId === user?.userId
-      ) !== -1
-    ) {
-      return (
-        <IonRow
-          className='ion-justify-content-around'
-          style={{ margin: "0.5rem" }}
-        >
-          <IonCol>
-            <IonButton
-              mode='ios'
-              shape='round'
-              color='danger'
-              expand='block'
-              fill='solid'
-              onClick={() => {
-                setState({
-                  showAlert: true,
-                  alertHeader: "Are you sure?",
-                  alertMessage:
-                    "Once rejected, you will no longer be able to access this challenge 😱",
-                  hasConfirm: true,
-                  confirmHandler: handleReject,
-                });
-              }}
-            >
-              <IonText>Nope</IonText>
-            </IonButton>
-          </IonCol>
-          <IonCol>
-            <IonButton
-              mode='ios'
-              shape='round'
-              color='secondary'
-              fill='solid'
-              expand='block'
-              style={{ marginBottom: "0.5rem" }}
-              onClick={() => {
-                setState({
-                  showAlert: true,
-                  alertHeader: "Are you sure?",
-                  alertMessage:
-                    "Once accepted, you will need to complete the challenge or get thrown onto the Wall of Shame 🙈",
-                  hasConfirm: true,
-                  confirmHandler: handleAccept,
-                });
-              }}
-            >
-              <IonText>I'm ready!</IonText>
-            </IonButton>
-          </IonCol>
-        </IonRow>
-      );
-    }
-
-    return (
-      <IonRow
-        className='ion-justify-content-center'
-        style={{ margin: "0.5rem" }}
-      >
-        <IonButton shape='round' color='secondary' disabled mode='ios'>
-          <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>
-            Waiting for the challenge to start
-          </IonText>
-        </IonButton>
-      </IonRow>
-    );
-  };
-
-  if (!(location.state as ChallengeData)) {
-    return <Redirect to={"challenges"} />;
-  }
-
   if (challenge === null) {
     return <Redirect to={"challenges"} />;
   }
@@ -711,7 +452,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
               }}
               color='dark'
               onClick={() => {
-                window.history.back();
+                history.goBack();
               }}
             >
               <IonIcon icon={arrowBackOutline} size='large' />
@@ -908,7 +649,31 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
         />
       </IonContent>
       <IonFooter translucent={true}>
-        <IonToolbar>{renderFooter()}</IonToolbar>
+        <IonToolbar>
+          <FooterActions
+            challenge={challenge}
+            viewVoteCallback={() => setState({ showVoteModal: true })}
+            uploadProofCallback={() => setState({ showUploadProofModal: true })}
+            handleAccept={handleAccept}
+            handleReject={handleReject}
+            handleComplete={handleComplete}
+            handleReleaseResults={handleReleaseResults}
+            alertCallback={(
+              hasConfirm,
+              alertHeader,
+              alertMessage,
+              confirmHandler
+            ) => {
+              setState({
+                showAlert: true,
+                hasConfirm: true,
+                alertHeader,
+                alertMessage,
+                confirmHandler,
+              });
+            }}
+          />
+        </IonToolbar>
       </IonFooter>
     </IonPage>
   );

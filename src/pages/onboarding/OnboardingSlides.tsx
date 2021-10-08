@@ -161,9 +161,8 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
                   color='quaternary'
                   style={{ marginLeft: "1rem", marginRight: "1rem" }}
                   onClick={async () => {
-                    continueWithGoogle(() => {
-                      setState({ isLoading: true });
-                    })
+                    setState({ isLoading: true });
+                    continueWithGoogle(() => {})
                       .then(() => {
                         setState({ isLoading: false });
                         window.location.reload();
@@ -198,9 +197,8 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
                   color='tertiary'
                   style={{ marginLeft: "1rem", marginRight: "1rem" }}
                   onClick={async () => {
-                    continueWithFacebook(() => {
-                      setState({ isLoading: true });
-                    })
+                    setState({ isLoading: true });
+                    continueWithFacebook(() => {})
                       .then(() => {
                         setState({ isLoading: false });
                         window.location.reload();
