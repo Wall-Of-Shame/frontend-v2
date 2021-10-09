@@ -30,7 +30,7 @@ const Explore: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader className={isPlatform("ios") ? "ion-no-border" : ""}>
+      <IonHeader>
         <IonToolbar>
           <IonTitle>Explore</IonTitle>
         </IonToolbar>
