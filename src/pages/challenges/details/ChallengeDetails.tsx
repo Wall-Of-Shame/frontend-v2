@@ -574,7 +574,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
             </IonText>
           </IonRow>
         </IonGrid>
-        <IonRow style={{ paddingLeft: "1rem", paddingRight: "1rem" }}>
+        <IonRow>
           <IonSegment
             onIonChange={(e) => setTab(e.detail.value ?? "active")}
             value={tab}
@@ -608,10 +608,16 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
                   style={{ marginTop: "0.25rem", marginBottom: "1.5rem" }}
                 >
                   <IonText
+                    color='dark'
                     style={{ fontWeight: "bold", fontSize: "1.5rem" }}
-                    color={startsIn < 3600 ? "danger" : "medium"}
                   >
-                    {`Starts in: ${
+                    Starts in:&nbsp;
+                  </IonText>
+                  <IonText
+                    style={{ fontWeight: "bold", fontSize: "1.5rem" }}
+                    color={startsIn < 3600 ? "danger" : "dark"}
+                  >
+                    {`${
                       intervalToDuration({
                         start: new Date(),
                         end: parseISO(challenge.startAt!),

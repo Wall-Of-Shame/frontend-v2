@@ -15,7 +15,6 @@ import {
   IonRow,
   IonSelect,
   IonSelectOption,
-  IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { useEffect, useReducer, useState } from "react";
@@ -38,8 +37,6 @@ import { useUser } from "../../contexts/UserContext";
 import LoadingSpinner from "../../components/loadingSpinner";
 import Alert from "../../components/alert";
 import AvatarImg from "../../components/avatar";
-import { isPlatform } from "@ionic/core";
-import Scrollbars from "react-custom-scrollbars";
 import { Socket } from "socket.io-client";
 import { useSocket } from "../../contexts/SocketContext";
 
@@ -357,90 +354,60 @@ const WallOfShame: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader className='ion-no-border'>
+      <IonHeader mode='ios'>
         <IonToolbar>
-          {isPlatform("ios") ? (
-            <IonTitle>Wall of Shame</IonTitle>
-          ) : (
-            <div style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}>
-              <IonRow class='ion-justify-content-center ion-no-padding'>
-                <h1 style={{ fontSize: "1.25rem", marginBottom: "0px" }}>
-                  THE
-                </h1>
-              </IonRow>
-              <IonRow class='ion-justify-content-center ion-no-padding'>
-                <h1
-                  style={{
-                    fontSize: "2.25rem",
-                    fontWeight: "bolder",
-                    marginTop: "0px",
-                  }}
-                >
-                  WALL OF SHAME
-                </h1>
-              </IonRow>
-            </div>
-          )}
+          <div style={{ paddingTop: "1rem" }}>
+            <IonRow class='ion-justify-content-center ion-no-padding'>
+              <h1 style={{ fontSize: "1.25rem", marginBottom: "0px" }}>THE</h1>
+            </IonRow>
+            <IonRow class='ion-justify-content-center ion-no-padding'>
+              <h1
+                style={{
+                  fontSize: "2.25rem",
+                  fontWeight: "bolder",
+                  marginTop: "0px",
+                }}
+              >
+                WALL OF SHAME
+              </h1>
+            </IonRow>
+          </div>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonHeader collapse='condense' className='ion-no-border'>
-          <IonToolbar>
-            <div>
-              <IonRow class='ion-justify-content-center ion-no-padding'>
-                <h1 style={{ fontSize: "1.25rem", marginBottom: "0px" }}>
-                  THE
-                </h1>
-              </IonRow>
-              <IonRow class='ion-justify-content-center ion-no-padding'>
-                <h1
-                  style={{
-                    fontSize: "2.25rem",
-                    fontWeight: "bolder",
-                    marginTop: "0px",
-                  }}
-                >
-                  WALL OF SHAME
-                </h1>
-              </IonRow>
-            </div>
-          </IonToolbar>
-        </IonHeader>
-        <Scrollbars>
-          <IonGrid>
-            <IonRow>
-              <IonCol size='6' style={{ paddingRight: "0px" }}>
-                <IonButton
-                  mode='ios'
-                  color={tab === "live" ? "quaternary" : "tertiary"}
-                  expand='block'
-                  style={{
-                    fontWeight: tab === "live" ? "900" : "normal",
-                    textDecoration: tab === "live" ? "underline" : "none",
-                  }}
-                  onClick={() => setTab("live")}
-                >
-                  Live
-                </IonButton>
-              </IonCol>
-              <IonCol size='6' style={{ paddingLeft: "0px" }}>
-                <IonButton
-                  mode='ios'
-                  color={tab !== "live" ? "quaternary" : "tertiary"}
-                  expand='block'
-                  style={{
-                    fontWeight: tab !== "live" ? "900" : "normal",
-                    textDecoration: tab !== "live" ? "underline" : "none",
-                  }}
-                  onClick={() => setTab("shameful")}
-                >
-                  Shameful 100
-                </IonButton>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
-          {renderWall()}
-        </Scrollbars>
+        <IonGrid>
+          <IonRow>
+            <IonCol size='6' style={{ paddingRight: "0px" }}>
+              <IonButton
+                mode='ios'
+                color={tab === "live" ? "quaternary" : "tertiary"}
+                expand='block'
+                style={{
+                  fontWeight: tab === "live" ? "900" : "normal",
+                  textDecoration: tab === "live" ? "underline" : "none",
+                }}
+                onClick={() => setTab("live")}
+              >
+                Live
+              </IonButton>
+            </IonCol>
+            <IonCol size='6' style={{ paddingLeft: "0px" }}>
+              <IonButton
+                mode='ios'
+                color={tab !== "live" ? "quaternary" : "tertiary"}
+                expand='block'
+                style={{
+                  fontWeight: tab !== "live" ? "900" : "normal",
+                  textDecoration: tab !== "live" ? "underline" : "none",
+                }}
+                onClick={() => setTab("shameful")}
+              >
+                Shameful 100
+              </IonButton>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+        {renderWall()}
         <IonFab vertical='bottom' horizontal='end' slot='fixed'>
           <IonFabButton color='senary' onClick={fetchData} mode='ios'>
             <IonIcon icon={refreshOutline} />

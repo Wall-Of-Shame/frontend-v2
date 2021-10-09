@@ -115,6 +115,14 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-senary-shade: #b3ccc5;
   --ion-color-senary-tint: #d0eae3;
 
+  /** border grey **/
+  --ion-color-border: #c4c4c4;
+  --ion-color-border-rgb: 196, 196, 196;
+  --ion-color-border-contrast: #000000;
+  --ion-color-border-contrast-rgb: 0, 0, 0;
+  --ion-color-border-shade: #acacac;
+  --ion-color-border-tint: #cacaca;
+
   --ion-tab-bar-color: #1a1a1a;
   --ion-tab-bar-color-selected: #ffd73c;
 }
@@ -153,6 +161,15 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-contrast-rgb: var(--ion-color-senary-contrast-rgb);
   --ion-color-shade: var(--ion-color-senary-shade);
   --ion-color-tint: var(--ion-color-senary-tint);
+}
+
+.ion-color-border {
+  --ion-color-base: var(--ion-color-border);
+  --ion-color-base-rgb: var(--ion-color-border-rgb);
+  --ion-color-contrast: var(--ion-color-border-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-border-contrast-rgb);
+  --ion-color-shade: var(--ion-color-border-shade);
+  --ion-color-tint: var(--ion-color-border-tint);
 }
 
 @media (prefers-color-scheme: dark) {

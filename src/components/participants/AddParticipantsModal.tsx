@@ -19,7 +19,7 @@ import "./AddParticipantsModal.scss";
 import { UserList } from "../../interfaces/models/Users";
 import { useCallback, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
-import { addOutline, closeOutline, removeOutline } from "ionicons/icons";
+import { addOutline, checkmark, removeOutline } from "ionicons/icons";
 import AvatarImg from "../avatar";
 import lodash from "lodash";
 
@@ -87,7 +87,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
               color='dark'
               onClick={() => completionCallback(invitedUsers)}
             >
-              Done
+              <IonIcon icon={checkmark} />
             </IonButton>
           </IonButtons>
         </IonToolbar>

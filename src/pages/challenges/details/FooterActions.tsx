@@ -178,7 +178,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
       >
         <IonButton shape='round' color='secondary-shade' mode='ios'>
           <IonText style={{ marginLeft: "1.5rem", marginRight: "1.5rem" }}>
-            Waiting for the challenge to start
+            Waiting to start
           </IonText>
         </IonButton>
       </IonRow>
@@ -242,7 +242,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
     <IonRow className='ion-justify-content-center' style={{ margin: "0.5rem" }}>
       <IonButton shape='round' color='secondary' disabled mode='ios'>
         <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>
-          Waiting for the challenge to start
+          Waiting to start
         </IonText>
       </IonButton>
     </IonRow>

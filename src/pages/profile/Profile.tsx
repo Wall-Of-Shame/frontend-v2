@@ -261,15 +261,15 @@ const Profile: React.FC = () => {
         </IonList>
       </IonPopover>
 
-      <IonHeader
-        className={isPlatform("ios") ? "ion-no-border" : ""}
-        translucent
-      >
+      <IonHeader>
         <IonToolbar>
           <IonButtons slot='end'>
             <IonButton
               style={{
-                margin: "0.5rem",
+                height: "2.5rem",
+                marginTop: "0.25rem",
+                marginRight: "0.5rem",
+                marginBottom: "0.25rem",
               }}
               color='dark'
               onClick={(e: any) => {

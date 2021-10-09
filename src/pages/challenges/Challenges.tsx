@@ -1,5 +1,6 @@
 import {
   IonAvatar,
+  IonBadge,
   IonButton,
   IonButtons,
   IonCard,
@@ -24,7 +25,7 @@ import {
 } from "@ionic/react";
 import "./Challenges.scss";
 import { useEffect, useReducer, useState } from "react";
-import { chevronForward, addOutline, refreshOutline } from "ionicons/icons";
+import { chevronForward, refreshOutline, mailOutline } from "ionicons/icons";
 import { hideTabs, showTabs } from "../../utils/TabsUtils";
 import { useHistory, useLocation } from "react-router";
 import SetUpProfileModal from "../../components/setupProfile/ProfileSetUpModal";
@@ -41,6 +42,7 @@ import parseISO from "date-fns/parseISO";
 import AvatarImg from "../../components/avatar";
 import { isPlatform } from "@ionic/core";
 import { useSocket } from "../../contexts/SocketContext";
+import challenge from "../../assets/onboarding/challenge.png";
 
 interface ChallengesState {
   isLoading: boolean;
@@ -214,12 +216,14 @@ const Challenges: React.FC = () => {
             <IonGrid
               style={{
                 display: "flex",
-                height: "80%",
+                height: "37.5vh",
                 justifyContent: "center",
                 alignItems: "center",
               }}
             >
-              <IonRow className='ion-padding'>No challenges yet</IonRow>
+              <IonRow className='ion-padding ion-justify-content-center'>
+                {"There's nothing here >_<"}
+              </IonRow>
             </IonGrid>
           );
         }
@@ -319,12 +323,6 @@ const Challenges: React.FC = () => {
               )}
               {pendingStart.length > 0 && (
                 <>
-                  <IonRow className='ion-padding-horizontal ion-margin-top'>
-                    <IonText style={{ color: "grey", marginTop: 5 }}>
-                      Waiting to start
-                    </IonText>
-                  </IonRow>
-
                   {pendingStart?.map((c) => {
                     const acceptedCount =
                       c.participants.accepted.completed.concat(
@@ -416,12 +414,14 @@ const Challenges: React.FC = () => {
             <IonGrid
               style={{
                 display: "flex",
-                height: "80%",
+                height: "37.5vh",
                 justifyContent: "center",
                 alignItems: "center",
               }}
             >
-              <IonRow className='ion-padding'>No challenges yet</IonRow>
+              <IonRow className='ion-padding ion-justify-content-center'>
+                {"There's nothing here >_<"}
+              </IonRow>
             </IonGrid>
           );
         }
@@ -444,44 +444,66 @@ const Challenges: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader className={isPlatform("ios") ? "ion-no-border" : ""}>
-        <IonToolbar>
-          <IonTitle>Challenges</IonTitle>
-          {!isPlatform("ios") && (
-            <IonButtons slot='end'>
-              <IonButton
-                style={{
-                  marginRight: "0.5rem",
-                }}
-                color='dark'
-                routerLink='challenges/create'
-              >
-                <IonIcon icon={addOutline} />
-              </IonButton>
-            </IonButtons>
-          )}
+      <IonHeader>
+        <IonToolbar
+          style={{
+            paddingTop: isPlatform("ios") ? "1.25rem" : 0,
+            paddingBottom: isPlatform("ios") ? "0.25rem" : 0,
+          }}
+        >
+          <IonTitle size='large'>Challenges</IonTitle>
+          <IonButtons slot='end'>
+            <IonButton
+              color='dark'
+              routerLink='challenges/create'
+              style={{
+                height: "2.5rem",
+                marginRight: "0.5rem",
+                marginTop: "0.5rem",
+              }}
+            >
+              <IonIcon
+                icon={mailOutline}
+                size='large'
+                style={{ padding: "0.5rem" }}
+              ></IonIcon>
+              {pendingResponse.length > 0 && (
+                <IonBadge
+                  mode='ios'
+                  color='danger'
+                  style={{
+                    position: "absolute",
+                    top: "0rem",
+                    right: "0rem",
+                  }}
+                >
+                  {pendingResponse.length}
+                </IonBadge>
+              )}
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonHeader
-          collapse='condense'
-          className={isPlatform("ios") ? "ion-no-border" : ""}
+        <IonRow className='ion-justify-content-center ion-padding'>
+          <img
+            src={challenge}
+            alt='Challenge'
+            className='create-challenge-img'
+          />
+        </IonRow>
+        <IonRow
+          className='ion-justify-content-center'
+          style={{ marginBottom: "1.5rem" }}
         >
-          <IonToolbar>
-            <IonTitle size='large'>Challenges</IonTitle>
-            <IonButtons slot='end'>
-              <IonButton
-                style={{
-                  marginRight: "0.5rem",
-                }}
-                color='dark'
-                routerLink='challenges/create'
-              >
-                <IonIcon icon={addOutline} style={{ fontSize: "2rem" }} />
-              </IonButton>
-            </IonButtons>
-          </IonToolbar>
-        </IonHeader>
+          <IonButton
+            shape='round'
+            fill='outline'
+            routerLink='challenges/create'
+          >
+            Create a new challenge
+          </IonButton>
+        </IonRow>
         <IonSegment
           onIonChange={(e) => setTab(e.detail.value ?? "active")}
           value={tab}
