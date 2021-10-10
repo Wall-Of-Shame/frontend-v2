@@ -486,24 +486,27 @@ const Challenges: React.FC = () => {
             Create a new challenge
           </IonButton>
         </IonRow>
-        <IonSegment
-          onIonChange={(e) => setTab(e.detail.value ?? "active")}
-          value={tab}
-          mode='md'
-          color='dark'
-          style={{
-            marginTop: "1rem",
-            paddingRight: "0.5rem",
-            paddingLeft: "0.5rem",
-          }}
-        >
-          <IonSegmentButton value='ongoing' className='ion-text-capitalize'>
-            <IonLabel>Ongoing</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value='pending' className='ion-text-capitalize'>
-            <IonLabel>Upcoming</IonLabel>
-          </IonSegmentButton>
-        </IonSegment>
+        <IonRow style={{ borderBottom: "1px #cecece solid" }}>
+          <IonCol size='6' className='ion-no-padding'>
+            <IonSegment
+              onIonChange={(e) => setTab(e.detail.value ?? "active")}
+              value={tab}
+              mode='md'
+              color='dark'
+              style={{
+                marginLeft: "1rem",
+                marginRight: "1rem",
+              }}
+            >
+              <IonSegmentButton value='ongoing' className='ion-text-capitalize'>
+                <IonLabel>Ongoing</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton value='pending' className='ion-text-capitalize'>
+                <IonLabel>Upcoming</IonLabel>
+              </IonSegmentButton>
+            </IonSegment>
+          </IonCol>
+        </IonRow>
         {renderChallenges()}
         <IonFab vertical='bottom' horizontal='end' slot='fixed'>
           <IonFabButton color='senary' onClick={fetchData} mode='ios'>

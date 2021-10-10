@@ -20,8 +20,6 @@ import {
   IonRow,
   IonSegment,
   IonSegmentButton,
-  IonSelect,
-  IonSelectOption,
   IonText,
   IonTitle,
   IonToolbar,
@@ -82,7 +80,6 @@ const WallOfShame: React.FC = () => {
   const [hasSynced, setHasSynced] = useState(false);
   const [globalRankings, setGlobalRankings] = useState<UserList[]>([]);
   const [friendsRankings, setFriendsRankings] = useState<UserList[]>([]);
-  const types = ["Global", "Friends"];
   const trophyColors = ["#ffd73c", "#bcbcbc", "#be7b2d"];
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -185,7 +182,7 @@ const WallOfShame: React.FC = () => {
     switch (tab) {
       case "live":
         if (shames.length <= 0) {
-          return <Container>No records yet</Container>;
+          return <Container>{"There's nothing here >_<"}</Container>;
         }
         return (
           <>
@@ -235,6 +232,7 @@ const WallOfShame: React.FC = () => {
                   color='dark'
                   style={{
                     marginLeft: "1rem",
+                    marginRight: "1rem",
                   }}
                 >
                   <IonSegmentButton
@@ -259,7 +257,7 @@ const WallOfShame: React.FC = () => {
               {globalRankings.length > 1 && (
                 <IonCol size='4'>
                   <IonRow className='ion-justify-content-center'>
-                    <IonAvatar style={{ width: "5rem", height: "5rem" }}>
+                    <IonAvatar className='second-place-avatar'>
                       <AvatarImg avatar={globalTopThree[1].avatar} />
                     </IonAvatar>
                   </IonRow>
@@ -288,7 +286,7 @@ const WallOfShame: React.FC = () => {
               {globalRankings.length > 0 && (
                 <IonCol size='4'>
                   <IonRow className='ion-justify-content-center'>
-                    <IonAvatar style={{ width: "7rem", height: "7rem" }}>
+                    <IonAvatar className='first-place-avatar'>
                       <AvatarImg avatar={globalTopThree[0].avatar} />
                     </IonAvatar>
                   </IonRow>
@@ -317,7 +315,7 @@ const WallOfShame: React.FC = () => {
               {globalRankings.length > 2 && (
                 <IonCol size='4'>
                   <IonRow className='ion-justify-content-center'>
-                    <IonAvatar style={{ width: "5rem", height: "5rem" }}>
+                    <IonAvatar className='third-place-avatar'>
                       <AvatarImg avatar={globalTopThree[2].avatar} />
                     </IonAvatar>
                   </IonRow>
@@ -344,107 +342,121 @@ const WallOfShame: React.FC = () => {
                 </IonCol>
               )}
             </IonRow>
-            <IonList style={{ marginTop: "1rem" }}>
-              {type === "Global" ? (
-                <>
-                  {globalRankings.length > 0 ? (
-                    <>
-                      {globalRankings
-                        .sort((x, y) => {
-                          const xCount =
-                            x.failedChallengeCount +
-                            (x.vetoedChallengeCount ?? 0);
-                          const yCount =
-                            y.failedChallengeCount +
-                            (y.vetoedChallengeCount ?? 0);
-                          return yCount - xCount;
-                        })
-                        .slice(3)
-                        .map((r, index) => {
-                          return (
-                            <IonItem lines='none' key={r.userId}>
-                              <IonAvatar slot='start'>
-                                <AvatarImg avatar={r.avatar} />
-                              </IonAvatar>
-                              <IonLabel>
-                                <h4 style={{ fontWeight: "bold" }}>{r.name}</h4>
-                              </IonLabel>
-                              <IonLabel slot='end'>
-                                {r.failedChallengeCount +
-                                  (r.vetoedChallengeCount ?? 0)}
-                              </IonLabel>
-                            </IonItem>
-                          );
-                        })}
-                    </>
-                  ) : (
-                    <IonGrid
-                      style={{
-                        display: "flex",
-                        height: "70%",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <IonRow className='ion-padding'>No records yet</IonRow>
-                    </IonGrid>
-                  )}
-                </>
-              ) : (
-                <>
-                  {friendsRankings.length > 0 ? (
-                    <>
-                      {friendsRankings
-                        .sort((x, y) => {
-                          const xCount =
-                            x.failedChallengeCount +
-                            (x.vetoedChallengeCount ?? 0);
-                          const yCount =
-                            y.failedChallengeCount +
-                            (y.vetoedChallengeCount ?? 0);
-                          return yCount - xCount;
-                        })
-                        .map((r, index) => {
-                          return (
-                            <IonItem lines='none' key={r.userId}>
-                              <IonAvatar slot='start'>
-                                <AvatarImg avatar={r.avatar} />{" "}
-                              </IonAvatar>
-                              <IonLabel>
-                                <h4 style={{ fontWeight: "bold" }}>{r.name}</h4>
-                              </IonLabel>
-                              <IonLabel slot='end'>
-                                {r.failedChallengeCount +
-                                  (r.vetoedChallengeCount ?? 0)}
-                              </IonLabel>
-                              {index < 3 ? (
-                                <IonIcon
-                                  slot='end'
-                                  icon={trophy}
-                                  style={{
-                                    color: trophyColors[index],
-                                  }}
-                                ></IonIcon>
-                              ) : (
-                                <IonIcon
-                                  slot='end'
-                                  icon={trophy}
-                                  color='light'
-                                  style={{
-                                    opacity: 0,
-                                  }}
-                                ></IonIcon>
-                              )}
-                            </IonItem>
-                          );
-                        })}
-                    </>
-                  ) : (
-                    <Container>No records yet</Container>
-                  )}
-                </>
-              )}
-            </IonList>
+            <IonCard>
+              <IonList style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+                {type === "Global" ? (
+                  <>
+                    {globalRankings.length > 0 ? (
+                      <>
+                        {globalRankings
+                          .sort((x, y) => {
+                            const xCount =
+                              x.failedChallengeCount +
+                              (x.vetoedChallengeCount ?? 0);
+                            const yCount =
+                              y.failedChallengeCount +
+                              (y.vetoedChallengeCount ?? 0);
+                            return yCount - xCount;
+                          })
+                          .slice(3)
+                          .map((r, index) => {
+                            return (
+                              <IonItem
+                                lines='none'
+                                key={r.userId}
+                                className='leaderboard-item'
+                              >
+                                <IonAvatar slot='start'>
+                                  <AvatarImg avatar={r.avatar} />
+                                </IonAvatar>
+                                <IonLabel>
+                                  <h4 style={{ fontWeight: "bold" }}>
+                                    {r.name}
+                                  </h4>
+                                </IonLabel>
+                                <IonLabel slot='end'>
+                                  {r.failedChallengeCount +
+                                    (r.vetoedChallengeCount ?? 0)}
+                                </IonLabel>
+                              </IonItem>
+                            );
+                          })}
+                      </>
+                    ) : (
+                      <IonGrid
+                        style={{
+                          display: "flex",
+                          height: "70%",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <IonRow className='ion-padding'>No records yet</IonRow>
+                      </IonGrid>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {friendsRankings.length > 0 ? (
+                      <>
+                        {friendsRankings
+                          .sort((x, y) => {
+                            const xCount =
+                              x.failedChallengeCount +
+                              (x.vetoedChallengeCount ?? 0);
+                            const yCount =
+                              y.failedChallengeCount +
+                              (y.vetoedChallengeCount ?? 0);
+                            return yCount - xCount;
+                          })
+                          .map((r, index) => {
+                            return (
+                              <IonItem
+                                lines='none'
+                                key={r.userId}
+                                className='leaderboard-item'
+                              >
+                                <IonAvatar slot='start'>
+                                  <AvatarImg avatar={r.avatar} />{" "}
+                                </IonAvatar>
+                                <IonLabel>
+                                  <h4 style={{ fontWeight: "bold" }}>
+                                    {r.name}
+                                  </h4>
+                                </IonLabel>
+                                <IonLabel slot='end'>
+                                  {r.failedChallengeCount +
+                                    (r.vetoedChallengeCount ?? 0)}
+                                </IonLabel>
+                                {index < 3 ? (
+                                  <IonIcon
+                                    slot='end'
+                                    icon={trophy}
+                                    style={{
+                                      color: trophyColors[index],
+                                    }}
+                                  ></IonIcon>
+                                ) : (
+                                  <IonIcon
+                                    slot='end'
+                                    icon={trophy}
+                                    color='light'
+                                    style={{
+                                      opacity: 0,
+                                    }}
+                                  ></IonIcon>
+                                )}
+                              </IonItem>
+                            );
+                          })}
+                      </>
+                    ) : (
+                      <Container>No records yet</Container>
+                    )}
+                  </>
+                )}
+              </IonList>
+            </IonCard>
           </>
         );
     }

@@ -1,6 +1,7 @@
 import {
   IonButtons,
   IonCard,
+  IonCol,
   IonContent,
   IonFab,
   IonFabButton,
@@ -609,23 +610,26 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
             </IonText>
           </IonRow>
         </IonGrid>
-        <IonRow>
-          <IonSegment
-            onIonChange={(e) => setTab(e.detail.value ?? "active")}
-            value={tab}
-            mode='md'
-            color='dark'
-          >
-            <IonSegmentButton value='details' className='ion-text-capitalize'>
-              <IonLabel>Details</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton
-              value='participants'
-              className='ion-text-capitalize'
+        <IonRow style={{ borderBottom: "1px #cecece solid" }}>
+          <IonCol size='6' className='ion-no-padding'>
+            <IonSegment
+              onIonChange={(e) => setTab(e.detail.value ?? "active")}
+              value={tab}
+              mode='md'
+              color='dark'
+              style={{ marginLeft: "1rem", marginRight: "1rem" }}
             >
-              <IonLabel>Participants</IonLabel>
-            </IonSegmentButton>
-          </IonSegment>
+              <IonSegmentButton value='details' className='ion-text-capitalize'>
+                <IonLabel>Details</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton
+                value='participants'
+                className='ion-text-capitalize'
+              >
+                <IonLabel>Participants</IonLabel>
+              </IonSegmentButton>
+            </IonSegment>
+          </IonCol>
         </IonRow>
         {tab === "details" ? (
           <>
