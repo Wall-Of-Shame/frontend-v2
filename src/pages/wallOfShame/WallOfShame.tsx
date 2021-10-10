@@ -261,6 +261,15 @@ const WallOfShame: React.FC = () => {
                       <AvatarImg avatar={globalTopThree[1].avatar} />
                     </IonAvatar>
                   </IonRow>
+                  <IonRow className='ion-justify-content-center'>
+                    <IonIcon
+                      icon={trophy}
+                      style={{
+                        color: trophyColors[1],
+                        marginTop: "0.5rem",
+                      }}
+                    ></IonIcon>
+                  </IonRow>
                   <IonRow
                     className='ion-justify-content-center'
                     style={{ marginTop: "0.25rem" }}
@@ -290,6 +299,15 @@ const WallOfShame: React.FC = () => {
                       <AvatarImg avatar={globalTopThree[0].avatar} />
                     </IonAvatar>
                   </IonRow>
+                  <IonRow className='ion-justify-content-center'>
+                    <IonIcon
+                      icon={trophy}
+                      style={{
+                        color: trophyColors[0],
+                        marginTop: "0.5rem",
+                      }}
+                    ></IonIcon>
+                  </IonRow>
                   <IonRow
                     className='ion-justify-content-center'
                     style={{ marginTop: "0.25rem" }}
@@ -318,6 +336,15 @@ const WallOfShame: React.FC = () => {
                     <IonAvatar className='third-place-avatar'>
                       <AvatarImg avatar={globalTopThree[2].avatar} />
                     </IonAvatar>
+                  </IonRow>
+                  <IonRow className='ion-justify-content-center'>
+                    <IonIcon
+                      icon={trophy}
+                      style={{
+                        color: trophyColors[2],
+                        marginTop: "0.5rem",
+                      }}
+                    ></IonIcon>
                   </IonRow>
                   <IonRow
                     className='ion-justify-content-center'
@@ -391,7 +418,9 @@ const WallOfShame: React.FC = () => {
                           alignItems: "center",
                         }}
                       >
-                        <IonRow className='ion-padding'>No records yet</IonRow>
+                        <IonRow className='ion-padding'>
+                          {"There's nothing here >_<"}
+                        </IonRow>
                       </IonGrid>
                     )}
                   </>
