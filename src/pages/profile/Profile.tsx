@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import {
   IonAvatar,
-  IonButton,
-  IonButtons,
   IonCard,
   IonCardContent,
   IonCol,
@@ -21,6 +19,7 @@ import {
   isPlatform,
   IonCardHeader,
   IonCardTitle,
+  IonFabButton,
 } from "@ionic/react";
 import { useEffect } from "react";
 import {
@@ -28,11 +27,12 @@ import {
   createOutline,
   settingsOutline,
   logOutOutline,
-  chevronForward,
   hammerOutline,
   bugOutline,
 } from "ionicons/icons";
+import { Avatar } from "../../interfaces/models/Users";
 import { useHistory, useLocation } from "react-router";
+import { PieChart } from "react-minimal-pie-chart";
 import { useAuth } from "../../contexts/AuthContext";
 import { hideTabs, showTabs } from "../../utils/TabsUtils";
 import "./Profile.scss";
@@ -78,9 +78,6 @@ const Profile: React.FC = () => {
       return (
         <>
           {completed?.map((c) => {
-            const acceptedCount = c.participants.accepted.completed.concat(
-              c.participants.accepted.notCompleted
-            ).length;
             return (
               <IonCard
                 mode='ios'
@@ -92,7 +89,7 @@ const Profile: React.FC = () => {
               >
                 <IonGrid className='ion-no-padding'>
                   <IonRow className='ion-align-items-center'>
-                    <IonCol size='11'>
+                    <IonCol size='12'>
                       <IonCardHeader style={{ paddingBottom: "0.75rem" }}>
                         <IonRow>
                           <IonCardTitle style={{ fontSize: "1.2rem" }}>
@@ -115,37 +112,26 @@ const Profile: React.FC = () => {
                             )}`}
                           </IonText>
                         </IonRow>
-                        <IonRow style={{ marginTop: "0.5rem" }}>
-                          <IonText style={{ fontSize: "0.8rem" }}>
-                            {acceptedCount} participant
-                            {acceptedCount === 1 ? "" : "s"}
-                          </IonText>
-                        </IonRow>
                         <IonRow
-                          style={{ paddingTop: "0.5rem" }}
+                          style={{ marginTop: "0.5rem" }}
                           className='ion-align-items-center'
                         >
-                          {c.participants.accepted.completed
-                            .concat(c.participants.accepted.notCompleted)
-                            .map((p) => {
-                              return (
-                                <IonAvatar
-                                  className='avatar'
-                                  key={p.userId}
-                                  style={{ marginRight: "0.25rem" }}
-                                >
-                                  <AvatarImg avatar={p.avatar} />
-                                </IonAvatar>
-                              );
-                            })}
+                          <IonAvatar
+                            className='avatar'
+                            key={c.owner.userId}
+                            style={{ marginRight: "0.5rem" }}
+                          >
+                            <AvatarImg avatar={c.owner.avatar as Avatar} />
+                          </IonAvatar>
+                          <IonText
+                            style={{
+                              fontSize: "0.8rem",
+                            }}
+                          >
+                            Created by {c.owner.name ?? "Anonymous"}
+                          </IonText>
                         </IonRow>
                       </IonCardContent>
-                    </IonCol>
-                    <IonCol size='1'>
-                      <IonIcon
-                        icon={chevronForward}
-                        style={{ fontSize: "1.5rem" }}
-                      />
                     </IonCol>
                   </IonRow>
                 </IonGrid>
@@ -260,30 +246,38 @@ const Profile: React.FC = () => {
           </IonItem>
         </IonList>
       </IonPopover>
-
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot='end'>
-            <IonButton
-              style={{
-                height: "2.5rem",
-                marginTop: "0.25rem",
-                marginRight: "0.5rem",
-                marginBottom: "0.25rem",
-              }}
-              color='dark'
-              onClick={(e: any) => {
-                e.persist();
-                setShowPopover({ showPopover: true, event: e });
-              }}
-            >
-              <IonIcon icon={ellipsisVertical} style={{ fontSize: "1.5rem" }} />
-            </IonButton>
-          </IonButtons>
+      <IonHeader className='ion-no-border'>
+        <IonToolbar className='profile-toolbar'>
+          <IonFabButton
+            color='light'
+            mode='ios'
+            slot='end'
+            style={{
+              margin: "0.5rem",
+              width: "3rem",
+              height: "3rem",
+            }}
+            onClick={(e: any) => {
+              e.persist();
+              setShowPopover({ showPopover: true, event: e });
+            }}
+          >
+            <IonIcon icon={ellipsisVertical} />
+          </IonFabButton>
         </IonToolbar>
       </IonHeader>
 
       <IonContent fullscreen>
+        {/*<div
+          className='fault-line'
+          style={{
+            position: "absolute",
+            top: 0,
+            width: "100%",
+            height: "11rem",
+            backgroundColor: "#C0D1FF",
+          }}
+        />*/}
         <IonRow
           className='ion-align-items-center ion-margin'
           style={{ marginTop: "2.5rem" }}
@@ -322,123 +316,96 @@ const Profile: React.FC = () => {
           </IonText>
         </IonRow>
 
-        <IonGrid style={{ paddingBottom: "2rem" }}>
-          <IonRow className='ion-align-items-center'>
-            <IonCol size='4' className='ion-no-padding'>
-              <IonCard
-                mode='ios'
-                className='profile-statistic ion-text-center'
-                color='quaternary'
-              >
-                <IonCardHeader
-                  className='ion-no-padding'
-                  style={{
-                    paddingTop: "1rem",
-                    paddingBottom: "0.5rem",
-                    paddingLeft: "0.5rem",
-                    paddingRight: "0.5rem",
-                  }}
-                >
-                  <IonCardTitle>
+        <IonCard mode='ios' style={{ marginBottom: "2rem" }}>
+          <IonRow className='ion-justify-content-center'>
+            <PieChart
+              style={{ width: "12rem", height: "12rem", marginTop: "2rem" }}
+              startAngle={-90}
+              lineWidth={50}
+              data={[
+                {
+                  title: "Completed",
+                  value: user?.completedChallengeCount ?? 0,
+                  color: "#6C7BFF",
+                },
+                {
+                  title: "Failures",
+                  value: user?.failedChallengeCount ?? 0,
+                  color: "#C7CCFF",
+                },
+                {
+                  title: "Cheats",
+                  value: user?.vetoedChallengeCount ?? 0,
+                  color: "#F0F1FD",
+                },
+              ]}
+              label={({ dataEntry }) => `${Math.round(dataEntry.percentage)}%`}
+              labelPosition={75}
+              labelStyle={{
+                fontSize: "0.5rem",
+              }}
+            />
+          </IonRow>
+          <IonGrid className='ion-no-padding'>
+            <IonRow className='ion-align-items-center'>
+              <IonCol size='12'>
+                <IonCardContent>
+                  <IonRow className='ion-justify-content-center ion-align-items-center'>
                     <IonText
                       style={{
                         fontSize: "1.5rem",
                         fontWeight: 600,
+                        marginRight: "0.5rem",
+                        color: "#000000",
                       }}
                     >
                       {user?.completedChallengeCount ?? 0}
                     </IonText>
-                  </IonCardTitle>
-                </IonCardHeader>
-                <IonCardContent>
-                  <IonRow className='ion-justify-content-center ion-align-items-center'>
                     <IonText style={{ fontSize: "0.9rem", fontWeight: 400 }}>
-                      Challenge
-                      {user?.completedChallengeCount !== 1 && "s"} <br />
-                      Completed
+                      {`Challenge${
+                        user?.completedChallengeCount !== 1 ? "s" : ""
+                      } Completed`}
                     </IonText>
                   </IonRow>
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
-            <IonCol size='4' className='ion-no-padding'>
-              <IonCard
-                mode='ios'
-                className='profile-statistic ion-text-center'
-                color='tertiary'
-              >
-                <IonCardHeader
-                  className='ion-no-padding'
-                  style={{
-                    paddingTop: "1rem",
-                    paddingBottom: "0.5rem",
-                    paddingLeft: "0.5rem",
-                    paddingRight: "0.5rem",
-                  }}
-                >
-                  <IonCardTitle>
+                  <IonRow className='ion-justify-content-center ion-align-items-center'>
                     <IonText
                       style={{
                         fontSize: "1.5rem",
                         fontWeight: 600,
+                        marginRight: "0.5rem",
+                        color: "#000000",
                       }}
                     >
                       {user?.failedChallengeCount ?? 0}
                     </IonText>
-                  </IonCardTitle>
-                </IonCardHeader>
-                <IonCardContent>
-                  <IonRow className='ion-justify-content-center ion-align-items-center'>
                     <IonText style={{ fontSize: "0.9rem", fontWeight: 400 }}>
-                      Shameful
-                      <br />
-                      Failure
-                      {user?.failedChallengeCount !== 1 && "s"}
+                      {`Shameful Failure${
+                        user?.failedChallengeCount !== 1 ? "s" : ""
+                      }`}
                     </IonText>
                   </IonRow>
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
-            <IonCol size='4' className='ion-no-padding'>
-              <IonCard
-                mode='ios'
-                className='profile-statistic ion-text-center'
-                color='quinary'
-              >
-                <IonCardHeader
-                  className='ion-no-padding'
-                  style={{
-                    paddingTop: "1rem",
-                    paddingBottom: "0.5rem",
-                    paddingLeft: "0.5rem",
-                    paddingRight: "0.5rem",
-                  }}
-                >
-                  <IonCardTitle>
+                  <IonRow className='ion-justify-content-center ion-align-items-center'>
                     <IonText
                       style={{
                         fontSize: "1.5rem",
                         fontWeight: 600,
+                        marginRight: "0.5rem",
+                        color: "#000000",
                       }}
                     >
                       {user?.vetoedChallengeCount ?? 0}
                     </IonText>
-                  </IonCardTitle>
-                </IonCardHeader>
-                <IonCardContent>
-                  <IonRow className='ion-justify-content-center ion-align-items-center'>
                     <IonText style={{ fontSize: "0.9rem", fontWeight: 400 }}>
-                      Shameless
-                      <br />
-                      Cheat
-                      {user?.vetoedChallengeCount !== 1 && "s"}
+                      {`Shameless Cheat${
+                        user?.vetoedChallengeCount !== 1 ? "s" : ""
+                      }`}
                     </IonText>
                   </IonRow>
                 </IonCardContent>
-              </IonCard>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonCard>
         <IonRow className='ion-padding-horizontal ion-justify-content-center'>
           <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
             Past challenges
