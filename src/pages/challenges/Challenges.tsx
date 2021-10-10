@@ -498,7 +498,8 @@ const Challenges: React.FC = () => {
         >
           <IonButton
             shape='round'
-            fill='outline'
+            fill='solid'
+            color='secondary'
             routerLink='challenges/create'
           >
             Create a new challenge
@@ -507,7 +508,8 @@ const Challenges: React.FC = () => {
         <IonSegment
           onIonChange={(e) => setTab(e.detail.value ?? "active")}
           value={tab}
-          color='secondary'
+          mode='md'
+          color='dark'
           style={{
             marginTop: "1rem",
             paddingRight: "0.5rem",

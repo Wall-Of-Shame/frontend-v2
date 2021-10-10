@@ -1,6 +1,7 @@
 import {
   IonButton,
   IonButtons,
+  IonCard,
   IonContent,
   IonFab,
   IonFabButton,
@@ -578,7 +579,8 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
           <IonSegment
             onIonChange={(e) => setTab(e.detail.value ?? "active")}
             value={tab}
-            color='secondary'
+            mode='md'
+            color='dark'
             style={{
               marginBottom: "2rem",
             }}
@@ -598,11 +600,15 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
           <>
             {renderImage()}
             {isAfter(Date.now(), parseISO(challenge.startAt!)) && (
-              <Countdown countdown={countdown} />
+              <IonCard className='ion-align-items-center ion-justify-content-center'>
+                <div style={{ margin: "1rem" }} />
+                <Countdown countdown={countdown} />
+                <div style={{ margin: "1rem" }} />
+              </IonCard>
             )}
 
             <IonGrid style={{ marginBottom: "0.5rem" }}>
-              {startsIn < 86400 && (
+              {startsIn > 0 && startsIn < 86400 && (
                 <IonRow
                   className='ion-justify-content-center'
                   style={{ marginTop: "0.25rem", marginBottom: "1.5rem" }}

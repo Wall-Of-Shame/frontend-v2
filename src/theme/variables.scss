@@ -3,6 +3,10 @@ http://ionicframework.com/docs/theming/ */
 
 /** Ionic CSS Variables **/
 :root {
+  --ion-background-color: #eff3fe;
+  --ion-toolbar-background: #eff3fe;
+  --ion-tab-bar-background: #eff3fe;
+
   /** primary **/
   --ion-color-primary: #000000;
   --ion-color-primary-rgb: 0, 0, 0;
@@ -12,12 +16,12 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-primary-tint: #1a1a1a;
 
   /** secondary **/
-  --ion-color-secondary: #ffd73c;
-  --ion-color-secondary-rgb: 255, 215, 60;
-  --ion-color-secondary-contrast: #000000;
-  --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #e6c236;
-  --ion-color-secondary-tint: #ffdb50;
+  --ion-color-secondary: #6c7bff;
+  --ion-color-secondary-rgb: 108, 123, 255;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 0, 0, 0;
+  --ion-color-secondary-shade: #5f6ce0;
+  --ion-color-secondary-tint: #7b88ff;
 
   /** tertiary **/
   --ion-color-tertiary: #e3c7ff;
@@ -172,12 +176,14 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-tint: var(--ion-color-border-tint);
 }
 
-@media (prefers-color-scheme: dark) {
-  /*
-   * Dark Colors
-   * -------------------------------------------
-   */
+ion-card {
+  --background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: none;
+}
 
+/*
+@media (prefers-color-scheme: dark) {
   body {
     --ion-color-primary: #e6e6e6;
     --ion-color-primary-rgb: 230, 230, 230;
@@ -271,11 +277,6 @@ http://ionicframework.com/docs/theming/ */
     --ion-color-senary-tint: #a0caa4;
   }
 
-  /*
-   * iOS Dark Theme
-   * -------------------------------------------
-   */
-
   .ios body {
     --ion-background-color: #000000;
     --ion-background-color-rgb: 0, 0, 0;
@@ -317,11 +318,6 @@ http://ionicframework.com/docs/theming/ */
     --ion-toolbar-border-color: var(--ion-color-step-0);
   }
 
-  /*
-   * Material Design Dark Theme
-   * -------------------------------------------
-   */
-
   .md body {
     --ion-background-color: #000000;
     --ion-background-color-rgb: 18, 18, 18;
@@ -359,3 +355,4 @@ http://ionicframework.com/docs/theming/ */
     --ion-card-background: #1e1e1e;
   }
 }
+*/

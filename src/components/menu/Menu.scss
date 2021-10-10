@@ -17,8 +17,6 @@
 .nav-menu ion-content {
   --padding-top: 20px;
   --padding-bottom: 20px;
-
-  --background: var(--ion-item-background, var(--ion-background-color, #fff));
 }
 
 /* Remove background transitions for switching themes */
@@ -56,7 +54,7 @@
 }
 
 .nav-menu.md ion-item.selected {
-  --background: rgba(var(--ion-color-secondary-rgb), 0.14);
+  --background: rgba(var(--ion-color-secondary-rgb), 0.15);
 }
 
 .nav-menu.md ion-item.selected ion-icon {

@@ -13,38 +13,50 @@ const Countdown: React.FC<CountdownProps> = (props: CountdownProps) => {
     (countdown?.months === undefined || countdown?.months === 0)
   ) {
     return (
-      <IonGrid style={{ marginBottom: "0.5rem" }}>
+      <IonGrid>
         <IonRow className='ion-padding-horizontal'>
           <IonCol size='3'>
             <IonRow className='ion-justify-content-center'>
-              <IonText style={{ fontWeight: "800", fontSize: "2rem" }}>
+              <IonText
+                color='dark'
+                style={{ fontWeight: "800", fontSize: "2rem" }}
+              >
                 {countdown?.days ?? "-"}
               </IonText>
             </IonRow>
           </IonCol>
           <IonCol size='3'>
             <IonRow className='ion-justify-content-center'>
-              <IonText style={{ fontWeight: "800", fontSize: "2rem" }}>
+              <IonText
+                color='dark'
+                style={{ fontWeight: "800", fontSize: "2rem" }}
+              >
                 {countdown?.hours ?? "-"}
               </IonText>
             </IonRow>
           </IonCol>
           <IonCol size='3'>
             <IonRow className='ion-justify-content-center'>
-              <IonText style={{ fontWeight: "800", fontSize: "2rem" }}>
+              <IonText
+                color='dark'
+                style={{ fontWeight: "800", fontSize: "2rem" }}
+              >
                 {countdown?.minutes ?? "-"}
               </IonText>
             </IonRow>
           </IonCol>
           <IonCol size='3'>
             <IonRow className='ion-justify-content-center'>
-              <IonText style={{ fontWeight: "800", fontSize: "2rem" }}>
+              <IonText
+                color='dark'
+                style={{ fontWeight: "800", fontSize: "2rem" }}
+              >
                 {countdown?.seconds ?? "-"}
               </IonText>
             </IonRow>
           </IonCol>
         </IonRow>
-        <IonRow className='ion-padding-horizontal ion-padding-bottom'>
+        <IonRow className='ion-padding-horizontal'>
           <IonCol size='3'>
             <IonRow className='ion-justify-content-center'>Days</IonRow>
           </IonCol>
@@ -63,25 +75,34 @@ const Countdown: React.FC<CountdownProps> = (props: CountdownProps) => {
   }
 
   return (
-    <IonGrid style={{ marginBottom: "0.5rem" }}>
+    <IonGrid>
       <IonRow className='ion-padding-horizontal'>
         <IonCol size='4'>
           <IonRow className='ion-justify-content-center'>
-            <IonText style={{ fontWeight: "800", fontSize: "2rem" }}>
+            <IonText
+              color='dark'
+              style={{ fontWeight: "800", fontSize: "2rem" }}
+            >
               {countdown?.years ?? "-"}
             </IonText>
           </IonRow>
         </IonCol>
         <IonCol size='4'>
           <IonRow className='ion-justify-content-center'>
-            <IonText style={{ fontWeight: "800", fontSize: "2rem" }}>
+            <IonText
+              color='dark'
+              style={{ fontWeight: "800", fontSize: "2rem" }}
+            >
               {countdown?.months ?? "-"}
             </IonText>
           </IonRow>
         </IonCol>
         <IonCol size='4'>
           <IonRow className='ion-justify-content-center'>
-            <IonText style={{ fontWeight: "800", fontSize: "2rem" }}>
+            <IonText
+              color='dark'
+              style={{ fontWeight: "800", fontSize: "2rem" }}
+            >
               {countdown?.days ?? "-"}
             </IonText>
           </IonRow>
@@ -101,27 +122,36 @@ const Countdown: React.FC<CountdownProps> = (props: CountdownProps) => {
       <IonRow className='ion-padding-horizontal'>
         <IonCol size='4'>
           <IonRow className='ion-justify-content-center'>
-            <IonText style={{ fontWeight: "800", fontSize: "2rem" }}>
+            <IonText
+              color='dark'
+              style={{ fontWeight: "800", fontSize: "2rem" }}
+            >
               {countdown?.hours ?? "-"}
             </IonText>
           </IonRow>
         </IonCol>
         <IonCol size='4'>
           <IonRow className='ion-justify-content-center'>
-            <IonText style={{ fontWeight: "800", fontSize: "2rem" }}>
+            <IonText
+              color='dark'
+              style={{ fontWeight: "800", fontSize: "2rem" }}
+            >
               {countdown?.minutes ?? "-"}
             </IonText>
           </IonRow>
         </IonCol>
         <IonCol size='4'>
           <IonRow className='ion-justify-content-center'>
-            <IonText style={{ fontWeight: "800", fontSize: "2rem" }}>
+            <IonText
+              color='dark'
+              style={{ fontWeight: "800", fontSize: "2rem" }}
+            >
               {countdown?.seconds ?? "-"}
             </IonText>
           </IonRow>
         </IonCol>
       </IonRow>
-      <IonRow className='ion-padding-horizontal ion-padding-bottom'>
+      <IonRow className='ion-padding-horizontal'>
         <IonCol size='4'>
           <IonRow className='ion-justify-content-center'>Hours</IonRow>
         </IonCol>
