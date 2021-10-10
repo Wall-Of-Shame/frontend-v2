@@ -176,7 +176,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
         className='ion-justify-content-center'
         style={{ margin: "0.5rem" }}
       >
-        <IonButton shape='round' color='secondary-shade' mode='ios'>
+        <IonButton shape='round' color='secondary' mode='ios' disabled>
           <IonText style={{ marginLeft: "1.5rem", marginRight: "1.5rem" }}>
             Waiting to start
           </IonText>

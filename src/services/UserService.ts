@@ -56,10 +56,27 @@ const getGlobalRankings = async (): Promise<UserList[]> => {
   }
 };
 
+const sendFeedback = async (
+  email: string,
+  description: string,
+  screenshot: string | undefined
+): Promise<void> => {
+  try {
+    await APIService.post("feedback", {
+      email,
+      description,
+      screenshot,
+    });
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   updateProfile,
   searchUser,
   getFriendsRankings,
   getGlobalRankings,
+  sendFeedback,
 };

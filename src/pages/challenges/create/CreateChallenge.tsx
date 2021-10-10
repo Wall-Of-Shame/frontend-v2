@@ -184,6 +184,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                 width: "100%",
                 borderRadius: "0.5rem",
                 background: "#ffffff",
+                paddingLeft: "0.75rem",
               }}
             >
               <IonInput
@@ -191,7 +192,6 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                 placeholder='Enter title'
                 maxlength={50}
                 autoCorrect='on'
-                style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
                 onIonChange={(event) => {
                   setState({ title: event.detail.value ?? "" });
                 }}
@@ -224,6 +224,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                 width: "100%",
                 borderRadius: "0.5rem",
                 background: "#ffffff",
+                paddingLeft: "0.75rem",
               }}
             >
               <IonTextarea
@@ -232,7 +233,6 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                 maxlength={200}
                 autoCorrect='on'
                 placeholder='Enter challenge description'
-                style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
                 onIonChange={(event) => {
                   setState({ description: event.detail.value ?? "" });
                 }}

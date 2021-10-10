@@ -83,7 +83,7 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
   const [file, setFile] = useState<File | null>(null);
 
   const options = {
-    maxSizeMB: 1,
+    maxSizeMB: 0.3,
     useWebWorker: true,
   };
 

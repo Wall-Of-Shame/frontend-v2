@@ -22,6 +22,7 @@ import LoadingSpinner from "../loadingSpinner";
 import ImageUploader from "react-images-upload";
 import imageCompression from "browser-image-compression";
 import "./FeedbackModal.scss";
+import { useUser } from "../../contexts/UserContext";
 
 interface FeedbackModalProps {
   showModal: boolean;
@@ -46,6 +47,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
   props: FeedbackModalProps
 ) => {
   const { showModal, setShowModal } = props;
+  const { sendFeedback } = useUser();
 
   const [state, setState] = useReducer(
     (s: FeedbackModalState, a: Partial<FeedbackModalState>) => ({
@@ -71,7 +73,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
   const [file, setFile] = useState<File | null>(null);
 
   const options = {
-    maxSizeMB: 1,
+    maxSizeMB: 0.3,
     useWebWorker: true,
   };
 
@@ -82,6 +84,42 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
       setFile(files[0]);
     } else {
       setImage("");
+    }
+  };
+
+  const validateInputs = (): boolean => {
+    return isValidEmail(state.email) && state.description.length > 0;
+  };
+
+  const handleSend = async () => {
+    setState({ isLoading: true });
+
+    try {
+      const compressedFile = await imageCompression(file!, options);
+      const reader = new FileReader();
+      reader.readAsDataURL(compressedFile);
+      reader.onloadend = async () => {
+        if (reader.result && typeof reader.result === "string") {
+          await sendFeedback(state.email, state.description, reader.result);
+          setState({
+            isLoading: false,
+            showAlert: true,
+            alertHeader: "Success",
+            alertMessage: "Your feedback has been sent successfully",
+            hasConfirm: false,
+          });
+        } else {
+          throw new Error("Please re-upload your image file!");
+        }
+      };
+    } catch (error) {
+      setState({
+        isLoading: false,
+        showAlert: true,
+        hasConfirm: false,
+        alertHeader: "Oooops",
+        alertMessage: "Our server is taking a break, come back later please :)",
+      });
     }
   };
 
@@ -128,9 +166,10 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
           <IonRow className='ion-padding-horizontal'>
             <div
               style={{
-                border: "solid 1px #adadad",
                 width: "100%",
                 borderRadius: "0.5rem",
+                background: "#ffffff",
+                paddingLeft: "0.75rem",
               }}
             >
               <IonInput
@@ -140,12 +179,19 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
                 placeholder='Enter your email*'
                 maxlength={50}
                 autoCorrect='on'
-                style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
                 onIonChange={(event) => {
                   setState({ email: event.detail.value ?? "" });
                 }}
               />
             </div>
+          </IonRow>
+          <IonRow
+            className='ion-padding-horizontal ion-justify-content-end'
+            style={{ marginTop: "0.5rem" }}
+          >
+            <IonText style={{ fontSize: "14px", color: "#adadad" }}>
+              {`${state.email.length}/50`}
+            </IonText>
           </IonRow>
         </IonGrid>
         <IonGrid>
@@ -167,9 +213,10 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
           <IonRow className='ion-padding-horizontal'>
             <div
               style={{
-                border: "solid 1px #adadad",
                 width: "100%",
                 borderRadius: "0.5rem",
+                background: "#ffffff",
+                paddingLeft: "0.75rem",
               }}
             >
               <IonTextarea
@@ -179,12 +226,19 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
                 maxlength={200}
                 autoCorrect='on'
                 placeholder='What did you expect and what happened instead?*'
-                style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
                 onIonChange={(event) => {
                   setState({ description: event.detail.value ?? "" });
                 }}
               />
             </div>
+          </IonRow>
+          <IonRow
+            className='ion-padding-horizontal ion-justify-content-end'
+            style={{ marginTop: "0.5rem" }}
+          >
+            <IonText style={{ fontSize: "14px", color: "#adadad" }}>
+              {`${state.description.length}/200`}
+            </IonText>
           </IonRow>
         </IonGrid>
         <IonGrid>
@@ -229,7 +283,13 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
             className='ion-justify-content-around'
             style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
           >
-            <IonButton shape='round' color='secondary' mode='ios'>
+            <IonButton
+              shape='round'
+              color='secondary'
+              mode='ios'
+              disabled={!validateInputs()}
+              onClick={handleSend}
+            >
               <IonText style={{ marginLeft: "1rem", marginRight: "1rem" }}>
                 Send
               </IonText>

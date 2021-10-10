@@ -55,6 +55,18 @@ const UserProvider: React.FunctionComponent = (props) => {
     }
   };
 
+  const sendFeedback = async (
+    email: string,
+    description: string,
+    screenshot: string | undefined
+  ): Promise<void> => {
+    try {
+      await UserService.sendFeedback(email, description, screenshot);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -63,6 +75,7 @@ const UserProvider: React.FunctionComponent = (props) => {
         searchUser,
         getFriendsRankings,
         getGlobalRankings,
+        sendFeedback,
       }}
       {...props}
     />
