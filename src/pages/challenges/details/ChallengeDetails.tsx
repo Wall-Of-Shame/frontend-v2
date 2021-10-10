@@ -1,5 +1,4 @@
 import {
-  IonButton,
   IonButtons,
   IonCard,
   IonContent,
@@ -20,11 +19,8 @@ import {
 } from "@ionic/react";
 import { useReducer, useState } from "react";
 import {
-  arrowBackOutline,
   chevronBackOutline,
-  pencil,
   pencilOutline,
-  personAdd,
   personAddOutline,
   refreshOutline,
 } from "ionicons/icons";

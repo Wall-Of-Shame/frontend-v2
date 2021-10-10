@@ -98,6 +98,8 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
   };
 
   const handleReUpload = () => {
+    setImage("");
+    setFile(null);
     setState({
       showAlert: true,
       hasConfirm: true,
@@ -176,7 +178,7 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
           <>
             <IonRow
               className='ion-padding-horizontal ion-justify-content-center'
-              style={{ marginTop: "2.5rem" }}
+              style={{ marginTop: "1.5rem" }}
             >
               <IonText style={{ fontWeight: "bolder" }}>
                 Phew... You're safe!
@@ -184,7 +186,7 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
             </IonRow>
             <IonRow
               className='ion-padding-horizontal ion-justify-content-center'
-              style={{ marginTop: "2.5rem" }}
+              style={{ marginTop: "1.5rem" }}
             >
               <IonText>
                 We sure hope you didn't cheat! You didn't cheat... right?
@@ -192,7 +194,7 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
             </IonRow>
             <IonRow
               className='ion-padding-horizontal ion-justify-content-center'
-              style={{ marginTop: "2.5rem" }}
+              style={{ marginTop: "1.5rem" }}
             >
               <IonText>
                 Yknow what, upload some proof to show that you’ve completed the
@@ -273,6 +275,12 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
           </>
         ) : (
           <>
+            <IonRow
+              className='ion-padding-horizontal ion-justify-content-center'
+              style={{ marginTop: "2.5rem" }}
+            >
+              <IonText>Congratulations for completing the challenge :)</IonText>
+            </IonRow>
             <IonRow className='ion-justify-content-center ion-margin-top'>
               <img
                 src={userData?.evidenceLink}
