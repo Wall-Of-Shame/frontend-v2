@@ -30,18 +30,14 @@ const Store: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Store</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-
       <IonContent fullscreen>
-        <IonHeader
-          collapse='condense'
-          className={isPlatform("ios") ? "ion-no-border" : ""}
-        >
-          <IonToolbar>
+        <IonHeader className='ion-no-border'>
+          <IonToolbar
+            style={{
+              paddingTop: isPlatform("ios") ? "1.9rem" : 0,
+              paddingBottom: isPlatform("ios") ? "0.25rem" : 0,
+            }}
+          >
             <IonTitle size='large'>Store</IonTitle>
           </IonToolbar>
         </IonHeader>

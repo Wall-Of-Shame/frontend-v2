@@ -28,3 +28,13 @@
   right: -3px;
   border-radius: 100%;
 }
+
+.create-challenge-img {
+  max-width: 60vw;
+}
+
+@media screen and (min-width: 768px) {
+  .create-challenge-img {
+    max-width: 300px;
+  }
+}

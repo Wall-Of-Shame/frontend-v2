@@ -354,7 +354,7 @@ const WallOfShame: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader mode='ios'>
+      <IonHeader mode='ios' className='ion-no-border'>
         <IonToolbar>
           <div style={{ paddingTop: "1rem" }}>
             <IonRow class='ion-justify-content-center ion-no-padding'>

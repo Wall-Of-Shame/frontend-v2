@@ -151,7 +151,7 @@ const Challenges: React.FC = () => {
                   >
                     <IonGrid className='ion-no-padding'>
                       <IonRow className='ion-align-items-center'>
-                        <IonCol size='11'>
+                        <IonCol size='12'>
                           <IonCardHeader style={{ paddingBottom: "0.75rem" }}>
                             <IonCardTitle style={{ fontSize: "1.2rem" }}>
                               {c.title}
@@ -197,12 +197,6 @@ const Challenges: React.FC = () => {
                                 })}
                             </IonRow>
                           </IonCardContent>
-                        </IonCol>
-                        <IonCol size='1'>
-                          <IonIcon
-                            icon={chevronForward}
-                            style={{ fontSize: "1.5rem" }}
-                          />
                         </IonCol>
                       </IonRow>
                     </IonGrid>
@@ -260,7 +254,7 @@ const Challenges: React.FC = () => {
                       >
                         <IonGrid className='ion-no-padding'>
                           <IonRow className='ion-align-items-center'>
-                            <IonCol size='11'>
+                            <IonCol size='12'>
                               <IonCardHeader
                                 style={{ paddingBottom: "0.75rem" }}
                               >
@@ -308,12 +302,6 @@ const Challenges: React.FC = () => {
                                 </IonRow>
                               </IonCardContent>
                             </IonCol>
-                            <IonCol size='1'>
-                              <IonIcon
-                                icon={chevronForward}
-                                style={{ fontSize: "1.5rem" }}
-                              />
-                            </IonCol>
                           </IonRow>
                         </IonGrid>
                       </IonCard>
@@ -342,7 +330,7 @@ const Challenges: React.FC = () => {
                       >
                         <IonGrid className='ion-no-padding'>
                           <IonRow className='ion-align-items-center'>
-                            <IonCol size='11'>
+                            <IonCol size='12'>
                               <IonCardHeader
                                 style={{ paddingBottom: "0.75rem" }}
                               >
@@ -394,12 +382,6 @@ const Challenges: React.FC = () => {
                                 </IonRow>
                               </IonCardContent>
                             </IonCol>
-                            <IonCol size='1'>
-                              <IonIcon
-                                icon={chevronForward}
-                                style={{ fontSize: "24px" }}
-                              />
-                            </IonCol>
                           </IonRow>
                         </IonGrid>
                       </IonCard>
@@ -444,44 +426,42 @@ const Challenges: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar
-          style={{
-            paddingTop: isPlatform("ios") ? "1.25rem" : 0,
-            paddingBottom: isPlatform("ios") ? "0.25rem" : 0,
-          }}
-        >
-          <IonTitle size='large'>Challenges</IonTitle>
-          <IonButtons slot='end'>
-            <IonButton
-              color='dark'
-              routerLink='challenges/create'
-              style={{
-                height: "2.5rem",
-                marginRight: "0.5rem",
-                marginTop: "0.5rem",
-              }}
-            >
-              <IonIcon
-                icon={mailOutline}
-                size='large'
-                style={{ padding: "0.5rem" }}
-              ></IonIcon>
-              {pendingResponse.length > 0 && (
-                <IonBadge
-                  mode='ios'
-                  color='danger'
-                  style={{
-                    position: "absolute",
-                    top: "0rem",
-                    right: "0rem",
-                  }}
-                >
-                  {pendingResponse.length}
-                </IonBadge>
-              )}
-            </IonButton>
-          </IonButtons>
+      <IonHeader className='ion-no-border'>
+        <IonToolbar>
+          <IonTitle
+            size='large'
+            style={{ paddingBottom: isPlatform("ios") ? "1rem" : 0 }}
+          >
+            Challenges
+          </IonTitle>
+          <IonFabButton
+            color='light'
+            mode='ios'
+            slot='end'
+            style={{
+              margin: "0.5rem",
+              width: "3rem",
+              height: "3rem",
+            }}
+            routerLink='/challenges/invitations'
+          >
+            <IonIcon icon={mailOutline} />
+            {pendingResponse.length >= 0 && (
+              <IonBadge
+                mode='ios'
+                color='danger'
+                style={{
+                  position: "absolute",
+                  top: "0.45rem",
+                  right: "0.3rem",
+                  width: "1rem",
+                  height: "1rem",
+                }}
+              >
+                &nbsp;
+              </IonBadge>
+            )}
+          </IonFabButton>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -498,6 +478,7 @@ const Challenges: React.FC = () => {
         >
           <IonButton
             shape='round'
+            mode='ios'
             fill='solid'
             color='secondary'
             routerLink='challenges/create'
