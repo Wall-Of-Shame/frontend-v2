@@ -186,7 +186,6 @@ const Profile: React.FC = () => {
             className='tutorial'
             onClick={() => {
               setShowPopover({ showPopover: false, event: undefined });
-              history.push("/profile/edit");
             }}
           >
             <IonIcon

@@ -82,7 +82,7 @@ const Participants: React.FC<ParticipantsProps> = (
                   <IonAvatar slot='start'>
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
-                  <IonLabel slot='start'>
+                  <IonLabel>
                     {u.userId === user?.userId
                       ? "You"
                       : trimDisplayName(u.name)}
@@ -132,7 +132,7 @@ const Participants: React.FC<ParticipantsProps> = (
                   <IonAvatar slot='start'>
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
-                  <IonLabel slot='start'>
+                  <IonLabel>
                     {u.userId === user?.userId
                       ? "You"
                       : trimDisplayName(u.name)}
@@ -256,12 +256,11 @@ const Participants: React.FC<ParticipantsProps> = (
                   <IonAvatar slot='start'>
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
-                  <IonLabel slot='start'>
+                  <IonLabel>
                     {u.userId === user?.userId
                       ? "You"
                       : trimDisplayName(u.name)}
                   </IonLabel>
-
                   {u.evidenceLink !== undefined && u.evidenceLink !== "" && (
                     <IonButton
                       mode='ios'
@@ -375,7 +374,7 @@ const Participants: React.FC<ParticipantsProps> = (
                   <IonAvatar slot='start'>
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
-                  <IonLabel slot='start'>
+                  <IonLabel>
                     {u.userId === user?.userId
                       ? "You"
                       : trimDisplayName(u.name)}
@@ -514,7 +513,7 @@ const Participants: React.FC<ParticipantsProps> = (
                 <IonAvatar slot='start'>
                   <AvatarImg avatar={u.avatar} />
                 </IonAvatar>
-                <IonLabel slot='start'>
+                <IonLabel>
                   {u.userId === user?.userId ? "You" : trimDisplayName(u.name)}
                 </IonLabel>
               </IonItem>

@@ -522,7 +522,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     return <></>;
   };
 
-  if (challenge === null) {
+  if (!challenge) {
     return <Redirect to={"challenges"} />;
   }
 

@@ -30,17 +30,17 @@ const Explore: React.FC = () => {
 
   return (
     <IonPage>
+      <IonHeader className='ion-no-border'>
+        <IonToolbar
+          style={{
+            paddingTop: isPlatform("ios") ? "0.75rem" : 0,
+            paddingBottom: isPlatform("ios") ? "0.75rem" : 0,
+          }}
+        >
+          <IonTitle size='large'>Explore</IonTitle>
+        </IonToolbar>
+      </IonHeader>
       <IonContent fullscreen>
-        <IonHeader className='ion-no-border'>
-          <IonToolbar
-            style={{
-              paddingTop: isPlatform("ios") ? "0.75rem" : 0,
-              paddingBottom: isPlatform("ios") ? "0.75rem" : 0,
-            }}
-          >
-            <IonTitle size='large'>Explore</IonTitle>
-          </IonToolbar>
-        </IonHeader>
         <Container>Coming soon :)</Container>
       </IonContent>
     </IonPage>
