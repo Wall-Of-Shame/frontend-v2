@@ -3,6 +3,7 @@ import {
   IonButtons,
   IonContent,
   IonDatetime,
+  IonFabButton,
   IonFooter,
   IonGrid,
   IonHeader,
@@ -17,7 +18,7 @@ import {
   IonTextarea,
   IonToolbar,
 } from "@ionic/react";
-import { arrowBackOutline } from "ionicons/icons";
+import { chevronBackOutline } from "ionicons/icons";
 import { useState, useReducer, useEffect } from "react";
 import {
   addHours,
@@ -130,20 +131,24 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
 
   return (
     <IonPage>
-      <IonHeader>
+      <IonHeader className='ion-no-border'>
         <IonToolbar>
           <IonButtons slot='start'>
-            <IonButton
+            <IonFabButton
+              color='light'
+              mode='ios'
+              slot='start'
               style={{
                 margin: "0.5rem",
+                width: "2.75rem",
+                height: "2.75rem",
               }}
-              color='dark'
               onClick={() => {
                 history.goBack();
               }}
             >
-              <IonIcon icon={arrowBackOutline} size='large' />
-            </IonButton>
+              <IonIcon icon={chevronBackOutline} />
+            </IonFabButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
@@ -170,20 +175,20 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
               style={{ fontWeight: "bold" }}
               color={hasError && state.title.length <= 0 ? "danger" : "primary"}
             >
-              What's the challenge called?
+              What's the challenge called?*
             </IonText>
           </IonRow>
           <IonRow className='ion-padding-horizontal'>
             <div
               style={{
-                border: "solid 1px #adadad",
                 width: "100%",
                 borderRadius: "0.5rem",
+                background: "#ffffff",
               }}
             >
               <IonInput
                 value={state.title}
-                placeholder='Enter title*'
+                placeholder='Enter title'
                 maxlength={50}
                 autoCorrect='on'
                 style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
@@ -210,15 +215,15 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                 hasError && state.description.length <= 0 ? "danger" : "primary"
               }
             >
-              What do they need to do?
+              What do they need to do?*
             </IonText>
           </IonRow>
           <IonRow className='ion-padding-horizontal'>
             <div
               style={{
-                border: "solid 1px #adadad",
                 width: "100%",
                 borderRadius: "0.5rem",
+                background: "#ffffff",
               }}
             >
               <IonTextarea
@@ -226,7 +231,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                 rows={4}
                 maxlength={200}
                 autoCorrect='on'
-                placeholder='Enter challenge description*'
+                placeholder='Enter challenge description'
                 style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
                 onIonChange={(event) => {
                   setState({ description: event.detail.value ?? "" });

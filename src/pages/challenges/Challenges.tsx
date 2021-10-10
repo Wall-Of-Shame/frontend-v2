@@ -2,7 +2,6 @@ import {
   IonAvatar,
   IonBadge,
   IonButton,
-  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -25,7 +24,7 @@ import {
 } from "@ionic/react";
 import "./Challenges.scss";
 import { useEffect, useReducer, useState } from "react";
-import { chevronForward, refreshOutline, mailOutline } from "ionicons/icons";
+import { refreshOutline, mailOutline } from "ionicons/icons";
 import { hideTabs, showTabs } from "../../utils/TabsUtils";
 import { useHistory, useLocation } from "react-router";
 import SetUpProfileModal from "../../components/setupProfile/ProfileSetUpModal";
@@ -43,6 +42,7 @@ import AvatarImg from "../../components/avatar";
 import { isPlatform } from "@ionic/core";
 import { useSocket } from "../../contexts/SocketContext";
 import challenge from "../../assets/onboarding/challenge.png";
+import { Avatar } from "../../interfaces/models/Users";
 
 interface ChallengesState {
   isLoading: boolean;
@@ -163,7 +163,6 @@ const Challenges: React.FC = () => {
                                 style={{
                                   fontSize: "0.8rem",
                                   fontWeight: "bold",
-                                  marginBottom: "0.25rem",
                                 }}
                               >
                                 {`Ends at: ${format(
@@ -179,22 +178,23 @@ const Challenges: React.FC = () => {
                               </IonText>
                             </IonRow>
                             <IonRow
-                              style={{ paddingTop: "0.5rem" }}
+                              style={{ marginTop: "0.5rem" }}
                               className='ion-align-items-center'
                             >
-                              {c.participants.accepted.completed
-                                .concat(c.participants.accepted.notCompleted)
-                                .map((p) => {
-                                  return (
-                                    <IonAvatar
-                                      className='avatar'
-                                      key={p.userId}
-                                      style={{ marginRight: "0.25rem" }}
-                                    >
-                                      <AvatarImg avatar={p.avatar} />
-                                    </IonAvatar>
-                                  );
-                                })}
+                              <IonAvatar
+                                className='avatar'
+                                key={c.owner.userId}
+                                style={{ marginRight: "0.5rem" }}
+                              >
+                                <AvatarImg avatar={c.owner.avatar as Avatar} />
+                              </IonAvatar>
+                              <IonText
+                                style={{
+                                  fontSize: "0.8rem",
+                                }}
+                              >
+                                Created by {c.owner.name ?? "Anonymous"}
+                              </IonText>
                             </IonRow>
                           </IonCardContent>
                         </IonCol>
@@ -268,7 +268,6 @@ const Challenges: React.FC = () => {
                                     style={{
                                       fontSize: "0.8rem",
                                       fontWeight: "bold",
-                                      marginBottom: "0.25rem",
                                     }}
                                   >
                                     Waiting for your response
@@ -281,24 +280,25 @@ const Challenges: React.FC = () => {
                                   </IonText>
                                 </IonRow>
                                 <IonRow
-                                  style={{ paddingTop: "0.5rem" }}
+                                  style={{ marginTop: "0.5rem" }}
                                   className='ion-align-items-center'
                                 >
-                                  {c.participants.accepted.completed
-                                    .concat(
-                                      c.participants.accepted.notCompleted
-                                    )
-                                    .map((p) => {
-                                      return (
-                                        <IonAvatar
-                                          className='avatar'
-                                          key={p.userId}
-                                          style={{ marginRight: "0.25rem" }}
-                                        >
-                                          <AvatarImg avatar={p.avatar} />
-                                        </IonAvatar>
-                                      );
-                                    })}
+                                  <IonAvatar
+                                    className='avatar'
+                                    key={c.owner.userId}
+                                    style={{ marginRight: "0.5rem" }}
+                                  >
+                                    <AvatarImg
+                                      avatar={c.owner.avatar as Avatar}
+                                    />
+                                  </IonAvatar>
+                                  <IonText
+                                    style={{
+                                      fontSize: "0.8rem",
+                                    }}
+                                  >
+                                    Created by {c.owner.name ?? "Anonymous"}
+                                  </IonText>
                                 </IonRow>
                               </IonCardContent>
                             </IonCol>
@@ -344,7 +344,6 @@ const Challenges: React.FC = () => {
                                     style={{
                                       fontSize: "0.8rem",
                                       fontWeight: "bold",
-                                      marginBottom: "0.25rem",
                                     }}
                                   >
                                     {`Starts on ${format(
@@ -361,24 +360,25 @@ const Challenges: React.FC = () => {
                                   </IonText>
                                 </IonRow>
                                 <IonRow
-                                  style={{ paddingTop: "0.5rem" }}
+                                  style={{ marginTop: "0.5rem" }}
                                   className='ion-align-items-center'
                                 >
-                                  {c.participants.accepted.completed
-                                    .concat(
-                                      c.participants.accepted.notCompleted
-                                    )
-                                    .map((p) => {
-                                      return (
-                                        <IonAvatar
-                                          className='avatar'
-                                          key={p.userId}
-                                          style={{ marginRight: "0.25rem" }}
-                                        >
-                                          <AvatarImg avatar={p.avatar} />
-                                        </IonAvatar>
-                                      );
-                                    })}
+                                  <IonAvatar
+                                    className='avatar'
+                                    key={c.owner.userId}
+                                    style={{ marginRight: "0.5rem" }}
+                                  >
+                                    <AvatarImg
+                                      avatar={c.owner.avatar as Avatar}
+                                    />
+                                  </IonAvatar>
+                                  <IonText
+                                    style={{
+                                      fontSize: "0.8rem",
+                                    }}
+                                  >
+                                    Created by {c.owner.name ?? "Anonymous"}
+                                  </IonText>
                                 </IonRow>
                               </IonCardContent>
                             </IonCol>
@@ -440,19 +440,19 @@ const Challenges: React.FC = () => {
             slot='end'
             style={{
               margin: "0.5rem",
-              width: "3rem",
-              height: "3rem",
+              width: "2.75rem",
+              height: "2.75rem",
             }}
             routerLink='/challenges/invitations'
           >
-            <IonIcon icon={mailOutline} />
-            {pendingResponse.length >= 0 && (
+            <IonIcon icon={mailOutline} style={{ fontSize: "1.5rem" }} />
+            {pendingResponse.length > 0 && (
               <IonBadge
                 mode='ios'
                 color='danger'
                 style={{
                   position: "absolute",
-                  top: "0.45rem",
+                  top: "0.4rem",
                   right: "0.3rem",
                   width: "1rem",
                   height: "1rem",

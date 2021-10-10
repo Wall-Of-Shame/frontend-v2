@@ -75,6 +75,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={false}
       cssClass='modal-container'
+      swipeToClose={true}
     >
       <IonHeader translucent>
         <IonToolbar className='modal-search'>

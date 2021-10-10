@@ -34,8 +34,8 @@ const Explore: React.FC = () => {
         <IonHeader className='ion-no-border'>
           <IonToolbar
             style={{
-              paddingTop: isPlatform("ios") ? "1.9rem" : 0,
-              paddingBottom: isPlatform("ios") ? "0.25rem" : 0,
+              paddingTop: isPlatform("ios") ? "0.75rem" : 0,
+              paddingBottom: isPlatform("ios") ? "0.75rem" : 0,
             }}
           >
             <IonTitle size='large'>Explore</IonTitle>

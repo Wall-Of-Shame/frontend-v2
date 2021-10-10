@@ -21,8 +21,11 @@ import {
 import { useReducer, useState } from "react";
 import {
   arrowBackOutline,
+  chevronBackOutline,
   pencil,
+  pencilOutline,
   personAdd,
+  personAddOutline,
   refreshOutline,
 } from "ionicons/icons";
 import { useEffect } from "react";
@@ -160,6 +163,51 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
         alertHeader: "Ooooops",
         alertMessage: "Our server is taking a break, come back later please :)",
       });
+    }
+  };
+
+  const handleEdit = async () => {
+    if (!challenge) {
+      return;
+    }
+    setState({ isLoading: true });
+    const updatedChallenge = await getChallenge(challenge.challengeId);
+    if (updatedChallenge) {
+      setChallenge(updatedChallenge);
+      if (isAfter(Date.now(), parseISO(updatedChallenge.endAt))) {
+        setState({
+          isLoading: false,
+          showAlert: true,
+          hasConfirm: false,
+          alertHeader: "Notice",
+          alertMessage:
+            "This challenge has already ended, it cannot be edited anymore :)",
+        });
+      } else if (isAfter(Date.now(), parseISO(updatedChallenge.startAt!))) {
+        setState({
+          isLoading: false,
+          showAlert: true,
+          hasConfirm: false,
+          alertHeader: "Notice",
+          alertMessage:
+            "This challenge has already started, it cannot be edited anymore :)",
+        });
+      } else if (
+        updatedChallenge.participants.accepted.completed.concat(
+          updatedChallenge.participants.accepted.notCompleted
+        ).length > 1
+      ) {
+        setState({
+          isLoading: false,
+          showAlert: true,
+          hasConfirm: false,
+          alertHeader: "Notice",
+          alertMessage:
+            "One or more participants have accepted the challenge, this challenge cannot be edited anymore :)",
+        });
+      } else {
+        setState({ editMode: true, isLoading: false });
+      }
     }
   };
 
@@ -481,85 +529,58 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
 
   return (
     <IonPage>
-      <IonHeader>
+      <IonHeader className='ion-no-border'>
         <IonToolbar>
-          <IonButtons slot='start'>
-            <IonButton
-              style={{
-                margin: "0.5rem",
-              }}
-              color='dark'
-              onClick={() => {
-                history.goBack();
-              }}
-            >
-              <IonIcon icon={arrowBackOutline} size='large' />
-            </IonButton>
-          </IonButtons>
+          <IonFabButton
+            color='light'
+            mode='ios'
+            slot='start'
+            style={{
+              margin: "0.5rem",
+              width: "2.75rem",
+              height: "2.75rem",
+            }}
+            onClick={() => {
+              history.goBack();
+            }}
+          >
+            <IonIcon icon={chevronBackOutline} />
+          </IonFabButton>
           {user?.userId === challenge.owner.userId && (
             <>
               <IonButtons slot='end'>
-                <IonButton
-                  color='dark'
+                <IonFabButton
+                  color='light'
+                  mode='ios'
+                  slot='end'
+                  style={{
+                    margin: "0.5rem",
+                    width: "2.75rem",
+                    height: "2.75rem",
+                  }}
                   onClick={() => setState({ showParticipantModal: true })}
                 >
-                  <IonIcon slot='end' icon={personAdd} />
-                </IonButton>
-                <IonButton
+                  <IonIcon
+                    icon={personAddOutline}
+                    style={{ fontSize: "1.5rem" }}
+                  />
+                </IonFabButton>
+                <IonFabButton
+                  color='light'
+                  mode='ios'
+                  slot='end'
                   style={{
-                    marginRight: "0.5rem",
+                    margin: "0.5rem",
+                    width: "2.75rem",
+                    height: "2.75rem",
                   }}
-                  color='dark'
-                  onClick={async () => {
-                    setState({ isLoading: true });
-                    const updatedChallenge = await getChallenge(
-                      challenge.challengeId
-                    );
-                    if (updatedChallenge) {
-                      setChallenge(updatedChallenge);
-                      if (
-                        isAfter(Date.now(), parseISO(updatedChallenge.endAt))
-                      ) {
-                        setState({
-                          isLoading: false,
-                          showAlert: true,
-                          hasConfirm: false,
-                          alertHeader: "Notice",
-                          alertMessage:
-                            "This challenge has already ended, it cannot be edited anymore :)",
-                        });
-                      } else if (
-                        isAfter(Date.now(), parseISO(updatedChallenge.startAt!))
-                      ) {
-                        setState({
-                          isLoading: false,
-                          showAlert: true,
-                          hasConfirm: false,
-                          alertHeader: "Notice",
-                          alertMessage:
-                            "This challenge has already started, it cannot be edited anymore :)",
-                        });
-                      } else if (
-                        updatedChallenge.participants.accepted.completed.concat(
-                          updatedChallenge.participants.accepted.notCompleted
-                        ).length > 1
-                      ) {
-                        setState({
-                          isLoading: false,
-                          showAlert: true,
-                          hasConfirm: false,
-                          alertHeader: "Notice",
-                          alertMessage:
-                            "One or more participants have accepted the challenge, this challenge cannot be edited anymore :)",
-                        });
-                      } else {
-                        setState({ editMode: true, isLoading: false });
-                      }
-                    }
-                  }}
+                  onClick={handleEdit}
                 >
-                  <IonIcon slot='end' icon={pencil} />
-                </IonButton>
+                  <IonIcon
+                    icon={pencilOutline}
+                    style={{ fontSize: "1.5rem" }}
+                  />
+                </IonFabButton>
               </IonButtons>
             </>
           )}

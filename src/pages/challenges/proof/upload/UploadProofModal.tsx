@@ -10,7 +10,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { arrowBackOutline } from "ionicons/icons";
+import { close } from "ionicons/icons";
 import Container from "../../../../components/container";
 import { useReducer, useState } from "react";
 import LoadingSpinner from "../../../../components/loadingSpinner";
@@ -174,6 +174,31 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
       <Container>
         {state.uploadMode ? (
           <>
+            <IonRow
+              className='ion-padding-horizontal ion-justify-content-center'
+              style={{ marginTop: "2.5rem" }}
+            >
+              <IonText style={{ fontWeight: "bolder" }}>
+                Phew... You're safe!
+              </IonText>
+            </IonRow>
+            <IonRow
+              className='ion-padding-horizontal ion-justify-content-center'
+              style={{ marginTop: "2.5rem" }}
+            >
+              <IonText>
+                We sure hope you didn't cheat! You didn't cheat... right?
+              </IonText>
+            </IonRow>
+            <IonRow
+              className='ion-padding-horizontal ion-justify-content-center'
+              style={{ marginTop: "2.5rem" }}
+            >
+              <IonText>
+                Yknow what, upload some proof to show that you’ve completed the
+                challenge!
+              </IonText>
+            </IonRow>
             <ImageUploader
               withIcon={false}
               buttonText='&nbsp;&nbsp;&nbsp;Select Image&nbsp;&nbsp;&nbsp;'
@@ -218,9 +243,9 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
               <IonRow className='ion-no-padding ion-justify-content-center'>
                 <IonButton
                   mode='ios'
-                  fill='solid'
+                  fill='outline'
                   shape='round'
-                  color='tertiary'
+                  color='secondary'
                   className='ion-padding-horizontal'
                   onClick={() => {
                     setShowModal(false);
@@ -300,14 +325,14 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
       backdropDismiss={false}
     >
       <IonHeader translucent>
-        <IonToolbar style={{ paddingTop: "0.5rem" }}>
-          <IonTitle>My proof</IonTitle>
+        <IonToolbar>
+          <IonTitle>Completed</IonTitle>
           <IonButtons slot='start'>
             <IonButton
               onClick={() => setShowModal(false)}
-              style={{ marginLeft: "1rem" }}
+              style={{ margin: "0.5rem" }}
             >
-              <IonIcon icon={arrowBackOutline} size='large' />
+              <IonIcon icon={close} size='large' />
             </IonButton>
           </IonButtons>
         </IonToolbar>

@@ -64,7 +64,9 @@ const Profile: React.FC = () => {
   useEffect(() => {
     if (
       location.pathname === "/challenges" ||
+      location.pathname === "/explore" ||
       location.pathname === "/wall-of-shame" ||
+      location.pathname === "/store" ||
       location.pathname === "/profile"
     ) {
       showTabs();

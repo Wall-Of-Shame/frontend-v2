@@ -3,6 +3,7 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonFabButton,
   IonGrid,
   IonHeader,
   IonIcon,
@@ -18,7 +19,7 @@ import {
 } from "@ionic/react";
 import "./EditProfile.scss";
 import { useEffect, useReducer } from "react";
-import { checkmark, dice, arrowBackOutline } from "ionicons/icons";
+import { checkmark, dice, chevronBackOutline } from "ionicons/icons";
 import {
   Avatar,
   AvatarAnimal,
@@ -133,7 +134,7 @@ const EditProfile: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader>
+      <IonHeader className='ion-no-border'>
         <IonToolbar>
           <IonTitle
             style={{
@@ -144,31 +145,37 @@ const EditProfile: React.FC = () => {
             Edit Profile
           </IonTitle>
           <IonButtons slot='start'>
-            <IonButton
+            <IonFabButton
+              color='light'
+              mode='ios'
+              slot='start'
               style={{
                 margin: "0.5rem",
+                width: "2.75rem",
+                height: "2.75rem",
               }}
-              color='dark'
-              onClick={() => history.goBack()}
+              onClick={() => {
+                history.goBack();
+              }}
             >
-              <IonIcon icon={arrowBackOutline} size='large' />
-            </IonButton>
+              <IonIcon icon={chevronBackOutline} />
+            </IonFabButton>
           </IonButtons>
           <IonButtons slot='end'>
-            <IonButton
+            <IonFabButton
+              color='light'
+              mode='ios'
+              slot='start'
               style={{
                 margin: "0.5rem",
+                width: "2.75rem",
+                height: "2.75rem",
               }}
-              color='dark'
               disabled={!verifyInputs()}
               onClick={handleSubmit}
             >
-              <IonIcon
-                slot='end'
-                icon={checkmark}
-                style={{ fontSize: "32px" }}
-              />
-            </IonButton>
+              <IonIcon icon={checkmark} />
+            </IonFabButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
@@ -186,16 +193,12 @@ const EditProfile: React.FC = () => {
           <IonButton
             mode='ios'
             shape='round'
-            color='medium'
-            fill='outline'
+            color='secondary'
+            fill='solid'
             onClick={handleRandomize}
           >
-            <IonIcon
-              icon={dice}
-              color='dark'
-              style={{ marginRight: "0.5rem" }}
-            />
-            <IonText color='dark'>Gimme another one</IonText>
+            <IonIcon icon={dice} style={{ marginRight: "0.5rem" }} />
+            <IonText>Gimme another one</IonText>
           </IonButton>
         </IonRow>
         <IonGrid className='ion-padding-horizontal'>

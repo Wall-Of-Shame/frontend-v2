@@ -1,6 +1,5 @@
 import {
   IonAvatar,
-  IonButton,
   IonButtons,
   IonCard,
   IonCardContent,
@@ -8,6 +7,7 @@ import {
   IonCardTitle,
   IonCol,
   IonContent,
+  IonFabButton,
   IonGrid,
   IonHeader,
   IonIcon,
@@ -16,24 +16,22 @@ import {
   IonText,
   IonToolbar,
 } from "@ionic/react";
-import { arrowBackOutline, chevronForward } from "ionicons/icons";
-import { useEffect, useState } from "react";
-import { ChallengeData } from "../../../interfaces/models/Challenges";
+import { chevronBackOutline, chevronForward } from "ionicons/icons";
+import { useEffect } from "react";
 import { hideTabs } from "../../../utils/TabsUtils";
 import { useHistory } from "react-router";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../reducers/RootReducer";
 import { ChallengeDux } from "../../../reducers/ChallengeDux";
 import AvatarImg from "../../../components/avatar";
+import Container from "../../../components/container";
 
 const Invitations: React.FC = () => {
   const history = useHistory();
 
   const selectChallenges = (state: RootState): ChallengeDux => state.challenges;
 
-  const [pendingResponse, setPendingResponse] = useState<ChallengeData[]>(
-    useSelector(selectChallenges).pendingResponse
-  );
+  const pendingResponse = useSelector(selectChallenges).pendingResponse;
 
   useEffect(() => {
     hideTabs();
@@ -41,26 +39,30 @@ const Invitations: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader>
+      <IonHeader className='ion-no-border'>
         <IonToolbar>
           <IonButtons slot='start'>
-            <IonButton
+            <IonFabButton
+              color='light'
+              mode='ios'
+              slot='start'
               style={{
                 margin: "0.5rem",
+                width: "2.75rem",
+                height: "2.75rem",
               }}
-              color='dark'
               onClick={() => {
                 history.goBack();
               }}
             >
-              <IonIcon icon={arrowBackOutline} size='large' />
-            </IonButton>
+              <IonIcon icon={chevronBackOutline} />
+            </IonFabButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
 
       <IonContent fullscreen>
-        {pendingResponse.length > 0 && (
+        {pendingResponse.length > 0 ? (
           <>
             <IonRow className='ion-padding-horizontal ion-margin-top'>
               <IonText style={{ color: "gray" }}>Pending Invitations</IonText>
@@ -136,6 +138,8 @@ const Invitations: React.FC = () => {
               );
             })}
           </>
+        ) : (
+          <Container>{"There's nothing here >_<"}</Container>
         )}
       </IonContent>
     </IonPage>
