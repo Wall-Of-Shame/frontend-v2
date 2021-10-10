@@ -14,7 +14,7 @@ import {
   IonTextarea,
   IonFooter,
 } from "@ionic/react";
-import { arrowBackOutline } from "ionicons/icons";
+import { close } from "ionicons/icons";
 import { useReducer, useState } from "react";
 import { isValidEmail } from "../../utils/ProfileUtils";
 import Alert from "../alert";
@@ -106,7 +106,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
                 setShowModal(false);
               }}
             >
-              <IonIcon icon={arrowBackOutline} size='large' />
+              <IonIcon icon={close} size='large' />
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -206,12 +206,12 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
           <IonRow className='ion-no-padding'>
             <ImageUploader
               withIcon={false}
-              buttonText='&nbsp;&nbsp;&nbsp;Select Image&nbsp;&nbsp;&nbsp;'
+              buttonText='&nbsp;&nbsp;&nbsp;Select image&nbsp;&nbsp;&nbsp;'
               buttonStyles={image ? { display: "none" } : undefined}
               onChange={onDrop}
               withPreview={true}
               singleImage={true}
-              label={"Selected: " + image ?? "None"}
+              label={image ? `Selected: ${image}` : "Selected: None"}
               labelStyles={{
                 textAlign: "center",
                 paddingBottom: "16px",
