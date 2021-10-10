@@ -203,12 +203,12 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
             </IonRow>
             <ImageUploader
               withIcon={false}
-              buttonText='&nbsp;&nbsp;&nbsp;Select Image&nbsp;&nbsp;&nbsp;'
+              buttonText='&nbsp;&nbsp;&nbsp;Select image&nbsp;&nbsp;&nbsp;'
               buttonStyles={image ? { display: "none" } : undefined}
               onChange={onDrop}
               withPreview={true}
               singleImage={true}
-              label={"Selected: " + image ?? "None"}
+              label={image ? `Selected: ${image}` : "Selected: None"}
               labelStyles={{
                 textAlign: "center",
                 paddingBottom: "16px",
@@ -217,31 +217,33 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
               imgExtension={[".jpg", ".png", ".gif", "jpeg"]}
               maxFileSize={Infinity}
             />
-            <IonRow
-              className='ion-no-padding ion-justify-content-center'
-              style={{ marginTop: "2.5rem" }}
-            >
-              <IonButton
-                mode='ios'
-                fill='solid'
-                shape='round'
-                color='secondary'
-                className='ion-padding-horizontal'
-                disabled={file === null}
-                onClick={handleSubmit}
-                style={{ marginBottom: "0.5rem" }}
+            {image !== undefined && image !== "" && (
+              <IonRow
+                className='ion-no-padding ion-justify-content-center'
+                style={{ marginTop: "1.5rem" }}
               >
-                <IonText
-                  style={{
-                    marginLeft: "1.5rem",
-                    marginRight: "1.5rem",
-                  }}
+                <IonButton
+                  mode='ios'
+                  fill='solid'
+                  shape='round'
+                  color='secondary'
+                  className='ion-padding-horizontal'
+                  disabled={file === null}
+                  onClick={handleSubmit}
+                  style={{ marginBottom: "0.5rem" }}
                 >
-                  {state.hasCompleted ? "Re-upload proof" : "Upload proof"}
-                </IonText>
-              </IonButton>
-            </IonRow>
-            {!state.hasCompleted && (
+                  <IonText
+                    style={{
+                      marginLeft: "1.5rem",
+                      marginRight: "1.5rem",
+                    }}
+                  >
+                    {state.hasCompleted ? "Re-upload proof" : "Upload proof"}
+                  </IonText>
+                </IonButton>
+              </IonRow>
+            )}
+            {(image === undefined || image === "") && !state.hasCompleted && (
               <IonRow className='ion-no-padding ion-justify-content-center'>
                 <IonButton
                   mode='ios'

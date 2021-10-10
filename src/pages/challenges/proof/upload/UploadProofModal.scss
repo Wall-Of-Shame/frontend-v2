@@ -3,28 +3,12 @@
   background: inherit;
   .chooseFileButton {
     border-radius: 1.5rem;
-    background: #aff4f9;
-    color: #000000;
+    background: #55bbda;
+    color: #ffffff;
     font: inherit;
     height: inherit;
     padding-top: 0.9rem;
     padding-bottom: 0.9rem;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .fileUploader .fileContainer {
-    box-shadow: none;
-    background: inherit;
-    .chooseFileButton {
-      border-radius: 1.5rem;
-      background: #8cc3c7;
-      color: #000000;
-      font: inherit;
-      height: inherit;
-      padding-top: 0.9rem;
-      padding-bottom: 0.9rem;
-    }
   }
 }
 

@@ -355,7 +355,7 @@ const Challenges: React.FC = () => {
                                 <IonRow style={{ marginTop: "0.5rem" }}>
                                   <IonText style={{ fontSize: "0.8rem" }}>
                                     {acceptedCount} participant
-                                    {acceptedCount === 1 ? "" : "s"} have
+                                    {acceptedCount === 1 ? " has " : "s have "}
                                     accepted
                                   </IonText>
                                 </IonRow>
