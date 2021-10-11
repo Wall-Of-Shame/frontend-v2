@@ -169,22 +169,166 @@ const WallOfShame: React.FC = () => {
     }
   }, [location.pathname]);
 
-  const globalTopThree = globalRankings
-    .sort((x, y) => {
-      const xCount = x.failedChallengeCount + (x.vetoedChallengeCount ?? 0);
-      const yCount = y.failedChallengeCount + (y.vetoedChallengeCount ?? 0);
-      return yCount - xCount;
-    })
-    .slice(0, 3);
-
-  const friendsTopThree = friendsRankings
-    .sort((x, y) => {
-      const xCount = x.failedChallengeCount + (x.vetoedChallengeCount ?? 0);
-      const yCount = y.failedChallengeCount + (y.vetoedChallengeCount ?? 0);
-      return yCount - xCount;
-    })
-    .slice(0, 3);
-
+  const renderLeaderboard = (rankings: UserList[]) => {
+    const topThree = rankings
+      .sort((x, y) => {
+        const xCount = x.failedChallengeCount + (x.vetoedChallengeCount ?? 0);
+        const yCount = y.failedChallengeCount + (y.vetoedChallengeCount ?? 0);
+        return yCount - xCount;
+      })
+      .slice(0, 3);
+    return (
+      <>
+        <IonRow className='ion-align-items-end' style={{ marginTop: "1rem" }}>
+          {rankings.length > 1 && (
+            <IonCol size='4'>
+              <IonRow className='ion-justify-content-center'>
+                <IonAvatar className='second-place-avatar'>
+                  <AvatarImg avatar={topThree[1].avatar} />
+                </IonAvatar>
+              </IonRow>
+              <IonRow className='ion-justify-content-center'>
+                <IonIcon
+                  icon={trophy}
+                  style={{
+                    color: trophyColors[1],
+                    marginTop: "0.5rem",
+                  }}
+                ></IonIcon>
+              </IonRow>
+              <IonRow
+                className='ion-justify-content-center'
+                style={{ marginTop: "0.25rem" }}
+              >
+                <IonLabel>
+                  <h4 style={{ fontWeight: "bold" }}>{topThree[1].name}</h4>
+                </IonLabel>
+              </IonRow>
+              <IonRow
+                className='ion-justify-content-center'
+                style={{ marginTop: "0.25rem" }}
+              >
+                <IonLabel style={{ fontSize: "0.8rem" }}>
+                  {topThree[1].failedChallengeCount +
+                    (topThree[1].vetoedChallengeCount ?? 0) +
+                    " shames"}
+                </IonLabel>
+              </IonRow>
+            </IonCol>
+          )}
+          {rankings.length > 0 && (
+            <IonCol size='4'>
+              <IonRow className='ion-justify-content-center'>
+                <IonAvatar className='first-place-avatar'>
+                  <AvatarImg avatar={topThree[0].avatar} />
+                </IonAvatar>
+              </IonRow>
+              <IonRow className='ion-justify-content-center'>
+                <IonIcon
+                  icon={trophy}
+                  style={{
+                    color: trophyColors[0],
+                    marginTop: "0.5rem",
+                  }}
+                ></IonIcon>
+              </IonRow>
+              <IonRow
+                className='ion-justify-content-center'
+                style={{ marginTop: "0.25rem" }}
+              >
+                <IonLabel>
+                  <h4 style={{ fontWeight: "bold" }}>{topThree[0].name}</h4>
+                </IonLabel>
+              </IonRow>
+              <IonRow
+                className='ion-justify-content-center'
+                style={{ marginTop: "0.25rem" }}
+              >
+                <IonLabel style={{ fontSize: "0.8rem" }}>
+                  {topThree[0].failedChallengeCount +
+                    (topThree[0].vetoedChallengeCount ?? 0) +
+                    " shames"}
+                </IonLabel>
+              </IonRow>
+            </IonCol>
+          )}
+          {rankings.length > 2 && (
+            <IonCol size='4'>
+              <IonRow className='ion-justify-content-center'>
+                <IonAvatar className='third-place-avatar'>
+                  <AvatarImg avatar={topThree[2].avatar} />
+                </IonAvatar>
+              </IonRow>
+              <IonRow className='ion-justify-content-center'>
+                <IonIcon
+                  icon={trophy}
+                  style={{
+                    color: trophyColors[2],
+                    marginTop: "0.5rem",
+                  }}
+                ></IonIcon>
+              </IonRow>
+              <IonRow
+                className='ion-justify-content-center'
+                style={{ marginTop: "0.25rem" }}
+              >
+                <IonLabel>
+                  <h4 style={{ fontWeight: "bold" }}>{topThree[2].name}</h4>
+                </IonLabel>
+              </IonRow>
+              <IonRow
+                className='ion-justify-content-center'
+                style={{ marginTop: "0.25rem" }}
+              >
+                <IonLabel style={{ fontSize: "0.8rem" }}>
+                  {topThree[2].failedChallengeCount +
+                    (topThree[2].vetoedChallengeCount ?? 0) +
+                    " shames"}
+                </IonLabel>
+              </IonRow>
+            </IonCol>
+          )}
+        </IonRow>
+        {rankings.length > 3 && (
+          <IonCard>
+            <IonList style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+              {rankings
+                .sort((x, y) => {
+                  const xCount =
+                    x.failedChallengeCount + (x.vetoedChallengeCount ?? 0);
+                  const yCount =
+                    y.failedChallengeCount + (y.vetoedChallengeCount ?? 0);
+                  return yCount - xCount;
+                })
+                .slice(3)
+                .map((r, index) => {
+                  return (
+                    <IonItem
+                      lines='none'
+                      key={r.userId}
+                      className='leaderboard-item'
+                    >
+                      <IonAvatar slot='start'>
+                        <AvatarImg avatar={r.avatar} />
+                      </IonAvatar>
+                      <IonLabel>
+                        <h4 style={{ fontWeight: "bold" }}>{r.name}</h4>
+                      </IonLabel>
+                      <IonLabel slot='end'>
+                        {r.failedChallengeCount + (r.vetoedChallengeCount ?? 0)}
+                      </IonLabel>
+                    </IonItem>
+                  );
+                })}
+            </IonList>
+          </IonCard>
+        )}
+        {rankings.length <= 0 && (
+          <Container>{"There's nothing here >_<"}</Container>
+        )}
+      </>
+    );
+  };
   const renderWall = () => {
     switch (tab) {
       case "live":
@@ -257,342 +401,8 @@ const WallOfShame: React.FC = () => {
                 </IonSegment>
               </IonCol>
             </IonRow>
-            {type === "Global" && (
-              <IonRow
-                className='ion-align-items-end'
-                style={{ marginTop: "1rem" }}
-              >
-                {globalRankings.length > 1 && (
-                  <IonCol size='4'>
-                    <IonRow className='ion-justify-content-center'>
-                      <IonAvatar className='second-place-avatar'>
-                        <AvatarImg avatar={globalTopThree[1].avatar} />
-                      </IonAvatar>
-                    </IonRow>
-                    <IonRow className='ion-justify-content-center'>
-                      <IonIcon
-                        icon={trophy}
-                        style={{
-                          color: trophyColors[1],
-                          marginTop: "0.5rem",
-                        }}
-                      ></IonIcon>
-                    </IonRow>
-                    <IonRow
-                      className='ion-justify-content-center'
-                      style={{ marginTop: "0.25rem" }}
-                    >
-                      <IonLabel>
-                        <h4 style={{ fontWeight: "bold" }}>
-                          {globalTopThree[1].name}
-                        </h4>
-                      </IonLabel>
-                    </IonRow>
-                    <IonRow
-                      className='ion-justify-content-center'
-                      style={{ marginTop: "0.25rem" }}
-                    >
-                      <IonLabel style={{ fontSize: "0.8rem" }}>
-                        {globalTopThree[1].failedChallengeCount +
-                          (globalTopThree[1].vetoedChallengeCount ?? 0) +
-                          " shames"}
-                      </IonLabel>
-                    </IonRow>
-                  </IonCol>
-                )}
-                {globalRankings.length > 0 && (
-                  <IonCol size='4'>
-                    <IonRow className='ion-justify-content-center'>
-                      <IonAvatar className='first-place-avatar'>
-                        <AvatarImg avatar={globalTopThree[0].avatar} />
-                      </IonAvatar>
-                    </IonRow>
-                    <IonRow className='ion-justify-content-center'>
-                      <IonIcon
-                        icon={trophy}
-                        style={{
-                          color: trophyColors[0],
-                          marginTop: "0.5rem",
-                        }}
-                      ></IonIcon>
-                    </IonRow>
-                    <IonRow
-                      className='ion-justify-content-center'
-                      style={{ marginTop: "0.25rem" }}
-                    >
-                      <IonLabel>
-                        <h4 style={{ fontWeight: "bold" }}>
-                          {globalTopThree[0].name}
-                        </h4>
-                      </IonLabel>
-                    </IonRow>
-                    <IonRow
-                      className='ion-justify-content-center'
-                      style={{ marginTop: "0.25rem" }}
-                    >
-                      <IonLabel style={{ fontSize: "0.8rem" }}>
-                        {globalTopThree[0].failedChallengeCount +
-                          (globalTopThree[0].vetoedChallengeCount ?? 0) +
-                          " shames"}
-                      </IonLabel>
-                    </IonRow>
-                  </IonCol>
-                )}
-                {globalRankings.length > 2 && (
-                  <IonCol size='4'>
-                    <IonRow className='ion-justify-content-center'>
-                      <IonAvatar className='third-place-avatar'>
-                        <AvatarImg avatar={globalTopThree[2].avatar} />
-                      </IonAvatar>
-                    </IonRow>
-                    <IonRow className='ion-justify-content-center'>
-                      <IonIcon
-                        icon={trophy}
-                        style={{
-                          color: trophyColors[2],
-                          marginTop: "0.5rem",
-                        }}
-                      ></IonIcon>
-                    </IonRow>
-                    <IonRow
-                      className='ion-justify-content-center'
-                      style={{ marginTop: "0.25rem" }}
-                    >
-                      <IonLabel>
-                        <h4 style={{ fontWeight: "bold" }}>
-                          {globalTopThree[2].name}
-                        </h4>
-                      </IonLabel>
-                    </IonRow>
-                    <IonRow
-                      className='ion-justify-content-center'
-                      style={{ marginTop: "0.25rem" }}
-                    >
-                      <IonLabel style={{ fontSize: "0.8rem" }}>
-                        {globalTopThree[2].failedChallengeCount +
-                          (globalTopThree[2].vetoedChallengeCount ?? 0) +
-                          " shames"}
-                      </IonLabel>
-                    </IonRow>
-                  </IonCol>
-                )}
-              </IonRow>
-            )}
-            {type === "Friends" && (
-              <IonRow
-                className='ion-align-items-end'
-                style={{ marginTop: "1rem" }}
-              >
-                {friendsRankings.length > 1 && (
-                  <IonCol size='4'>
-                    <IonRow className='ion-justify-content-center'>
-                      <IonAvatar className='second-place-avatar'>
-                        <AvatarImg avatar={friendsTopThree[1].avatar} />
-                      </IonAvatar>
-                    </IonRow>
-                    <IonRow className='ion-justify-content-center'>
-                      <IonIcon
-                        icon={trophy}
-                        style={{
-                          color: trophyColors[1],
-                          marginTop: "0.5rem",
-                        }}
-                      ></IonIcon>
-                    </IonRow>
-                    <IonRow
-                      className='ion-justify-content-center'
-                      style={{ marginTop: "0.25rem" }}
-                    >
-                      <IonLabel>
-                        <h4 style={{ fontWeight: "bold" }}>
-                          {friendsTopThree[1].name}
-                        </h4>
-                      </IonLabel>
-                    </IonRow>
-                    <IonRow
-                      className='ion-justify-content-center'
-                      style={{ marginTop: "0.25rem" }}
-                    >
-                      <IonLabel style={{ fontSize: "0.8rem" }}>
-                        {friendsTopThree[1].failedChallengeCount +
-                          (friendsTopThree[1].vetoedChallengeCount ?? 0) +
-                          " shames"}
-                      </IonLabel>
-                    </IonRow>
-                  </IonCol>
-                )}
-                {friendsRankings.length > 0 && (
-                  <IonCol size='4'>
-                    <IonRow className='ion-justify-content-center'>
-                      <IonAvatar className='first-place-avatar'>
-                        <AvatarImg avatar={friendsTopThree[0].avatar} />
-                      </IonAvatar>
-                    </IonRow>
-                    <IonRow className='ion-justify-content-center'>
-                      <IonIcon
-                        icon={trophy}
-                        style={{
-                          color: trophyColors[0],
-                          marginTop: "0.5rem",
-                        }}
-                      ></IonIcon>
-                    </IonRow>
-                    <IonRow
-                      className='ion-justify-content-center'
-                      style={{ marginTop: "0.25rem" }}
-                    >
-                      <IonLabel>
-                        <h4 style={{ fontWeight: "bold" }}>
-                          {friendsTopThree[0].name}
-                        </h4>
-                      </IonLabel>
-                    </IonRow>
-                    <IonRow
-                      className='ion-justify-content-center'
-                      style={{ marginTop: "0.25rem" }}
-                    >
-                      <IonLabel style={{ fontSize: "0.8rem" }}>
-                        {friendsTopThree[0].failedChallengeCount +
-                          (friendsTopThree[0].vetoedChallengeCount ?? 0) +
-                          " shames"}
-                      </IonLabel>
-                    </IonRow>
-                  </IonCol>
-                )}
-                {friendsRankings.length > 2 && (
-                  <IonCol size='4'>
-                    <IonRow className='ion-justify-content-center'>
-                      <IonAvatar className='third-place-avatar'>
-                        <AvatarImg avatar={friendsTopThree[2].avatar} />
-                      </IonAvatar>
-                    </IonRow>
-                    <IonRow className='ion-justify-content-center'>
-                      <IonIcon
-                        icon={trophy}
-                        style={{
-                          color: trophyColors[2],
-                          marginTop: "0.5rem",
-                        }}
-                      ></IonIcon>
-                    </IonRow>
-                    <IonRow
-                      className='ion-justify-content-center'
-                      style={{ marginTop: "0.25rem" }}
-                    >
-                      <IonLabel>
-                        <h4 style={{ fontWeight: "bold" }}>
-                          {friendsTopThree[2].name}
-                        </h4>
-                      </IonLabel>
-                    </IonRow>
-                    <IonRow
-                      className='ion-justify-content-center'
-                      style={{ marginTop: "0.25rem" }}
-                    >
-                      <IonLabel style={{ fontSize: "0.8rem" }}>
-                        {friendsTopThree[2].failedChallengeCount +
-                          (friendsTopThree[2].vetoedChallengeCount ?? 0) +
-                          " shames"}
-                      </IonLabel>
-                    </IonRow>
-                  </IonCol>
-                )}
-              </IonRow>
-            )}
-            {type === "Global" && globalRankings.length > 3 && (
-              <IonCard>
-                <IonList style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-                  {globalRankings
-                    .sort((x, y) => {
-                      const xCount =
-                        x.failedChallengeCount + (x.vetoedChallengeCount ?? 0);
-                      const yCount =
-                        y.failedChallengeCount + (y.vetoedChallengeCount ?? 0);
-                      return yCount - xCount;
-                    })
-                    .slice(3)
-                    .map((r, index) => {
-                      return (
-                        <IonItem
-                          lines='none'
-                          key={r.userId}
-                          className='leaderboard-item'
-                        >
-                          <IonAvatar slot='start'>
-                            <AvatarImg avatar={r.avatar} />
-                          </IonAvatar>
-                          <IonLabel>
-                            <h4 style={{ fontWeight: "bold" }}>{r.name}</h4>
-                          </IonLabel>
-                          <IonLabel slot='end'>
-                            {r.failedChallengeCount +
-                              (r.vetoedChallengeCount ?? 0)}
-                          </IonLabel>
-                        </IonItem>
-                      );
-                    })}
-                </IonList>
-              </IonCard>
-            )}
-            {type === "Global" && globalRankings.length <= 0 && (
-              <Container>{"There's nothing here >_<"}</Container>
-            )}
-
-            {type === "Friends" && friendsRankings.length > 3 && (
-              <IonCard>
-                <IonList>
-                  {friendsRankings
-                    .sort((x, y) => {
-                      const xCount =
-                        x.failedChallengeCount + (x.vetoedChallengeCount ?? 0);
-                      const yCount =
-                        y.failedChallengeCount + (y.vetoedChallengeCount ?? 0);
-                      return yCount - xCount;
-                    })
-                    .map((r, index) => {
-                      return (
-                        <IonItem
-                          lines='none'
-                          key={r.userId}
-                          className='leaderboard-item'
-                        >
-                          <IonAvatar slot='start'>
-                            <AvatarImg avatar={r.avatar} />{" "}
-                          </IonAvatar>
-                          <IonLabel>
-                            <h4 style={{ fontWeight: "bold" }}>{r.name}</h4>
-                          </IonLabel>
-                          <IonLabel slot='end'>
-                            {r.failedChallengeCount +
-                              (r.vetoedChallengeCount ?? 0)}
-                          </IonLabel>
-                          {index < 3 ? (
-                            <IonIcon
-                              slot='end'
-                              icon={trophy}
-                              style={{
-                                color: trophyColors[index],
-                              }}
-                            ></IonIcon>
-                          ) : (
-                            <IonIcon
-                              slot='end'
-                              icon={trophy}
-                              color='light'
-                              style={{
-                                opacity: 0,
-                              }}
-                            ></IonIcon>
-                          )}
-                        </IonItem>
-                      );
-                    })}
-                </IonList>
-              </IonCard>
-            )}
-            {type === "Friends" && friendsRankings.length <= 0 && (
-              <Container>{"There's nothing here >_<"}</Container>
-            )}
+            {type === "Global" && renderLeaderboard(globalRankings)}
+            {type === "Friends" && renderLeaderboard(friendsRankings)}
           </>
         );
     }
@@ -651,7 +461,7 @@ const WallOfShame: React.FC = () => {
                 fill='clear'
                 color='clear'
                 mode='ios'
-                style={{ paddingTop: "1rem" }}
+                style={{ marginTop: "1rem" }}
                 onClick={(e: any) => {
                   e.persist();
                   setShowPopover({ showPopover: true, event: e });
