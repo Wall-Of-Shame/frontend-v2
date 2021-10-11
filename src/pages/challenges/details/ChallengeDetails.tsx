@@ -523,115 +523,13 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     return <></>;
   };
 
-  if (!challenge) {
-    return <Redirect to={"challenges"} />;
-  }
-
-  if (state.editMode) {
-    return (
-      <EditChallenge
-        challenge={challenge}
-        backAction={() => setState({ editMode: false })}
-      />
-    );
-  }
-
-  const startsIn = Math.round(
-    (parseISO(challenge.startAt!).getTime() - new Date().getTime()) / 1000
-  );
-
-  return (
-    <IonPage>
-      <IonHeader className='ion-no-border'>
-        <IonToolbar>
-          <IonFabButton
-            color='light'
-            mode='ios'
-            slot='start'
-            style={{
-              margin: "0.5rem",
-              width: "2.75rem",
-              height: "2.75rem",
-            }}
-            onClick={() => {
-              history.goBack();
-            }}
-          >
-            <IonIcon icon={chevronBackOutline} />
-          </IonFabButton>
-          {user?.userId === challenge.owner.userId &&
-            !isAfter(Date.now(), parseISO(challenge.startAt!)) && (
-              <>
-                <IonButtons slot='end'>
-                  <IonFabButton
-                    color='light'
-                    mode='ios'
-                    slot='end'
-                    style={{
-                      margin: "0.5rem",
-                      width: "2.75rem",
-                      height: "2.75rem",
-                    }}
-                    onClick={() => setState({ showParticipantModal: true })}
-                  >
-                    <IonIcon
-                      icon={personAddOutline}
-                      style={{ fontSize: "1.5rem" }}
-                    />
-                  </IonFabButton>
-                  <IonFabButton
-                    color='light'
-                    mode='ios'
-                    slot='end'
-                    style={{
-                      margin: "0.5rem",
-                      width: "2.75rem",
-                      height: "2.75rem",
-                    }}
-                    onClick={handleEdit}
-                  >
-                    <IonIcon
-                      icon={pencilOutline}
-                      style={{ fontSize: "1.5rem" }}
-                    />
-                  </IonFabButton>
-                </IonButtons>
-              </>
-            )}
-        </IonToolbar>
-      </IonHeader>
-
-      <IonContent fullscreen>
-        <IonGrid>
-          {renderHeader()}
-          <IonRow className='ion-padding-horizontal ion-padding-bottom'>
-            <IonText style={{ fontWeight: "bold", fontSize: "1.5rem" }}>
-              {challenge.title}
-            </IonText>
-          </IonRow>
-        </IonGrid>
-        <IonRow style={{ borderBottom: "1px #cecece solid" }}>
-          <IonCol size='6' className='ion-no-padding'>
-            <IonSegment
-              onIonChange={(e) => setTab(e.detail.value ?? "active")}
-              value={tab}
-              mode='md'
-              color='dark'
-              style={{ marginLeft: "1rem", marginRight: "1rem" }}
-            >
-              <IonSegmentButton value='details' className='ion-text-capitalize'>
-                <IonLabel>Details</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton
-                value='participants'
-                className='ion-text-capitalize'
-              >
-                <IonLabel>Participants</IonLabel>
-              </IonSegmentButton>
-            </IonSegment>
-          </IonCol>
-        </IonRow>
-        {tab === "details" ? (
+  const renderTabs = () => {
+    if (!challenge) {
+      return <></>;
+    }
+    switch (tab) {
+      case "details":
+        return (
           <>
             {challenge.participants.accepted.notCompleted.length > 0 &&
               renderImage()}
@@ -756,17 +654,133 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
               </IonRow>
             </IonGrid>
           </>
-        ) : (
-          <Participants
-            challenge={challenge}
-            viewProofCallback={(userUnderViewing) => {
-              setState({
-                userUnderViewing,
-                showViewProofModal: true,
-              });
+        );
+      case "participants":
+        return (
+          <div style={{ marginTop: "1rem" }}>
+            <Participants
+              challenge={challenge}
+              viewProofCallback={(userUnderViewing) => {
+                setState({
+                  userUnderViewing,
+                  showViewProofModal: true,
+                });
+              }}
+            />
+          </div>
+        );
+    }
+  };
+
+  if (!challenge) {
+    return <Redirect to={"challenges"} />;
+  }
+
+  if (state.editMode) {
+    return (
+      <EditChallenge
+        challenge={challenge}
+        backAction={() => setState({ editMode: false })}
+      />
+    );
+  }
+
+  const startsIn = Math.round(
+    (parseISO(challenge.startAt!).getTime() - new Date().getTime()) / 1000
+  );
+
+  return (
+    <IonPage>
+      <IonHeader className='ion-no-border'>
+        <IonToolbar>
+          <IonFabButton
+            color='light'
+            mode='ios'
+            slot='start'
+            style={{
+              margin: "0.5rem",
+              width: "2.75rem",
+              height: "2.75rem",
             }}
-          />
-        )}
+            onClick={() => {
+              history.goBack();
+            }}
+          >
+            <IonIcon icon={chevronBackOutline} />
+          </IonFabButton>
+          {user?.userId === challenge.owner.userId &&
+            !isAfter(Date.now(), parseISO(challenge.startAt!)) && (
+              <>
+                <IonButtons slot='end'>
+                  <IonFabButton
+                    color='light'
+                    mode='ios'
+                    slot='end'
+                    style={{
+                      margin: "0.5rem",
+                      width: "2.75rem",
+                      height: "2.75rem",
+                    }}
+                    onClick={() => setState({ showParticipantModal: true })}
+                  >
+                    <IonIcon
+                      icon={personAddOutline}
+                      style={{ fontSize: "1.5rem" }}
+                    />
+                  </IonFabButton>
+                  <IonFabButton
+                    color='light'
+                    mode='ios'
+                    slot='end'
+                    style={{
+                      margin: "0.5rem",
+                      width: "2.75rem",
+                      height: "2.75rem",
+                    }}
+                    onClick={handleEdit}
+                  >
+                    <IonIcon
+                      icon={pencilOutline}
+                      style={{ fontSize: "1.5rem" }}
+                    />
+                  </IonFabButton>
+                </IonButtons>
+              </>
+            )}
+        </IonToolbar>
+      </IonHeader>
+
+      <IonContent fullscreen>
+        <IonGrid>
+          {renderHeader()}
+          <IonRow className='ion-padding-horizontal ion-padding-bottom'>
+            <IonText style={{ fontWeight: "bold", fontSize: "1.5rem" }}>
+              {challenge.title}
+            </IonText>
+          </IonRow>
+        </IonGrid>
+        <IonRow style={{ borderBottom: "1px #cecece solid" }}>
+          <IonCol size='6' className='ion-no-padding'>
+            <IonSegment
+              onIonChange={(e) => setTab(e.detail.value ?? "active")}
+              value={tab}
+              mode='md'
+              color='dark'
+              style={{ marginLeft: "1rem", marginRight: "1rem" }}
+            >
+              <IonSegmentButton value='details' className='ion-text-capitalize'>
+                <IonLabel>Details</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton
+                value='participants'
+                className='ion-text-capitalize'
+              >
+                <IonLabel>Participants</IonLabel>
+              </IonSegmentButton>
+            </IonSegment>
+          </IonCol>
+        </IonRow>
+        {renderTabs()}
         <IonFab vertical='bottom' horizontal='end' slot='fixed'>
           <IonFabButton color='senary' onClick={fetchData} mode='ios'>
             <IonIcon icon={refreshOutline} />
