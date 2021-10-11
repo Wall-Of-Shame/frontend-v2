@@ -138,7 +138,6 @@ const WallOfShame: React.FC = () => {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const connectToSocket = async () => {
     const globalSocket = await connect();
     setSocket(globalSocket);
@@ -151,8 +150,8 @@ const WallOfShame: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchData();
-    // connectToSocket();
+    // fetchData();
+    connectToSocket();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

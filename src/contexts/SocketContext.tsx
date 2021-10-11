@@ -13,9 +13,8 @@ const SocketProvider: React.FunctionComponent = (props) => {
   let socket: Socket | undefined;
 
   const connect = async (): Promise<Socket> => {
-    console.log(socket);
     if (!socket) {
-      const newSocket = io("ws://localhost:3001/", {
+      const newSocket = io(`${process.env.REACT_APP_BACKEND_WS_API}`, {
         withCredentials: true,
         transports: ["websocket", "polling"],
         reconnection: true,
