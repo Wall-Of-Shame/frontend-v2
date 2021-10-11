@@ -252,12 +252,7 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
             className='ion-justify-content-around'
             style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
           >
-            <IonButton
-              mode='ios'
-              color='secondary'
-              shape='round'
-              style={{ color: "black" }}
-            >
+            <IonButton mode='ios' color='secondary' shape='round'>
               <IonText
                 style={{
                   marginLeft: "1rem",
