@@ -96,6 +96,7 @@ const Profile: React.FC = () => {
   );
 
   const [searchText, setSearchText] = useState("");
+  const [debouncedSearchText, setDebouncedSearchText] = useState("");
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(
@@ -106,11 +107,7 @@ const Profile: React.FC = () => {
   );
 
   const handleSearch = async (searchText: string) => {
-    if (searchText.length <= 0) {
-      return;
-    }
-    try {
-    } catch (error) {}
+    setDebouncedSearchText(searchText);
   };
 
   useEffect(() => {
@@ -128,10 +125,14 @@ const Profile: React.FC = () => {
   }, [location.pathname]);
 
   const renderChallengeHistory = () => {
-    if (completed && completed.length > 0) {
+    const filteredChallenges = completed?.filter(
+      (c) =>
+        c.title.toLowerCase().indexOf(debouncedSearchText.toLowerCase()) !== -1
+    );
+    if (filteredChallenges && filteredChallenges.length > 0) {
       return (
         <>
-          {completed?.map((c) => {
+          {filteredChallenges.map((c) => {
             return (
               <IonCard
                 mode='ios'
@@ -196,8 +197,11 @@ const Profile: React.FC = () => {
       );
     } else {
       return (
-        <IonRow className='ion-padding ion-justify-content-center'>
-          <IonText color='medium'>No challenges yet</IonText>
+        <IonRow
+          className='ion-padding ion-justify-content-center'
+          style={{ marginBottom: "0.5rem" }}
+        >
+          <IonText color='medium'>{"There's nothing here >_<"}</IonText>
         </IonRow>
       );
     }
