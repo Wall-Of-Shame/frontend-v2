@@ -1,7 +1,5 @@
 import {
   IonAvatar,
-  IonButton,
-  IonButtons,
   IonCard,
   IonCol,
   IonContent,
@@ -19,7 +17,6 @@ import {
   IonRow,
   IonSegment,
   IonSegmentButton,
-  IonText,
   IonTitle,
   IonToolbar,
   isPlatform,
@@ -28,12 +25,7 @@ import { useEffect, useReducer, useState } from "react";
 import "./WallOfShame.scss";
 import { hideTabs, showTabs } from "../../utils/TabsUtils";
 import { useLocation } from "react-router";
-import {
-  chevronBackOutline,
-  chevronForwardOutline,
-  refreshOutline,
-  trophy,
-} from "ionicons/icons";
+import { funnelOutline, refreshOutline, trophy } from "ionicons/icons";
 import { database } from "../../firebase";
 import {
   ref,
@@ -410,107 +402,71 @@ const WallOfShame: React.FC = () => {
 
   return (
     <IonPage>
-      <IonPopover
-        cssClass='popover'
-        event={popoverState.event}
-        isOpen={popoverState.showPopover}
-        onDidDismiss={() =>
-          setShowPopover({ showPopover: false, event: undefined })
-        }
-      >
-        <IonList>
-          <IonRadioGroup value={tab}>
-            <IonItem
-              lines='none'
-              style={{ marginTop: isPlatform("ios") ? "0.5rem" : "0rem" }}
-              onClick={() => {
-                setTab("live");
-                setShowPopover({ showPopover: false, event: undefined });
-              }}
-            >
-              <IonLabel>Live Chart</IonLabel>
-              <IonRadio value='live' />
-            </IonItem>
-            <IonItem
-              lines='none'
-              style={{ marginBottom: isPlatform("ios") ? "0.5rem" : "0rem" }}
-              onClick={() => {
-                setTab("shameful");
-                setShowPopover({ showPopover: false, event: undefined });
-              }}
-            >
-              <IonLabel>Top Chart</IonLabel>
-              <IonRadio value='shameful' />
-            </IonItem>
-          </IonRadioGroup>
-        </IonList>
-      </IonPopover>
       <IonHeader className='ion-no-border'>
-        {isPlatform("ios") ? (
-          <IonToolbar
+        <IonToolbar style={{ paddingTop: "0.5rem" }}>
+          <IonTitle
+            size='large'
             style={{
-              paddingTop: "2.5rem",
+              paddingBottom: isPlatform("ios") ? "1rem" : 0,
             }}
           >
-            <IonTitle size='large' style={{ paddingBottom: "2rem" }}>
-              Wall of Shame
-            </IonTitle>
-            <IonButtons
-              slot='end'
-              style={{ paddingTop: "1rem", height: "4rem" }}
-            >
-              <IonButton
-                fill='clear'
-                color='clear'
-                mode='ios'
-                style={{ marginTop: "1rem" }}
-                onClick={(e: any) => {
-                  e.persist();
-                  setShowPopover({ showPopover: true, event: e });
-                }}
-              >
-                <IonIcon icon={chevronBackOutline} size='small' />
-                <IonText
-                  style={{
-                    marginLeft: "0.25rem",
-                    marginRight: "0.25rem",
-                  }}
-                >
-                  {tab === "live" ? "Live Chart" : "Top Chart"}
-                </IonText>
-                <IonIcon icon={chevronForwardOutline} size='small' />
-              </IonButton>
-            </IonButtons>
-          </IonToolbar>
-        ) : (
-          <IonToolbar>
-            <IonTitle size='large'>Wall of Shame</IonTitle>
-            <IonButtons slot='end'>
-              <IonButton
-                fill='clear'
-                color='clear'
-                mode='ios'
-                onClick={(e: any) => {
-                  e.persist();
-                  setShowPopover({ showPopover: true, event: e });
-                }}
-              >
-                <IonIcon icon={chevronBackOutline} size='small' />
-                <IonText
-                  style={{
-                    marginLeft: "0.25rem",
-                    marginRight: "0.25rem",
-                  }}
-                >
-                  {tab === "live" ? "Live Chart" : "Top Chart"}
-                </IonText>
-                <IonIcon icon={chevronForwardOutline} size='small' />
-              </IonButton>
-            </IonButtons>
-          </IonToolbar>
-        )}
+            Wall of Shame
+          </IonTitle>
+          <IonFabButton
+            className='placeholder-fab'
+            color='light'
+            mode='ios'
+            slot='end'
+            style={{
+              margin: "0.5rem",
+              width: "2.75rem",
+              height: "2.75rem",
+            }}
+            onClick={(e: any) => {
+              e.persist();
+              setShowPopover({ showPopover: true, event: e });
+            }}
+          >
+            <IonIcon icon={funnelOutline} style={{ fontSize: "1.5rem" }} />
+          </IonFabButton>
+        </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+        <IonPopover
+          cssClass='popover'
+          event={popoverState.event}
+          isOpen={popoverState.showPopover}
+          onDidDismiss={() =>
+            setShowPopover({ showPopover: false, event: undefined })
+          }
+        >
+          <IonList>
+            <IonRadioGroup value={tab}>
+              <IonItem
+                lines='none'
+                style={{ marginTop: isPlatform("ios") ? "0.5rem" : "0rem" }}
+                onClick={() => {
+                  setTab("live");
+                  setShowPopover({ showPopover: false, event: undefined });
+                }}
+              >
+                <IonLabel>Live Chart</IonLabel>
+                <IonRadio value='live' />
+              </IonItem>
+              <IonItem
+                lines='none'
+                style={{ marginBottom: isPlatform("ios") ? "0.5rem" : "0rem" }}
+                onClick={() => {
+                  setTab("shameful");
+                  setShowPopover({ showPopover: false, event: undefined });
+                }}
+              >
+                <IonLabel>Top Chart</IonLabel>
+                <IonRadio value='shameful' />
+              </IonItem>
+            </IonRadioGroup>
+          </IonList>
+        </IonPopover>
         {renderWall()}
         <IonFab vertical='bottom' horizontal='end' slot='fixed'>
           <IonFabButton color='senary' onClick={fetchData} mode='ios'>
