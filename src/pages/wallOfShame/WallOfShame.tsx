@@ -419,16 +419,14 @@ const WallOfShame: React.FC = () => {
         }
       >
         <IonList>
-          <IonRadioGroup
-            value={tab}
-            onIonChange={(event) => {
-              setTab(event.detail.value);
-              setShowPopover({ showPopover: false, event: undefined });
-            }}
-          >
+          <IonRadioGroup value={tab}>
             <IonItem
               lines='none'
               style={{ marginTop: isPlatform("ios") ? "0.5rem" : "0rem" }}
+              onClick={() => {
+                setTab("live");
+                setShowPopover({ showPopover: false, event: undefined });
+              }}
             >
               <IonLabel>Live Chart</IonLabel>
               <IonRadio value='live' />
@@ -436,6 +434,10 @@ const WallOfShame: React.FC = () => {
             <IonItem
               lines='none'
               style={{ marginBottom: isPlatform("ios") ? "0.5rem" : "0rem" }}
+              onClick={() => {
+                setTab("shameful");
+                setShowPopover({ showPopover: false, event: undefined });
+              }}
             >
               <IonLabel>Top Chart</IonLabel>
               <IonRadio value='shameful' />
