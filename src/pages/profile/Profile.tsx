@@ -393,35 +393,46 @@ const Profile: React.FC = () => {
         </IonRow>
 
         <IonCard mode='ios' style={{ marginBottom: "2rem" }}>
-          <IonRow className='ion-justify-content-center'>
-            <PieChart
-              style={{ width: "12rem", height: "12rem", marginTop: "2rem" }}
-              startAngle={-90}
-              lineWidth={50}
-              data={[
-                {
-                  title: "Completed",
-                  value: user?.completedChallengeCount ?? 0,
-                  color: "#6C7BFF",
-                },
-                {
-                  title: "Failures",
-                  value: user?.failedChallengeCount ?? 0,
-                  color: "#C7CCFF",
-                },
-                {
-                  title: "Cheats",
-                  value: user?.vetoedChallengeCount ?? 0,
-                  color: "#F0F1FD",
-                },
-              ]}
-              label={({ dataEntry }) => `${Math.round(dataEntry.percentage)}%`}
-              labelPosition={75}
-              labelStyle={{
-                fontSize: "0.5rem",
-              }}
-            />
-          </IonRow>
+          {(user?.completedChallengeCount ?? 0) +
+            (user?.failedChallengeCount ?? 0) +
+            (user?.vetoedChallengeCount ?? 0) >
+            0 && (
+            <IonRow className='ion-justify-content-center'>
+              <PieChart
+                style={{ width: "12rem", height: "12rem", marginTop: "2rem" }}
+                startAngle={-90}
+                lineWidth={50}
+                data={[
+                  {
+                    title: "Completed",
+                    value: user?.completedChallengeCount ?? 0,
+                    color: "#6C7BFF",
+                  },
+                  {
+                    title: "Failures",
+                    value: user?.failedChallengeCount ?? 0,
+                    color: "#C7CCFF",
+                  },
+                  {
+                    title: "Cheats",
+                    value: user?.vetoedChallengeCount ?? 0,
+                    color: "#F0F1FD",
+                  },
+                ]}
+                label={({ dataEntry }) => {
+                  const percentage = Math.round(dataEntry.percentage);
+                  if (percentage > 0) {
+                    return `${Math.round(dataEntry.percentage)}%`;
+                  }
+                  return "";
+                }}
+                labelPosition={75}
+                labelStyle={{
+                  fontSize: "0.5rem",
+                }}
+              />
+            </IonRow>
+          )}
           <IonGrid className='ion-no-padding'>
             <IonRow className='ion-align-items-center'>
               <IonCol size='12'>
@@ -442,6 +453,17 @@ const Profile: React.FC = () => {
                         user?.completedChallengeCount !== 1 ? "s" : ""
                       } Completed`}
                     </IonText>
+                    <IonBadge
+                      mode='ios'
+                      style={{
+                        marginLeft: "0.5rem",
+                        width: "1rem",
+                        height: "1rem",
+                        backgroundColor: "#6C7BFF",
+                      }}
+                    >
+                      &nbsp;
+                    </IonBadge>
                   </IonRow>
                   <IonRow className='ion-justify-content-center ion-align-items-center'>
                     <IonText
@@ -459,6 +481,17 @@ const Profile: React.FC = () => {
                         user?.failedChallengeCount !== 1 ? "s" : ""
                       }`}
                     </IonText>
+                    <IonBadge
+                      mode='ios'
+                      style={{
+                        marginLeft: "0.5rem",
+                        width: "1rem",
+                        height: "1rem",
+                        backgroundColor: "#C7CCFF",
+                      }}
+                    >
+                      &nbsp;
+                    </IonBadge>
                   </IonRow>
                   <IonRow className='ion-justify-content-center ion-align-items-center'>
                     <IonText
@@ -476,6 +509,17 @@ const Profile: React.FC = () => {
                         user?.vetoedChallengeCount !== 1 ? "s" : ""
                       }`}
                     </IonText>
+                    <IonBadge
+                      mode='ios'
+                      style={{
+                        marginLeft: "0.5rem",
+                        width: "1rem",
+                        height: "1rem",
+                        backgroundColor: "#F0F1FD",
+                      }}
+                    >
+                      &nbsp;
+                    </IonBadge>
                   </IonRow>
                 </IonCardContent>
               </IonCol>
