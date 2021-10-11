@@ -33,7 +33,7 @@ const Store: React.FC = () => {
       <IonHeader className='ion-no-border'>
         <IonToolbar
           style={{
-            paddingTop: isPlatform("ios") ? "0.75rem" : 0,
+            paddingTop: isPlatform("ios") ? "2.5rem" : 0,
             paddingBottom: isPlatform("ios") ? "0.75rem" : 0,
           }}
         >
