@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useCallback, useReducer, useState } from "react";
 import {
   IonAvatar,
   IonCard,
@@ -21,6 +21,7 @@ import {
   IonCardTitle,
   IonFabButton,
   IonBadge,
+  IonSearchbar,
 } from "@ionic/react";
 import { useEffect } from "react";
 import {
@@ -47,6 +48,7 @@ import { format, parseISO } from "date-fns";
 import FeedbackModal from "../../components/feedback";
 import Alert from "../../components/alert";
 import { useCache } from "../../contexts/CacheContext";
+import lodash from "lodash";
 
 export interface ProfileState {
   isLoading: boolean;
@@ -92,6 +94,24 @@ const Profile: React.FC = () => {
       okHandler: undefined,
     }
   );
+
+  const [searchText, setSearchText] = useState("");
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedSearch = useCallback(
+    lodash.debounce((e) => {
+      handleSearch(e);
+    }, 250),
+    []
+  );
+
+  const handleSearch = async (searchText: string) => {
+    if (searchText.length <= 0) {
+      return;
+    }
+    try {
+    } catch (error) {}
+  };
 
   useEffect(() => {
     if (
@@ -462,6 +482,22 @@ const Profile: React.FC = () => {
           <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
             Past challenges
           </IonText>
+        </IonRow>
+        <IonRow style={{ paddingLeft: "0.25rem", paddingRight: "0.25rem" }}>
+          <IonSearchbar
+            mode='ios'
+            key='modal-search'
+            value={searchText}
+            onIonChange={(e) => {
+              setSearchText(e.detail.value ?? "");
+              debouncedSearch(e.detail.value ?? "");
+            }}
+            debounce={0}
+            placeholder='Search for a challenge'
+            showCancelButton='never'
+            className='ion-margin-top users-search'
+            showClearButton='always'
+          ></IonSearchbar>
         </IonRow>
         {renderChallengeHistory()}
         <FeedbackModal
