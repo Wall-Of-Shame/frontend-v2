@@ -10,6 +10,8 @@ const CacheContext = React.createContext<CacheContextInterface | undefined>(
 const CacheProvider: React.SFC = (props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLatestVersion, setIsLatestVersion] = useState(true);
+  const [currentVersion, setCurrentVersion] = useState("");
+  const [latestVersion, setLatestVersion] = useState("");
 
   const refreshCacheAndReload = () => {
     // Service worker cache should be cleared with caches.delete()
@@ -19,6 +21,7 @@ const CacheProvider: React.SFC = (props) => {
         .keys()
         .then(async function (names) {
           for (const name of names) await caches.delete(name);
+          localStorage.setItem("meta", latestVersion);
         })
         .then(() => {
           window.location.reload();
@@ -34,9 +37,11 @@ const CacheProvider: React.SFC = (props) => {
       .then((meta) => {
         const latestVersion = meta.version;
         const currentVersion = packageJson.version;
+        setCurrentVersion(currentVersion);
+        setLatestVersion(latestVersion);
         const shouldForceRefresh = semverGreaterThan(
           latestVersion,
-          currentVersion
+          localStorage.getItem("meta") ?? currentVersion
         );
         if (shouldForceRefresh) {
           setIsLatestVersion(false);
@@ -64,6 +69,8 @@ const CacheProvider: React.SFC = (props) => {
     <CacheContext.Provider
       value={{
         isLatestVersion,
+        currentVersion,
+        latestVersion,
         refreshCacheAndReload,
       }}
       {...props}

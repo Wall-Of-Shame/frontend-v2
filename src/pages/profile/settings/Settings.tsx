@@ -1,7 +1,7 @@
 import {
-  IonButton,
   IonButtons,
   IonContent,
+  IonFabButton,
   IonGrid,
   IonHeader,
   IonIcon,
@@ -11,18 +11,18 @@ import {
   IonPage,
   IonRow,
   IonText,
-  IonTitle,
   IonToggle,
   IonToolbar,
 } from "@ionic/react";
 import "./Settings.scss";
 import { useEffect, useReducer, useState } from "react";
-import { arrowBackOutline } from "ionicons/icons";
+import { chevronBackOutline } from "ionicons/icons";
 import { useUser } from "../../../contexts/UserContext";
 import { ToggleChangeEventDetail } from "@ionic/core";
 import { useHistory } from "react-router";
 import { hideTabs } from "../../../utils/TabsUtils";
 import Alert from "../../../components/alert";
+import { useCache } from "../../../contexts/CacheContext";
 
 export interface SettingsState {
   showAlert: boolean;
@@ -43,6 +43,13 @@ const Settings: React.FC = () => {
       invitations: true,
     }
   );
+
+  const {
+    currentVersion,
+    latestVersion,
+    isLatestVersion,
+    refreshCacheAndReload,
+  } = useCache();
 
   const [state, setState] = useReducer(
     (s: SettingsState, a: Partial<SettingsState>) => ({
@@ -124,38 +131,47 @@ const Settings: React.FC = () => {
 
   useEffect(() => {
     hideTabs();
+    if (!isLatestVersion && localStorage.getItem("meta") !== latestVersion) {
+      setState({
+        showAlert: true,
+        alertHeader: "App Update",
+        alertMessage:
+          "A new version of the app is now available! This update will only take a few seconds.",
+        hasConfirm: true,
+        confirmHandler: refreshCacheAndReload,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <IonPage>
-      <IonHeader>
+      <IonHeader className='ion-no-border'>
         <IonToolbar>
-          <IonTitle
-            style={{
-              textAlign: "left",
-              fontSize: "1.2rem",
-            }}
-          >
-            Settings
-          </IonTitle>
           <IonButtons slot='start'>
-            <IonButton
+            <IonFabButton
+              color='light'
+              mode='ios'
+              slot='start'
               style={{
                 margin: "0.5rem",
+                width: "2.75rem",
+                height: "2.75rem",
               }}
-              color='dark'
-              onClick={() => history.goBack()}
+              onClick={() => {
+                history.goBack();
+              }}
             >
-              <IonIcon icon={arrowBackOutline} size='large' />
-            </IonButton>
+              <IonIcon icon={chevronBackOutline} />
+            </IonFabButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
 
       <IonContent fullscreen>
-        <IonGrid style={{ paddingTop: "2.5rem" }}>
+        <IonGrid style={{ paddingTop: "1.5rem" }}>
           <IonRow className='ion-padding'>
-            <IonText style={{ fontWeight: "bold", fontSize: 32 }}>
+            <IonText style={{ fontWeight: "bold", fontSize: "1.5rem" }}>
               Notifications
             </IonText>
           </IonRow>
@@ -179,6 +195,22 @@ const Settings: React.FC = () => {
                 checked={settings.invitations}
                 onIonChange={handleInvitationsChange}
               />
+            </IonItem>
+          </IonList>
+        </IonGrid>
+
+        <IonGrid style={{ paddingTop: "0.5rem" }}>
+          <IonRow className='ion-padding'>
+            <IonText style={{ fontWeight: "bold", fontSize: "1.5rem" }}>
+              About
+            </IonText>
+          </IonRow>
+          <IonList>
+            <IonItem lines='none' style={{ marginTop: "0.5rem" }}>
+              <IonLabel slot='start'>Version</IonLabel>
+              <IonLabel slot='end'>
+                {localStorage.getItem("meta") ?? currentVersion}
+              </IonLabel>
             </IonItem>
           </IonList>
         </IonGrid>

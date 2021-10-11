@@ -743,7 +743,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
               </IonRow>
               <IonRow className='ion-padding-horizontal ion-padding-bottom'>
                 <IonText style={{ fontWeight: "bold" }}>
-                  Complete the challenge and upload your proof by
+                  Complete the challenge by
                 </IonText>
               </IonRow>
               <IonRow className='ion-padding-horizontal ion-padding-bottom'>

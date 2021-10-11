@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import {
   IonAvatar,
   IonCard,
@@ -20,6 +20,7 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonFabButton,
+  IonBadge,
 } from "@ionic/react";
 import { useEffect } from "react";
 import {
@@ -44,10 +45,24 @@ import { ChallengeDux } from "../../reducers/ChallengeDux";
 import { ChallengeData } from "../../interfaces/models/Challenges";
 import { format, parseISO } from "date-fns";
 import FeedbackModal from "../../components/feedback";
+import Alert from "../../components/alert";
+import { useCache } from "../../contexts/CacheContext";
+
+export interface ProfileState {
+  isLoading: boolean;
+  showAlert: boolean;
+  alertHeader: string;
+  alertMessage: string;
+  hasConfirm: boolean;
+  confirmHandler: () => void;
+  cancelHandler: () => void;
+  okHandler?: () => void;
+}
 
 const Profile: React.FC = () => {
   const { logout } = useAuth();
   const { user } = useUser();
+  const { isLatestVersion } = useCache();
   const location = useLocation();
   const history = useHistory();
   const [popoverState, setShowPopover] = useState({
@@ -60,6 +75,23 @@ const Profile: React.FC = () => {
     useSelector(selectChallenges).history
   );
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+
+  const [state, setState] = useReducer(
+    (s: ProfileState, a: Partial<ProfileState>) => ({
+      ...s,
+      ...a,
+    }),
+    {
+      isLoading: false,
+      showAlert: false,
+      alertHeader: "",
+      alertMessage: "",
+      hasConfirm: false,
+      confirmHandler: () => {},
+      cancelHandler: () => {},
+      okHandler: undefined,
+    }
+  );
 
   useEffect(() => {
     if (
@@ -186,6 +218,11 @@ const Profile: React.FC = () => {
             className='tutorial'
             onClick={() => {
               setShowPopover({ showPopover: false, event: undefined });
+              setState({
+                showAlert: true,
+                alertHeader: "Coming soon :)",
+                alertMessage: "Thank you for using Wall of Shame",
+              });
             }}
           >
             <IonIcon
@@ -226,7 +263,21 @@ const Profile: React.FC = () => {
               icon={settingsOutline}
               style={{ fontSize: "1.5rem" }}
             />
+
             <IonLabel>Settings</IonLabel>
+            {!isLatestVersion && (
+              <IonBadge
+                color='danger'
+                slot='end'
+                mode='ios'
+                style={{
+                  width: "1rem",
+                  height: "1rem",
+                }}
+              >
+                &nbsp;
+              </IonBadge>
+            )}
           </IonItem>
           <IonItem
             button
@@ -416,6 +467,20 @@ const Profile: React.FC = () => {
         <FeedbackModal
           showModal={showFeedbackModal}
           setShowModal={setShowFeedbackModal}
+        />
+        <Alert
+          showAlert={state.showAlert}
+          closeAlert={(): void => {
+            setState({
+              showAlert: false,
+            });
+          }}
+          alertHeader={state.alertHeader}
+          alertMessage={state.alertMessage}
+          hasConfirm={state.hasConfirm}
+          confirmHandler={state.confirmHandler}
+          cancelHandler={state.cancelHandler}
+          okHandler={state.okHandler}
         />
       </IonContent>
     </IonPage>
