@@ -449,7 +449,7 @@ const WallOfShame: React.FC = () => {
         {isPlatform("ios") ? (
           <IonToolbar
             style={{
-              paddingTop: "0.75rem",
+              paddingTop: "2.5rem",
             }}
           >
             <IonTitle size='large' style={{ paddingBottom: "2rem" }}>
