@@ -585,7 +585,11 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
             )}
             <IonGrid
               className='ion-no-padding'
-              style={{ paddingLeft: "0.2rem", paddingRight: "0.2rem" }}
+              style={{
+                paddingLeft: "0.2rem",
+                paddingRight: "0.2rem",
+                maxWidth: "calc(480px - 0.4rem)",
+              }}
             >
               {startsIn > 0 && startsIn < 86400 && (
                 <IonCard className='ion-align-items-center ion-justify-content-center'>

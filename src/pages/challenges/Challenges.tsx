@@ -207,18 +207,12 @@ const Challenges: React.FC = () => {
           );
         } else {
           return (
-            <IonGrid
-              style={{
-                display: "flex",
-                height: "37.5vh",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+            <IonRow
+              className='ion-padding ion-justify-content-center'
+              style={{ marginTop: "1.5rem" }}
             >
-              <IonRow className='ion-padding ion-justify-content-center'>
-                {"There's nothing here >_<"}
-              </IonRow>
-            </IonGrid>
+              {"There's nothing here >_<"}
+            </IonRow>
           );
         }
       case "pending":
@@ -393,18 +387,12 @@ const Challenges: React.FC = () => {
           );
         } else {
           return (
-            <IonGrid
-              style={{
-                display: "flex",
-                height: "37.5vh",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+            <IonRow
+              className='ion-padding ion-justify-content-center'
+              style={{ marginTop: "1.5rem" }}
             >
-              <IonRow className='ion-padding ion-justify-content-center'>
-                {"There's nothing here >_<"}
-              </IonRow>
-            </IonGrid>
+              {"There's nothing here >_<"}
+            </IonRow>
           );
         }
     }

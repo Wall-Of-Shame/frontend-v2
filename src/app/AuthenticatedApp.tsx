@@ -25,18 +25,19 @@ import "./App.scss";
 import Menu from "../components/menu";
 import Tabs from "../pages/tabs";
 import RightMenu from "../components/rightMenu";
+import { isPlatform } from "@ionic/core";
 
 const AuthenticatedApp: React.FC = () => {
   return (
     <IonApp>
       <IonReactRouter>
         <IonSplitPane contentId='main' className='split-pane-main'>
-          <Menu />
+          {!isPlatform("ios") && <Menu />}
           <IonRouterOutlet id='main' className='split-pane-content'>
             <Route path='/challenges' render={() => <Tabs />} />
             <Route path='/' render={() => <Tabs />} />
           </IonRouterOutlet>
-          <RightMenu />
+          {!isPlatform("ios") && <RightMenu />}
         </IonSplitPane>
       </IonReactRouter>
     </IonApp>

@@ -392,140 +392,154 @@ const Profile: React.FC = () => {
           </IonText>
         </IonRow>
 
-        <IonCard mode='ios' style={{ marginBottom: "2rem" }}>
-          {(user?.completedChallengeCount ?? 0) +
-            (user?.failedChallengeCount ?? 0) +
-            (user?.vetoedChallengeCount ?? 0) >
-            0 && (
-            <IonRow className='ion-justify-content-center'>
-              <PieChart
-                style={{ width: "12rem", height: "12rem", marginTop: "2rem" }}
-                startAngle={-90}
-                lineWidth={50}
-                data={[
-                  {
-                    title: "Completed",
-                    value: user?.completedChallengeCount ?? 0,
-                    color: "#6C7BFF",
-                  },
-                  {
-                    title: "Failures",
-                    value: user?.failedChallengeCount ?? 0,
-                    color: "#C7CCFF",
-                  },
-                  {
-                    title: "Cheats",
-                    value: user?.vetoedChallengeCount ?? 0,
-                    color: "#F0F1FD",
-                  },
-                ]}
-                label={({ dataEntry }) => {
-                  const percentage = Math.round(dataEntry.percentage);
-                  if (percentage > 0) {
-                    return `${Math.round(dataEntry.percentage)}%`;
-                  }
-                  return "";
-                }}
-                labelPosition={75}
-                labelStyle={{
-                  fontSize: "0.5rem",
-                }}
-              />
-            </IonRow>
-          )}
-          <IonGrid className='ion-no-padding'>
-            <IonRow className='ion-align-items-center'>
-              <IonCol size='12'>
-                <IonCardContent>
-                  <IonRow className='ion-justify-content-center ion-align-items-center'>
-                    <IonText
-                      style={{
-                        fontSize: "1.5rem",
-                        fontWeight: 600,
-                        marginRight: "0.5rem",
-                        color: "#000000",
-                      }}
-                    >
-                      {user?.completedChallengeCount ?? 0}
-                    </IonText>
-                    <IonText style={{ fontSize: "0.9rem", fontWeight: 400 }}>
-                      {`Challenge${
-                        user?.completedChallengeCount !== 1 ? "s" : ""
-                      } Completed`}
-                    </IonText>
-                    <IonBadge
-                      mode='ios'
-                      style={{
-                        marginLeft: "0.5rem",
-                        width: "1rem",
-                        height: "1rem",
-                        backgroundColor: "#6C7BFF",
-                      }}
-                    >
-                      &nbsp;
-                    </IonBadge>
-                  </IonRow>
-                  <IonRow className='ion-justify-content-center ion-align-items-center'>
-                    <IonText
-                      style={{
-                        fontSize: "1.5rem",
-                        fontWeight: 600,
-                        marginRight: "0.5rem",
-                        color: "#000000",
-                      }}
-                    >
-                      {user?.failedChallengeCount ?? 0}
-                    </IonText>
-                    <IonText style={{ fontSize: "0.9rem", fontWeight: 400 }}>
-                      {`Shameful Failure${
-                        user?.failedChallengeCount !== 1 ? "s" : ""
-                      }`}
-                    </IonText>
-                    <IonBadge
-                      mode='ios'
-                      style={{
-                        marginLeft: "0.5rem",
-                        width: "1rem",
-                        height: "1rem",
-                        backgroundColor: "#C7CCFF",
-                      }}
-                    >
-                      &nbsp;
-                    </IonBadge>
-                  </IonRow>
-                  <IonRow className='ion-justify-content-center ion-align-items-center'>
-                    <IonText
-                      style={{
-                        fontSize: "1.5rem",
-                        fontWeight: 600,
-                        marginRight: "0.5rem",
-                        color: "#000000",
-                      }}
-                    >
-                      {user?.vetoedChallengeCount ?? 0}
-                    </IonText>
-                    <IonText style={{ fontSize: "0.9rem", fontWeight: 400 }}>
-                      {`Shameless Cheat${
-                        user?.vetoedChallengeCount !== 1 ? "s" : ""
-                      }`}
-                    </IonText>
-                    <IonBadge
-                      mode='ios'
-                      style={{
-                        marginLeft: "0.5rem",
-                        width: "1rem",
-                        height: "1rem",
-                        backgroundColor: "#F0F1FD",
-                      }}
-                    >
-                      &nbsp;
-                    </IonBadge>
-                  </IonRow>
-                </IonCardContent>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
-        </IonCard>
+        <IonRow className='ion-justify-content-center'>
+          <IonCol sizeXs='12' sizeMd='8' sizeLg='6'>
+            <IonCard mode='ios' style={{ marginBottom: "2rem" }}>
+              {(user?.completedChallengeCount ?? 0) +
+                (user?.failedChallengeCount ?? 0) +
+                (user?.vetoedChallengeCount ?? 0) >
+                0 && (
+                <IonRow className='ion-justify-content-center'>
+                  <PieChart
+                    style={{
+                      width: "12rem",
+                      height: "12rem",
+                      marginTop: "2rem",
+                    }}
+                    startAngle={-90}
+                    lineWidth={50}
+                    data={[
+                      {
+                        title: "Completed",
+                        value: user?.completedChallengeCount ?? 0,
+                        color: "#6C7BFF",
+                      },
+                      {
+                        title: "Failures",
+                        value: user?.failedChallengeCount ?? 0,
+                        color: "#C7CCFF",
+                      },
+                      {
+                        title: "Cheats",
+                        value: user?.vetoedChallengeCount ?? 0,
+                        color: "#F0F1FD",
+                      },
+                    ]}
+                    label={({ dataEntry }) => {
+                      const percentage = Math.round(dataEntry.percentage);
+                      if (percentage > 0) {
+                        return `${Math.round(dataEntry.percentage)}%`;
+                      }
+                      return "";
+                    }}
+                    labelPosition={75}
+                    labelStyle={{
+                      fontSize: "0.5rem",
+                    }}
+                  />
+                </IonRow>
+              )}
+              <IonGrid className='ion-no-padding'>
+                <IonRow className='ion-align-items-center'>
+                  <IonCol size='12'>
+                    <IonCardContent>
+                      <IonRow className='ion-justify-content-center ion-align-items-center'>
+                        <IonText
+                          style={{
+                            fontSize: "1.5rem",
+                            fontWeight: 600,
+                            marginRight: "0.5rem",
+                            color: "#000000",
+                          }}
+                        >
+                          {user?.completedChallengeCount ?? 0}
+                        </IonText>
+                        <IonText
+                          style={{ fontSize: "0.9rem", fontWeight: 400 }}
+                        >
+                          {`Challenge${
+                            user?.completedChallengeCount !== 1 ? "s" : ""
+                          } Completed`}
+                        </IonText>
+                        <IonBadge
+                          mode='ios'
+                          style={{
+                            marginLeft: "0.5rem",
+                            width: "1rem",
+                            height: "1rem",
+                            backgroundColor: "#6C7BFF",
+                          }}
+                        >
+                          &nbsp;
+                        </IonBadge>
+                      </IonRow>
+                      <IonRow className='ion-justify-content-center ion-align-items-center'>
+                        <IonText
+                          style={{
+                            fontSize: "1.5rem",
+                            fontWeight: 600,
+                            marginRight: "0.5rem",
+                            color: "#000000",
+                          }}
+                        >
+                          {user?.failedChallengeCount ?? 0}
+                        </IonText>
+                        <IonText
+                          style={{ fontSize: "0.9rem", fontWeight: 400 }}
+                        >
+                          {`Shameful Failure${
+                            user?.failedChallengeCount !== 1 ? "s" : ""
+                          }`}
+                        </IonText>
+                        <IonBadge
+                          mode='ios'
+                          style={{
+                            marginLeft: "0.5rem",
+                            width: "1rem",
+                            height: "1rem",
+                            backgroundColor: "#C7CCFF",
+                          }}
+                        >
+                          &nbsp;
+                        </IonBadge>
+                      </IonRow>
+                      <IonRow className='ion-justify-content-center ion-align-items-center'>
+                        <IonText
+                          style={{
+                            fontSize: "1.5rem",
+                            fontWeight: 600,
+                            marginRight: "0.5rem",
+                            color: "#000000",
+                          }}
+                        >
+                          {user?.vetoedChallengeCount ?? 0}
+                        </IonText>
+                        <IonText
+                          style={{ fontSize: "0.9rem", fontWeight: 400 }}
+                        >
+                          {`Shameless Cheat${
+                            user?.vetoedChallengeCount !== 1 ? "s" : ""
+                          }`}
+                        </IonText>
+                        <IonBadge
+                          mode='ios'
+                          style={{
+                            marginLeft: "0.5rem",
+                            width: "1rem",
+                            height: "1rem",
+                            backgroundColor: "#F0F1FD",
+                          }}
+                        >
+                          &nbsp;
+                        </IonBadge>
+                      </IonRow>
+                    </IonCardContent>
+                  </IonCol>
+                </IonRow>
+              </IonGrid>
+            </IonCard>
+          </IonCol>
+        </IonRow>
         <IonRow className='ion-padding-horizontal ion-justify-content-center'>
           <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
             Past challenges
