@@ -25,6 +25,7 @@ const PendingChallengeImg: React.FunctionComponent<PendingChallengeImgProps> = (
               transform: `translate(${-120 + 85 * index}%, 65%)`,
               zIndex: index,
               position: "absolute",
+              maxWidth: "80px",
             }}
             key={index}
           >

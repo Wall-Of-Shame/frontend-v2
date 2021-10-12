@@ -20,6 +20,7 @@ import challengeIcon from "../../assets/icons/challenge-icon.svg";
 import shameIcon from "../../assets/icons/shame-icon.svg";
 
 import "./Menu.scss";
+import { useWindowSize } from "../../utils/WindowUtils";
 
 const routes = {
   appPages: [
@@ -40,6 +41,7 @@ interface Pages {
 
 const Menu: React.FC = () => {
   const location = useLocation();
+  const { width, height } = useWindowSize();
 
   function renderlistItems(list: Pages[]) {
     return list
@@ -62,7 +64,12 @@ const Menu: React.FC = () => {
   }
 
   return (
-    <IonMenu contentId='main' className='nav-menu' side='start'>
+    <IonMenu
+      contentId='main'
+      className='nav-menu'
+      side='start'
+      hidden={!(width! > 576 && height! > 576)}
+    >
       <IonContent forceOverscroll={false}>
         <IonList lines='none' mode='md'>
           <IonListHeader>Welcome</IonListHeader>
