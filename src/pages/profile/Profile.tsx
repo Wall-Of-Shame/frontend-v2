@@ -47,7 +47,6 @@ import { ChallengeData } from "../../interfaces/models/Challenges";
 import { format, parseISO } from "date-fns";
 import FeedbackModal from "../../components/feedback";
 import Alert from "../../components/alert";
-import { useCache } from "../../contexts/CacheContext";
 import lodash from "lodash";
 
 export interface ProfileState {
@@ -64,7 +63,6 @@ export interface ProfileState {
 const Profile: React.FC = () => {
   const { logout } = useAuth();
   const { user } = useUser();
-  const { isLatestVersion } = useCache();
   const location = useLocation();
   const history = useHistory();
   const [popoverState, setShowPopover] = useState({
@@ -289,19 +287,6 @@ const Profile: React.FC = () => {
             />
 
             <IonLabel>Settings</IonLabel>
-            {!isLatestVersion && (
-              <IonBadge
-                color='danger'
-                slot='end'
-                mode='ios'
-                style={{
-                  width: "1rem",
-                  height: "1rem",
-                }}
-              >
-                &nbsp;
-              </IonBadge>
-            )}
           </IonItem>
           <IonItem
             button

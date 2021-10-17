@@ -27,6 +27,22 @@
   --ion-item-background: #ffffff;
 }
 
+.transparent {
+  --background: #ffffff;
+  max-width: 11rem !important;
+  left: calc(50% - 5.5rem);
+  padding-bottom: 0.5rem;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
 @media screen and (max-width: 576px) {
   .first-place-avatar {
     width: 30vw;
