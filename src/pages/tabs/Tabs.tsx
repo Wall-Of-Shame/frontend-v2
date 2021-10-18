@@ -6,6 +6,7 @@ import {
   IonTabButton,
   IonIcon,
   IonLabel,
+  isPlatform,
 } from "@ionic/react";
 import { Route, Redirect } from "react-router";
 import {
@@ -67,7 +68,12 @@ const Tabs: React.FC = () => {
         </Route>
         <Route render={redirectToChallenges} />
       </IonRouterOutlet>
-      <IonTabBar slot='bottom' className='nav-tabs'>
+      <IonTabBar
+        slot='bottom'
+        className='mobile-nav-tabs'
+        id='mobile-nav-tabs'
+        hidden={isPlatform("desktop")}
+      >
         <IonTabButton tab='challenges' href='/challenges'>
           <IonIcon icon={challengeIcon} />
           <IonLabel>Challenges</IonLabel>
