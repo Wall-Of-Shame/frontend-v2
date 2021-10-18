@@ -3,8 +3,8 @@ import {
   IonCard,
   IonCol,
   IonContent,
-  IonFab,
   IonFabButton,
+  IonFooter,
   IonHeader,
   IonIcon,
   IonItem,
@@ -17,15 +17,18 @@ import {
   IonRow,
   IonSegment,
   IonSegmentButton,
+  IonText,
   IonTitle,
   IonToolbar,
   isPlatform,
 } from "@ionic/react";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import StackGrid, { Grid } from "react-stack-grid";
 import "./WallOfShame.scss";
 import { hideTabs, showTabs } from "../../utils/TabsUtils";
 import { useLocation } from "react-router";
-import { funnelOutline, refreshOutline, trophy } from "ionicons/icons";
+import { funnelOutline, trophy } from "ionicons/icons";
 import { database } from "../../firebase";
 import {
   ref,
@@ -35,7 +38,7 @@ import {
   limitToLast,
 } from "firebase/database";
 import { Shame } from "../../interfaces/models/Challenges";
-import { differenceInSeconds, format, parseISO } from "date-fns";
+import { differenceInSeconds, parseISO } from "date-fns";
 import { UserList } from "../../interfaces/models/Users";
 import { useUser } from "../../contexts/UserContext";
 import LoadingSpinner from "../../components/loadingSpinner";
@@ -44,6 +47,10 @@ import AvatarImg from "../../components/avatar";
 import { Socket } from "socket.io-client";
 import { useSocket } from "../../contexts/SocketContext";
 import Container from "../../components/container";
+import { useWindowSize } from "../../utils/WindowUtils";
+import intervalToDuration from "date-fns/intervalToDuration";
+import { formatWallTime } from "../../utils/TimeUtils";
+import { egg, poop, tomato } from "../../assets/overlay";
 
 interface WallOfShameState {
   isLoading: boolean;
@@ -56,9 +63,19 @@ interface WallOfShameState {
   okHandler?: () => void;
 }
 
+interface OverlayPosition {
+  top: number;
+  left: number;
+}
+
+interface OverlayPositionMap {
+  [key: number]: OverlayPosition[];
+}
+
 const WallOfShame: React.FC = () => {
   const location = useLocation();
   const { connect } = useSocket();
+  const { width } = useWindowSize();
   const { getGlobalRankings, getFriendsRankings } = useUser();
 
   const [tab, setTab] = useState("live");
@@ -66,7 +83,17 @@ const WallOfShame: React.FC = () => {
     showPopover: false,
     event: undefined,
   });
+  const grid = useRef<Grid | null>(null);
   const [shames, setShames] = useState<Shame[]>([]);
+  const [shameTool, setShameTool] = useState<"tomato" | "egg" | "poop" | "">(
+    ""
+  );
+  const [poopOverlaysPositions, setPoopOverlaysPositions] =
+    useState<OverlayPositionMap>({});
+  const [eggOverlaysPositions, setEggOverlaysPositions] =
+    useState<OverlayPositionMap>({});
+  const [tomatoOverlaysPositions, setTomatoOverlaysPositions] =
+    useState<OverlayPositionMap>({});
   const [lastUpdated, setLastUpdated] = useState(Date.now());
   const [hasSynced, setHasSynced] = useState(false);
   const [globalRankings, setGlobalRankings] = useState<UserList[]>([]);
@@ -98,7 +125,7 @@ const WallOfShame: React.FC = () => {
   const topShamesRef = query(
     ref(database, "shames"),
     orderByKey(),
-    limitToLast(50)
+    limitToLast(100)
   );
 
   onValue(topShamesRef, (snapshot) => {
@@ -113,12 +140,14 @@ const WallOfShame: React.FC = () => {
     if (object) {
       const parsedValues = Object.values(object) as Shame[];
       if (parsedValues) {
-        setShames(parsedValues.reverse());
+        const reversed = parsedValues.reverse();
+        setShames(reversed);
         setHasSynced(true);
       }
     }
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const fetchData = async (): Promise<void> => {
     try {
       const global = await getGlobalRankings();
@@ -141,6 +170,46 @@ const WallOfShame: React.FC = () => {
     });
   };
 
+  const handleShame = (key: number) => {
+    switch (shameTool) {
+      case "tomato":
+        const newTomatoPosition: OverlayPosition = {
+          top: Math.round(Math.random() * 100),
+          left: Math.round(Math.random() * 100),
+        };
+        let newTomatoOverlayPositions = tomatoOverlaysPositions[key] ?? [];
+        newTomatoOverlayPositions.push(newTomatoPosition);
+        setTomatoOverlaysPositions({
+          ...tomatoOverlaysPositions,
+          [key]: newTomatoOverlayPositions,
+        });
+        return;
+      case "egg":
+        const newEggPosition: OverlayPosition = {
+          top: Math.round(Math.random() * 100),
+          left: Math.round(Math.random() * 100),
+        };
+        let newEggOverlayPositions = eggOverlaysPositions[key] ?? [];
+        newEggOverlayPositions.push(newEggPosition);
+        setEggOverlaysPositions({
+          ...eggOverlaysPositions,
+          [key]: newEggOverlayPositions,
+        });
+        return;
+      case "poop":
+        const newPoopPosition: OverlayPosition = {
+          top: Math.round(Math.random() * 100),
+          left: Math.round(Math.random() * 100),
+        };
+        let newPoopOverlayPositions = poopOverlaysPositions[key] ?? [];
+        newPoopOverlayPositions.push(newPoopPosition);
+        setPoopOverlaysPositions({
+          ...poopOverlaysPositions,
+          [key]: newPoopOverlayPositions,
+        });
+    }
+  };
+
   useEffect(() => {
     // fetchData();
     connectToSocket();
@@ -159,6 +228,11 @@ const WallOfShame: React.FC = () => {
     } else {
       hideTabs();
     }
+    setTimeout(() => {
+      if (grid.current) {
+        grid.current.updateLayout();
+      }
+    });
   }, [location.pathname]);
 
   const renderLeaderboard = (rankings: UserList[]) => {
@@ -321,6 +395,7 @@ const WallOfShame: React.FC = () => {
       </>
     );
   };
+
   const renderWall = () => {
     switch (tab) {
       case "live":
@@ -328,40 +403,125 @@ const WallOfShame: React.FC = () => {
           return <Container>{"There's nothing here >_<"}</Container>;
         }
         return (
-          <>
-            {shames.map((s) => {
-              return (
-                <IonCard
-                  key={s.timestamp}
-                  className='ion-no-margin'
-                  style={{ margin: "0.75rem" }}
-                >
-                  <IonItem lines='none' color='light'>
-                    <IonAvatar slot='start'>
-                      <AvatarImg avatar={s.avatar} />
-                    </IonAvatar>
-                    {s.type === "cheat" ? (
-                      <IonLabel>
-                        <h6>{s.name} cheated in the challenge:</h6>
-                        <h4 style={{ fontWeight: "bold" }}>{s.title}</h4>
-                        <h6>
-                          On {format(parseISO(s.time), "dd MMM yyyy, HH:mm:ss")}
-                        </h6>
-                      </IonLabel>
-                    ) : (
-                      <IonLabel>
-                        <h6>{s.name} failed the challenge:</h6>
-                        <h4 style={{ fontWeight: "bold" }}>{s.title}</h4>
-                        <h6>
-                          On {format(parseISO(s.time), "dd MMM yyyy, HH:mm:ss")}
-                        </h6>
-                      </IonLabel>
-                    )}
-                  </IonItem>
-                </IonCard>
-              );
-            })}
-          </>
+          <div style={{ padding: "0.5rem" }}>
+            <StackGrid
+              columnWidth={width! <= 768 ? "50%" : "33.33%"}
+              monitorImagesLoaded={true}
+              appearDelay={200}
+              gridRef={(r) => (grid.current = r)}
+            >
+              {shames.map((s, index) => {
+                const duration = intervalToDuration({
+                  start: parseISO(s.time),
+                  end: Date.now(),
+                });
+                return (
+                  <div key={s.timestamp} style={{ padding: "0.5rem" }}>
+                    <IonCard
+                      className='ion-no-margin ion-text-center'
+                      onClick={() => handleShame(s.timestamp)}
+                    >
+                      <IonRow className='ion-justify-content-center ion-padding-horizontal ion-padding-top'>
+                        <div style={{ maxWidth: "6rem", maxHeight: "6rem" }}>
+                          <AvatarImg avatar={s.avatar} />
+                        </div>
+                      </IonRow>
+                      <IonRow className='ion-justify-content-center ion-padding'>
+                        <IonLabel>
+                          <h6>
+                            <strong>{s.name} </strong>
+                            {s.type === "cheat" ? "cheated in " : "failed "} to:
+                          </h6>
+                          <h4 style={{ fontWeight: "bold" }}>{s.title}</h4>
+                          <h6>
+                            {formatWallTime(duration)}
+                            {" ago"}
+                          </h6>
+                        </IonLabel>
+                      </IonRow>
+                      <IonRow
+                        className='ion-justify-content-center'
+                        style={{ paddingBottom: "0.25rem" }}
+                      >
+                        {`🍅 12 🍳 9 💩 5`}
+                      </IonRow>
+                      <AnimatePresence>
+                        {!!tomatoOverlaysPositions[s.timestamp] &&
+                          tomatoOverlaysPositions[s.timestamp].length > 0 &&
+                          tomatoOverlaysPositions[s.timestamp].map(
+                            (position, index) => {
+                              return (
+                                <motion.img
+                                  key={`${s.timestamp}-tomato-${index}`}
+                                  initial={{ opacity: 0, scale: 2 }}
+                                  animate={{ opacity: 0.8, scale: 1 }}
+                                  exit={{ opacity: 0 }}
+                                  src={tomato}
+                                  style={{
+                                    position: "absolute",
+                                    top: `calc(${position.top}% - 2.5rem)`,
+                                    left: `calc(${position.left}% - 2.5rem)`,
+                                    width: "5rem",
+                                    height: "5rem",
+                                  }}
+                                  alt=''
+                                />
+                              );
+                            }
+                          )}
+                        {!!eggOverlaysPositions[s.timestamp] &&
+                          eggOverlaysPositions[s.timestamp].length > 0 &&
+                          eggOverlaysPositions[s.timestamp].map(
+                            (position, index) => {
+                              return (
+                                <motion.img
+                                  key={`${s.timestamp}-egg-${index}`}
+                                  initial={{ opacity: 0, scale: 2 }}
+                                  animate={{ opacity: 0.8, scale: 1 }}
+                                  exit={{ opacity: 0 }}
+                                  src={egg}
+                                  style={{
+                                    position: "absolute",
+                                    top: `calc(${position.top}% - 2.5rem)`,
+                                    left: `calc(${position.left}% - 2.5rem)`,
+                                    width: "5rem",
+                                    height: "5rem",
+                                  }}
+                                  alt=''
+                                />
+                              );
+                            }
+                          )}
+                        {!!poopOverlaysPositions[s.timestamp] &&
+                          poopOverlaysPositions[s.timestamp].length > 0 &&
+                          poopOverlaysPositions[s.timestamp].map(
+                            (position, index) => {
+                              return (
+                                <motion.img
+                                  key={`${s.timestamp}-poop-${index}`}
+                                  initial={{ opacity: 0, scale: 2 }}
+                                  animate={{ opacity: 0.7, scale: 1 }}
+                                  exit={{ opacity: 0 }}
+                                  src={poop}
+                                  style={{
+                                    position: "absolute",
+                                    top: `calc(${position.top}% - 2.5rem)`,
+                                    left: `calc(${position.left}% - 2.5rem)`,
+                                    width: "5rem",
+                                    height: "5rem",
+                                  }}
+                                  alt=''
+                                />
+                              );
+                            }
+                          )}
+                      </AnimatePresence>
+                    </IonCard>
+                  </div>
+                );
+              })}
+            </StackGrid>
+          </div>
         );
       case "shameful":
         return (
@@ -468,11 +628,7 @@ const WallOfShame: React.FC = () => {
           </IonList>
         </IonPopover>
         {renderWall()}
-        <IonFab vertical='bottom' horizontal='end' slot='fixed'>
-          <IonFabButton color='senary' onClick={fetchData} mode='ios'>
-            <IonIcon icon={refreshOutline} />
-          </IonFabButton>
-        </IonFab>
+
         <LoadingSpinner
           loading={state.isLoading}
           message={"Loading"}
@@ -493,6 +649,63 @@ const WallOfShame: React.FC = () => {
           okHandler={state.okHandler}
         />
       </IonContent>
+      <IonFooter className='transparent'>
+        <div className='glass'>
+          <IonRow style={{ margin: "0.5rem" }}>
+            <IonCol
+              style={{
+                backgroundColor: shameTool === "tomato" ? "#FFC83C" : undefined,
+                borderRadius: "2rem",
+              }}
+              onClick={() => {
+                if (shameTool !== "tomato") {
+                  setShameTool("tomato");
+                } else {
+                  setShameTool("");
+                }
+              }}
+            >
+              <IonRow className='ion-justify-content-center'>
+                <IonText style={{ fontSize: "2rem" }}>🍅</IonText>
+              </IonRow>
+            </IonCol>
+            <IonCol
+              style={{
+                backgroundColor: shameTool === "egg" ? "#FFC83C" : undefined,
+                borderRadius: "2rem",
+              }}
+              onClick={() => {
+                if (shameTool !== "egg") {
+                  setShameTool("egg");
+                } else {
+                  setShameTool("");
+                }
+              }}
+            >
+              <IonRow className='ion-justify-content-center'>
+                <IonText style={{ fontSize: "2rem" }}>🍳</IonText>
+              </IonRow>
+            </IonCol>
+            <IonCol
+              style={{
+                backgroundColor: shameTool === "poop" ? "#FFC83C" : undefined,
+                borderRadius: "2rem",
+              }}
+              onClick={() => {
+                if (shameTool !== "poop") {
+                  setShameTool("poop");
+                } else {
+                  setShameTool("");
+                }
+              }}
+            >
+              <IonRow className='ion-justify-content-center'>
+                <IonText style={{ fontSize: "2rem" }}>💩</IonText>
+              </IonRow>
+            </IonCol>
+          </IonRow>
+        </div>
+      </IonFooter>
     </IonPage>
   );
 };
