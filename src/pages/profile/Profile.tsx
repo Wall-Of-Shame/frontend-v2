@@ -285,7 +285,6 @@ const Profile: React.FC = () => {
               icon={settingsOutline}
               style={{ fontSize: "1.5rem" }}
             />
-
             <IonLabel>Settings</IonLabel>
           </IonItem>
           <IonItem
@@ -308,15 +307,18 @@ const Profile: React.FC = () => {
         </IonList>
       </IonPopover>
       <IonHeader className='ion-no-border'>
-        <IonToolbar className='profile-toolbar'>
+        <IonToolbar
+          className='profile-toolbar'
+          style={{ paddingTop: "0.5rem" }}
+        >
           <IonFabButton
             color='light'
             mode='ios'
             slot='end'
             style={{
               margin: "0.5rem",
-              width: "3rem",
-              height: "3rem",
+              width: "2.75rem",
+              height: "2.75rem",
             }}
             onClick={(e: any) => {
               e.persist();
