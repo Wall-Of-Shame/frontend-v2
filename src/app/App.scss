@@ -1,25 +1,21 @@
-/*
-body {
-  border-right: solid #eaeaea;
-  border-width: 1px;
-}
-
-@media screen and (min-width: 1240px) {
-  body {
-    max-width: 1240px;
-    margin-left: calc((100vw - 1240px) / 2);
-  }
-}
-
-
-@media screen and (min-width: 1240px) {
+@media screen and (min-width: 992px) {
   .split-pane-content {
-    margin-right: calc((100vw - 1240px) / 2);
+    margin-left: calc((100vw - 864px) / 2);
   }
 }
 
-.split-pane-content {
-  border-right: solid #dedede;
-  border-width: 1px;
+@media screen and (min-width: 576px) and (max-width: 992px) {
+  .split-pane-content {
+    margin-left: calc((100vw - 576px) / 2);
+    margin-right: calc((100vw - 576px) / 2);
+  }
 }
-*/
+
+.desktop-navbar {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.desktop-navbar-tabs {
+  box-shadow: none;
+  border: none;
+}
