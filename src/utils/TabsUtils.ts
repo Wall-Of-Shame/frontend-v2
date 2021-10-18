@@ -1,12 +1,20 @@
+import { isPlatform } from "@ionic/react";
+
 export function hideTabs() {
-  const tabsEl = document.querySelector("ion-tab-bar");
+  if (isPlatform("desktop")) {
+    return;
+  }
+  const tabsEl = document.getElementById("mobile-nav-tabs");
   if (tabsEl) {
     tabsEl.hidden = true;
   }
 }
 
 export function showTabs() {
-  const tabsEl = document.querySelector("ion-tab-bar");
+  if (isPlatform("desktop")) {
+    return;
+  }
+  const tabsEl = document.getElementById("mobile-nav-tabs");
   if (tabsEl) {
     tabsEl.hidden = false;
   }
