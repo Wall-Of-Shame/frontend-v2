@@ -43,6 +43,7 @@ import { isPlatform } from "@ionic/core";
 import { useSocket } from "../../contexts/SocketContext";
 import challenge from "../../assets/onboarding/challenge.png";
 import { Avatar } from "../../interfaces/models/Users";
+import HeaderCurve from "../../components/headerCurve";
 
 interface ChallengesState {
   isLoading: boolean;
@@ -415,7 +416,7 @@ const Challenges: React.FC = () => {
   return (
     <IonPage>
       <IonHeader className='ion-no-border'>
-        <IonToolbar style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar color="secondary" style={{ paddingTop: "0.5rem" }}>
           <IonTitle
             size='large'
             style={{ paddingBottom: isPlatform("ios") ? "1rem" : 0 }}
@@ -451,6 +452,7 @@ const Challenges: React.FC = () => {
             )}
           </IonFabButton>
         </IonToolbar>
+        <HeaderCurve />
       </IonHeader>
       <IonContent fullscreen>
         <IonRow className='ion-justify-content-center ion-padding'>
