@@ -177,8 +177,8 @@ const WallOfShame: React.FC = () => {
         case "tomato":
           const newTomatoPosition: Overlay = {
             type: "tomato",
-            top: Math.round(Math.random() * 100),
-            left: Math.round(Math.random() * 100),
+            top: 10 + Math.round(Math.random() * 80),
+            left: 10 + Math.round(Math.random() * 80),
           };
           let newTomatoOverlays = overlaysPositions[key] ?? [];
           newTomatoOverlays.push(newTomatoPosition);
@@ -189,8 +189,8 @@ const WallOfShame: React.FC = () => {
         case "egg":
           const newEggPosition: Overlay = {
             type: "egg",
-            top: Math.round(Math.random() * 100),
-            left: Math.round(Math.random() * 100),
+            top: 10 + Math.round(Math.random() * 80),
+            left: 10 + Math.round(Math.random() * 80),
           };
           let newEggOverlays = overlaysPositions[key] ?? [];
           newEggOverlays.push(newEggPosition);
@@ -201,8 +201,8 @@ const WallOfShame: React.FC = () => {
         case "poop":
           const newPoopPosition: Overlay = {
             type: "poop",
-            top: Math.round(Math.random() * 100),
-            left: Math.round(Math.random() * 100),
+            top: 10 + Math.round(Math.random() * 80),
+            left: 10 + Math.round(Math.random() * 80),
           };
           let newPoopOverlays = overlaysPositions[key] ?? [];
           newPoopOverlays.push(newPoopPosition);
@@ -455,7 +455,7 @@ const WallOfShame: React.FC = () => {
         return (
           <div style={{ padding: "0.5rem" }}>
             <StackGrid
-              columnWidth={width! <= 768 ? "50%" : "33.3%"}
+              columnWidth={width! <= 576 ? "50%" : "33.3%"}
               monitorImagesLoaded={true}
               appearDelay={100}
               gridRef={(r) => (grid.current = r)}
@@ -476,12 +476,7 @@ const WallOfShame: React.FC = () => {
                           handleShame(s.timestamp);
                         }}
                         style={{
-                          width:
-                            width! <= 768
-                              ? "100%"
-                              : width! > 1280
-                              ? "90%"
-                              : "66.6%",
+                          width: "100%",
                         }}
                       >
                         <IonRow className='ion-justify-content-center ion-padding-horizontal ion-padding-top'>
