@@ -11,7 +11,7 @@ export const useWindowSize = (): {
     return {
       width: isClient ? window.innerWidth : undefined,
       height: isClient ? window.innerHeight : undefined,
-      isDesktop: isClient && window.innerWidth >= 992,
+      isDesktop: isClient && window.innerWidth >= 576,
     };
   }, [isClient]);
 

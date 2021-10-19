@@ -50,9 +50,19 @@ import logo from "../assets/icon-192x192.png";
 import challengeIcon from "../assets/icons/challenge-icon.svg";
 import shameIcon from "../assets/icons/shame-icon.svg";
 import { useWindowSize } from "../utils/WindowUtils";
+import { useEffect, useState } from "react";
 
 const AuthenticatedApp: React.FC = () => {
-  const { width } = useWindowSize();
+  const { width, isDesktop } = useWindowSize();
+  const [isDesktopBefore, setIsDesktopBefore] = useState(isDesktop);
+
+  useEffect(() => {
+    if (isDesktop !== isDesktopBefore && !isPlatform("desktop")) {
+      setIsDesktopBefore(isDesktop);
+      window.location.reload();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDesktop]);
 
   return (
     <IonApp>
