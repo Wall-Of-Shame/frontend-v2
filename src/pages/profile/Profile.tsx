@@ -22,6 +22,7 @@ import {
   IonFabButton,
   IonBadge,
   IonSearchbar,
+  IonButton,
 } from "@ionic/react";
 import { useEffect } from "react";
 import {
@@ -529,11 +530,26 @@ const Profile: React.FC = () => {
         </IonRow>
         <IonRow
           className='ion-padding-horizontal ion-justify-content-center'
-          style={{ marginBottom: "2rem" }}
+          style={{ marginBottom: "1rem" }}
         >
           <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
             Friends
           </IonText>
+        </IonRow>
+        <IonRow
+          className='ion-justify-content-center'
+          style={{ marginBottom: "2rem" }}
+        >
+          <IonButton
+            mode='ios'
+            color='secondary'
+            shape='round'
+            onClick={() => {
+              history.push("/friends");
+            }}
+          >
+            See all friends and requests
+          </IonButton>
         </IonRow>
         <IonRow className='ion-padding-horizontal ion-justify-content-center'>
           <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>

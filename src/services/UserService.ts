@@ -33,6 +33,15 @@ const searchUser = async (searchText: string): Promise<UserList[]> => {
   }
 };
 
+const getUserProfile = async (userId: string): Promise<UserList> => {
+  try {
+    const response = await APIService.get(`users/${userId}`);
+    return response.data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 const getFriendsRankings = async (): Promise<UserList[]> => {
   try {
     const response = await APIService.get(`users/?operation=wallRecents`);
@@ -71,6 +80,7 @@ const sendFeedback = async (
 export default {
   updateProfile,
   searchUser,
+  getUserProfile,
   getFriendsRankings,
   getGlobalRankings,
   sendFeedback,

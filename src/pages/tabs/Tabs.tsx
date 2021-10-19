@@ -27,6 +27,8 @@ import Settings from "../profile/settings";
 import Explore from "../explore";
 import Store from "../store";
 import Invitations from "../challenges/invitations";
+import OtherProfile from "../profile/other";
+import Friends from "../profile/friends";
 
 const redirectToChallenges = (): React.ReactNode => (
   <Redirect to={"/challenges"} />
@@ -65,6 +67,12 @@ const Tabs: React.FC = () => {
         </Route>
         <Route exact path='/profile/settings'>
           <Settings />
+        </Route>
+        <Route exact path='/profile/user/:id'>
+          <OtherProfile />
+        </Route>
+        <Route exact path='/friends'>
+          <Friends />
         </Route>
         <Route render={redirectToChallenges} />
       </IonRouterOutlet>

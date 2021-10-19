@@ -9,6 +9,7 @@ export default interface UserContextInterface {
     avatar: Avatar
   ): Promise<void>;
   searchUser(searchText: string): Promise<UserList[]>;
+  getUserProfile(userId: string): Promise<UserList>;
   getFriendsRankings(): Promise<UserList[]>;
   getGlobalRankings(): Promise<UserList[]>;
   sendFeedback(
