@@ -399,17 +399,17 @@ const Profile: React.FC = () => {
                       {
                         title: "Completed",
                         value: user?.completedChallengeCount ?? 0,
-                        color: "#6C7BFF",
+                        color: "#fdab8f",
                       },
                       {
                         title: "Failures",
                         value: user?.failedChallengeCount ?? 0,
-                        color: "#C7CCFF",
+                        color: "#7dd7e1",
                       },
                       {
                         title: "Cheats",
                         value: user?.vetoedChallengeCount ?? 0,
-                        color: "#F0F1FD",
+                        color: "#ffc635",
                       },
                     ]}
                     label={({ dataEntry }) => {
@@ -454,7 +454,7 @@ const Profile: React.FC = () => {
                             marginLeft: "0.5rem",
                             width: "1rem",
                             height: "1rem",
-                            backgroundColor: "#6C7BFF",
+                            backgroundColor: "#fdab8f",
                           }}
                         >
                           &nbsp;
@@ -484,7 +484,7 @@ const Profile: React.FC = () => {
                             marginLeft: "0.5rem",
                             width: "1rem",
                             height: "1rem",
-                            backgroundColor: "#C7CCFF",
+                            backgroundColor: "#7dd7e1",
                           }}
                         >
                           &nbsp;
@@ -514,7 +514,7 @@ const Profile: React.FC = () => {
                             marginLeft: "0.5rem",
                             width: "1rem",
                             height: "1rem",
-                            backgroundColor: "#F0F1FD",
+                            backgroundColor: "#ffc635",
                           }}
                         >
                           &nbsp;
@@ -541,7 +541,7 @@ const Profile: React.FC = () => {
         >
           <IonButton
             mode='ios'
-            color='secondary'
+            color='main-blue'
             shape='round'
             onClick={() => {
               history.push("/friends");
