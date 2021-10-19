@@ -1,6 +1,6 @@
 import store from "../app/store";
 import { UserData } from "../interfaces/models/Users";
-import { clearUser, setUser } from "../reducers/MiscDux";
+import { clearUser, setFriends, setUser } from "../reducers/MiscDux";
 import APIService from "../services/APIService";
 import TokenUtils from "../utils/TokenUtils";
 
@@ -34,13 +34,19 @@ const getUser = async (): Promise<UserData | null> => {
   }
 
   try {
-    const response = await APIService.get("self");
-    if (response.status === 200) {
-      const user = response.data;
+    const userResponse = await APIService.get("self");
+    const friendsResponse = await APIService.get("friends");
+    let authenticatedUser: UserData | null = null;
+    if (userResponse.status === 200) {
+      const user = userResponse.data;
       store.dispatch(setUser(user));
-      return user;
+      authenticatedUser = user;
     }
-    throw new Error(response.statusText);
+    if (friendsResponse.status === 200) {
+      const friends = friendsResponse.data;
+      store.dispatch(setFriends(friends));
+    }
+    return authenticatedUser;
   } catch (error) {
     logout();
     return Promise.reject(error);

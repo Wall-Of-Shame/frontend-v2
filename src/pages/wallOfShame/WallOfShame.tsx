@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   IonAvatar,
   IonCard,
@@ -38,7 +39,7 @@ import {
   limitToLast,
 } from "firebase/database";
 import { Shame } from "../../interfaces/models/Challenges";
-import { differenceInSeconds, parseISO } from "date-fns";
+import { differenceInSeconds, isBefore, parseISO } from "date-fns";
 import { UserList } from "../../interfaces/models/Users";
 import { useUser } from "../../contexts/UserContext";
 import LoadingSpinner from "../../components/loadingSpinner";
@@ -71,7 +72,7 @@ interface Overlay {
 }
 
 interface OverlayMap {
-  [key: number]: Overlay[];
+  [key: string]: Overlay[];
 }
 
 const WallOfShame: React.FC = () => {
@@ -87,7 +88,7 @@ const WallOfShame: React.FC = () => {
   });
   const grid = useRef<Grid | null>(null);
   const [shames, setShames] = useState<Shame[]>([]);
-  const [selectedShame, setSelectedShame] = useState<number | null>(null);
+  const [selectedShame, setSelectedShame] = useState<string | null>(null);
   const [shameTool, setShameTool] = useState<"tomato" | "egg" | "poop" | "">(
     ""
   );
@@ -127,6 +128,7 @@ const WallOfShame: React.FC = () => {
     limitToLast(100)
   );
 
+  /*
   onValue(topShamesRef, (snapshot) => {
     const object = snapshot.val();
 
@@ -145,6 +147,7 @@ const WallOfShame: React.FC = () => {
       }
     }
   });
+  */
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const fetchData = async (): Promise<void> => {
@@ -167,9 +170,15 @@ const WallOfShame: React.FC = () => {
     globalSocket?.on("globalLeaderboard", (data: UserList[]) => {
       setGlobalRankings(data);
     });
+    globalSocket?.emit("shameListGet", (data: Shame[]) => {
+      setShames(data);
+    });
+    globalSocket?.on("shameListUpdate", (data: Shame[]) => {
+      setShames([...data, ...shames]);
+    });
   };
 
-  const handleShame = (key: number) => {
+  const handleShame = (key: string) => {
     setLastShamed(new Date().getTime() / 1000);
     if (key !== selectedShame) {
       setSelectedShame(key);
@@ -466,14 +475,14 @@ const WallOfShame: React.FC = () => {
                   end: Date.now(),
                 });
                 return (
-                  <div key={s.timestamp} style={{ padding: "0.5rem" }}>
+                  <div key={s.id} style={{ padding: "0.5rem" }}>
                     <IonRow className='ion-justify-content-center'>
                       <IonCard
                         className='ion-no-margin ion-text-center'
                         mode='ios'
                         button
                         onClick={() => {
-                          handleShame(s.timestamp);
+                          handleShame(s.id);
                         }}
                         style={{
                           width: "100%",
@@ -506,54 +515,52 @@ const WallOfShame: React.FC = () => {
                           {`🍅 12 🍳 9 💩 5`}
                         </IonRow>
                         <AnimatePresence>
-                          {!!overlaysPositions[s.timestamp] &&
-                            overlaysPositions[s.timestamp].length > 0 &&
-                            overlaysPositions[s.timestamp].map(
-                              (overlay, index) => {
-                                return (
-                                  <motion.img
-                                    key={`${s.timestamp}-${overlay.type}-${index}`}
-                                    initial={{
-                                      opacity: 0,
-                                      scale: 2,
-                                      y: 100,
-                                    }}
-                                    animate={{
-                                      opacity:
-                                        overlay.type === "tomato"
-                                          ? 0.7
-                                          : overlay.type === "egg"
-                                          ? 0.9
-                                          : 0.7,
-                                      scale: 1,
-                                      y: 0,
-                                    }}
-                                    exit={{
-                                      opacity: 0,
-                                      y: 100,
-                                      transition: {
-                                        duration: 2,
-                                      },
-                                    }}
-                                    src={
+                          {!!overlaysPositions[s.id] &&
+                            overlaysPositions[s.id].length > 0 &&
+                            overlaysPositions[s.id].map((overlay, index) => {
+                              return (
+                                <motion.img
+                                  key={`${s.id}-${overlay.type}-${index}`}
+                                  initial={{
+                                    opacity: 0,
+                                    scale: 2,
+                                    y: 100,
+                                  }}
+                                  animate={{
+                                    opacity:
                                       overlay.type === "tomato"
-                                        ? tomato
+                                        ? 0.7
                                         : overlay.type === "egg"
-                                        ? egg
-                                        : poop
-                                    }
-                                    style={{
-                                      position: "absolute",
-                                      top: `calc(${overlay.top}% - 2.5rem)`,
-                                      left: `calc(${overlay.left}% - 2.5rem)`,
-                                      width: "5rem",
-                                      height: "5rem",
-                                    }}
-                                    alt=''
-                                  />
-                                );
-                              }
-                            )}
+                                        ? 0.9
+                                        : 0.7,
+                                    scale: 1,
+                                    y: 0,
+                                  }}
+                                  exit={{
+                                    opacity: 0,
+                                    y: 100,
+                                    transition: {
+                                      duration: 2,
+                                    },
+                                  }}
+                                  src={
+                                    overlay.type === "tomato"
+                                      ? tomato
+                                      : overlay.type === "egg"
+                                      ? egg
+                                      : poop
+                                  }
+                                  style={{
+                                    position: "absolute",
+                                    top: `calc(${overlay.top}% - 2.5rem)`,
+                                    left: `calc(${overlay.left}% - 2.5rem)`,
+                                    width: "5rem",
+                                    height: "5rem",
+                                  }}
+                                  alt=''
+                                />
+                              );
+                            })}
                         </AnimatePresence>
                       </IonCard>
                     </IonRow>

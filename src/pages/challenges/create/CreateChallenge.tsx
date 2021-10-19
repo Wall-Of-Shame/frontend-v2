@@ -135,7 +135,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
   return (
     <IonPage>
       <IonHeader className='ion-no-border'>
-        <IonToolbar>
+        <IonToolbar style={{ paddingTop: "0.5rem" }}>
           <IonButtons slot='start'>
             <IonFabButton
               color='light'

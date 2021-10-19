@@ -76,11 +76,11 @@ type DeepPartialUserMini = Pick<UserMini, "userId"> &
   };
 
 export interface Shame {
+  id: `${string}:${string}`; // userId + challengeId
   name: string;
   title: string;
-  type: string;
+  type: "shame" | "cheat";
   time: string;
-  timestamp: number;
   avatar: {
     animal: AvatarAnimal;
     color: AvatarColor;

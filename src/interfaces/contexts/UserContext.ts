@@ -7,7 +7,7 @@ export default interface UserContextInterface {
     username: string,
     settings: Settings,
     avatar: Avatar
-  ): Promise<UserData | null>;
+  ): Promise<void>;
   searchUser(searchText: string): Promise<UserList[]>;
   getFriendsRankings(): Promise<UserList[]>;
   getGlobalRankings(): Promise<UserList[]>;

@@ -1,9 +1,4 @@
-import {
-  Avatar,
-  Settings,
-  UserData,
-  UserList,
-} from "../interfaces/models/Users";
+import { Avatar, Settings, UserList } from "../interfaces/models/Users";
 import APIService from "../services/APIService";
 import AuthService from "./AuthService";
 
@@ -12,7 +7,7 @@ const updateProfile = async (
   username: string,
   settings: Settings,
   avatar: Avatar
-): Promise<UserData | null> => {
+): Promise<void> => {
   const data = {
     name,
     username,
@@ -21,7 +16,7 @@ const updateProfile = async (
   };
   try {
     await APIService.patch("self", data);
-    return await AuthService.getUser();
+    await AuthService.getUser();
   } catch (error) {
     return Promise.reject(error);
   }

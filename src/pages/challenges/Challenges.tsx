@@ -416,7 +416,7 @@ const Challenges: React.FC = () => {
   return (
     <IonPage>
       <IonHeader className='ion-no-border'>
-        <IonToolbar color="secondary" style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar color='secondary' style={{ paddingTop: "0.5rem" }}>
           <IonTitle
             size='large'
             style={{ paddingBottom: isPlatform("ios") ? "1rem" : 0 }}
@@ -452,7 +452,7 @@ const Challenges: React.FC = () => {
             )}
           </IonFabButton>
         </IonToolbar>
-        <HeaderCurve />
+        {!isPlatform("desktop") && <HeaderCurve />}
       </IonHeader>
       <IonContent fullscreen>
         <IonRow className='ion-justify-content-center ion-padding'>

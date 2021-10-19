@@ -1,12 +1,7 @@
 import React from "react";
 
 import UserContextInterface from "../interfaces/contexts/UserContext";
-import {
-  Avatar,
-  Settings,
-  UserData,
-  UserList,
-} from "../interfaces/models/Users";
+import { Avatar, Settings, UserList } from "../interfaces/models/Users";
 import UserService from "../services/UserService";
 
 import { useAuth } from "./AuthContext";
@@ -24,8 +19,12 @@ const UserProvider: React.FunctionComponent = (props) => {
     username: string,
     settings: Settings,
     avatar: Avatar
-  ): Promise<UserData | null> => {
-    return await UserService.updateProfile(name, username, settings, avatar);
+  ): Promise<void> => {
+    try {
+      await UserService.updateProfile(name, username, settings, avatar);
+    } catch (error) {
+      return Promise.reject(error);
+    }
   };
 
   const searchUser = async (searchText: string): Promise<UserList[]> => {

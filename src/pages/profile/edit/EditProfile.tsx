@@ -135,7 +135,7 @@ const EditProfile: React.FC = () => {
   return (
     <IonPage>
       <IonHeader className='ion-no-border'>
-        <IonToolbar>
+        <IonToolbar style={{ paddingTop: "0.5rem" }}>
           <IonTitle
             style={{
               textAlign: "left",

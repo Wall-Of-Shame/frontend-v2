@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { UserData } from "../interfaces/models/Users";
+import { UserData, UserList } from "../interfaces/models/Users";
 
 export interface MiscDux {
   user?: UserData;
+  friends?: UserList[];
   lastRetrieved?: number;
 }
 
@@ -18,13 +19,18 @@ const misc = createSlice({
       state.user = { ...action.payload };
       state.lastRetrieved = Date.now();
     },
+    setFriends: (state, action: PayloadAction<UserList[]>): void => {
+      state.friends = { ...action.payload };
+      state.lastRetrieved = Date.now();
+    },
     clearUser: (state): void => {
       state.user = undefined;
+      state.friends = undefined;
       state.lastRetrieved = undefined;
     },
   },
 });
 
-export const { setUser, clearUser } = misc.actions;
+export const { setUser, setFriends, clearUser } = misc.actions;
 
 export default misc.reducer;
