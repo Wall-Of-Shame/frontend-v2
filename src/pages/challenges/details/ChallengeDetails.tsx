@@ -838,6 +838,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
               startAt: challenge.startAt!,
               endAt: challenge.endAt,
               type: challenge.type,
+              inviteType: challenge.inviteType,
               participants: updatedParticipants,
             };
             setState({ isLoading: true });

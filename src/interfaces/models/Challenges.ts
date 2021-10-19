@@ -6,6 +6,8 @@ export interface ChallengeId {
 
 export type ChallengeType = "LAST_TO_COMPLETE" | "NOT_COMPLETED";
 
+export type ChallengeInviteType = "PRIVATE" | "PUBLIC";
+
 // Input schema for the `POST /challenges` route.
 export interface ChallengePost {
   title: string;
@@ -13,6 +15,7 @@ export interface ChallengePost {
   startAt: string;
   endAt: string;
   type: ChallengeType;
+  inviteType: ChallengeInviteType;
   participants: string[];
 }
 
@@ -25,6 +28,7 @@ export interface ChallengeData {
   endAt: string;
   participantCount: number;
   type: ChallengeType;
+  inviteType: ChallengeInviteType;
   hasReleasedResult: boolean;
   owner: DeepPartialUserMini;
   participants: {

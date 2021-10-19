@@ -527,6 +527,14 @@ const Profile: React.FC = () => {
             </IonCard>
           </IonCol>
         </IonRow>
+        <IonRow
+          className='ion-padding-horizontal ion-justify-content-center'
+          style={{ marginBottom: "2rem" }}
+        >
+          <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
+            Friends
+          </IonText>
+        </IonRow>
         <IonRow className='ion-padding-horizontal ion-justify-content-center'>
           <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
             Past challenges

@@ -33,6 +33,7 @@ import {
 import "./CreateChallenge.scss";
 import AddParticipantsModal from "../../../components/participants/AddParticipantsModal";
 import {
+  ChallengeInviteType,
   ChallengePost,
   ChallengeType,
 } from "../../../interfaces/models/Challenges";
@@ -51,6 +52,7 @@ interface CreateChallengeState {
   title: string;
   description: string;
   punishmentType: ChallengeType;
+  inviteType: ChallengeInviteType;
   startAt: string;
   endAt: string;
   invitedUsers: UserList[];
@@ -84,6 +86,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
       punishmentType: "NOT_COMPLETED",
       startAt: formatISO(addHours(Date.now(), 1)),
       endAt: formatISO(addHours(Date.now(), 2)),
+      inviteType: "PRIVATE",
       invitedUsers: [],
       isLoading: false,
       showAlert: false,
@@ -354,6 +357,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
               startAt: state.startAt,
               endAt: state.endAt,
               type: state.punishmentType,
+              inviteType: state.inviteType,
               participants: invitedUsers.map((u) => {
                 return u.userId;
               }),

@@ -32,6 +32,7 @@ import {
 import "./EditChallenge.scss";
 import {
   ChallengeData,
+  ChallengeInviteType,
   ChallengePost,
   ChallengeType,
   UserMini,
@@ -49,6 +50,7 @@ interface EditChallengeState {
   title: string;
   description: string;
   punishmentType: ChallengeType;
+  inviteType: ChallengeInviteType;
   startAt: string;
   endAt: string;
   participants: {
@@ -87,6 +89,7 @@ const EditChallenge: React.FC<EditChallengeProps> = (
       title: challenge.title,
       description: challenge.description ?? "",
       punishmentType: challenge.type,
+      inviteType: challenge.inviteType,
       startAt: challenge.startAt ?? formatISO(Date.now()),
       endAt: challenge.endAt,
       participants: challenge.participants,
@@ -125,6 +128,7 @@ const EditChallenge: React.FC<EditChallengeProps> = (
       startAt: state.startAt,
       endAt: state.endAt,
       type: state.punishmentType,
+      inviteType: state.inviteType,
       participants: updatedParticipants,
     };
     setState({ isLoading: true });
