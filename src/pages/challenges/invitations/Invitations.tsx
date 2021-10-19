@@ -15,8 +15,9 @@ import {
   IonRow,
   IonText,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
-import { chevronBackOutline, chevronForward } from "ionicons/icons";
+import { arrowBack, chevronForward } from "ionicons/icons";
 import { useEffect } from "react";
 import { hideTabs } from "../../../utils/TabsUtils";
 import { useHistory } from "react-router";
@@ -25,6 +26,7 @@ import { RootState } from "../../../reducers/RootReducer";
 import { ChallengeDux } from "../../../reducers/ChallengeDux";
 import AvatarImg from "../../../components/avatar";
 import Container from "../../../components/container";
+import "../Challenges.scss";
 
 const Invitations: React.FC = () => {
   const history = useHistory();
@@ -40,10 +42,11 @@ const Invitations: React.FC = () => {
   return (
     <IonPage>
       <IonHeader className='ion-no-border'>
-        <IonToolbar style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar color='main-beige' style={{ paddingTop: "0.5rem" }}>
           <IonButtons slot='start'>
             <IonFabButton
-              color='light'
+              className='placeholder-fab'
+              color='main-beige'
               mode='ios'
               slot='start'
               style={{
@@ -55,10 +58,11 @@ const Invitations: React.FC = () => {
                 history.goBack();
               }}
             >
-              <IonIcon icon={chevronBackOutline} />
+              <IonIcon icon={arrowBack} />
             </IonFabButton>
           </IonButtons>
         </IonToolbar>
+        {!isPlatform("desktop") && <div className='challenges-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen>

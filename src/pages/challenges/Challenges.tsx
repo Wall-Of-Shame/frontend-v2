@@ -13,18 +13,19 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
-  IonLabel,
   IonPage,
   IonRow,
-  IonSegment,
-  IonSegmentButton,
   IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import "./Challenges.scss";
 import { useEffect, useReducer, useState } from "react";
-import { refreshOutline, mailOutline } from "ionicons/icons";
+import {
+  refreshOutline,
+  mailOutline,
+  notificationsOutline,
+} from "ionicons/icons";
 import { hideTabs, showTabs } from "../../utils/TabsUtils";
 import { useHistory, useLocation } from "react-router";
 import SetUpProfileModal from "../../components/setupProfile/ProfileSetUpModal";
@@ -43,7 +44,6 @@ import { isPlatform } from "@ionic/core";
 import { useSocket } from "../../contexts/SocketContext";
 import challenge from "../../assets/onboarding/challenge.png";
 import { Avatar } from "../../interfaces/models/Users";
-import HeaderCurve from "../../components/headerCurve";
 
 interface ChallengesState {
   isLoading: boolean;
@@ -416,15 +416,17 @@ const Challenges: React.FC = () => {
   return (
     <IonPage>
       <IonHeader className='ion-no-border'>
-        <IonToolbar color='secondary' style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar color='main-beige' style={{ paddingTop: "0.5rem" }}>
           <IonTitle
             size='large'
+            color='white'
             style={{ paddingBottom: isPlatform("ios") ? "1rem" : 0 }}
           >
             Challenges
           </IonTitle>
           <IonFabButton
-            color='light'
+            className='placeholder-fab'
+            color='main-beige'
             mode='ios'
             slot='end'
             style={{
@@ -434,7 +436,10 @@ const Challenges: React.FC = () => {
             }}
             routerLink='/challenges/invitations'
           >
-            <IonIcon icon={mailOutline} style={{ fontSize: "1.5rem" }} />
+            <IonIcon
+              icon={notificationsOutline}
+              style={{ fontSize: "1.5rem" }}
+            />
             {pendingResponse.length > 0 && (
               <IonBadge
                 mode='ios'
@@ -452,7 +457,7 @@ const Challenges: React.FC = () => {
             )}
           </IonFabButton>
         </IonToolbar>
-        {!isPlatform("desktop") && <HeaderCurve />}
+        {!isPlatform("desktop") && <div className='challenges-header-curve' />}
       </IonHeader>
       <IonContent fullscreen>
         <IonRow className='ion-justify-content-center ion-padding'>
@@ -470,32 +475,34 @@ const Challenges: React.FC = () => {
             shape='round'
             mode='ios'
             fill='solid'
-            color='secondary'
+            color='main-blue'
             routerLink='challenges/create'
           >
             Create a new challenge
           </IonButton>
         </IonRow>
-        <IonRow style={{ borderBottom: "1px #cecece solid" }}>
-          <IonCol size='6' className='ion-no-padding'>
-            <IonSegment
-              onIonChange={(e) => setTab(e.detail.value ?? "active")}
-              value={tab}
-              mode='md'
-              color='dark'
-              style={{
-                marginLeft: "1rem",
-                marginRight: "1rem",
-              }}
-            >
-              <IonSegmentButton value='ongoing' className='ion-text-capitalize'>
-                <IonLabel>Ongoing</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton value='pending' className='ion-text-capitalize'>
-                <IonLabel>Upcoming</IonLabel>
-              </IonSegmentButton>
-            </IonSegment>
-          </IonCol>
+        <IonRow
+          className='ion-justify-content-start ion-padding'
+          style={{ marginBottom: "1.5rem" }}
+        >
+          <IonButton
+            shape='round'
+            mode='ios'
+            fill='solid'
+            color={tab === "ongoing" ? "main-beige" : "light"}
+            onClick={() => setTab("ongoing")}
+          >
+            Ongoing
+          </IonButton>
+          <IonButton
+            shape='round'
+            mode='ios'
+            fill='solid'
+            color={tab === "pending" ? "main-beige" : "light"}
+            onClick={() => setTab("pending")}
+          >
+            Upcoming
+          </IonButton>
         </IonRow>
         {renderChallenges()}
         <IonFab vertical='bottom' horizontal='end' slot='fixed'>
