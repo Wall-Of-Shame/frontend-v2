@@ -1,6 +1,6 @@
 @media screen and (min-width: 576px) {
   .right-section {
-    margin-right: calc((100vw - 864px) / 2);
+    margin-right: calc((100vw - 992px) / 2);
   }
 }
 
@@ -11,7 +11,7 @@
 }
 
 .right-section {
-  max-width: 240px;
+  max-width: 400px;
   margin-top: 3.5rem;
   --ion-background-color: #fafafa;
 }
@@ -26,52 +26,12 @@
   --transition: none;
 }
 
-.right-section .selected {
-  --color: var(--ion-color-secondary);
-}
-
 body.backdrio-no-scroll {
   --border: none !important;
 }
 
-/*
- * Material Design Menu
-*/
-.right-section.md ion-list {
-  padding: 20px 0;
-}
-
-.right-section.md ion-list-header {
-  padding-left: 2rem;
-  padding-right: 2rem;
-  margin-bottom: 0.5rem;
-
-  letter-spacing: 0.1em;
-  font-weight: 750;
-  font-size: 1.5rem;
-}
-
-.right-section.md ion-item {
-  --padding-start: 2rem;
-
-  border-radius: 0px 50px 50px 0px;
-
-  font-weight: 500;
-}
-
-.right-section.md ion-item.selected {
-  --background: rgba(var(--ion-color-secondary-rgb), 0.14);
-}
-
-.right-section.md ion-item.selected ion-icon {
-  color: var(--ion-color-secondary);
-}
-
-.right-section.md ion-list-header,
-.right-section.md ion-item ion-icon {
-  color: var(--ion-color-step-650, #5f6368);
-}
-
-.right-section.md ion-list:not(:last-of-type) {
-  border-bottom: 1px solid var(--ion-color-step-150, #d7d8da);
+.shame-notification {
+  border-radius: 1rem;
+  box-shadow: none;
+  background-color: #fafafa;
 }
