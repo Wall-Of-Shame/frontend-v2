@@ -15,16 +15,21 @@ import {
   IonRow,
   IonText,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
-import { chevronBackOutline, personAddOutline } from "ionicons/icons";
-import { useEffect } from "react";
+import { arrowBackOutline, personAddOutline } from "ionicons/icons";
+import { useEffect, useState } from "react";
 import { hideTabs } from "../../../utils/TabsUtils";
 import { useHistory } from "react-router";
 import AvatarImg from "../../../components/avatar";
 import Container from "../../../components/container";
+import "../Profile.scss";
+import AddFriendsModal from "./AddFriendsModal";
 
 const Friends: React.FC = () => {
   const history = useHistory();
+
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     hideTabs();
@@ -33,10 +38,11 @@ const Friends: React.FC = () => {
   return (
     <IonPage>
       <IonHeader className='ion-no-border'>
-        <IonToolbar style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar color='main-blue' style={{ paddingTop: "0.5rem" }}>
           <IonButtons slot='start'>
             <IonFabButton
-              color='light'
+              className='placeholder-fab'
+              color='main-blue'
               mode='ios'
               slot='start'
               style={{
@@ -48,12 +54,13 @@ const Friends: React.FC = () => {
                 history.goBack();
               }}
             >
-              <IonIcon icon={chevronBackOutline} />
+              <IonIcon icon={arrowBackOutline} />
             </IonFabButton>
           </IonButtons>
           <IonButtons slot='end'>
             <IonFabButton
-              color='light'
+              className='placeholder-fab'
+              color='main-blue'
               mode='ios'
               slot='end'
               style={{
@@ -61,18 +68,23 @@ const Friends: React.FC = () => {
                 width: "2.75rem",
                 height: "2.75rem",
               }}
-              onClick={() => {
-                history.goBack();
-              }}
+              onClick={() => setShowModal(true)}
             >
-              <IonIcon icon={personAddOutline} style={{ fontSize: "1.5rem" }} />
+              <IonIcon icon={personAddOutline} />
             </IonFabButton>
           </IonButtons>
         </IonToolbar>
+        {!isPlatform("desktop") && <div className='profile-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen>
         <Container>{"There's nothing here >_<"}</Container>
+        <AddFriendsModal
+          users={[]}
+          showModal={showModal}
+          setShowModal={setShowModal}
+          completionCallback={() => {}}
+        />
       </IonContent>
     </IonPage>
   );

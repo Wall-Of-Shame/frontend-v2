@@ -308,12 +308,10 @@ const Profile: React.FC = () => {
         </IonList>
       </IonPopover>
       <IonHeader className='ion-no-border'>
-        <IonToolbar
-          className='profile-toolbar'
-          style={{ paddingTop: "0.5rem" }}
-        >
+        <IonToolbar color='main-blue' style={{ paddingTop: "0.5rem" }}>
           <IonFabButton
-            color='light'
+            className='placeholder-fab'
+            color='main-blue'
             mode='ios'
             slot='end'
             style={{
@@ -329,6 +327,7 @@ const Profile: React.FC = () => {
             <IonIcon icon={ellipsisVertical} />
           </IonFabButton>
         </IonToolbar>
+        {!isPlatform("desktop") && <div className='profile-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen>
