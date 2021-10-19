@@ -35,7 +35,7 @@ const Explore: React.FC = () => {
   return (
     <IonPage>
       <IonHeader className='ion-no-border'>
-        <IonToolbar style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar color='main-blue' style={{ paddingTop: "0.5rem" }}>
           <IonTitle
             size='large'
             style={{
@@ -49,6 +49,7 @@ const Explore: React.FC = () => {
             color='clear'
             mode='ios'
             slot='end'
+            disabled
             style={{
               margin: "0.5rem",
               width: "2.75rem",
@@ -57,10 +58,12 @@ const Explore: React.FC = () => {
           >
             <IonIcon
               icon={funnelOutline}
-              style={{ fontSize: "1.5rem", color: "#eff3fe" }}
+              color='main-blue'
+              style={{ fontSize: "1.5rem" }}
             />
           </IonFabButton>
         </IonToolbar>
+        {!isPlatform("desktop") && <div className='explore-header-curve' />}
       </IonHeader>
       <IonContent fullscreen>
         <Container>Coming soon :)</Container>
