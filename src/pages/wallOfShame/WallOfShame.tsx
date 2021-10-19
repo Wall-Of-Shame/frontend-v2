@@ -462,7 +462,7 @@ const WallOfShame: React.FC = () => {
           return <Container>{"There's nothing here >_<"}</Container>;
         }
         return (
-          <div style={{ padding: "0.5rem" }}>
+          <div style={{ padding: "0.5rem", marginTop: "1rem" }}>
             <StackGrid
               columnWidth={width! <= 576 ? "50%" : "33.3%"}
               monitorImagesLoaded={true}
@@ -610,7 +610,7 @@ const WallOfShame: React.FC = () => {
   return (
     <IonPage>
       <IonHeader className='ion-no-border'>
-        <IonToolbar style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar color='main-yellow' style={{ paddingTop: "0.5rem" }}>
           <IonTitle
             size='large'
             style={{
@@ -621,7 +621,7 @@ const WallOfShame: React.FC = () => {
           </IonTitle>
           <IonFabButton
             className='placeholder-fab'
-            color='light'
+            color='main-yellow'
             mode='ios'
             slot='end'
             style={{
@@ -637,6 +637,7 @@ const WallOfShame: React.FC = () => {
             <IonIcon icon={funnelOutline} style={{ fontSize: "1.5rem" }} />
           </IonFabButton>
         </IonToolbar>
+        {!isPlatform("desktop") && <div className='wall-header-curve' />}
       </IonHeader>
       <IonContent fullscreen>
         <IonPopover
