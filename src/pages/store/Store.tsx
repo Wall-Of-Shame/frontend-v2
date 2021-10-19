@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router";
 import Container from "../../components/container";
 import { showTabs, hideTabs } from "../../utils/TabsUtils";
+import "./Store.scss";
 
 const Store: React.FC = () => {
   const location = useLocation();
@@ -34,7 +35,7 @@ const Store: React.FC = () => {
   return (
     <IonPage>
       <IonHeader className='ion-no-border'>
-        <IonToolbar style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar color='main-beige' style={{ paddingTop: "0.5rem" }}>
           <IonTitle
             size='large'
             style={{
@@ -45,9 +46,10 @@ const Store: React.FC = () => {
           </IonTitle>
           <IonFabButton
             className='placeholder-fab'
-            color='clear'
+            color='main-beige'
             mode='ios'
             slot='end'
+            disabled
             style={{
               margin: "0.5rem",
               width: "2.75rem",
@@ -56,10 +58,12 @@ const Store: React.FC = () => {
           >
             <IonIcon
               icon={funnelOutline}
-              style={{ fontSize: "1.5rem", color: "#eff3fe" }}
+              color='main-beige'
+              style={{ fontSize: "1.5rem" }}
             />
           </IonFabButton>
         </IonToolbar>
+        {!isPlatform("desktop") && <div className='store-header-curve' />}
       </IonHeader>
       <IonContent fullscreen>
         <Container>Coming soon :)</Container>
