@@ -144,7 +144,9 @@ const AuthenticatedApp: React.FC = () => {
         <IonSplitPane contentId='main' className='split-pane-main'>
           <IonRouterOutlet
             id='main'
-            className='split-pane-content'
+            className={`split-pane-content ${
+              !isPlatform("desktop") ? "non-desktop" : ""
+            }`}
             style={{ marginTop: isPlatform("desktop") ? "3.5rem" : 0 }}
           >
             <Route path='/challenges' render={() => <Tabs />} />

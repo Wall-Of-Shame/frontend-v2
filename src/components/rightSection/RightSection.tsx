@@ -12,7 +12,6 @@ import {
 } from "@ionic/react";
 import "./RightSection.scss";
 import FeedbackModal from "../feedback";
-import { useWindowSize } from "../../utils/WindowUtils";
 import { useSocket } from "../../contexts/SocketContext";
 import { Shame } from "../../interfaces/models/Challenges";
 import { intervalToDuration, parseISO } from "date-fns";
@@ -21,7 +20,6 @@ import { formatWallTime } from "../../utils/TimeUtils";
 import { useHistory } from "react-router";
 
 const RightSection = () => {
-  const { width, height } = useWindowSize();
   const { connect } = useSocket();
   const history = useHistory();
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
@@ -47,7 +45,6 @@ const RightSection = () => {
       contentId='right-section-menu'
       className='right-section'
       side='end'
-      hidden={!(width! > 576 && height! > 576)}
     >
       <IonContent forceOverscroll={false} id='right-section-menu'>
         <IonRow
