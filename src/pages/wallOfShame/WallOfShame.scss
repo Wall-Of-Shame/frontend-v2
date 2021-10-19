@@ -48,6 +48,12 @@
   --ion-item-background: #ffffff;
 }
 
+.wall-of-shame-poster {
+  border-radius: 0;
+  box-shadow: rgb(240, 240, 240) 0px 0px 0px 2px,
+    rgb(210, 210, 210) 0px 0px 0px 4px;
+}
+
 .transparent {
   --background: #ffffff;
   max-width: 11rem !important;

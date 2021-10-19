@@ -103,7 +103,6 @@ const WallOfShame: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [type, setType] = useState("Global");
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [socket, setSocket] = useState<Socket | undefined>(undefined);
 
   const [state, setState] = useReducer(
     (s: WallOfShameState, a: Partial<WallOfShameState>) => ({
@@ -163,7 +162,6 @@ const WallOfShame: React.FC = () => {
 
   const connectToSocket = async () => {
     const globalSocket = await connect();
-    setSocket(globalSocket);
     globalSocket?.emit("globalLeaderboard", {}, (data: UserList[]) => {
       setGlobalRankings(data);
     });
@@ -462,7 +460,12 @@ const WallOfShame: React.FC = () => {
           return <Container>{"There's nothing here >_<"}</Container>;
         }
         return (
-          <div style={{ padding: "0.5rem", marginTop: "1rem" }}>
+          <div
+            style={{
+              padding: "0.5rem",
+              marginTop: !isPlatform("desktop") ? "1rem" : 0,
+            }}
+          >
             <StackGrid
               columnWidth={width! <= 576 ? "50%" : "33.3%"}
               monitorImagesLoaded={true}
@@ -478,7 +481,7 @@ const WallOfShame: React.FC = () => {
                   <div key={s.id} style={{ padding: "0.5rem" }}>
                     <IonRow className='ion-justify-content-center'>
                       <IonCard
-                        className='ion-no-margin ion-text-center'
+                        className='ion-no-margin ion-text-center wall-of-shame-poster'
                         mode='ios'
                         button
                         onClick={() => {
@@ -510,7 +513,7 @@ const WallOfShame: React.FC = () => {
                         </IonRow>
                         <IonRow
                           className='ion-justify-content-center'
-                          style={{ paddingBottom: "0.25rem" }}
+                          style={{ paddingBottom: "0.5rem" }}
                         >
                           {`🍅 12 🍳 9 💩 5`}
                         </IonRow>
