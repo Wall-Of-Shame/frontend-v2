@@ -21,11 +21,7 @@ import {
 } from "@ionic/react";
 import "./Challenges.scss";
 import { useEffect, useReducer, useState } from "react";
-import {
-  refreshOutline,
-  mailOutline,
-  notificationsOutline,
-} from "ionicons/icons";
+import { refreshOutline, notificationsOutline } from "ionicons/icons";
 import { hideTabs, showTabs } from "../../utils/TabsUtils";
 import { useHistory, useLocation } from "react-router";
 import SetUpProfileModal from "../../components/setupProfile/ProfileSetUpModal";

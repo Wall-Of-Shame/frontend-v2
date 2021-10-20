@@ -1,6 +1,9 @@
 import {
+  IonAvatar,
   IonButton,
   IonButtons,
+  IonCard,
+  IonCol,
   IonContent,
   IonDatetime,
   IonFabButton,
@@ -17,8 +20,9 @@ import {
   IonText,
   IonTextarea,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
-import { chevronBackOutline } from "ionicons/icons";
+import { arrowBack, chevronForward } from "ionicons/icons";
 import { useState, useReducer, useEffect } from "react";
 import {
   addHours,
@@ -30,6 +34,9 @@ import {
   isBefore,
   parseISO,
 } from "date-fns";
+import challenge from "../../../assets/onboarding/challenge.png";
+import highground from "../../../assets/onboarding/highground.png";
+import "../Challenges.scss";
 import "./CreateChallenge.scss";
 import AddParticipantsModal from "../../../components/participants/AddParticipantsModal";
 import {
@@ -74,6 +81,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
   const [showModal, setShowModal] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [showOfflineToast, setShowOfflineToast] = useState(false);
+  const [hasSetInviteType, setHasSetInviteType] = useState(false);
 
   const [state, setState] = useReducer(
     (s: CreateChallengeState, a: Partial<CreateChallengeState>) => ({
@@ -132,13 +140,103 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
     hideTabs();
   }, []);
 
+  if (!hasSetInviteType) {
+    return (
+      <IonPage>
+        <IonHeader className='ion-no-border'>
+          <IonToolbar color='main-beige' style={{ paddingTop: "0.5rem" }}>
+            <IonButtons slot='start'>
+              <IonFabButton
+                className='placeholder-fab'
+                color='main-beige'
+                mode='ios'
+                slot='start'
+                style={{
+                  margin: "0.5rem",
+                  width: "2.75rem",
+                  height: "2.75rem",
+                }}
+                onClick={() => {
+                  history.goBack();
+                }}
+              >
+                <IonIcon icon={arrowBack} />
+              </IonFabButton>
+            </IonButtons>
+          </IonToolbar>
+          {!isPlatform("desktop") && (
+            <div className='challenges-header-curve' />
+          )}
+        </IonHeader>
+
+        <IonContent fullscreen>
+          <IonGrid style={{ marginTop: "1rem" }}>
+            <IonRow className='ion-padding'>
+              <IonText style={{ fontWeight: "bold", fontSize: "1.5rem" }}>
+                Tell us more about your challenge
+              </IonText>
+            </IonRow>
+          </IonGrid>
+          <IonGrid style={{ marginTop: "0.5rem" }}>
+            <IonRow className='ion-justify-content-center'>
+              <IonCol>
+                <IonCard
+                  className='ion-align-items-center ion-no-margin'
+                  button
+                  onClick={() => {
+                    setState({ inviteType: "PRIVATE" });
+                    setHasSetInviteType(true);
+                  }}
+                  style={{ marginLeft: "1rem", marginRight: "1rem" }}
+                >
+                  <IonItem lines='none' className='ion-margin-vertical'>
+                    <IonAvatar slot='start'>
+                      <img src={challenge} alt='' />
+                    </IonAvatar>
+                    <IonText>For me and my friends</IonText>
+                    <IonIcon slot='end' icon={chevronForward} />
+                  </IonItem>
+                </IonCard>
+              </IonCol>
+            </IonRow>
+            <IonRow
+              className='ion-justify-content-center'
+              style={{ marginTop: "0.5rem" }}
+            >
+              <IonCol>
+                <IonCard
+                  className='ion-align-items-center ion-no-margin'
+                  button
+                  onClick={() => {
+                    setState({ inviteType: "PUBLIC" });
+                    setHasSetInviteType(true);
+                  }}
+                  style={{ marginLeft: "1rem", marginRight: "1rem" }}
+                >
+                  <IonItem lines='none' className='ion-margin-vertical'>
+                    <IonAvatar slot='start'>
+                      <img src={highground} alt='' />
+                    </IonAvatar>
+                    <IonText>For anyone to join</IonText>
+                    <IonIcon slot='end' icon={chevronForward} />
+                  </IonItem>
+                </IonCard>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonContent>
+      </IonPage>
+    );
+  }
+
   return (
     <IonPage>
       <IonHeader className='ion-no-border'>
-        <IonToolbar style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar color='main-beige' style={{ paddingTop: "1rem" }}>
           <IonButtons slot='start'>
             <IonFabButton
-              color='light'
+              className='placeholder-fab'
+              color='main-beige'
               mode='ios'
               slot='start'
               style={{
@@ -147,13 +245,14 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                 height: "2.75rem",
               }}
               onClick={() => {
-                history.goBack();
+                setHasSetInviteType(false);
               }}
             >
-              <IonIcon icon={chevronBackOutline} />
+              <IonIcon icon={arrowBack} />
             </IonFabButton>
           </IonButtons>
         </IonToolbar>
+        {!isPlatform("desktop") && <div className='challenges-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen>
