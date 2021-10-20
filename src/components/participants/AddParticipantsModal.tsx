@@ -19,9 +19,10 @@ import "./AddParticipantsModal.scss";
 import { UserList } from "../../interfaces/models/Users";
 import { useCallback, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
-import { addOutline, checkmark, removeOutline } from "ionicons/icons";
+import { close } from "ionicons/icons";
 import AvatarImg from "../avatar";
 import lodash from "lodash";
+import HorizontalScroll from "../horizontalScroll";
 
 interface AddParticipantsModalProps {
   users: UserList[];
@@ -79,6 +80,17 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
     >
       <IonHeader translucent>
         <IonToolbar className='modal-search'>
+          <IonButtons slot='start'>
+            <IonButton
+              style={{
+                margin: "0.5rem",
+              }}
+              color='dark'
+              onClick={() => setShowModal(false)}
+            >
+              <IonIcon icon={close} />
+            </IonButton>
+          </IonButtons>
           <IonTitle>Invite participants</IonTitle>
           <IonButtons slot='end'>
             <IonButton
@@ -88,7 +100,9 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
               color='dark'
               onClick={() => completionCallback(invitedUsers)}
             >
-              <IonIcon icon={checkmark} />
+              <IonText color='main-beige' style={{ fontWeight: "bold" }}>
+                Done
+              </IonText>
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -108,7 +122,8 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
           className='ion-margin-top users-search'
           showClearButton='always'
         ></IonSearchbar>
-        <IonGrid className='ion-margin-top'>
+        <HorizontalScroll users={invitedUsers} />
+        <IonGrid className='ion-margin-top ion-no-padding'>
           <IonText
             className='ion-margin'
             style={{ fontSize: 17, fontWeight: 600 }}
@@ -117,11 +132,23 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
           </IonText>
           {matchedUsers.map((u) => {
             return (
-              <IonRow className='ion-margin' key={u.userId}>
-                <IonCol className='ion-align-item-center' size='3'>
-                  <IonAvatar className='user-avatar'>
-                    <AvatarImg avatar={u.avatar} />
-                  </IonAvatar>
+              <IonRow
+                className='ion-margin'
+                key={u.userId}
+                style={{ marginBottom: "1.25rem" }}
+              >
+                <IonCol className='ion-align-item-center' size='2.5'>
+                  <IonRow className='ion-justify-content-cneter'>
+                    <IonAvatar
+                      className='user-avatar'
+                      style={{
+                        width: "3rem",
+                        height: "3rem",
+                      }}
+                    >
+                      <AvatarImg avatar={u.avatar} />
+                    </IonAvatar>
+                  </IonRow>
                 </IonCol>
                 <IonCol
                   style={{
@@ -131,7 +158,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
                   }}
                   size='6'
                 >
-                  <IonRow style={{ paddingBottom: "0.5rem" }}>
+                  <IonRow style={{ paddingBottom: "0.25rem" }}>
                     <IonText style={{ fontSize: 17, fontWeight: 600 }}>
                       {u.name}
                     </IonText>
@@ -145,15 +172,15 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
                       justifyContent: "center",
                       alignItems: "center",
                     }}
-                    size='3'
+                    size='3.5'
                   >
                     <IonButton
                       mode='ios'
-                      shape='round'
-                      color='tertiary'
+                      className='ion-no-padding'
+                      color='main-beige'
                       disabled
                       fill='solid'
-                      style={{ height: "2.5rem", width: "4.5rem" }}
+                      style={{ height: "2rem", width: "100%" }}
                     >
                       You
                     </IonButton>
@@ -165,85 +192,24 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
                       justifyContent: "center",
                       alignItems: "center",
                     }}
-                    size='3'
+                    size='3.5'
                   >
                     <IonButton
                       mode='ios'
-                      shape='round'
-                      color={
-                        invitedUsers.indexOf(u) !== -1
-                          ? "quinary"
-                          : "quaternary"
+                      className='ion-no-padding'
+                      color={"main-blue"}
+                      fill={
+                        invitedUsers.indexOf(u) === -1 ? "solid" : "outline"
                       }
-                      fill='solid'
-                      style={{ height: "2.5rem", width: "4.5rem" }}
+                      style={{ height: "2rem", width: "100%" }}
                       onClick={() => handleInvite(u)}
                     >
-                      <IonIcon
-                        icon={
-                          invitedUsers.indexOf(u) !== -1
-                            ? removeOutline
-                            : addOutline
-                        }
-                      />
+                      <IonText style={{ fontSize: "0.9rem" }}>
+                        {invitedUsers.indexOf(u) !== -1 ? "Added" : "Add"}
+                      </IonText>
                     </IonButton>
                   </IonCol>
                 )}
-              </IonRow>
-            );
-          })}
-        </IonGrid>
-        <IonGrid className='ion-margin-top'>
-          {invitedUsers.length > 0 && (
-            <IonText
-              className='ion-margin'
-              style={{ fontSize: 17, fontWeight: 600 }}
-            >
-              Added users
-            </IonText>
-          )}
-          {invitedUsers.map((u) => {
-            return (
-              <IonRow className='ion-margin' key={u.username}>
-                <IonCol className='ion-align-item-center' size='3'>
-                  <IonAvatar className='user-avatar'>
-                    <AvatarImg avatar={u.avatar} />
-                  </IonAvatar>
-                </IonCol>
-                <IonCol
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                  }}
-                  size='6'
-                >
-                  <IonRow style={{ paddingBottom: "0.5rem" }}>
-                    <IonText style={{ fontSize: 17, fontWeight: 600 }}>
-                      {u.name}
-                    </IonText>
-                  </IonRow>
-                  <IonRow>{`@${u.username}`}</IonRow>
-                </IonCol>
-                <IonCol
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  size='3'
-                >
-                  <IonButton
-                    mode='ios'
-                    shape='round'
-                    color='tertiary'
-                    fill='solid'
-                    style={{ height: "2.5rem", width: "4.5rem" }}
-                    onClick={() => handleInvite(u)}
-                  >
-                    <IonIcon icon={removeOutline} />
-                  </IonButton>
-                </IonCol>
               </IonRow>
             );
           })}
@@ -255,7 +221,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
             className='ion-justify-content-around'
             style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
           >
-            <IonButton mode='ios' color='secondary' shape='round'>
+            <IonButton mode='ios' color='main-beige' shape='round'>
               <IonText
                 style={{
                   marginLeft: "1rem",
