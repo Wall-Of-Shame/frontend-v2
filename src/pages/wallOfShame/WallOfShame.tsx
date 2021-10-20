@@ -26,6 +26,7 @@ import {
 import { useEffect, useReducer, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import StackGrid, { Grid } from "react-stack-grid";
+import uniqid from "uniqid";
 import "./WallOfShame.scss";
 import { hideTabs, showTabs } from "../../utils/TabsUtils";
 import { useLocation } from "react-router";
@@ -66,6 +67,7 @@ interface WallOfShameState {
 }
 
 interface Overlay {
+  id: string;
   type: "tomato" | "egg" | "poop";
   top: number;
   left: number;
@@ -183,6 +185,7 @@ const WallOfShame: React.FC = () => {
       switch (shameTool) {
         case "tomato":
           const newTomatoPosition: Overlay = {
+            id: uniqid(),
             type: "tomato",
             top: 10 + Math.round(Math.random() * 80),
             left: 10 + Math.round(Math.random() * 80),
@@ -195,6 +198,7 @@ const WallOfShame: React.FC = () => {
           return;
         case "egg":
           const newEggPosition: Overlay = {
+            id: uniqid(),
             type: "egg",
             top: 10 + Math.round(Math.random() * 80),
             left: 10 + Math.round(Math.random() * 80),
@@ -207,6 +211,7 @@ const WallOfShame: React.FC = () => {
           return;
         case "poop":
           const newPoopPosition: Overlay = {
+            id: uniqid(),
             type: "poop",
             top: 10 + Math.round(Math.random() * 80),
             left: 10 + Math.round(Math.random() * 80),
@@ -221,6 +226,7 @@ const WallOfShame: React.FC = () => {
       switch (shameTool) {
         case "tomato":
           const newTomatoPosition: Overlay = {
+            id: uniqid(),
             type: "tomato",
             top: Math.round(Math.random() * 100),
             left: Math.round(Math.random() * 100),
@@ -234,6 +240,7 @@ const WallOfShame: React.FC = () => {
           return;
         case "egg":
           const newEggPosition: Overlay = {
+            id: uniqid(),
             type: "egg",
             top: Math.round(Math.random() * 100),
             left: Math.round(Math.random() * 100),
@@ -247,6 +254,7 @@ const WallOfShame: React.FC = () => {
           return;
         case "poop":
           const newPoopPosition: Overlay = {
+            id: uniqid(),
             type: "poop",
             top: Math.round(Math.random() * 100),
             left: Math.round(Math.random() * 100),
@@ -520,13 +528,12 @@ const WallOfShame: React.FC = () => {
                         <AnimatePresence>
                           {!!overlaysPositions[s.id] &&
                             overlaysPositions[s.id].length > 0 &&
-                            overlaysPositions[s.id].map((overlay, index) => {
+                            overlaysPositions[s.id].map((overlay) => {
                               return (
                                 <motion.img
-                                  key={`${s.id}-${overlay.type}-${index}`}
+                                  key={`${s.id}-${overlay.type}-${overlay.id}`}
                                   initial={{
                                     opacity: 0,
-                                    scale: 2,
                                     y: 100,
                                   }}
                                   animate={{
@@ -611,7 +618,7 @@ const WallOfShame: React.FC = () => {
   };
 
   return (
-    <IonPage>
+    <IonPage style={{ background: "#ffffff" }}>
       <IonHeader className='ion-no-border'>
         <IonToolbar color='main-yellow' style={{ paddingTop: "0.5rem" }}>
           <IonTitle
