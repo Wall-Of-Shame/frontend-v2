@@ -50,19 +50,9 @@ import logo from "../assets/icon-192x192.png";
 import challengeIcon from "../assets/icons/challenge-icon.svg";
 import shameIcon from "../assets/icons/shame-icon.svg";
 import { useWindowSize } from "../utils/WindowUtils";
-import { useEffect, useState } from "react";
 
 const AuthenticatedApp: React.FC = () => {
-  const { width, isDesktop } = useWindowSize();
-  const [isDesktopBefore, setIsDesktopBefore] = useState(isDesktop);
-
-  useEffect(() => {
-    if (isDesktop !== isDesktopBefore && !isPlatform("desktop")) {
-      setIsDesktopBefore(isDesktop);
-      window.location.reload();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDesktop]);
+  const { width } = useWindowSize();
 
   return (
     <IonApp>
@@ -141,7 +131,12 @@ const AuthenticatedApp: React.FC = () => {
             </IonRow>
           </IonToolbar>
         )}
-        <IonSplitPane contentId='main' className='split-pane-main'>
+        <IonSplitPane
+          contentId='main'
+          className={`split-pane-main ${
+            isPlatform("desktop") ? "split-pane-main-desktop" : ""
+          }`}
+        >
           <IonRouterOutlet
             id='main'
             className={`split-pane-content ${
