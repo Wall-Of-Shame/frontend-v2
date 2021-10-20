@@ -22,7 +22,7 @@ import {
   IonToolbar,
   isPlatform,
 } from "@ionic/react";
-import { arrowBack, chevronForward } from "ionicons/icons";
+import { arrowBack, chevronForward, pencil } from "ionicons/icons";
 import { useState, useReducer, useEffect } from "react";
 import {
   addHours,
@@ -143,7 +143,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
   if (!hasSetInviteType) {
     return (
       <IonPage style={{ background: "#ffffff" }}>
-        <IonHeader mode='ios'>
+        <IonHeader className='ion-no-border'>
           <IonToolbar
             color='main-beige'
             className='challenges-header'
@@ -235,7 +235,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
 
   return (
     <IonPage style={{ background: "#ffffff" }}>
-      <IonHeader mode='ios'>
+      <IonHeader className='ion-no-border'>
         <IonToolbar
           color='main-beige'
           className='challenges-header'
@@ -272,10 +272,39 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
           </IonRow>
         </IonGrid>
         <IonGrid>
+          <IonRow className='ion-padding-horizontal ion-padding-bottom'>
+            <IonText style={{ fontWeight: "bold" }} color='primary'>
+              Rule
+            </IonText>
+          </IonRow>
           <IonRow className='ion-padding-bottom ion-padding-horizontal'>
             <IonText>
               Anyone who doesn't finish the challenge in time will be thrown to
               the wall
+            </IonText>
+          </IonRow>
+        </IonGrid>
+        <IonGrid>
+          <IonRow className='ion-padding-horizontal ion-padding-bottom'>
+            <IonCol className='ion-no-padding' size='10'>
+              <IonText style={{ fontWeight: "bold" }} color='primary'>
+                Who's the challenge for?
+              </IonText>
+            </IonCol>
+            <IonCol className='ion-no-padding' size='2'>
+              <IonRow className='ion-justify-content-end'>
+                <IonIcon
+                  icon={pencil}
+                  onClick={() => setHasSetInviteType(false)}
+                />
+              </IonRow>
+            </IonCol>
+          </IonRow>
+          <IonRow className='ion-padding-bottom ion-padding-horizontal'>
+            <IonText>
+              {state.inviteType === "PRIVATE"
+                ? "For me and my friends"
+                : "For anyone to join"}
             </IonText>
           </IonRow>
         </IonGrid>
@@ -295,6 +324,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                 borderRadius: "0.5rem",
                 background: "#ffffff",
                 paddingLeft: "0.75rem",
+                boxShadow: "rgba(149, 149, 149, 0.2) 0px 2px 10px 0px",
               }}
             >
               <IonInput
@@ -335,6 +365,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                 borderRadius: "0.5rem",
                 background: "#ffffff",
                 paddingLeft: "0.75rem",
+                boxShadow: "rgba(149, 149, 149, 0.2) 0px 2px 10px 0px",
               }}
             >
               <IonTextarea
@@ -498,7 +529,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
           okHandler={state.okHandler}
         />
       </IonContent>
-      <IonFooter translucent={true} className='ion-margin-top'>
+      <IonFooter>
         <IonToolbar>
           <IonRow
             className='ion-justify-content-center'

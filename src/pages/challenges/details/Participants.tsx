@@ -85,7 +85,7 @@ const Participants: React.FC<ParticipantsProps> = (
                   <IonLabel>
                     {u.userId === user?.userId
                       ? "You"
-                      : trimDisplayName(u.name)}
+                      : trimDisplayName(u.name, 7)}
                   </IonLabel>
 
                   {u.evidenceLink !== undefined && u.evidenceLink !== "" && (
@@ -135,7 +135,7 @@ const Participants: React.FC<ParticipantsProps> = (
                   <IonLabel>
                     {u.userId === user?.userId
                       ? "You"
-                      : trimDisplayName(u.name)}
+                      : trimDisplayName(u.name, 7)}
                   </IonLabel>
 
                   {u.evidenceLink !== undefined && u.evidenceLink !== "" && (
@@ -203,7 +203,7 @@ const Participants: React.FC<ParticipantsProps> = (
                   <IonLabel>
                     {u.userId === user?.userId
                       ? "You"
-                      : trimDisplayName(u.name)}
+                      : trimDisplayName(u.name, 7)}
                   </IonLabel>
                 </IonItem>
               );
@@ -259,7 +259,7 @@ const Participants: React.FC<ParticipantsProps> = (
                   <IonLabel>
                     {u.userId === user?.userId
                       ? "You"
-                      : trimDisplayName(u.name)}
+                      : trimDisplayName(u.name, 7)}
                   </IonLabel>
                   {u.evidenceLink !== undefined && u.evidenceLink !== "" && (
                     <IonButton
@@ -321,7 +321,7 @@ const Participants: React.FC<ParticipantsProps> = (
                   <IonLabel>
                     {u.userId === user?.userId
                       ? "You"
-                      : trimDisplayName(u.name)}
+                      : trimDisplayName(u.name, 7)}
                   </IonLabel>
                 </IonItem>
               );
@@ -377,7 +377,7 @@ const Participants: React.FC<ParticipantsProps> = (
                   <IonLabel>
                     {u.userId === user?.userId
                       ? "You"
-                      : trimDisplayName(u.name)}
+                      : trimDisplayName(u.name, 7)}
                   </IonLabel>
                   {u.evidenceLink !== undefined && u.evidenceLink !== "" && (
                     <IonButton
@@ -428,7 +428,7 @@ const Participants: React.FC<ParticipantsProps> = (
                   <IonLabel>
                     {u.userId === user?.userId
                       ? "You"
-                      : trimDisplayName(u.name)}
+                      : trimDisplayName(u.name, 7)}
                   </IonLabel>
                 </IonItem>
               );
@@ -481,7 +481,9 @@ const Participants: React.FC<ParticipantsProps> = (
                   <AvatarImg avatar={u.avatar} />
                 </IonAvatar>
                 <IonLabel>
-                  {u.userId === user?.userId ? "You" : trimDisplayName(u.name)}
+                  {u.userId === user?.userId
+                    ? "You"
+                    : trimDisplayName(u.name, 7)}
                 </IonLabel>
               </IonItem>
             );
@@ -514,7 +516,9 @@ const Participants: React.FC<ParticipantsProps> = (
                   <AvatarImg avatar={u.avatar} />
                 </IonAvatar>
                 <IonLabel>
-                  {u.userId === user?.userId ? "You" : trimDisplayName(u.name)}
+                  {u.userId === user?.userId
+                    ? "You"
+                    : trimDisplayName(u.name, 7)}
                 </IonLabel>
               </IonItem>
             );
