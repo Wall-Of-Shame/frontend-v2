@@ -8,11 +8,11 @@ export const isValidPassword = (password: string): boolean => {
   return password.length > 7 && password.length < 73;
 };
 
-export const trimDisplayName = (name: string): string => {
-  if (name.length < 11) {
+export const trimDisplayName = (name: string, count: number): string => {
+  if (name.length < count + 3) {
     return name;
   } else {
-    const substring = name.substring(0, 7);
+    const substring = name.substring(0, count);
     const trimmed = substring.trimEnd();
     return trimmed + "...";
   }
