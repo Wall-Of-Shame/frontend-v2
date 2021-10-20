@@ -33,7 +33,7 @@ const Store: React.FC = () => {
   }, [location.pathname]);
 
   return (
-    <IonPage>
+    <IonPage style={{ background: "#ffffff" }}>
       <IonHeader className='ion-no-border'>
         <IonToolbar color='main-beige' style={{ paddingTop: "0.5rem" }}>
           <IonTitle

@@ -36,7 +36,7 @@ const Friends: React.FC = () => {
   }, []);
 
   return (
-    <IonPage>
+    <IonPage style={{ background: "#ffffff" }}>
       <IonHeader className='ion-no-border'>
         <IonToolbar color='main-blue' style={{ paddingTop: "0.5rem" }}>
           <IonButtons slot='start'>

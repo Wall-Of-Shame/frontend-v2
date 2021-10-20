@@ -207,7 +207,7 @@ const Profile: React.FC = () => {
   };
 
   return (
-    <IonPage>
+    <IonPage style={{ background: "#ffffff" }}>
       <IonPopover
         cssClass='popover'
         event={popoverState.event}
