@@ -694,7 +694,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   );
 
   return (
-    <IonPage>
+    <IonPage style={{ background: "#ffffff" }}>
       <IonHeader className='ion-no-border'>
         <IonToolbar style={{ paddingTop: "0.5rem" }}>
           <IonFabButton

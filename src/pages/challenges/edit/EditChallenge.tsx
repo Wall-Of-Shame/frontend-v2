@@ -149,7 +149,7 @@ const EditChallenge: React.FC<EditChallengeProps> = (
   }, []);
 
   return (
-    <IonPage>
+    <IonPage style={{ background: "#ffffff" }}>
       <IonHeader>
         <IonToolbar style={{ paddingTop: "0.5rem" }}>
           <IonButtons slot='start'>

@@ -410,9 +410,13 @@ const Challenges: React.FC = () => {
   }, []);
 
   return (
-    <IonPage>
-      <IonHeader className='ion-no-border'>
-        <IonToolbar color='main-beige' style={{ paddingTop: "0.5rem" }}>
+    <IonPage style={{ background: "#ffffff" }}>
+      <IonHeader mode='ios'>
+        <IonToolbar
+          color='main-beige'
+          className='challenges-header'
+          style={{ paddingTop: "0.5rem" }}
+        >
           <IonTitle
             size='large'
             color='white'

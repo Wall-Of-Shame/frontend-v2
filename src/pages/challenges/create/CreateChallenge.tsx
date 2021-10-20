@@ -142,9 +142,13 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
 
   if (!hasSetInviteType) {
     return (
-      <IonPage>
-        <IonHeader className='ion-no-border'>
-          <IonToolbar color='main-beige' style={{ paddingTop: "0.5rem" }}>
+      <IonPage style={{ background: "#ffffff" }}>
+        <IonHeader mode='ios'>
+          <IonToolbar
+            color='main-beige'
+            className='challenges-header'
+            style={{ paddingTop: "0.5rem" }}
+          >
             <IonButtons slot='start'>
               <IonFabButton
                 className='placeholder-fab'
@@ -230,9 +234,13 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
   }
 
   return (
-    <IonPage>
-      <IonHeader className='ion-no-border'>
-        <IonToolbar color='main-beige' style={{ paddingTop: "1rem" }}>
+    <IonPage style={{ background: "#ffffff" }}>
+      <IonHeader mode='ios'>
+        <IonToolbar
+          color='main-beige'
+          className='challenges-header'
+          style={{ paddingTop: "0.5rem" }}
+        >
           <IonButtons slot='start'>
             <IonFabButton
               className='placeholder-fab'
@@ -256,7 +264,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
       </IonHeader>
 
       <IonContent fullscreen>
-        <IonGrid style={{ marginTop: "0.5rem" }}>
+        <IonGrid style={{ marginTop: "1rem" }}>
           <IonRow className='ion-padding'>
             <IonText style={{ fontWeight: "bold", fontSize: "1.5rem" }}>
               Create a new challenge
@@ -499,12 +507,12 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
             <IonButton
               mode='ios'
               shape='round'
-              color='secondary'
+              color='main-beige'
               fill='solid'
               onClick={handleCreate}
             >
               <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>
-                Create challenge
+                Save
               </IonText>
             </IonButton>
           </IonRow>
