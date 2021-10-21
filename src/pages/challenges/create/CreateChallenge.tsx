@@ -559,6 +559,12 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
               color="main-beige"
               fill="solid"
               onClick={handleCreate}
+              style={{
+                display: "flex",
+                flex: 1,
+                marginLeft: "2rem",
+                marginRight: "2rem",
+              }}
             >
               <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>
                 Save
