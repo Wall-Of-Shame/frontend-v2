@@ -16,7 +16,7 @@ import {
 } from "@ionic/react";
 import "./Settings.scss";
 import { useEffect, useReducer, useState } from "react";
-import { chevronBackOutline } from "ionicons/icons";
+import { arrowBack } from "ionicons/icons";
 import { useUser } from "../../../contexts/UserContext";
 import { ToggleChangeEventDetail } from "@ionic/core";
 import { useHistory } from "react-router";
@@ -129,10 +129,11 @@ const Settings: React.FC = () => {
   return (
     <IonPage style={{ background: "#ffffff" }}>
       <IonHeader className='ion-no-border'>
-        <IonToolbar style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar color='main-blue' style={{ paddingTop: "0.5rem" }}>
           <IonButtons slot='start'>
             <IonFabButton
-              color='light'
+              className='placeholder-fab'
+              color='main-blue'
               mode='ios'
               slot='start'
               style={{
@@ -144,7 +145,7 @@ const Settings: React.FC = () => {
                 history.goBack();
               }}
             >
-              <IonIcon icon={chevronBackOutline} />
+              <IonIcon icon={arrowBack} />
             </IonFabButton>
           </IonButtons>
         </IonToolbar>
@@ -163,6 +164,7 @@ const Settings: React.FC = () => {
               <IonToggle
                 slot='end'
                 mode='ios'
+                color='main-blue'
                 className='toggle'
                 checked={settings.deadlineReminder}
                 onIonChange={handleReminderChange}
@@ -173,6 +175,7 @@ const Settings: React.FC = () => {
               <IonToggle
                 slot='end'
                 mode='ios'
+                color='main-blue'
                 className='toggle'
                 checked={settings.invitations}
                 onIonChange={handleInvitationsChange}

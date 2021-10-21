@@ -84,33 +84,44 @@ const AvatarRandomizer: React.FC<AvatarRandomizerProps> = (
             <AvatarImg avatar={state.avatar} />
           </IonAvatar>
         </IonRow>
-        <IonButton
-          mode='ios'
-          shape='round'
-          color='medium'
-          fill='outline'
-          onClick={handleRandomize}
-        >
-          <IonIcon icon={dice} color='dark' style={{ marginRight: "0.5rem" }} />
-          <IonText color='dark'>Gimme another one</IonText>
-        </IonButton>
-        <IonButton
-          mode='ios'
-          fill='solid'
-          shape='round'
-          color='main-blue'
-          className='ion-padding-horizontal'
-          style={{
-            display: "flex",
-            margin: "1rem",
-            marginTop: "3rem",
-          }}
-          onClick={completionCallback}
-        >
-          <IonText color="white" style={{ marginLeft: "2rem", marginRight: "2rem" }}>
-            Done
-          </IonText>
-        </IonButton>
+        <IonRow className='ion-justify-content-center'>
+          <IonButton
+            mode='ios'
+            shape='round'
+            color='medium'
+            fill='outline'
+            onClick={handleRandomize}
+          >
+            <IonIcon
+              icon={dice}
+              color='dark'
+              style={{ marginRight: "0.5rem" }}
+            />
+            <IonText color='dark'>Gimme another one</IonText>
+          </IonButton>
+        </IonRow>
+        <IonRow className='ion-justify-content-center'>
+          <IonButton
+            mode='ios'
+            fill='solid'
+            shape='round'
+            color='main-blue'
+            className='ion-padding-horizontal'
+            style={{
+              display: "flex",
+              margin: "1rem",
+              marginTop: "3rem",
+            }}
+            onClick={completionCallback}
+          >
+            <IonText
+              color='white'
+              style={{ marginLeft: "2rem", marginRight: "2rem" }}
+            >
+              Done
+            </IonText>
+          </IonButton>
+        </IonRow>
       </Container>
     </IonContent>
   );

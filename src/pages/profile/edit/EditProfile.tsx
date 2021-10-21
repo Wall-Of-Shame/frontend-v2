@@ -19,7 +19,7 @@ import {
 } from "@ionic/react";
 import "./EditProfile.scss";
 import { useEffect, useReducer } from "react";
-import { checkmark, dice, chevronBackOutline } from "ionicons/icons";
+import { checkmark, dice, arrowBack } from "ionicons/icons";
 import {
   Avatar,
   AvatarAnimal,
@@ -135,7 +135,7 @@ const EditProfile: React.FC = () => {
   return (
     <IonPage style={{ background: "#ffffff" }}>
       <IonHeader className='ion-no-border'>
-        <IonToolbar style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar color='main-blue' style={{ paddingTop: "0.5rem" }}>
           <IonTitle
             style={{
               textAlign: "left",
@@ -146,7 +146,8 @@ const EditProfile: React.FC = () => {
           </IonTitle>
           <IonButtons slot='start'>
             <IonFabButton
-              color='light'
+              className='placeholder-fab'
+              color='main-blue'
               mode='ios'
               slot='start'
               style={{
@@ -158,12 +159,13 @@ const EditProfile: React.FC = () => {
                 history.goBack();
               }}
             >
-              <IonIcon icon={chevronBackOutline} />
+              <IonIcon icon={arrowBack} />
             </IonFabButton>
           </IonButtons>
           <IonButtons slot='end'>
             <IonFabButton
-              color='light'
+              className='placeholder-fab'
+              color='main-blue'
               mode='ios'
               slot='start'
               style={{
@@ -197,7 +199,11 @@ const EditProfile: React.FC = () => {
             fill='outline'
             onClick={handleRandomize}
           >
-            <IonIcon color='dark' icon={dice} style={{ marginRight: "0.5rem" }} />
+            <IonIcon
+              color='dark'
+              icon={dice}
+              style={{ marginRight: "0.5rem" }}
+            />
             <IonText color='dark'>Gimme another one</IonText>
           </IonButton>
         </IonRow>
