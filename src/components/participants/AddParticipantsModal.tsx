@@ -75,32 +75,34 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
       isOpen={showModal}
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={false}
-      cssClass='modal-container'
+      cssClass="modal-container"
       swipeToClose={true}
     >
       <IonHeader translucent>
-        <IonToolbar className='modal-search'>
-          <IonButtons slot='start'>
+        <IonToolbar className="modal-search">
+          <IonButtons slot="start">
             <IonButton
               style={{
                 margin: "0.5rem",
               }}
-              color='dark'
+              color="dark"
               onClick={() => setShowModal(false)}
             >
               <IonIcon icon={close} />
             </IonButton>
           </IonButtons>
-          <IonTitle>Invite participants</IonTitle>
-          <IonButtons slot='end'>
+          <IonTitle style={{ fontWeight: "bold" }}>
+            Invite participants
+          </IonTitle>
+          <IonButtons slot="end">
             <IonButton
               style={{
                 margin: "0.5rem",
               }}
-              color='dark'
+              color="dark"
               onClick={() => completionCallback(invitedUsers)}
             >
-              <IonText color='main-beige' style={{ fontWeight: "bold" }}>
+              <IonText color="accent-beige" style={{ fontWeight: "bold" }}>
                 Done
               </IonText>
             </IonButton>
@@ -109,23 +111,23 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
       </IonHeader>
       <IonContent fullscreen>
         <IonSearchbar
-          mode='ios'
-          key='modal-search'
+          mode="ios"
+          key="modal-search"
           value={searchText}
           onIonChange={(e) => {
             setSearchText(e.detail.value ?? "");
             debouncedSearch(e.detail.value ?? "");
           }}
           debounce={0}
-          placeholder='Search for a name or username'
-          showCancelButton='never'
-          className='ion-margin-top users-search'
-          showClearButton='always'
+          placeholder="Search a name or username"
+          showCancelButton="never"
+          className="ion-margin-top users-search"
+          showClearButton="always"
         ></IonSearchbar>
         <HorizontalScroll users={invitedUsers} />
-        <IonGrid className='ion-margin-top ion-no-padding'>
+        <IonGrid className="ion-margin-top ion-no-padding">
           <IonText
-            className='ion-margin'
+            className="ion-margin"
             style={{ fontSize: 17, fontWeight: 600 }}
           >
             Search results
@@ -133,14 +135,14 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
           {matchedUsers.map((u) => {
             return (
               <IonRow
-                className='ion-margin'
+                className="ion-margin"
                 key={u.userId}
                 style={{ marginBottom: "1.25rem" }}
               >
-                <IonCol className='ion-align-item-center' size='2.5'>
-                  <IonRow className='ion-justify-content-cneter'>
+                <IonCol className="ion-align-item-center" size="2.5">
+                  <IonRow className="ion-justify-content-cneter">
                     <IonAvatar
-                      className='user-avatar'
+                      className="user-avatar"
                       style={{
                         width: "3rem",
                         height: "3rem",
@@ -156,7 +158,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
                     flexDirection: "column",
                     justifyContent: "center",
                   }}
-                  size='6'
+                  size="6"
                 >
                   <IonRow style={{ paddingBottom: "0.25rem" }}>
                     <IonText style={{ fontSize: 17, fontWeight: 600 }}>
@@ -172,14 +174,14 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
                       justifyContent: "center",
                       alignItems: "center",
                     }}
-                    size='3.5'
+                    size="3.5"
                   >
                     <IonButton
-                      mode='ios'
-                      className='ion-no-padding'
-                      color='main-beige'
+                      mode="ios"
+                      className="ion-no-padding"
+                      color="main-beige"
                       disabled
-                      fill='solid'
+                      fill="solid"
                       style={{ height: "2rem", width: "100%" }}
                     >
                       You
@@ -192,11 +194,11 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
                       justifyContent: "center",
                       alignItems: "center",
                     }}
-                    size='3.5'
+                    size="3.5"
                   >
                     <IonButton
-                      mode='ios'
-                      className='ion-no-padding'
+                      mode="ios"
+                      className="ion-no-padding"
                       color={"main-blue"}
                       fill={
                         invitedUsers.findIndex((i) => i.userId === u.userId) ===
@@ -225,10 +227,20 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
       <IonFooter>
         <IonToolbar>
           <IonRow
-            className='ion-justify-content-around'
+            className="ion-justify-content-around"
             style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
           >
-            <IonButton mode='ios' color='main-beige' shape='round'>
+            <IonButton
+              mode="ios"
+              color="main-beige"
+              shape="round"
+              style={{
+                display: "flex",
+                flex: 1,
+                marginLeft: "2rem",
+                marginRight: "2rem",
+              }}
+            >
               <IonText
                 style={{
                   marginLeft: "1rem",
