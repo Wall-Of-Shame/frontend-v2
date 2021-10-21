@@ -54,16 +54,16 @@ const EmailVerification: React.FC<EmailVerificationProps> = (
   };
 
   return (
-    <IonContent fullscreen>
+    <IonContent fullscreen scrollY={false}>
       <IonFab
-        horizontal="start"
-        vertical="top"
+        horizontal='start'
+        vertical='top'
         style={{ marginTop: "1rem", marginLeft: "1rem" }}
       >
-        <IonIcon icon={arrowBackOutline} size="large" onClick={prevPage} />
+        <IonIcon icon={arrowBackOutline} size='large' onClick={prevPage} />
       </IonFab>
       <Container>
-        <IonRow slot="start" style={{ marginBottom: "2rem" }}>
+        <IonRow slot='start' style={{ marginBottom: "2rem" }}>
           <IonText
             style={{
               fontSize: "32px",
@@ -76,7 +76,7 @@ const EmailVerification: React.FC<EmailVerificationProps> = (
           </IonText>
         </IonRow>
         <IonRow
-          slot="start"
+          slot='start'
           style={{ textAlign: "left", marginBottom: "1rem" }}
         >
           <IonText
@@ -90,7 +90,7 @@ const EmailVerification: React.FC<EmailVerificationProps> = (
             <IonText style={{ fontWeight: "bold" }}>{state.email}</IonText>
           </IonText>
         </IonRow>
-        <IonRow slot="start" style={{ textAlign: "left" }}>
+        <IonRow slot='start' style={{ textAlign: "left" }}>
           <IonText
             style={{
               fontSize: "17px",
@@ -102,10 +102,10 @@ const EmailVerification: React.FC<EmailVerificationProps> = (
           </IonText>
         </IonRow>
         <IonButton
-          fill="solid"
-          shape="round"
-          color="main-blue"
-          className="ion-padding-horizontal"
+          fill='solid'
+          shape='round'
+          color='main-blue'
+          className='ion-padding-horizontal'
           style={{
             display: "flex",
             margin: "1rem",
@@ -114,17 +114,17 @@ const EmailVerification: React.FC<EmailVerificationProps> = (
           onClick={handleContinue}
         >
           <IonText
-            color="white"
+            color='white'
             style={{ marginLeft: "2rem", marginRight: "2rem" }}
           >
             Continue
           </IonText>
         </IonButton>
         <IonRow
-          class="ion-justify-content-center"
+          class='ion-justify-content-center'
           style={{ marginTop: "2rem" }}
         >
-          <IonText class="ion-text-center" color="medium" style={{}}>
+          <IonText class='ion-text-center' color='medium' style={{}}>
             Did not receive the email?&nbsp;
             <Link
               to={"#"}

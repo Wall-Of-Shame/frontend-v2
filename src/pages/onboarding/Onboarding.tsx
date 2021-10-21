@@ -4,7 +4,7 @@ import React, { useReducer, useState } from "react";
 import "./Onboarding.scss";
 import OnboardingSlides from "./OnboardingSlides";
 import SignUpModal from "./signup/SignUpModal";
-import LoginModal from "./login/LoginModal";
+import LoginModal from "./login";
 import { arrowBackOutline } from "ionicons/icons";
 import LoadingSpinner from "../../components/loadingSpinner";
 import Alert from "../../components/alert";

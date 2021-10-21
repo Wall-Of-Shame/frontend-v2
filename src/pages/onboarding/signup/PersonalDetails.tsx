@@ -2,7 +2,6 @@ import {
   IonButton,
   IonContent,
   IonFab,
-  IonHeader,
   IonIcon,
   IonInput,
   IonItem,
@@ -10,7 +9,6 @@ import {
   IonList,
   IonRow,
   IonText,
-  IonToolbar,
 } from "@ionic/react";
 import "./SignUpModal.scss";
 import { arrowBackOutline } from "ionicons/icons";
@@ -61,20 +59,20 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = (
   };
 
   return (
-    <IonContent fullscreen>
+    <IonContent fullscreen scrollY={false}>
       <IonFab
-        horizontal="start"
-        vertical="top"
+        horizontal='start'
+        vertical='top'
         style={{ marginTop: "1rem", marginLeft: "1rem" }}
       >
         <IonIcon
           icon={arrowBackOutline}
-          size="large"
+          size='large'
           onClick={() => setShowModal(false)}
         />
       </IonFab>
       <Container>
-        <IonRow slot="start">
+        <IonRow slot='start'>
           <IonText
             style={{
               fontSize: "32px",
@@ -85,21 +83,21 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = (
             Create Account
           </IonText>
         </IonRow>
-        <IonList className="ion-padding-vertical">
-          <IonItem lines="full">
+        <IonList className='ion-padding-vertical'>
+          <IonItem lines='full'>
             <IonLabel
               color={
                 state.email !== "" && !isValidEmail(state.email)
                   ? "danger"
                   : "primary"
               }
-              position="floating"
+              position='floating'
             >
               Email*
             </IonLabel>
             <IonInput
-              name="name"
-              type="email"
+              name='name'
+              type='email'
               value={state.email}
               required
               onIonChange={(event: CustomEvent) => {
@@ -107,13 +105,13 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = (
               }}
             />
           </IonItem>
-          <IonItem lines="full">
-            <IonLabel color="primary" position="floating">
+          <IonItem lines='full'>
+            <IonLabel color='primary' position='floating'>
               Password*
             </IonLabel>
             <IonInput
-              name="name"
-              type="password"
+              name='name'
+              type='password'
               value={state.password}
               required
               onIonChange={(event: CustomEvent) => {
@@ -121,13 +119,13 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = (
               }}
             />
           </IonItem>
-          <IonItem lines="full">
-            <IonLabel color="primary" position="floating">
+          <IonItem lines='full'>
+            <IonLabel color='primary' position='floating'>
               Confirm Password*
             </IonLabel>
             <IonInput
-              name="name"
-              type="password"
+              name='name'
+              type='password'
               value={state.passwordConfirmation}
               required
               onIonChange={(event: CustomEvent) => {
@@ -137,11 +135,11 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = (
           </IonItem>
         </IonList>
         <IonButton
-          mode="ios"
-          fill="solid"
-          color="main-blue"
-          shape="round"
-          className="ion-padding-horizontal"
+          mode='ios'
+          fill='solid'
+          color='main-blue'
+          shape='round'
+          className='ion-padding-horizontal'
           style={{
             display: "flex",
             margin: "1rem",
@@ -150,7 +148,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = (
           onClick={handleSubmit}
         >
           <IonText
-            color="white"
+            color='white'
             style={{ marginLeft: "2rem", marginRight: "2rem" }}
           >
             Next

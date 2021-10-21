@@ -1,4 +1,4 @@
-import { IonModal } from "@ionic/react";
+import { IonModal, isPlatform } from "@ionic/react";
 import { useReducer, useState } from "react";
 import "./SignUpModal.scss";
 import PersonalDetails from "./PersonalDetails";
@@ -91,6 +91,11 @@ const SignUpModal: React.FC<SignUpModalProps> = (props: SignUpModalProps) => {
   return (
     <IonModal
       isOpen={showModal}
+      cssClass={
+        isPlatform("desktop") || isPlatform("tablet") || isPlatform("ipad")
+          ? "signup-modal"
+          : ""
+      }
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={false}
     >

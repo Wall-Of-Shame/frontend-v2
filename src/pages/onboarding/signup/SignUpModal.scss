@@ -36,3 +36,11 @@ p {
 p b {
   color: var(--ion-text-color, #000000);
 }
+
+.signup-modal {
+  padding: 7.5vw;
+
+  .modal-wrapper {
+    border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
+  }
+}
