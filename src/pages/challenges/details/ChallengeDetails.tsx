@@ -17,10 +17,11 @@ import {
   IonText,
   IonToast,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react";
 import { useReducer, useState } from "react";
 import {
-  chevronBackOutline,
+  arrowBack,
   pencilOutline,
   personAddOutline,
   refreshOutline,
@@ -616,7 +617,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
               )}
             </IonGrid>
             <IonGrid style={{ marginBottom: "0.5rem" }}>
-              <IonRow className='ion-padding-horizontal ion-padding-bottom'>
+              <IonRow className='ion-padding'>
                 <IonText style={{ fontWeight: "bold" }}>
                   What do we need to do?
                 </IonText>
@@ -696,9 +697,9 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   return (
     <IonPage style={{ background: "#ffffff" }}>
       <IonHeader className='ion-no-border'>
-        <IonToolbar style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar color='main-beige' style={{ paddingTop: "0.5rem" }}>
           <IonFabButton
-            color='light'
+            color='main-beige'
             mode='ios'
             slot='start'
             style={{
@@ -710,14 +711,14 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
               history.goBack();
             }}
           >
-            <IonIcon icon={chevronBackOutline} />
+            <IonIcon icon={arrowBack} />
           </IonFabButton>
           {user?.userId === challenge.owner.userId &&
             !isAfter(Date.now(), parseISO(challenge.startAt!)) && (
               <>
                 <IonButtons slot='end'>
                   <IonFabButton
-                    color='light'
+                    color='main-beige'
                     mode='ios'
                     slot='end'
                     style={{
@@ -733,7 +734,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
                     />
                   </IonFabButton>
                   <IonFabButton
-                    color='light'
+                    color='main-beige'
                     mode='ios'
                     slot='end'
                     style={{
@@ -752,10 +753,11 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
               </>
             )}
         </IonToolbar>
+        {!isPlatform("desktop") && <div className='challenges-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen>
-        <IonGrid>
+        <IonGrid className="ion-margin-top">
           {renderHeader()}
           <IonRow className='ion-padding-horizontal ion-padding-bottom'>
             <IonText style={{ fontWeight: "bold", fontSize: "1.5rem" }}>

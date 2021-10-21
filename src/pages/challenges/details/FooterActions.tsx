@@ -157,7 +157,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
         <IonButton
           mode='ios'
           shape='round'
-          color='secondary'
+          color='main-beige'
           expand='block'
           fill='solid'
           onClick={handleComplete}
@@ -176,7 +176,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
         className='ion-justify-content-center'
         style={{ margin: "0.5rem" }}
       >
-        <IonButton shape='round' color='secondary' mode='ios' disabled>
+        <IonButton shape='round' color='main-beige' mode='ios' disabled>
           <IonText style={{ marginLeft: "1.5rem", marginRight: "1.5rem" }}>
             Waiting to start
           </IonText>
@@ -240,7 +240,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
 
   return (
     <IonRow className='ion-justify-content-center' style={{ margin: "0.5rem" }}>
-      <IonButton shape='round' color='secondary' disabled mode='ios'>
+      <IonButton shape='round' color='main-beige' disabled mode='ios'>
         <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>
           Waiting to start
         </IonText>
