@@ -1,15 +1,18 @@
 import {
+  IonButton,
   IonContent,
   IonFabButton,
   IonHeader,
   IonIcon,
   IonPage,
+  IonRow,
+  IonText,
   IonTitle,
   IonToolbar,
   isPlatform,
 } from "@ionic/react";
 import { funnelOutline } from "ionicons/icons";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import Container from "../../components/container";
 import { showTabs, hideTabs } from "../../utils/TabsUtils";
@@ -17,6 +20,8 @@ import "./Store.scss";
 
 const Store: React.FC = () => {
   const location = useLocation();
+
+  const [tab, setTab] = useState("powerups");
 
   useEffect(() => {
     if (
@@ -66,7 +71,29 @@ const Store: React.FC = () => {
         {!isPlatform("desktop") && <div className='store-header-curve' />}
       </IonHeader>
       <IonContent fullscreen>
-        <Container>Coming soon :)</Container>
+        <IonRow
+          className='ion-justify-content-start ion-padding'
+          style={{ marginTop: "1rem", marginBottom: "1.5rem" }}
+        >
+          <IonButton
+            shape='round'
+            mode='ios'
+            fill='solid'
+            color={tab === "powerups" ? "main-beige" : "light"}
+            onClick={() => setTab("powerups")}
+          >
+            <IonText style={{ fontWeight: "bold" }}>Power-ups</IonText>
+          </IonButton>
+          <IonButton
+            shape='round'
+            mode='ios'
+            fill='solid'
+            color={tab === "effects" ? "main-beige" : "light"}
+            onClick={() => setTab("effects")}
+          >
+            <IonText style={{ fontWeight: "bold" }}>Effects</IonText>
+          </IonButton>
+        </IonRow>
       </IonContent>
     </IonPage>
   );
