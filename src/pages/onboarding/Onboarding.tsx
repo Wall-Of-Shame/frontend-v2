@@ -65,7 +65,7 @@ const Onboarding: React.FC = () => {
           <IonIcon
             icon={arrowBackOutline}
             size='large'
-            color='medium'
+            color='light'
             onClick={() => {
               if (swiper) {
                 swiper.slidePrev();
@@ -81,7 +81,7 @@ const Onboarding: React.FC = () => {
           className='control-button'
         >
           <IonButton
-            color='medium'
+            color='light'
             fill='clear'
             onClick={() => {
               if (swiper) {

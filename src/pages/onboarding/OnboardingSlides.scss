@@ -4,7 +4,16 @@
 
 .slide {
   overflow: auto;
-  height: 100vh;
+  height: 110vh;
+  &.beige {
+    background-color: var(--ion-color-main-beige);
+  }
+  &.blue {
+    background-color: var(--ion-color-main-blue);
+  }
+  &.yellow {
+    background-color: var(--ion-color-main-yellow);
+  }
 }
 
 .container {
@@ -30,11 +39,20 @@ p {
   padding: 0 40px;
   font-size: 14px;
   line-height: 1.5;
-  color: var(--ion-color-step-600, #60646b);
+  color: var(--ion-color-light, #ffffff);
 }
 
 p b {
-  color: var(--ion-text-color, #000000);
+  color: var(--ion-color-light, #ffffff);
+}
+
+h1 {
+  color: var(--ion-color-light, #ffffff);
+  font-weight: bold;
+}
+
+h5 {
+  color: var(--ion-color-light, #ffffff);
 }
 
 @media only screen {

@@ -5,13 +5,14 @@
 .separator {
   max-width: 20rem;
   text-align: center;
-  border-bottom: 1px solid rgb(173, 173, 173);
+  border-bottom: 1px solid #ffffff;
   line-height: 0.1em;
   margin: auto;
 }
 
 .separator span {
-  background: #eff3fe;
+  color: #ffffff;
+  background: var(--ion-color-main-beige);
   padding: 0 10px;
 }
 
