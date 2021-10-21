@@ -13,7 +13,7 @@ import {
   isPlatform,
 } from "@ionic/react";
 import { closeCircle, informationCircle } from "ionicons/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { useLocation } from "react-router";
 import ReactCardFlip from "react-card-flip";
 import challenge from "../../assets/onboarding/challenge.png";
@@ -23,8 +23,28 @@ import "./Store.scss";
 import { useUser } from "../../contexts/UserContext";
 import { useWindowSize } from "../../utils/WindowUtils";
 
-import { PowerUp, PowerUpType } from "../../interfaces/models/Store";
+import {
+  PowerUp,
+  PowerUpPostType,
+  PowerUpType,
+} from "../../interfaces/models/Store";
 import PurchasePowerUpModal from "./powerUp";
+import { useAuth } from "../../contexts/AuthContext";
+import { UserData } from "../../interfaces/models/Users";
+import LoadingSpinner from "../../components/loadingSpinner";
+import Alert from "../../components/alert";
+import Container from "../../components/container";
+
+interface StoreState {
+  isLoading: boolean;
+  showAlert: boolean;
+  alertHeader: string;
+  alertMessage: string;
+  hasConfirm: boolean;
+  confirmHandler: () => void;
+  cancelHandler: () => void;
+  okHandler?: () => void;
+}
 
 interface PowerUpMap {
   [key: string]: boolean;
@@ -47,9 +67,12 @@ const powerUps: PowerUp[] = [
 
 const Store: React.FC = () => {
   const location = useLocation();
-  const { user } = useUser();
+  const { refreshUser } = useAuth();
+  const { user, purchaseItem } = useUser();
   const { width } = useWindowSize();
 
+  const [refreshedUser, setRefreshedUser] = useState<UserData | null>(user);
+  const [hasPurchased, setHasPurchased] = useState(false);
   const [tab, setTab] = useState("powerups");
   const [showModal, setShowModal] = useState(false);
   const [selectedPowerUp, setSelectedPowerUp] = useState<PowerUp | null>(null);
@@ -59,6 +82,23 @@ const Store: React.FC = () => {
     U2: false,
     Buffett: false,
   });
+
+  const [state, setState] = useReducer(
+    (s: StoreState, a: Partial<StoreState>) => ({
+      ...s,
+      ...a,
+    }),
+    {
+      isLoading: false,
+      showAlert: false,
+      alertHeader: "",
+      alertMessage: "",
+      hasConfirm: false,
+      confirmHandler: () => {},
+      cancelHandler: () => {},
+      okHandler: undefined,
+    }
+  );
 
   useEffect(() => {
     if (
@@ -74,21 +114,237 @@ const Store: React.FC = () => {
     }
   }, [location.pathname]);
 
-  useEffect(() => {
-    console.log(isPlatform("desktop"));
-  }, []);
-
   const computePowerUpStock = (type: PowerUpType) => {
     switch (type) {
       case "Protec":
-        return user?.store.protecCount ?? 0;
+        return refreshedUser?.store.protecCount ?? 0;
       case "U2":
-        return user?.store.griefCount ?? 0;
+        return refreshedUser?.store.griefCount ?? 0;
     }
   };
 
-  const handlePurchase = async (type: PowerUpType, count: number) => {
-    // TODO
+  const adaptPowerUpType = (type: PowerUpType): PowerUpPostType => {
+    switch (type) {
+      case "Protec":
+        return "PROTEC";
+      case "U2":
+        return "GRIEF";
+    }
+  };
+
+  const handlePurchasePowerUp = async (type: PowerUpType, count: number) => {
+    let price = 0;
+    switch (type) {
+      case "Protec":
+        price = count * powerUps[0].price;
+        break;
+      case "U2":
+        price = count * powerUps[1].price;
+    }
+    if (price > (refreshedUser?.store.points ?? 0)) {
+      setState({
+        showAlert: true,
+        hasConfirm: false,
+        alertHeader: "Ooooops",
+        alertMessage:
+          "You do not have sufficient coins to complete this purchase. Try to do more challenges :)",
+      });
+      return;
+    }
+    setState({ isLoading: true });
+    try {
+      await purchaseItem({
+        powerup: adaptPowerUpType(type),
+        count: count,
+      });
+      const refreshedData = await refreshUser();
+      setRefreshedUser(refreshedData);
+      setTimeout(() => {
+        setState({ isLoading: false });
+        setHasPurchased(true);
+      }, 1000);
+    } catch (error) {
+      setState({
+        isLoading: false,
+        showAlert: true,
+        hasConfirm: false,
+        alertHeader: "Ooooops",
+        alertMessage: "Our server is taking a break, come back later please :)",
+      });
+    }
+  };
+
+  const renderPowerUps = () => {
+    return (
+      <IonRow
+        style={{
+          marginTop: "1rem",
+          marginLeft: "0.5rem",
+          marginRight: "0.5rem",
+        }}
+      >
+        {powerUps.map((p) => {
+          return (
+            <IonCol sizeXs='6' sizeSm='6' sizeMd='4' key={p.type}>
+              <ReactCardFlip
+                isFlipped={isPowerUpFlipped[p.type]}
+                flipDirection='horizontal'
+              >
+                <div key={`${p}-front`}>
+                  <IonCard
+                    mode='md'
+                    className='ion-no-margin ion-align-items-center'
+                    style={{
+                      marginLeft: "0.5rem",
+                      marginRight: "0.5rem",
+                      height: width! < 350 ? "14rem" : "15rem",
+                    }}
+                  >
+                    <IonRow
+                      className='ion-justify-content-end'
+                      style={{
+                        paddingTop: "0.5rem",
+                        paddingLeft: "0.5rem",
+                        paddingRight: "0.5rem",
+                      }}
+                    >
+                      <IonIcon
+                        icon={informationCircle}
+                        color='main-beige'
+                        style={{ fontSize: "1.33rem" }}
+                        onClick={() => {
+                          setIsPowerUpFlipped({
+                            ...isPowerUpFlipped,
+                            [p.type]: true,
+                          });
+                        }}
+                      />
+                    </IonRow>
+                    <IonRow className='ion-justify-content-center'>
+                      <img
+                        src={challenge}
+                        alt='Challenge'
+                        className='store-card-img'
+                        style={{
+                          width: "75%",
+                          height: "75%",
+                        }}
+                      />
+                    </IonRow>
+                    <IonRow className='ion-justify-content-center'>
+                      <IonText
+                        style={{ fontWeight: "bold", fontSize: "1.05rem" }}
+                        color='black'
+                      >
+                        {p.type}
+                      </IonText>
+                    </IonRow>
+                    <IonRow className='ion-justify-content-center'>
+                      <IonText
+                        color='black'
+                        style={{ fontSize: "0.9rem" }}
+                      >{`You have ${computePowerUpStock(p.type)}`}</IonText>
+                    </IonRow>
+                    <IonRow
+                      className='ion-justify-content-center ion-align-items-center'
+                      style={{ margin: "0.5rem" }}
+                    >
+                      <img
+                        src={coin}
+                        alt=''
+                        style={{
+                          width: "1.5rem",
+                          height: "1.5rem",
+                          marginRight: "0.5rem",
+                        }}
+                      />
+                      <IonText color='black'>{p.price}</IonText>
+                    </IonRow>
+                  </IonCard>
+                </div>
+                <div key={`${p}-back`}>
+                  <IonCard
+                    mode='md'
+                    className='ion-no-margin ion-align-items-center'
+                    style={{
+                      marginLeft: "0.5rem",
+                      marginRight: "0.5rem",
+                      height: width! < 350 ? "14rem" : "15rem",
+                    }}
+                  >
+                    <IonRow
+                      className='ion-justify-content-end'
+                      style={{
+                        paddingTop: "0.5rem",
+                        paddingLeft: "0.5rem",
+                        paddingRight: "0.5rem",
+                      }}
+                    >
+                      <IonIcon
+                        icon={closeCircle}
+                        color='main-beige'
+                        style={{ fontSize: "1.33rem" }}
+                        onClick={() => {
+                          setIsPowerUpFlipped({
+                            ...isPowerUpFlipped,
+                            [p.type]: false,
+                          });
+                        }}
+                      />
+                    </IonRow>
+
+                    <IonRow className='ion-justify-content-center'>
+                      <IonText
+                        style={{ fontWeight: "bold", fontSize: "1.05rem" }}
+                        color='black'
+                      >
+                        {p.type}
+                      </IonText>
+                    </IonRow>
+                    <IonRow
+                      className='ion-justify-content-center'
+                      style={{
+                        marginBottom: "0.5rem",
+                        paddingTop: "0.5rem",
+                        paddingLeft: width! < 350 ? "0.5rem" : "0.75rem",
+                        paddingRight: width! < 350 ? "0.5rem" : "0.75rem",
+                      }}
+                    >
+                      <IonText
+                        color='black'
+                        className='ion-text-center'
+                        style={{
+                          fontSize: width! < 350 ? "0.85rem" : "0.95rem",
+                        }}
+                      >
+                        {p.description}
+                      </IonText>
+                    </IonRow>
+                  </IonCard>
+                </div>
+              </ReactCardFlip>
+              <IonRow className='ion-justify-content-center'>
+                <IonCol>
+                  <IonButton
+                    color='main-beige'
+                    expand='block'
+                    mode='ios'
+                    style={{ height: "2rem" }}
+                    onClick={() => {
+                      setSelectedPowerUp(p);
+                      setHasPurchased(false);
+                      setShowModal(true);
+                    }}
+                  >
+                    Buy
+                  </IonButton>
+                </IonCol>
+              </IonRow>
+            </IonCol>
+          );
+        })}
+      </IonRow>
+    );
   };
 
   return (
@@ -136,7 +392,7 @@ const Store: React.FC = () => {
               }}
             />
             <IonText style={{ fontWeight: "bold" }}>
-              {user?.store.points ?? 0}
+              {refreshedUser?.store.points ?? 0}
             </IonText>
           </IonButton>
         </IonToolbar>
@@ -171,177 +427,41 @@ const Store: React.FC = () => {
             <IonText style={{ fontWeight: "bold" }}>Effects</IonText>
           </IonButton>
         </IonRow>
-        <IonRow
-          style={{
-            marginTop: "1rem",
-            marginLeft: "0.5rem",
-            marginRight: "0.5rem",
-          }}
-        >
-          {powerUps.map((p) => {
-            return (
-              <IonCol sizeXs='6' sizeSm='6' sizeMd='4' key={p.type}>
-                <ReactCardFlip
-                  isFlipped={isPowerUpFlipped[p.type]}
-                  flipDirection='horizontal'
-                >
-                  <div key={`${p}-front`}>
-                    <IonCard
-                      mode='md'
-                      className='ion-no-margin ion-align-items-center'
-                      style={{
-                        marginLeft: "0.5rem",
-                        marginRight: "0.5rem",
-                        height: width! < 350 ? "14rem" : "15rem",
-                      }}
-                    >
-                      <IonRow
-                        className='ion-justify-content-end'
-                        style={{
-                          paddingTop: "0.5rem",
-                          paddingLeft: "0.5rem",
-                          paddingRight: "0.5rem",
-                        }}
-                      >
-                        <IonIcon
-                          icon={informationCircle}
-                          color='main-beige'
-                          style={{ fontSize: "1.33rem" }}
-                          onClick={() => {
-                            setIsPowerUpFlipped({
-                              ...isPowerUpFlipped,
-                              [p.type]: true,
-                            });
-                          }}
-                        />
-                      </IonRow>
-                      <IonRow className='ion-justify-content-center'>
-                        <img
-                          src={challenge}
-                          alt='Challenge'
-                          className='store-card-img'
-                          style={{
-                            width: "75%",
-                            height: "75%",
-                          }}
-                        />
-                      </IonRow>
-                      <IonRow className='ion-justify-content-center'>
-                        <IonText
-                          style={{ fontWeight: "bold", fontSize: "1.05rem" }}
-                          color='black'
-                        >
-                          {p.type}
-                        </IonText>
-                      </IonRow>
-                      <IonRow className='ion-justify-content-center'>
-                        <IonText
-                          color='black'
-                          style={{ fontSize: "0.9rem" }}
-                        >{`You have ${computePowerUpStock(p.type)}`}</IonText>
-                      </IonRow>
-                      <IonRow
-                        className='ion-justify-content-center ion-align-items-center'
-                        style={{ margin: "0.5rem" }}
-                      >
-                        <img
-                          src={coin}
-                          alt=''
-                          style={{
-                            width: "1.5rem",
-                            height: "1.5rem",
-                            marginRight: "0.5rem",
-                          }}
-                        />
-                        <IonText color='black'>{p.price}</IonText>
-                      </IonRow>
-                    </IonCard>
-                  </div>
-                  <div key={`${p}-back`}>
-                    <IonCard
-                      mode='md'
-                      className='ion-no-margin ion-align-items-center'
-                      style={{
-                        marginLeft: "0.5rem",
-                        marginRight: "0.5rem",
-                        height: width! < 350 ? "14rem" : "15rem",
-                      }}
-                    >
-                      <IonRow
-                        className='ion-justify-content-end'
-                        style={{
-                          paddingTop: "0.5rem",
-                          paddingLeft: "0.5rem",
-                          paddingRight: "0.5rem",
-                        }}
-                      >
-                        <IonIcon
-                          icon={closeCircle}
-                          color='main-beige'
-                          style={{ fontSize: "1.33rem" }}
-                          onClick={() => {
-                            setIsPowerUpFlipped({
-                              ...isPowerUpFlipped,
-                              [p.type]: false,
-                            });
-                          }}
-                        />
-                      </IonRow>
-
-                      <IonRow className='ion-justify-content-center'>
-                        <IonText
-                          style={{ fontWeight: "bold", fontSize: "1.05rem" }}
-                          color='black'
-                        >
-                          {p.type}
-                        </IonText>
-                      </IonRow>
-                      <IonRow
-                        className='ion-justify-content-center'
-                        style={{
-                          marginBottom: "0.5rem",
-                          paddingTop: "0.5rem",
-                          paddingLeft: width! < 350 ? "0.5rem" : "0.75rem",
-                          paddingRight: width! < 350 ? "0.5rem" : "0.75rem",
-                        }}
-                      >
-                        <IonText
-                          color='black'
-                          className='ion-text-center'
-                          style={{
-                            fontSize: width! < 350 ? "0.85rem" : "0.95rem",
-                          }}
-                        >
-                          {p.description}
-                        </IonText>
-                      </IonRow>
-                    </IonCard>
-                  </div>
-                </ReactCardFlip>
-                <IonRow className='ion-justify-content-center'>
-                  <IonCol>
-                    <IonButton
-                      color='main-beige'
-                      expand='block'
-                      mode='ios'
-                      style={{ height: "2rem" }}
-                      onClick={() => {
-                        setSelectedPowerUp(p);
-                        setShowModal(true);
-                      }}
-                    >
-                      Buy
-                    </IonButton>
-                  </IonCol>
-                </IonRow>
-              </IonCol>
-            );
-          })}
-        </IonRow>
+        {tab === "powerups" ? (
+          renderPowerUps()
+        ) : (
+          <Container>Coming soon :)</Container>
+        )}
         <PurchasePowerUpModal
           powerUp={selectedPowerUp}
+          purchaseCallback={handlePurchasePowerUp}
+          hasPurchased={hasPurchased}
+          currentCount={
+            (selectedPowerUp?.type === "Protec"
+              ? refreshedUser?.store.protecCount
+              : refreshedUser?.store.griefCount) ?? 0
+          }
           showModal={showModal}
           setShowModal={setShowModal}
+        />
+        <LoadingSpinner
+          loading={state.isLoading}
+          message={"Loading"}
+          closeLoading={() => {}}
+        />
+        <Alert
+          showAlert={state.showAlert}
+          closeAlert={(): void => {
+            setState({
+              showAlert: false,
+            });
+          }}
+          alertHeader={state.alertHeader}
+          alertMessage={state.alertMessage}
+          hasConfirm={state.hasConfirm}
+          confirmHandler={state.confirmHandler}
+          cancelHandler={state.cancelHandler}
+          okHandler={state.okHandler}
         />
       </IonContent>
     </IonPage>
