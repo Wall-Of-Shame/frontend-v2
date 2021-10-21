@@ -492,7 +492,7 @@ const Challenges: React.FC = () => {
             color={tab === "ongoing" ? "main-beige" : "light"}
             onClick={() => setTab("ongoing")}
           >
-            Ongoing
+            <IonText style={{ fontWeight: "bold" }}>Ongoing</IonText>
           </IonButton>
           <IonButton
             shape='round'
@@ -501,7 +501,7 @@ const Challenges: React.FC = () => {
             color={tab === "pending" ? "main-beige" : "light"}
             onClick={() => setTab("pending")}
           >
-            Upcoming
+            <IonText style={{ fontWeight: "bold" }}>Upcoming</IonText>
           </IonButton>
         </IonRow>
         {renderChallenges()}

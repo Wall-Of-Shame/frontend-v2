@@ -26,6 +26,11 @@ export interface UserData {
     deadlineReminder: boolean;
     invitations: boolean;
   };
+  store: {
+    points: number;
+    griefCount: number;
+    protecCount: number;
+  };
 }
 
 // Partial return schema for the `GET /self/friends` route.
