@@ -58,7 +58,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
   };
 
   const handleInvite = (user: UserList) => {
-    const index = invitedUsers.indexOf(user);
+    const index = invitedUsers.findIndex((u) => u.userId === user.userId);
     if (index !== -1) {
       var newInvitedUsers = invitedUsers.slice(0);
       newInvitedUsers = invitedUsers.filter((u) => u.userId !== user.userId);
@@ -199,13 +199,20 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
                       className='ion-no-padding'
                       color={"main-blue"}
                       fill={
-                        invitedUsers.indexOf(u) === -1 ? "solid" : "outline"
+                        invitedUsers.findIndex((i) => i.userId === u.userId) ===
+                        -1
+                          ? "solid"
+                          : "outline"
                       }
                       style={{ height: "2rem", width: "100%" }}
                       onClick={() => handleInvite(u)}
                     >
                       <IonText style={{ fontSize: "0.9rem" }}>
-                        {invitedUsers.indexOf(u) !== -1 ? "Added" : "Add"}
+                        {invitedUsers.findIndex(
+                          (i) => i.userId === u.userId
+                        ) !== -1
+                          ? "Added"
+                          : "Add"}
                       </IonText>
                     </IonButton>
                   </IonCol>

@@ -16,7 +16,7 @@ const Stories = (props: HorizontalScrollProps) => {
       <ul className='horizontal-list'>
         {users.map((u) => {
           return (
-            <li className='horizontal-item' key={u.userId}>
+            <li className='horizontal-item' key={`${u.userId}-horizontal`}>
               <IonCol>
                 <IonRow className='ion-justify-content-center'>
                   <IonAvatar>
