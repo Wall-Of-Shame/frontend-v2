@@ -18,3 +18,13 @@
   box-shadow: 0px 300px 0px 300px var(--ion-color-main-beige);
   // box-shadow: 0px 500px 0px 500px pink;
 }
+
+.store-card-img {
+  max-width: 30vw;
+}
+
+@media screen and (min-width: 768px) {
+  .store-card-img {
+    max-width: 150px;
+  }
+}

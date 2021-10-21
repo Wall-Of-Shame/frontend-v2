@@ -1,7 +1,8 @@
 import {
   IonButton,
+  IonCard,
+  IonCol,
   IonContent,
-  IonFabButton,
   IonHeader,
   IonIcon,
   IonPage,
@@ -11,12 +12,15 @@ import {
   IonToolbar,
   isPlatform,
 } from "@ionic/react";
-import { funnelOutline } from "ionicons/icons";
+import { informationCircle } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import Container from "../../components/container";
+import challenge from "../../assets/onboarding/challenge.png";
+import coin from "../../assets/icons/lucky.png";
 import { showTabs, hideTabs } from "../../utils/TabsUtils";
 import "./Store.scss";
+
+const powerUps = ["Protec", "U2", "Double"];
 
 const Store: React.FC = () => {
   const location = useLocation();
@@ -49,31 +53,35 @@ const Store: React.FC = () => {
           >
             Store
           </IonTitle>
-          <IonFabButton
-            className='placeholder-fab'
+          <IonButton
+            className='placeholder-fab ion-align-items-center ion-no-padding'
             color='main-beige'
             mode='ios'
             slot='end'
-            disabled
             style={{
               margin: "0.5rem",
-              width: "2.75rem",
+              width: "5.5rem",
               height: "2.75rem",
             }}
           >
-            <IonIcon
-              icon={funnelOutline}
-              color='main-beige'
-              style={{ fontSize: "1.5rem" }}
+            <img
+              src={coin}
+              alt=''
+              style={{
+                width: "1.5rem",
+                height: "1.5rem",
+                marginRight: "0.5rem",
+              }}
             />
-          </IonFabButton>
+            <IonText style={{ fontWeight: "bold" }}>1342</IonText>
+          </IonButton>
         </IonToolbar>
         {!isPlatform("desktop") && <div className='store-header-curve' />}
       </IonHeader>
       <IonContent fullscreen>
         <IonRow
-          className='ion-justify-content-start ion-padding'
-          style={{ marginTop: "1rem", marginBottom: "1.5rem" }}
+          className='ion-justify-content-start ion-padding-horizontal'
+          style={{ marginTop: isPlatform("desktop") ? "1.5rem" : "2rem" }}
         >
           <IonButton
             shape='round'
@@ -93,6 +101,94 @@ const Store: React.FC = () => {
           >
             <IonText style={{ fontWeight: "bold" }}>Effects</IonText>
           </IonButton>
+        </IonRow>
+        <IonRow>
+          {powerUps.map((p) => {
+            return (
+              <IonCol sizeXs='6' sizeSm='6' sizeMd='4'>
+                <IonCard
+                  mode='ios'
+                  className='ion-no-margin'
+                  style={{
+                    marginTop: "1rem",
+                    marginLeft: "1rem",
+                    marginRight: "1rem",
+                    marginBottom: "0.25rem",
+                  }}
+                >
+                  <IonRow
+                    className='ion-justify-content-end'
+                    style={{
+                      paddingTop: "0.5rem",
+                      paddingLeft: "0.5rem",
+                      paddingRight: "0.5rem",
+                    }}
+                  >
+                    <IonIcon
+                      icon={informationCircle}
+                      color='main-beige'
+                      style={{ fontSize: "1.33rem" }}
+                    />
+                  </IonRow>
+                  <IonRow className='ion-justify-content-center'>
+                    <img
+                      src={challenge}
+                      alt='Challenge'
+                      className='store-card-img'
+                      style={{
+                        width: "75%",
+                        height: "75%",
+                      }}
+                    />
+                  </IonRow>
+                  <IonRow className='ion-justify-content-center'>
+                    <IonText
+                      style={{ fontWeight: "bold", fontSize: "1.05rem" }}
+                      color='black'
+                    >
+                      {p}
+                    </IonText>
+                  </IonRow>
+                  <IonRow className='ion-justify-content-center'>
+                    <IonText
+                      color='black'
+                      style={{ fontSize: "0.9rem" }}
+                    >{`You have 0`}</IonText>
+                  </IonRow>
+                  <IonRow
+                    className='ion-justify-content-center ion-align-items-center'
+                    style={{ margin: "0.5rem" }}
+                  >
+                    <img
+                      src={coin}
+                      alt=''
+                      style={{
+                        width: "1.5rem",
+                        height: "1.5rem",
+                        marginRight: "0.5rem",
+                      }}
+                    />
+                    <IonText color='black'>750</IonText>
+                  </IonRow>
+                </IonCard>
+                <IonRow
+                  className='ion-justify-content-center'
+                  style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
+                >
+                  <IonCol>
+                    <IonButton
+                      color='main-beige'
+                      expand='block'
+                      mode='ios'
+                      style={{ height: "2rem" }}
+                    >
+                      Buy
+                    </IonButton>
+                  </IonCol>
+                </IonRow>
+              </IonCol>
+            );
+          })}
         </IonRow>
       </IonContent>
     </IonPage>
