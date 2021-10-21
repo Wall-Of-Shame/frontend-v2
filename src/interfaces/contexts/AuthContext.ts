@@ -7,6 +7,7 @@ export default interface AuthContextInterface {
   login(email: string, password: string): Promise<void>;
   continueWithGoogle(callback: () => void): Promise<void>;
   continueWithFacebook(callback: () => void): Promise<void>;
+  refreshUser(): Promise<UserData | null>;
   refreshFirebaseUser(): Promise<void>;
   getFirebaseUser(): User | null;
   resendVerificationEmail(): Promise<void>;

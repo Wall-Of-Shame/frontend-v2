@@ -1,3 +1,4 @@
+import { PurchasePost } from "../models/Store";
 import { Avatar, Settings, UserData, UserList } from "../models/Users";
 
 export default interface UserContextInterface {
@@ -12,6 +13,7 @@ export default interface UserContextInterface {
   getUserProfile(userId: string): Promise<UserList>;
   getFriendsRankings(): Promise<UserList[]>;
   getGlobalRankings(): Promise<UserList[]>;
+  purchaseItem(order: PurchasePost): Promise<void>;
   sendFeedback(
     email: string,
     description: string,
