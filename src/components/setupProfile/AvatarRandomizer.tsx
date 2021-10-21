@@ -72,7 +72,7 @@ const AvatarRandomizer: React.FC<AvatarRandomizerProps> = (
         </IonRow>
         <IonRow slot='start' style={{ textAlign: "left", margin: "1rem" }}>
           <IonText>
-            This little guy will be representing you in your journey of
+            This lil guy will be representing you in your journey of
             self-discovery
           </IonText>
         </IonRow>
@@ -98,13 +98,17 @@ const AvatarRandomizer: React.FC<AvatarRandomizerProps> = (
           mode='ios'
           fill='solid'
           shape='round'
-          color='secondary'
+          color='main-blue'
           className='ion-padding-horizontal'
-          style={{ marginTop: "2rem" }}
+          style={{
+            display: "flex",
+            margin: "1rem",
+            marginTop: "3rem",
+          }}
           onClick={completionCallback}
         >
-          <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>
-            Get Started
+          <IonText color="white" style={{ marginLeft: "2rem", marginRight: "2rem" }}>
+            Done
           </IonText>
         </IonButton>
       </Container>

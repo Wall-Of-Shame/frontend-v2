@@ -32,7 +32,7 @@ const ProfileSetUp: React.FC<ProfileSetUpProps> = (
   return (
     <IonContent fullscreen>
       <Container>
-        <IonRow slot='start' className='ion-text-start'>
+        <IonRow slot="start" className="ion-text-start">
           <IonText
             style={{
               fontSize: "32px",
@@ -41,17 +41,17 @@ const ProfileSetUp: React.FC<ProfileSetUpProps> = (
               marginRight: "1rem",
             }}
           >
-            Complete your profile set up
+            Set up your profile
           </IonText>
         </IonRow>
-        <IonList className='ion-padding-vertical'>
-          <IonItem lines='full'>
-            <IonLabel color='primary' position='floating'>
+        <IonList className="ion-padding-vertical">
+          <IonItem lines="full">
+            <IonLabel color="primary" position="floating">
               Display name*
             </IonLabel>
             <IonInput
-              name='display_name'
-              type='text'
+              name="display_name"
+              type="text"
               value={state.displayName}
               required
               onIonChange={(event: CustomEvent) => {
@@ -59,13 +59,13 @@ const ProfileSetUp: React.FC<ProfileSetUpProps> = (
               }}
             />
           </IonItem>
-          <IonItem lines='full'>
-            <IonLabel color='primary' position='floating'>
+          <IonItem lines="full">
+            <IonLabel color="primary" position="floating">
               Username*
             </IonLabel>
             <IonInput
-              name='username'
-              type='text'
+              name="username"
+              type="text"
               value={state.username}
               required
               onIonChange={(event: CustomEvent) => {
@@ -74,20 +74,27 @@ const ProfileSetUp: React.FC<ProfileSetUpProps> = (
             />
           </IonItem>
         </IonList>
-        <IonRow slot='start' style={{ textAlign: "left", margin: "1rem" }}>
-          <IonText>Your username will allow others to find you easily</IonText>
+        <IonRow slot="start" style={{ textAlign: "left", margin: "1rem" }}>
+          <IonText color="medium">Your username will allow others to find you easily</IonText>
         </IonRow>
         <IonButton
-          mode='ios'
-          fill='solid'
-          shape='round'
-          color='secondary'
-          className='ion-padding-horizontal'
-          style={{ marginTop: "2rem" }}
+          mode="ios"
+          fill="solid"
+          shape="round"
+          color="main-blue"
+          className="ion-padding-horizontal"
+          style={{
+            display: "flex",
+            margin: "1rem",
+            marginTop: "3rem",
+          }}
           disabled={!verifyInputs()}
           onClick={completionCallback}
         >
-          <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>
+          <IonText
+            color="white"
+            style={{ marginLeft: "2rem", marginRight: "2rem" }}
+          >
             Next
           </IonText>
         </IonButton>
