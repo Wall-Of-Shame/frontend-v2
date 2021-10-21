@@ -41,7 +41,7 @@ const Participants: React.FC<ParticipantsProps> = (
     return (
       <IonGrid>
         <IonRow
-          className='ion-align-items-center'
+          className="ion-align-items-center"
           style={{
             marginBottom: "0.5rem",
             marginLeft: "0.5rem",
@@ -58,7 +58,7 @@ const Participants: React.FC<ParticipantsProps> = (
         </IonRow>
         {nonCheaters.length > 0 && (
           <IonRow
-            className='ion-align-items-center'
+            className="ion-align-items-center"
             style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
           >
             <IonCol>
@@ -75,11 +75,11 @@ const Participants: React.FC<ParticipantsProps> = (
           </IonRow>
         )}
         {nonCheaters.length > 0 && (
-          <IonList className='ion-margin-vertical'>
+          <IonList className="ion-margin-vertical">
             {challenge.participants.accepted.completed.map((u) => {
               return (
-                <IonItem key={u.userId} lines='none'>
-                  <IonAvatar slot='start'>
+                <IonItem key={u.userId} lines="none">
+                  <IonAvatar slot="start">
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
                   <IonLabel>
@@ -90,15 +90,15 @@ const Participants: React.FC<ParticipantsProps> = (
 
                   {u.evidenceLink !== undefined && u.evidenceLink !== "" && (
                     <IonButton
-                      mode='ios'
-                      slot='end'
-                      shape='round'
-                      color='tertiary'
+                      mode="ios"
+                      slot="end"
+                      shape="round"
+                      color="main-blue"
                       onClick={() => {
                         viewProofCallback(u);
                       }}
                     >
-                      &nbsp;View proof&nbsp;
+                      <IonText style={{ padding: 10 }}>Proof</IonText>
                     </IonButton>
                   )}
                 </IonItem>
@@ -108,7 +108,7 @@ const Participants: React.FC<ParticipantsProps> = (
         )}
         {cheaters.length > 0 && (
           <IonRow
-            className='ion-align-items-center'
+            className="ion-align-items-center"
             style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
           >
             <IonCol>
@@ -125,11 +125,11 @@ const Participants: React.FC<ParticipantsProps> = (
           </IonRow>
         )}
         {cheaters.length > 0 && (
-          <IonList className='ion-margin-vertical'>
+          <IonList className="ion-margin-vertical">
             {cheaters.map((u) => {
               return (
-                <IonItem key={u.userId} lines='none'>
-                  <IonAvatar slot='start'>
+                <IonItem key={u.userId} lines="none">
+                  <IonAvatar slot="start">
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
                   <IonLabel>
@@ -140,15 +140,15 @@ const Participants: React.FC<ParticipantsProps> = (
 
                   {u.evidenceLink !== undefined && u.evidenceLink !== "" && (
                     <IonButton
-                      mode='ios'
-                      slot='end'
-                      shape='round'
-                      color='tertiary'
+                      mode="ios"
+                      slot="end"
+                      shape="round"
+                      color="main-blue"
                       onClick={() => {
                         viewProofCallback(u);
                       }}
                     >
-                      &nbsp;View proof&nbsp;
+                      <IonText style={{ padding: 10 }}>Proof</IonText>
                     </IonButton>
                   )}
                 </IonItem>
@@ -158,7 +158,7 @@ const Participants: React.FC<ParticipantsProps> = (
         )}
         {challenge.participants.accepted.notCompleted.length > 0 && (
           <IonRow
-            className='ion-align-items-center'
+            className="ion-align-items-center"
             style={{
               marginLeft: "0.5rem",
               marginRight: "0.5rem",
@@ -193,11 +193,11 @@ const Participants: React.FC<ParticipantsProps> = (
           </IonRow>
         )}
         {challenge.participants.accepted.notCompleted.length > 0 && (
-          <IonList className='ion-margin-vertical'>
+          <IonList className="ion-margin-vertical">
             {challenge.participants.accepted.notCompleted.map((u) => {
               return (
-                <IonItem key={u.userId} lines='none'>
-                  <IonAvatar slot='start'>
+                <IonItem key={u.userId} lines="none">
+                  <IonAvatar slot="start">
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
                   <IonLabel>
@@ -217,7 +217,7 @@ const Participants: React.FC<ParticipantsProps> = (
     return (
       <IonGrid>
         <IonRow
-          className='ion-align-items-center'
+          className="ion-align-items-center"
           style={{
             marginBottom: "0.5rem",
             marginLeft: "0.5rem",
@@ -234,7 +234,7 @@ const Participants: React.FC<ParticipantsProps> = (
         </IonRow>
         {challenge.participants.accepted.completed.length > 0 && (
           <IonRow
-            className='ion-align-items-center'
+            className="ion-align-items-center"
             style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
           >
             <IonCol>
@@ -249,11 +249,11 @@ const Participants: React.FC<ParticipantsProps> = (
           </IonRow>
         )}
         {challenge.participants.accepted.completed.length > 0 && (
-          <IonList className='ion-margin-vertical'>
+          <IonList className="ion-margin-vertical">
             {challenge.participants.accepted.completed.map((u) => {
               return (
-                <IonItem key={u.userId} lines='none'>
-                  <IonAvatar slot='start'>
+                <IonItem key={u.userId} lines="none">
+                  <IonAvatar slot="start">
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
                   <IonLabel>
@@ -263,15 +263,15 @@ const Participants: React.FC<ParticipantsProps> = (
                   </IonLabel>
                   {u.evidenceLink !== undefined && u.evidenceLink !== "" && (
                     <IonButton
-                      mode='ios'
-                      slot='end'
-                      shape='round'
-                      color='tertiary'
+                      mode="ios"
+                      slot="end"
+                      shape="round"
+                      color="main-blue"
                       onClick={() => {
                         viewProofCallback(u);
                       }}
                     >
-                      &nbsp;View proof&nbsp;
+                      <IonText style={{ padding: 10 }}>Proof</IonText>
                     </IonButton>
                   )}
                 </IonItem>
@@ -281,7 +281,7 @@ const Participants: React.FC<ParticipantsProps> = (
         )}
         {challenge.participants.accepted.notCompleted.length > 0 && (
           <IonRow
-            className='ion-align-items-center'
+            className="ion-align-items-center"
             style={{
               marginLeft: "0.5rem",
               marginRight: "0.5rem",
@@ -311,11 +311,11 @@ const Participants: React.FC<ParticipantsProps> = (
           </IonRow>
         )}
         {challenge.participants.accepted.notCompleted.length > 0 && (
-          <IonList className='ion-margin-vertical'>
+          <IonList className="ion-margin-vertical">
             {challenge.participants.accepted.notCompleted.map((u) => {
               return (
-                <IonItem key={u.userId} lines='none'>
-                  <IonAvatar slot='start'>
+                <IonItem key={u.userId} lines="none">
+                  <IonAvatar slot="start">
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
                   <IonLabel>
@@ -335,7 +335,7 @@ const Participants: React.FC<ParticipantsProps> = (
     return (
       <IonGrid>
         <IonRow
-          className='ion-align-items-center'
+          className="ion-align-items-center"
           style={{
             marginBottom: "0.5rem",
             marginLeft: "0.5rem",
@@ -352,7 +352,7 @@ const Participants: React.FC<ParticipantsProps> = (
         </IonRow>
         {challenge.participants.accepted.completed.length > 0 && (
           <IonRow
-            className='ion-align-items-center'
+            className="ion-align-items-center"
             style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
           >
             <IonCol>
@@ -367,11 +367,11 @@ const Participants: React.FC<ParticipantsProps> = (
           </IonRow>
         )}
         {challenge.participants.accepted.completed.length > 0 && (
-          <IonList className='ion-margin-vertical'>
+          <IonList className="ion-margin-vertical">
             {challenge.participants.accepted.completed.map((u) => {
               return (
-                <IonItem key={u.userId} lines='none'>
-                  <IonAvatar slot='start'>
+                <IonItem key={u.userId} lines="none">
+                  <IonAvatar slot="start">
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
                   <IonLabel>
@@ -381,15 +381,15 @@ const Participants: React.FC<ParticipantsProps> = (
                   </IonLabel>
                   {u.evidenceLink !== undefined && u.evidenceLink !== "" && (
                     <IonButton
-                      mode='ios'
-                      slot='end'
-                      shape='round'
-                      color='tertiary'
+                      mode="ios"
+                      slot="end"
+                      shape="round"
+                      color="main-blue"
                       onClick={() => {
                         viewProofCallback(u);
                       }}
                     >
-                      &nbsp;View proof&nbsp;
+                      <IonText style={{ padding: 10 }}>Proof</IonText>
                     </IonButton>
                   )}
                 </IonItem>
@@ -399,7 +399,7 @@ const Participants: React.FC<ParticipantsProps> = (
         )}
         {challenge.participants.accepted.notCompleted.length > 0 && (
           <IonRow
-            className='ion-align-items-center'
+            className="ion-align-items-center"
             style={{
               marginLeft: "0.5rem",
               marginRight: "0.5rem",
@@ -418,11 +418,11 @@ const Participants: React.FC<ParticipantsProps> = (
           </IonRow>
         )}
         {challenge.participants.accepted.notCompleted.length > 0 && (
-          <IonList className='ion-margin-vertical'>
+          <IonList className="ion-margin-vertical">
             {challenge.participants.accepted.notCompleted.map((u) => {
               return (
-                <IonItem key={u.userId} lines='none'>
-                  <IonAvatar slot='start'>
+                <IonItem key={u.userId} lines="none">
+                  <IonAvatar slot="start">
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
                   <IonLabel>
@@ -441,7 +441,7 @@ const Participants: React.FC<ParticipantsProps> = (
   return (
     <IonGrid>
       <IonRow
-        className='ion-align-items-center'
+        className="ion-align-items-center"
         style={{
           marginBottom: "0.5rem",
           marginLeft: "0.5rem",
@@ -458,7 +458,7 @@ const Participants: React.FC<ParticipantsProps> = (
       </IonRow>
       {challenge.participants.accepted.notCompleted.length > 0 && (
         <IonRow
-          className='ion-align-items-center'
+          className="ion-align-items-center"
           style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
         >
           <IonCol>
@@ -473,11 +473,11 @@ const Participants: React.FC<ParticipantsProps> = (
         </IonRow>
       )}
       {challenge.participants.accepted.notCompleted.length > 0 && (
-        <IonList className='ion-margin-vertical'>
+        <IonList className="ion-margin-vertical">
           {challenge.participants.accepted.notCompleted.map((u) => {
             return (
-              <IonItem key={u.userId} lines='none'>
-                <IonAvatar slot='start'>
+              <IonItem key={u.userId} lines="none">
+                <IonAvatar slot="start">
                   <AvatarImg avatar={u.avatar} />
                 </IonAvatar>
                 <IonLabel>
@@ -492,7 +492,7 @@ const Participants: React.FC<ParticipantsProps> = (
       )}
       {challenge.participants.pending.length > 0 && (
         <IonRow
-          className='ion-align-items-center'
+          className="ion-align-items-center"
           style={{
             marginLeft: "0.5rem",
             marginRight: "0.5rem",
@@ -508,11 +508,11 @@ const Participants: React.FC<ParticipantsProps> = (
         </IonRow>
       )}
       {challenge.participants.pending.length > 0 && (
-        <IonList className='ion-margin-vertical'>
+        <IonList className="ion-margin-vertical">
           {challenge.participants.pending.map((u) => {
             return (
-              <IonItem key={u.userId} lines='none'>
-                <IonAvatar slot='start'>
+              <IonItem key={u.userId} lines="none">
+                <IonAvatar slot="start">
                   <AvatarImg avatar={u.avatar} />
                 </IonAvatar>
                 <IonLabel>

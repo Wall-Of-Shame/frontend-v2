@@ -44,7 +44,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
         <IonButton
           mode='ios'
           shape='round'
-          color='secondary'
+          color='main-beige'
           expand='block'
           fill='solid'
           onClick={viewVoteCallback}
@@ -67,7 +67,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
             <IonButton
               mode='ios'
               shape='round'
-              color='secondary'
+              color='main-blue'
               expand='block'
               fill='solid'
               onClick={viewVoteCallback}
@@ -135,7 +135,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
         <IonButton
           mode='ios'
           shape='round'
-          color='secondary'
+          color='accent-beige'
           expand='block'
           fill='solid'
           onClick={uploadProofCallback}
@@ -218,7 +218,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
           <IonButton
             mode='ios'
             shape='round'
-            color='secondary'
+            color='main-beige'
             fill='solid'
             expand='block'
             style={{ marginBottom: "0.5rem" }}

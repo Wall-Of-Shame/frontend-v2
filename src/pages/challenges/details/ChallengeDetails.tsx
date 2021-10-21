@@ -500,7 +500,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
       } else {
         return (
           <IonRow className='ion-padding'>
-            <IonText>You have completed</IonText>
+            <IonText>You have completed the challenge</IonText>
           </IonRow>
         );
       }
