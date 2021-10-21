@@ -20,6 +20,8 @@ import Alert from "../../../components/alert";
 import { isValidEmail } from "../../../utils/ProfileUtils";
 import { Link } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import "./LoginModal.scss";
+import { isPlatform } from "@ionic/core";
 
 interface LoginModalProps {
   showModal: boolean;
@@ -146,7 +148,7 @@ const LoginModal: React.FC<LoginModalProps> = (props: LoginModalProps) => {
     switch (pageNumber) {
       case 0:
         return (
-          <IonContent fullscreen>
+          <IonContent fullscreen scrollY={false}>
             <IonFab
               horizontal='start'
               vertical='top'
@@ -274,7 +276,7 @@ const LoginModal: React.FC<LoginModalProps> = (props: LoginModalProps) => {
         );
       case 1:
         return (
-          <IonContent fullscreen>
+          <IonContent fullscreen scrollY={false}>
             <IonFab
               horizontal='start'
               vertical='top'
@@ -365,7 +367,7 @@ const LoginModal: React.FC<LoginModalProps> = (props: LoginModalProps) => {
         );
       case 2:
         return (
-          <IonContent fullscreen>
+          <IonContent fullscreen scrollY={false}>
             <IonFab
               horizontal='start'
               vertical='top'
@@ -459,6 +461,11 @@ const LoginModal: React.FC<LoginModalProps> = (props: LoginModalProps) => {
   return (
     <IonModal
       isOpen={showModal}
+      cssClass={
+        isPlatform("desktop") || isPlatform("tablet") || isPlatform("ipad")
+          ? "login-modal"
+          : ""
+      }
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={false}
     >
