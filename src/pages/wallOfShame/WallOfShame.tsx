@@ -620,11 +620,23 @@ const WallOfShame: React.FC = () => {
   return (
     <IonPage style={{ background: "#ffffff" }}>
       <IonHeader className='ion-no-border'>
-        <IonToolbar color='main-yellow' style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar
+          color='main-yellow'
+          mode='md'
+          className='wall-of-shame-header'
+          style={{ paddingTop: "0.5rem", paddingBottom: "0.25rem" }}
+        >
           <IonTitle
             size='large'
+            color='white'
             style={{
-              paddingBottom: isPlatform("ios") ? "0.5rem" : 0,
+              fontWeight: "800",
+              fontSize:
+                isPlatform("desktop") ||
+                isPlatform("tablet") ||
+                isPlatform("ipad")
+                  ? "1.5rem"
+                  : "2rem",
             }}
           >
             Wall of Shame
@@ -647,8 +659,13 @@ const WallOfShame: React.FC = () => {
             <IonIcon icon={funnelOutline} style={{ fontSize: "1.5rem" }} />
           </IonFabButton>
         </IonToolbar>
-        {!isPlatform("desktop") && <div className='wall-header-curve' />}
+        {!(
+          isPlatform("desktop") ||
+          isPlatform("tablet") ||
+          isPlatform("ipad")
+        ) && <div className='wall-header-curve' />}
       </IonHeader>
+
       <IonContent fullscreen>
         <IonPopover
           cssClass='popover'

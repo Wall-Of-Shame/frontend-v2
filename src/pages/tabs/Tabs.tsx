@@ -5,7 +5,6 @@ import {
   IonTabBar,
   IonTabButton,
   IonIcon,
-  IonLabel,
   isPlatform,
 } from "@ionic/react";
 import { Route, Redirect } from "react-router";
@@ -84,23 +83,18 @@ const Tabs: React.FC = () => {
       >
         <IonTabButton tab='challenges' href='/challenges'>
           <IonIcon icon={challengeIcon} />
-          <IonLabel>Challenges</IonLabel>
         </IonTabButton>
         <IonTabButton tab='explore' href='/explore'>
           <IonIcon icon={flashlightOutline} />
-          <IonLabel>Explore</IonLabel>
         </IonTabButton>
         <IonTabButton tab='wall-of-shame' href='/wall-of-shame'>
           <IonIcon icon={shameIcon} />
-          <IonLabel>Wall</IonLabel>
         </IonTabButton>
         <IonTabButton tab='store' href='/store'>
           <IonIcon icon={storefrontOutline} />
-          <IonLabel>Store</IonLabel>
         </IonTabButton>
         <IonTabButton tab='profile' href='/profile'>
           <IonIcon icon={personOutline} />
-          <IonLabel>Profile</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

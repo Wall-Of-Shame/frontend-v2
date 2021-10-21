@@ -4,7 +4,6 @@ import {
   IonButton,
   IonCol,
   IonIcon,
-  IonLabel,
   IonRouterOutlet,
   IonRow,
   IonSplitPane,
@@ -90,23 +89,18 @@ const AuthenticatedApp: React.FC = () => {
                 <IonTabBar className='desktop-navbar-tabs'>
                   <IonTabButton tab='challenges' href='/challenges'>
                     <IonIcon icon={challengeIcon} />
-                    <IonLabel>Challenges</IonLabel>
                   </IonTabButton>
                   <IonTabButton tab='explore' href='/explore'>
                     <IonIcon icon={flashlightOutline} />
-                    <IonLabel>Explore</IonLabel>
                   </IonTabButton>
                   <IonTabButton tab='wall-of-shame' href='/wall-of-shame'>
                     <IonIcon icon={shameIcon} />
-                    <IonLabel>Wall</IonLabel>
                   </IonTabButton>
                   <IonTabButton tab='store' href='/store'>
                     <IonIcon icon={storefrontOutline} />
-                    <IonLabel>Store</IonLabel>
                   </IonTabButton>
                   <IonTabButton tab='profile' href='/profile'>
                     <IonIcon icon={personOutline} />
-                    <IonLabel>Profile</IonLabel>
                   </IonTabButton>
                 </IonTabBar>
               </IonCol>

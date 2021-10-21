@@ -94,11 +94,23 @@ const Store: React.FC = () => {
   return (
     <IonPage style={{ background: "#ffffff" }}>
       <IonHeader className='ion-no-border'>
-        <IonToolbar color='main-beige' style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar
+          color='main-beige'
+          mode='md'
+          className='store-header'
+          style={{ paddingTop: "0.5rem", paddingBottom: "0.25rem" }}
+        >
           <IonTitle
             size='large'
+            color='white'
             style={{
-              paddingBottom: isPlatform("ios") ? "0.5rem" : 0,
+              fontWeight: "800",
+              fontSize:
+                isPlatform("desktop") ||
+                isPlatform("tablet") ||
+                isPlatform("ipad")
+                  ? "1.5rem"
+                  : "2rem",
             }}
           >
             Store
@@ -128,8 +140,13 @@ const Store: React.FC = () => {
             </IonText>
           </IonButton>
         </IonToolbar>
-        {!isPlatform("desktop") && <div className='store-header-curve' />}
+        {!(
+          isPlatform("desktop") ||
+          isPlatform("tablet") ||
+          isPlatform("ipad")
+        ) && <div className='store-header-curve' />}
       </IonHeader>
+
       <IonContent fullscreen>
         <IonRow
           className='ion-justify-content-start ion-padding-horizontal'

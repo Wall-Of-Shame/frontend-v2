@@ -414,13 +414,22 @@ const Challenges: React.FC = () => {
       <IonHeader className='ion-no-border'>
         <IonToolbar
           color='main-beige'
+          mode='md'
           className='challenges-header'
-          style={{ paddingTop: "0.5rem" }}
+          style={{ paddingTop: "0.5rem", paddingBottom: "0.25rem" }}
         >
           <IonTitle
             size='large'
             color='white'
-            style={{ paddingBottom: isPlatform("ios") ? "0.5rem" : 0 }}
+            style={{
+              fontWeight: "800",
+              fontSize:
+                isPlatform("desktop") ||
+                isPlatform("tablet") ||
+                isPlatform("ipad")
+                  ? "1.5rem"
+                  : "2rem",
+            }}
           >
             Challenges
           </IonTitle>
@@ -457,7 +466,11 @@ const Challenges: React.FC = () => {
             )}
           </IonFabButton>
         </IonToolbar>
-        {!isPlatform("desktop") && <div className='challenges-header-curve' />}
+        {!(
+          isPlatform("desktop") ||
+          isPlatform("tablet") ||
+          isPlatform("ipad")
+        ) && <div className='challenges-header-curve' />}
       </IonHeader>
       <IonContent fullscreen>
         <IonRow className='ion-justify-content-center ion-padding'>

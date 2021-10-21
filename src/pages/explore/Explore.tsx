@@ -35,11 +35,23 @@ const Explore: React.FC = () => {
   return (
     <IonPage style={{ background: "#ffffff" }}>
       <IonHeader className='ion-no-border'>
-        <IonToolbar color='main-blue' style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar
+          color='main-blue'
+          mode='md'
+          className='explore-header'
+          style={{ paddingTop: "0.5rem", paddingBottom: "0.25rem" }}
+        >
           <IonTitle
             size='large'
+            color='white'
             style={{
-              paddingBottom: isPlatform("ios") ? "0.5rem" : 0,
+              fontWeight: "800",
+              fontSize:
+                isPlatform("desktop") ||
+                isPlatform("tablet") ||
+                isPlatform("ipad")
+                  ? "1.5rem"
+                  : "2rem",
             }}
           >
             Explore
@@ -63,8 +75,13 @@ const Explore: React.FC = () => {
             />
           </IonFabButton>
         </IonToolbar>
-        {!isPlatform("desktop") && <div className='explore-header-curve' />}
+        {!(
+          isPlatform("desktop") ||
+          isPlatform("tablet") ||
+          isPlatform("ipad")
+        ) && <div className='explore-header-curve' />}
       </IonHeader>
+
       <IonContent fullscreen>
         <Container>Coming soon :)</Container>
       </IonContent>

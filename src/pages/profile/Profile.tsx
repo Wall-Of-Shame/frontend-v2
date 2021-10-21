@@ -309,11 +309,24 @@ const Profile: React.FC = () => {
         </IonList>
       </IonPopover>
       <IonHeader className='ion-no-border'>
-        <IonToolbar color='main-blue' style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar
+          color='main-blue'
+          mode='md'
+          className='store-header'
+          style={{ paddingTop: "0.5rem", paddingBottom: "0.25rem" }}
+        >
           <IonTitle
             size='large'
             color='white'
-            style={{ paddingBottom: isPlatform("ios") ? "0.5rem" : 0 }}
+            style={{
+              fontWeight: "800",
+              fontSize:
+                isPlatform("desktop") ||
+                isPlatform("tablet") ||
+                isPlatform("ipad")
+                  ? "1.5rem"
+                  : "2rem",
+            }}
           >
             Profile
           </IonTitle>
@@ -335,7 +348,11 @@ const Profile: React.FC = () => {
             <IonIcon icon={ellipsisVertical} />
           </IonFabButton>
         </IonToolbar>
-        {!isPlatform("desktop") && <div className='profile-header-curve' />}
+        {!(
+          isPlatform("desktop") ||
+          isPlatform("tablet") ||
+          isPlatform("ipad")
+        ) && <div className='profile-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen>
@@ -537,7 +554,11 @@ const Profile: React.FC = () => {
         </IonRow>
         <IonRow
           className='ion-padding-horizontal'
-          style={{ marginBottom: "1rem", display: "flex", justifyContent: "fl" }}
+          style={{
+            marginBottom: "1rem",
+            display: "flex",
+            justifyContent: "fl",
+          }}
         >
           <IonCol>
             <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
@@ -545,9 +566,7 @@ const Profile: React.FC = () => {
             </IonText>
           </IonCol>
           <IonCol>
-            <IonText style={{ }}>
-              Find friends
-            </IonText>
+            <IonText style={{}}>Find friends</IonText>
           </IonCol>
         </IonRow>
         <IonRow
