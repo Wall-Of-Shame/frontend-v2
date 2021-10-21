@@ -193,12 +193,12 @@ const EditProfile: React.FC = () => {
           <IonButton
             mode='ios'
             shape='round'
-            color='secondary'
-            fill='solid'
+            color='medium'
+            fill='outline'
             onClick={handleRandomize}
           >
-            <IonIcon icon={dice} style={{ marginRight: "0.5rem" }} />
-            <IonText>Gimme another one</IonText>
+            <IonIcon color='dark' icon={dice} style={{ marginRight: "0.5rem" }} />
+            <IonText color='dark'>Gimme another one</IonText>
           </IonButton>
         </IonRow>
         <IonGrid className='ion-padding-horizontal'>
