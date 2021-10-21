@@ -57,7 +57,7 @@ const AuthenticatedApp: React.FC = () => {
   return (
     <IonApp>
       <IonReactRouter>
-        {isPlatform("desktop") && (
+        {(isPlatform("desktop") || isPlatform("ipad")) && (
           <IonToolbar className='desktop-navbar'>
             <IonRow className='ion-align-items-center'>
               {width! >= 992 && (
@@ -134,20 +134,25 @@ const AuthenticatedApp: React.FC = () => {
         <IonSplitPane
           contentId='main'
           className={`split-pane-main ${
-            isPlatform("desktop") ? "split-pane-main-desktop" : ""
+            isPlatform("desktop") || isPlatform("ipad")
+              ? "split-pane-main-desktop"
+              : ""
           }`}
         >
           <IonRouterOutlet
             id='main'
             className={`split-pane-content ${
-              !isPlatform("desktop") ? "non-desktop" : ""
+              !isPlatform("desktop") && !isPlatform("ipad") ? "non-desktop" : ""
             }`}
-            style={{ marginTop: isPlatform("desktop") ? "3.5rem" : 0 }}
+            style={{
+              marginTop:
+                isPlatform("desktop") || isPlatform("ipad") ? "3.5rem" : 0,
+            }}
           >
             <Route path='/challenges' render={() => <Tabs />} />
             <Route path='/' render={() => <Tabs />} />
           </IonRouterOutlet>
-          {!isPlatform("iphone") && <RightMenu />}
+          {(isPlatform("desktop") || isPlatform("ipad")) && <RightMenu />}
         </IonSplitPane>
       </IonReactRouter>
     </IonApp>
