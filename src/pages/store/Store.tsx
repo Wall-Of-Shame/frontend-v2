@@ -23,11 +23,8 @@ import "./Store.scss";
 import { useUser } from "../../contexts/UserContext";
 import { useWindowSize } from "../../utils/WindowUtils";
 
-interface PowerUp {
-  type: "Protec" | "U2";
-  price: number;
-  description: string;
-}
+import { PowerUp, PowerUpType } from "../../interfaces/models/Store";
+import PurchasePowerUpModal from "./powerUp";
 
 interface PowerUpMap {
   [key: string]: boolean;
@@ -54,6 +51,8 @@ const Store: React.FC = () => {
   const { width } = useWindowSize();
 
   const [tab, setTab] = useState("powerups");
+  const [showModal, setShowModal] = useState(false);
+  const [selectedPowerUp, setSelectedPowerUp] = useState<PowerUp | null>(null);
 
   const [isPowerUpFlipped, setIsPowerUpFlipped] = useState<PowerUpMap>({
     Protec: false,
@@ -75,6 +74,23 @@ const Store: React.FC = () => {
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    console.log(isPlatform("desktop"));
+  }, []);
+
+  const computePowerUpStock = (type: PowerUpType) => {
+    switch (type) {
+      case "Protec":
+        return user?.store.protecCount ?? 0;
+      case "U2":
+        return user?.store.griefCount ?? 0;
+    }
+  };
+
+  const handlePurchase = async (type: PowerUpType, count: number) => {
+    // TODO
+  };
+
   return (
     <IonPage style={{ background: "#ffffff" }}>
       <IonHeader className='ion-no-border'>
@@ -94,7 +110,6 @@ const Store: React.FC = () => {
             slot='end'
             style={{
               margin: "0.5rem",
-              width: "5.5rem",
               height: "2.75rem",
             }}
           >
@@ -205,7 +220,7 @@ const Store: React.FC = () => {
                         <IonText
                           color='black'
                           style={{ fontSize: "0.9rem" }}
-                        >{`You have 0`}</IonText>
+                        >{`You have ${computePowerUpStock(p.type)}`}</IonText>
                       </IonRow>
                       <IonRow
                         className='ion-justify-content-center ion-align-items-center'
@@ -220,7 +235,7 @@ const Store: React.FC = () => {
                             marginRight: "0.5rem",
                           }}
                         />
-                        <IonText color='black'>750</IonText>
+                        <IonText color='black'>{p.price}</IonText>
                       </IonRow>
                     </IonCard>
                   </div>
@@ -292,6 +307,10 @@ const Store: React.FC = () => {
                       expand='block'
                       mode='ios'
                       style={{ height: "2rem" }}
+                      onClick={() => {
+                        setSelectedPowerUp(p);
+                        setShowModal(true);
+                      }}
                     >
                       Buy
                     </IonButton>
@@ -301,6 +320,11 @@ const Store: React.FC = () => {
             );
           })}
         </IonRow>
+        <PurchasePowerUpModal
+          powerUp={selectedPowerUp}
+          showModal={showModal}
+          setShowModal={setShowModal}
+        />
       </IonContent>
     </IonPage>
   );
