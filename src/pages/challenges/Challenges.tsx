@@ -420,7 +420,7 @@ const Challenges: React.FC = () => {
           <IonTitle
             size='large'
             color='white'
-            style={{ paddingBottom: isPlatform("ios") ? "1rem" : 0 }}
+            style={{ paddingBottom: isPlatform("ios") ? "0.5rem" : 0 }}
           >
             Challenges
           </IonTitle>

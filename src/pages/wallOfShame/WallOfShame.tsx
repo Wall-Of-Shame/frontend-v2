@@ -624,7 +624,7 @@ const WallOfShame: React.FC = () => {
           <IonTitle
             size='large'
             style={{
-              paddingBottom: isPlatform("ios") ? "1rem" : 0,
+              paddingBottom: isPlatform("ios") ? "0.5rem" : 0,
             }}
           >
             Wall of Shame
