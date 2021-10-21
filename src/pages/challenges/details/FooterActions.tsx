@@ -67,10 +67,16 @@ const FooterActions: React.FC<FooterActionsProps> = (
             <IonButton
               mode='ios'
               shape='round'
-              color='main-blue'
+              color='accent-blue'
               expand='block'
               fill='solid'
               onClick={viewVoteCallback}
+              style={{
+                display: "flex",
+                flex: 1,
+                marginLeft: "2rem",
+                marginRight: "2rem",
+              }}
             >
               <IonText style={{ marginLeft: "1.5rem", marginRight: "1.5rem" }}>
                 Vote out cheaters
@@ -79,7 +85,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
             <IonButton
               mode='ios'
               shape='round'
-              color='senary'
+              color='accent-yellow'
               expand='block'
               fill='solid'
               onClick={() => {
@@ -89,6 +95,12 @@ const FooterActions: React.FC<FooterActionsProps> = (
                   "This will confirm the challenge and voting results and banish those who failed the challenge or cheated to the Wall of Shame :')",
                   handleReleaseResults
                 );
+              }}
+              style={{
+                display: "flex",
+                flex: 1,
+                marginLeft: "2rem",
+                marginRight: "2rem",
               }}
             >
               <IonText style={{ marginLeft: "1.5rem", marginRight: "1.5rem" }}>
@@ -104,10 +116,16 @@ const FooterActions: React.FC<FooterActionsProps> = (
             <IonButton
               mode='ios'
               shape='round'
-              color='secondary'
+              color='main-blue'
               expand='block'
               fill='solid'
               onClick={viewVoteCallback}
+              style={{
+                display: "flex",
+                flex: 1,
+                marginLeft: "2rem",
+                marginRight: "2rem",
+              }}
             >
               <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>
                 Vote out cheaters
