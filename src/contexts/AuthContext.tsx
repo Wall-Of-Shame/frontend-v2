@@ -135,6 +135,15 @@ const AuthProvider: React.FunctionComponent = (props) => {
     }
   };
 
+  const refreshUser = async (): Promise<UserData | null> => {
+    try {
+      const user = await AuthService.getUser();
+      return user;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
   const refreshFirebaseUser = async (): Promise<void> => {
     try {
       const user = auth.currentUser;
@@ -183,6 +192,7 @@ const AuthProvider: React.FunctionComponent = (props) => {
         login,
         continueWithGoogle,
         continueWithFacebook,
+        refreshUser,
         refreshFirebaseUser,
         getFirebaseUser,
         resendVerificationEmail,
