@@ -90,14 +90,12 @@ const WallOfShame: React.FC = () => {
   });
   const grid = useRef<Grid | null>(null);
   const [shames, setShames] = useState<Shame[]>([]);
-  const [selectedShame, setSelectedShame] = useState<string | null>(null);
+  const [selectedShameId, setSelectedShameId] = useState<string | null>(null);
   const [shameTool, setShameTool] = useState<"tomato" | "egg" | "poop" | "">(
     ""
   );
   const [lastShamed, setLastShamed] = useState(new Date().getTime() / 1000);
   const [overlaysPositions, setOverlaysPositions] = useState<OverlayMap>({});
-  const [lastUpdated, setLastUpdated] = useState(Date.now());
-  const [hasSynced, setHasSynced] = useState(false);
   const [globalRankings, setGlobalRankings] = useState<UserList[]>([]);
   const [friendsRankings, setFriendsRankings] = useState<UserList[]>([]);
   const trophyColors = ["#ffd73c", "#bcbcbc", "#be7b2d"];
@@ -180,8 +178,8 @@ const WallOfShame: React.FC = () => {
 
   const handleShame = (key: string) => {
     setLastShamed(new Date().getTime() / 1000);
-    if (key !== selectedShame) {
-      setSelectedShame(key);
+    if (key !== selectedShameId) {
+      setSelectedShameId(key);
       switch (shameTool) {
         case "tomato":
           const newTomatoPosition: Overlay = {
