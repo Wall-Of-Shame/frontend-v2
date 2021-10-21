@@ -182,11 +182,11 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
 
       <IonSlide className="slide beige">
         <Container>
-          <img
+          {/* <img
             src={highground}
             alt="highground"
             style={{ marginTop: "0rem", marginBottom: "0rem" }}
-          />
+          /> */}
           <h1 id="wall-of-shame-header">WALL OF SHAME</h1>
           <h5 style={{ marginTop: "1rem", marginBottom: "3rem" }}>
             Take the moral highground.
@@ -220,9 +220,9 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
                     });
                 }}
               >
-                <IonIcon color="accent-blue" src={logoGoogle} />
+                <IonIcon color="main-yellow" src={logoGoogle} />
                 <IonText
-                  color="accent-blue"
+                  color="main-yellow"
                   style={{ fontWeight: "bold", marginLeft: 10 }}
                   id="login-options-button-text"
                 >
@@ -292,7 +292,7 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
                 onClick={() => setShowSignUpModal(true)}
               >
                 <IonText
-                  color="main-yellow"
+                  color="accent-blue"
                   style={{ fontWeight: "bold" }}
                   id="login-options-button-text"
                 >
