@@ -279,7 +279,7 @@ const EditChallenge: React.FC<EditChallengeProps> = (
               <IonDatetime
                 displayFormat='D MMM YYYY HH:mm'
                 min={formatISO(Date.now()).slice(0, -6)}
-                max={formatISO(addYears(Date.now(), 10)).slice(0, -6)}
+                max={formatISO(addYears(Date.now(), 1)).slice(0, -6)}
                 value={state.startAt}
                 placeholder={format(Date.now(), "d MMM yyyy HH:mm")}
                 onIonChange={(e) => setState({ startAt: e.detail.value! })}

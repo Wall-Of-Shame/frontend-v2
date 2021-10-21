@@ -23,6 +23,7 @@ export interface ChallengePost {
 export interface ChallengeData {
   challengeId: string;
   title: string;
+  imageURL?: string;
   description?: string;
   startAt: string | null;
   endAt: string;

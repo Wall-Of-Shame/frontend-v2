@@ -104,9 +104,10 @@ const Store: React.FC = () => {
             Store
           </IonTitle>
           <IonButton
-            className='placeholder-fab ion-align-items-center ion-no-padding'
+            className='placeholder-fab ion-align-items-center'
             color='main-beige'
             mode='ios'
+            shape='round'
             slot='end'
             style={{
               margin: "0.5rem",
