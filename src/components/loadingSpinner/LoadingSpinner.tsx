@@ -17,7 +17,7 @@ const LoadingSpinner: React.FunctionComponent<LoadingProps> = (
       onDidDismiss={closeLoading}
       message={message}
       duration={10000}
-      spinner='crescent'
+      spinner='bubbles'
     />
   );
 };
