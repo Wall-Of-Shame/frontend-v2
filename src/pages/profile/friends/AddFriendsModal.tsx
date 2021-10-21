@@ -16,6 +16,7 @@ import {
 } from "@ionic/react";
 import { UserList } from "../../../interfaces/models/Users";
 import { useCallback, useState } from "react";
+import "./Friends.scss";
 import { useUser } from "../../../contexts/UserContext";
 import { addOutline, arrowBack, removeOutline } from "ionicons/icons";
 import AvatarImg from "../../../components/avatar";
@@ -72,7 +73,7 @@ const AddFriendsModal: React.FC<AddFriendsModalProps> = (props) => {
       isOpen={showModal}
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={false}
-      cssClass='modal-container'
+      cssClass='add-friends-modal'
       swipeToClose={true}
     >
       <IonHeader className='ion-no-border'>
