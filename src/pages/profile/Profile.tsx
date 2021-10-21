@@ -23,6 +23,7 @@ import {
   IonBadge,
   IonSearchbar,
   IonButton,
+  IonTitle,
 } from "@ionic/react";
 import { useEffect } from "react";
 import {
@@ -309,6 +310,13 @@ const Profile: React.FC = () => {
       </IonPopover>
       <IonHeader className='ion-no-border'>
         <IonToolbar color='main-blue' style={{ paddingTop: "0.5rem" }}>
+          <IonTitle
+            size='large'
+            color='white'
+            style={{ paddingBottom: isPlatform("ios") ? "0.5rem" : 0 }}
+          >
+            Profile
+          </IonTitle>
           <IonFabButton
             className='placeholder-fab'
             color='main-blue'
@@ -528,12 +536,19 @@ const Profile: React.FC = () => {
           </IonCol>
         </IonRow>
         <IonRow
-          className='ion-padding-horizontal ion-justify-content-center'
-          style={{ marginBottom: "1rem" }}
+          className='ion-padding-horizontal'
+          style={{ marginBottom: "1rem", display: "flex", justifyContent: "fl" }}
         >
-          <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
-            Friends
-          </IonText>
+          <IonCol>
+            <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
+              Friends
+            </IonText>
+          </IonCol>
+          <IonCol>
+            <IonText style={{ }}>
+              Find friends
+            </IonText>
+          </IonCol>
         </IonRow>
         <IonRow
           className='ion-justify-content-center'

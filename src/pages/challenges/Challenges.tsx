@@ -482,7 +482,7 @@ const Challenges: React.FC = () => {
           </IonButton>
         </IonRow>
         <IonRow
-          className='ion-justify-content-start ion-padding'
+          className='ion-justify-content-start ion-padding-horizontal ion-padding-top'
           style={{ marginBottom: "1.5rem" }}
         >
           <IonButton
