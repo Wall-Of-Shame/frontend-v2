@@ -197,7 +197,9 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                     <IonAvatar slot='start'>
                       <img src={challenge} alt='' />
                     </IonAvatar>
-                    <IonText>For me and my friends</IonText>
+                    <IonText style={{ fontSize: "0.9rem" }}>
+                      For me and my friends
+                    </IonText>
                     <IonIcon slot='end' icon={chevronForward} />
                   </IonItem>
                 </IonCard>
@@ -221,7 +223,9 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                     <IonAvatar slot='start'>
                       <img src={highground} alt='' />
                     </IonAvatar>
-                    <IonText>For anyone to join</IonText>
+                    <IonText style={{ fontSize: "0.9rem" }}>
+                      For anyone to join
+                    </IonText>
                     <IonIcon slot='end' icon={chevronForward} />
                   </IonItem>
                 </IonCard>
@@ -285,7 +289,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
           </IonRow>
         </IonGrid>
         <IonGrid>
-          <IonRow className='ion-padding-horizontal ion-padding-bottom'>
+          <IonRow className='ion-padding-horizontal ion-padding-bottom ion-align-items-center'>
             <IonCol className='ion-no-padding' size='10'>
               <IonText style={{ fontWeight: "bold" }} color='primary'>
                 Who's the challenge for?
