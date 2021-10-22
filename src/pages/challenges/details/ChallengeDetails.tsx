@@ -1,20 +1,17 @@
 import {
+  IonButton,
   IonButtons,
-  IonCard,
   IonCol,
   IonContent,
-  IonFab,
   IonFabButton,
   IonFooter,
   IonGrid,
   IonHeader,
   IonIcon,
-  IonLabel,
   IonPage,
   IonRow,
-  IonSegment,
-  IonSegmentButton,
   IonText,
+  IonTextarea,
   IonToast,
   IonToolbar,
   isPlatform,
@@ -22,9 +19,9 @@ import {
 import { useReducer, useState } from "react";
 import {
   arrowBack,
+  paperPlane,
   pencilOutline,
   personAddOutline,
-  refreshOutline,
 } from "ionicons/icons";
 import { useEffect } from "react";
 import { Redirect, useHistory, useLocation } from "react-router";
@@ -35,30 +32,28 @@ import {
   UserMini,
 } from "../../../interfaces/models/Challenges";
 import "./ChallengeDetails.scss";
-import { format, formatISO, parseISO } from "date-fns";
+import { formatISO, parseISO } from "date-fns";
+import { database } from "../../../firebase";
+import { ref, set } from "firebase/database";
 import { useUser } from "../../../contexts/UserContext";
 import EditChallenge from "../edit";
 import LoadingSpinner from "../../../components/loadingSpinner";
 import Alert from "../../../components/alert";
 import isAfter from "date-fns/isAfter";
-import isBefore from "date-fns/isBefore";
 import { intervalToDuration } from "date-fns/esm";
 import useInterval from "../../../hooks/useInterval";
 import UploadProofModal from "../proof/upload";
 import VoteModal from "../vote";
 import ViewProofModal from "../proof/view";
 import { hideTabs } from "../../../utils/TabsUtils";
-import { database } from "../../../firebase";
-import { ref, set } from "firebase/database";
 import { VoteData } from "../../../interfaces/models/Votes";
-import ActiveChallengeImg from "../../../components/activeChallengeImg";
-import PendingChallengeImg from "../../../components/pendingChallengeImg";
-import highground from "../../../assets/onboarding/highground.png";
 import OfflineToast from "../../../components/offlineToast";
-import Countdown from "./CountDown";
 import Participants from "./Participants";
 import FooterActions from "./FooterActions";
 import EditParticipantsModal from "../../../components/participants/EditParticipantsModal";
+import DetailsTab from "./DetailsTab";
+import Chat from "./Chat";
+import uniqid from "uniqid";
 
 interface ChallengeDetailsProps {}
 
@@ -77,6 +72,7 @@ interface ChallengeDetailsState {
     pending: UserMini[];
   };
   invitedUsers: UserMini[];
+  message: string;
   isLoading: boolean;
   showAlert: boolean;
   alertHeader: string;
@@ -129,6 +125,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
         challenge?.participants.accepted.notCompleted.concat(
           challenge.participants.pending
         ) ?? [],
+      message: "",
       isLoading: false,
       showAlert: false,
       alertHeader: "",
@@ -160,6 +157,32 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
         alertHeader: "Ooooops",
         alertMessage: "Our server is taking a break, come back later please :)",
       });
+    }
+  };
+
+  const handleSendMessage = async (): Promise<void> => {
+    if (!challenge) {
+      return;
+    }
+    const timestamp = new Date().getTime();
+    try {
+      set(
+        ref(
+          database,
+          `chat/${challenge.challengeId}/${timestamp}+${user?.userId}`
+        ),
+        {
+          messageId: uniqid(),
+          name: user?.name,
+          userId: user?.userId,
+          content: state.message,
+          time: formatISO(Date.now()),
+        }
+      ).then(() => {
+        setState({ message: "" });
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -328,32 +351,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
       return;
     }
     setState({ showUploadProofModal: true });
-    /*
-    try {
-      await completeChallenge(challenge.challengeId);
-      const updatedChallenge = await getChallenge(challenge.challengeId);
-      if (updatedChallenge) {
-        setChallenge(updatedChallenge);
-      }
-      setState({
-        isLoading: false,
-        showAlert: true,
-        hasConfirm: false,
-        alertHeader: "Woohoo",
-        alertMessage:
-          "You have completed the challenge. Now chill and watch the rest suffer :)",
-      });
-    } catch (error) {
-      setState({
-        isLoading: false,
-        showAlert: true,
-        hasConfirm: false,
-        alertHeader: "Ooooops",
-        alertMessage: "Our server is taking a break, come back later please :)",
-      });
-      setShowOfflineToast(true);
-    }
-    */
   };
 
   const handleReleaseResults = async () => {
@@ -436,45 +433,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [didFinish]);
 
-  const renderImage = () => {
-    if (challenge === null) {
-      return <Redirect to={"challenges"} />;
-    }
-
-    if (
-      isAfter(Date.now(), parseISO(challenge.startAt!)) &&
-      isBefore(Date.now(), parseISO(challenge.endAt!))
-    ) {
-      // render active challenge
-      return (
-        <div style={{ marginTop: "2rem" }}>
-          <ActiveChallengeImg
-            notCompleted={challenge.participants.accepted.notCompleted}
-          />
-        </div>
-      );
-    } else if (!isAfter(Date.now(), parseISO(challenge.startAt!))) {
-      // render waiting challenge
-      return (
-        <div style={{ marginTop: "2rem" }}>
-          <PendingChallengeImg
-            waitingToStart={challenge.participants.accepted.notCompleted}
-          />
-        </div>
-      );
-    }
-
-    return (
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <img
-          className='completed-challenge-img'
-          src={highground}
-          alt='Challenge Completed!'
-        ></img>
-      </div>
-    );
-  };
-
   const renderHeader = () => {
     if (challenge === null) {
       return <Redirect to={"challenges"} />;
@@ -530,136 +488,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     }
     switch (tab) {
       case "details":
-        return (
-          <>
-            {challenge.participants.accepted.notCompleted.length > 0 &&
-              renderImage()}
-            {isAfter(Date.now(), parseISO(challenge.startAt!)) &&
-              challenge.participants.accepted.completed.findIndex(
-                (p) => p.userId === user?.userId
-              ) === -1 && (
-                <IonCard className='ion-align-items-center ion-justify-content-center'>
-                  <IonRow
-                    className='ion-justify-content-center'
-                    style={{ marginTop: "1.5rem" }}
-                  >
-                    <IonText
-                      color='dark'
-                      style={{ fontSize: "1rem", fontWeight: "bold" }}
-                    >
-                      Challenge ends in
-                    </IonText>
-                  </IonRow>
-                  <div style={{ margin: "0.5rem" }} />
-                  <Countdown countdown={countdown} />
-                  <div style={{ margin: "1rem" }} />
-                </IonCard>
-              )}
-            {challenge.participants.accepted.completed.findIndex(
-              (p) => p.userId === user?.userId
-            ) !== -1 && (
-              <IonCard className='ion-align-items-center ion-justify-content-center'>
-                <IonRow
-                  className='ion-justify-content-center'
-                  style={{ marginTop: "1.5rem" }}
-                >
-                  <IonText
-                    color='dark'
-                    style={{ fontSize: "1rem", fontWeight: "bold" }}
-                  >
-                    You spent a total of
-                  </IonText>
-                </IonRow>
-                <div style={{ margin: "0.5rem" }} />
-                <Countdown
-                  countdown={intervalToDuration({
-                    start: parseISO(challenge.startAt!),
-                    end: parseISO(
-                      challenge.participants.accepted.completed.find(
-                        (p) => p.userId === user?.userId
-                      )?.completedAt!
-                    ),
-                  })}
-                />
-                <div style={{ margin: "1rem" }} />
-              </IonCard>
-            )}
-            <IonGrid
-              className='ion-no-padding'
-              style={{
-                paddingLeft: "0.2rem",
-                paddingRight: "0.2rem",
-                maxWidth: "calc(480px - 0.4rem)",
-              }}
-            >
-              {startsIn > 0 && startsIn < 86400 && (
-                <IonCard className='ion-align-items-center ion-justify-content-center'>
-                  <IonRow
-                    className='ion-justify-content-center'
-                    style={{ marginTop: "1.5rem" }}
-                  >
-                    <IonText
-                      color='dark'
-                      style={{ fontSize: "1rem", fontWeight: "bold" }}
-                    >
-                      Challenge starts in
-                    </IonText>
-                  </IonRow>
-                  <div style={{ margin: "0.5rem" }} />
-                  <Countdown
-                    countdown={intervalToDuration({
-                      start: Date.now(),
-                      end: parseISO(challenge.startAt!),
-                    })}
-                  />
-                  <div style={{ margin: "1rem" }} />
-                </IonCard>
-              )}
-            </IonGrid>
-            <IonGrid style={{ marginBottom: "0.5rem" }}>
-              <IonRow className='ion-padding'>
-                <IonText style={{ fontWeight: "bold" }}>
-                  What do we need to do?
-                </IonText>
-              </IonRow>
-              <IonRow
-                className='ion-padding-horizontal ion-padding-bottom'
-                style={{ marginBottom: "1rem" }}
-              >
-                <IonText>{challenge.description}</IonText>
-              </IonRow>
-              <IonRow className='ion-padding-horizontal ion-padding-bottom'>
-                <IonText style={{ fontWeight: "bold" }}>
-                  This challenge starts at
-                </IonText>
-              </IonRow>
-              <IonRow
-                className='ion-padding-horizontal ion-padding-bottom'
-                style={{ marginBottom: "1rem" }}
-              >
-                <IonText>
-                  {format(
-                    parseISO(challenge.startAt!),
-                    "EEEE, dd MMM yyyy, HH:mm"
-                  )}
-                </IonText>
-              </IonRow>
-              <IonRow className='ion-padding-horizontal ion-padding-bottom'>
-                <IonText style={{ fontWeight: "bold" }}>
-                  Complete the challenge by
-                </IonText>
-              </IonRow>
-              <IonRow className='ion-padding-horizontal ion-padding-bottom'>
-                <IonText>
-                  {format(
-                    parseISO(challenge.endAt),
-                    "EEEE, dd MMM yyyy, HH:mm"
-                  )}
-                </IonText>
-              </IonRow>
-            </IonGrid>
-          </>
-        );
+        return <DetailsTab challenge={challenge} countdown={countdown} />;
       case "participants":
         return (
           <div style={{ marginTop: "1rem" }}>
@@ -673,6 +502,100 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
               }}
             />
           </div>
+        );
+      case "chat":
+        return (
+          <Chat
+            chatId={challenge.challengeId}
+            participants={challenge.participants.accepted.completed.concat(
+              challenge.participants.accepted.notCompleted
+            )}
+          />
+        );
+    }
+  };
+
+  const renderFooter = () => {
+    if (!challenge) {
+      return <></>;
+    }
+    switch (tab) {
+      case "details":
+        return (
+          <IonFooter translucent={true}>
+            <IonToolbar>
+              <FooterActions
+                challenge={challenge}
+                viewVoteCallback={() => setState({ showVoteModal: true })}
+                uploadProofCallback={() =>
+                  setState({ showUploadProofModal: true })
+                }
+                handleAccept={handleAccept}
+                handleReject={handleReject}
+                handleComplete={handleComplete}
+                handleReleaseResults={handleReleaseResults}
+                alertCallback={(
+                  hasConfirm,
+                  alertHeader,
+                  alertMessage,
+                  confirmHandler
+                ) => {
+                  setState({
+                    showAlert: true,
+                    hasConfirm: true,
+                    alertHeader,
+                    alertMessage,
+                    confirmHandler,
+                  });
+                }}
+              />
+            </IonToolbar>
+          </IonFooter>
+        );
+      case "participants":
+        return <></>;
+      case "chat":
+        return (
+          <IonFooter translucent={true}>
+            <IonToolbar>
+              <IonRow
+                className='ion-align-items-center'
+                style={{ margin: "0.5rem" }}
+              >
+                <IonCol size='11'>
+                  <div
+                    style={{
+                      width: "100%",
+                      borderRadius: "2rem",
+                      background: "#ffffff",
+                      paddingLeft: "0.75rem",
+                      boxShadow: "rgba(149, 149, 149, 0.2) 0px 2px 10px 0px",
+                    }}
+                  >
+                    <IonTextarea
+                      value={state.message ?? ""}
+                      rows={1}
+                      autoCorrect='on'
+                      placeholder='Message...'
+                      onIonChange={(event) => {
+                        setState({
+                          message: event.detail.value ?? "",
+                        });
+                      }}
+                    />
+                  </div>
+                </IonCol>
+                <IonCol size='1'>
+                  <IonIcon
+                    icon={paperPlane}
+                    color='main-beige'
+                    size='large'
+                    onClick={handleSendMessage}
+                  />
+                </IonCol>
+              </IonRow>
+            </IonToolbar>
+          </IonFooter>
         );
     }
   };
@@ -689,10 +612,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
       />
     );
   }
-
-  const startsIn = Math.round(
-    (parseISO(challenge.startAt!).getTime() - new Date().getTime()) / 1000
-  );
 
   return (
     <IonPage style={{ background: "#ffffff" }}>
@@ -757,7 +676,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        <IonGrid className="ion-margin-top">
+        <IonGrid className='ion-margin-top'>
           {renderHeader()}
           <IonRow className='ion-padding-horizontal ion-padding-bottom'>
             <IonText style={{ fontWeight: "bold", fontSize: "1.5rem" }}>
@@ -765,33 +684,51 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
             </IonText>
           </IonRow>
         </IonGrid>
-        <IonRow style={{ borderBottom: "1px #cecece solid" }}>
-          <IonCol size='6' className='ion-no-padding'>
-            <IonSegment
-              onIonChange={(e) => setTab(e.detail.value ?? "active")}
-              value={tab}
-              mode='md'
-              color='dark'
-              style={{ marginLeft: "1rem", marginRight: "1rem" }}
-            >
-              <IonSegmentButton value='details' className='ion-text-capitalize'>
-                <IonLabel>Details</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton
-                value='participants'
-                className='ion-text-capitalize'
-              >
-                <IonLabel>Participants</IonLabel>
-              </IonSegmentButton>
-            </IonSegment>
-          </IonCol>
+        <IonRow
+          className='ion-justify-content-start ion-padding-horizontal ion-padding-top'
+          style={{ marginBottom: "1rem" }}
+        >
+          <IonButton
+            shape='round'
+            mode='ios'
+            fill='solid'
+            color={tab === "details" ? "main-beige" : "light"}
+            onClick={() => setTab("details")}
+            style={{
+              width: "5rem",
+              height: "2.5rem",
+            }}
+          >
+            <IonText style={{ fontWeight: "bold" }}>Details</IonText>
+          </IonButton>
+          <IonButton
+            shape='round'
+            mode='ios'
+            fill='solid'
+            color={tab === "participants" ? "main-beige" : "light"}
+            onClick={() => setTab("participants")}
+            style={{
+              width: "7.75rem",
+              height: "2.5rem",
+            }}
+          >
+            <IonText style={{ fontWeight: "bold" }}>Participants</IonText>
+          </IonButton>
+          <IonButton
+            shape='round'
+            mode='ios'
+            fill='solid'
+            color={tab === "chat" ? "main-beige" : "light"}
+            onClick={() => setTab("chat")}
+            style={{
+              width: "4rem",
+              height: "2.5rem",
+            }}
+          >
+            <IonText style={{ fontWeight: "bold" }}>Chat</IonText>
+          </IonButton>
         </IonRow>
         {renderTabs()}
-        <IonFab vertical='bottom' horizontal='end' slot='fixed'>
-          <IonFabButton color='senary' onClick={fetchData} mode='ios'>
-            <IonIcon icon={refreshOutline} />
-          </IonFabButton>
-        </IonFab>
         <UploadProofModal
           challenge={challenge}
           userData={challenge.participants.accepted.completed.find(
@@ -887,33 +824,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
           duration={1500}
         />
       </IonContent>
-      <IonFooter translucent={true}>
-        <IonToolbar>
-          <FooterActions
-            challenge={challenge}
-            viewVoteCallback={() => setState({ showVoteModal: true })}
-            uploadProofCallback={() => setState({ showUploadProofModal: true })}
-            handleAccept={handleAccept}
-            handleReject={handleReject}
-            handleComplete={handleComplete}
-            handleReleaseResults={handleReleaseResults}
-            alertCallback={(
-              hasConfirm,
-              alertHeader,
-              alertMessage,
-              confirmHandler
-            ) => {
-              setState({
-                showAlert: true,
-                hasConfirm: true,
-                alertHeader,
-                alertMessage,
-                confirmHandler,
-              });
-            }}
-          />
-        </IonToolbar>
-      </IonFooter>
+      {renderFooter()}
     </IonPage>
   );
 };

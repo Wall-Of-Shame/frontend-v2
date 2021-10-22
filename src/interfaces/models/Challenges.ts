@@ -93,3 +93,11 @@ export interface Shame {
     background: string;
   };
 }
+
+export interface Message {
+  messageId: string;
+  name: string;
+  userId: string;
+  content: string;
+  time: string;
+}
