@@ -126,28 +126,54 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
             ) : (
               <>
                 <IonCol size='2'>
-                  <IonAvatar
-                    style={{
-                      width: "2.75rem",
-                      height: "2.75rem",
-                    }}
-                  >
-                    <AvatarImg avatar={u?.avatar} />
-                  </IonAvatar>
+                  <IonRow className='ion-justify-content-center'>
+                    <IonAvatar
+                      style={{
+                        width: "2.5rem",
+                        height: "2.5rem",
+                      }}
+                    >
+                      <AvatarImg avatar={u?.avatar} />
+                    </IonAvatar>
+                  </IonRow>
                 </IonCol>
                 <IonCol size='10'>
-                  <IonRow>
-                    <IonText style={{ fontWeight: "bold", fontSize: "0.9rem" }}>
-                      {m.name}
-                    </IonText>
+                  <IonRow className='ion-no-padding'>
+                    <IonCol className='ion-text-right ion-no-padding'>
+                      <IonText
+                        style={{
+                          fontSize: "0.8rem",
+                          color: "#787878",
+                        }}
+                      >
+                        {`${format(parseISO(m.time), "dd MMM yyyy, HH:mm")}`}
+                      </IonText>
+                    </IonCol>
+                    <IonCol className='ion-text-right ion-no-padding'>
+                      <IonText
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: "0.9rem",
+                        }}
+                      >
+                        {m.name}
+                      </IonText>
+                    </IonCol>
                   </IonRow>
-                  <IonText
-                    style={{
-                      fontSize: "0.9rem",
-                    }}
+                  <IonRow
+                    className='ion-no-padding'
+                    style={{ marginTop: "0.25rem" }}
                   >
-                    {m.content}
-                  </IonText>
+                    <IonCol className='ion-text-right ion-no-padding'>
+                      <IonText
+                        style={{
+                          fontSize: "0.9rem",
+                        }}
+                      >
+                        {m.content}
+                      </IonText>
+                    </IonCol>
+                  </IonRow>
                 </IonCol>
               </>
             )}
