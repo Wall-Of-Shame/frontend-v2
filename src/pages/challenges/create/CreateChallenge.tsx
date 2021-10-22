@@ -442,6 +442,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                 Ends at
               </IonLabel>
               <IonDatetime
+                mode='md'
                 displayFormat='D MMM YYYY HH:mm'
                 min={formatISO(Date.now()).slice(0, -6)}
                 max={formatISO(addYears(Date.now(), 10)).slice(0, -6)}

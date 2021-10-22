@@ -82,39 +82,50 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
 
   return (
     <IonModal
+      cssClass='edit-participants-modal'
       isOpen={showModal}
+      mode='ios'
       onDidDismiss={() => setShowModal(false)}
-      backdropDismiss={false}
-      cssClass='modal-container'
+      backdropDismiss={true}
     >
-      <IonHeader translucent>
-        <IonToolbar className='modal-search'>
+      <IonHeader className='ion-no-border'>
+        <IonToolbar color='main-beige' mode='md' className='store-header'>
           <IonButtons slot='start'>
             <IonButton
               style={{
                 margin: "0.5rem",
               }}
-              color='dark'
               onClick={() => setShowModal(false)}
             >
-              <IonIcon icon={close} size='large' />
+              <IonIcon
+                icon={close}
+                color='white'
+                style={{ fontSize: "1.5rem" }}
+              />
             </IonButton>
           </IonButtons>
-          <IonTitle>Invite participants</IonTitle>
+          <IonTitle size='large' color='white'>
+            Invite participants
+          </IonTitle>
           <IonButtons slot='end'>
             <IonButton
               style={{
                 margin: "0.5rem",
               }}
-              color='dark'
-              onClick={() => completionCallback(invitedUsers)}
+              onClick={() => {
+                completionCallback(invitedUsers);
+              }}
             >
-              <IonIcon icon={checkmark} size='large' />
+              <IonIcon
+                icon={checkmark}
+                color='white'
+                style={{ fontSize: "1.5rem" }}
+              />
             </IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent fullscreen scrollY={false}>
         <IonSearchbar
           mode='ios'
           key='modal-search'
@@ -190,61 +201,6 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
             );
           })}
         </IonGrid>
-        <IonGrid className='ion-margin-top'>
-          {invitedUsers.length > 0 && (
-            <IonText
-              className='ion-margin'
-              style={{ fontSize: 17, fontWeight: 600 }}
-            >
-              Added users
-            </IonText>
-          )}
-          {invitedUsers.map((u) => {
-            return (
-              <IonRow className='ion-margin' key={u.username}>
-                <IonCol className='ion-align-item-center' size='3'>
-                  <IonAvatar className='user-avatar'>
-                    <AvatarImg avatar={u.avatar} />
-                  </IonAvatar>
-                </IonCol>
-                <IonCol
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                  }}
-                  size='6'
-                >
-                  <IonRow style={{ paddingBottom: "0.5rem" }}>
-                    <IonText style={{ fontSize: 17, fontWeight: 600 }}>
-                      {u.name}
-                    </IonText>
-                  </IonRow>
-                  <IonRow>{`@${u.username}`}</IonRow>
-                </IonCol>
-                <IonCol
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  size='3'
-                >
-                  <IonButton
-                    mode='ios'
-                    shape='round'
-                    color='tertiary'
-                    fill='solid'
-                    style={{ height: "2.5rem", width: "4.5rem" }}
-                    onClick={() => handleInvite(u)}
-                  >
-                    <IonIcon icon={removeOutline} />
-                  </IonButton>
-                </IonCol>
-              </IonRow>
-            );
-          })}
-        </IonGrid>
       </IonContent>
       <IonFooter>
         <IonToolbar>
@@ -252,7 +208,18 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
             className='ion-justify-content-around'
             style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
           >
-            <IonButton mode='ios' color='secondary' shape='round'>
+            <IonButton
+              mode='ios'
+              color='main-beige'
+              shape='round'
+              style={{
+                display: "flex",
+                flex: 1,
+                marginLeft: "2rem",
+                marginRight: "2rem",
+                maxWidth: 300,
+              }}
+            >
               <IonText
                 style={{
                   marginLeft: "1rem",

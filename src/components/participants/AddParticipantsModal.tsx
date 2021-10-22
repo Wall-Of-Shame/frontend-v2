@@ -19,10 +19,9 @@ import "./AddParticipantsModal.scss";
 import { UserList } from "../../interfaces/models/Users";
 import { useCallback, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
-import { close } from "ionicons/icons";
+import { addOutline, checkmark, close, removeOutline } from "ionicons/icons";
 import AvatarImg from "../avatar";
 import lodash from "lodash";
-import HorizontalScroll from "../horizontalScroll";
 
 interface AddParticipantsModalProps {
   users: UserList[];
@@ -33,7 +32,7 @@ interface AddParticipantsModalProps {
 
 const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
   const { users, showModal, setShowModal, completionCallback } = props;
-  const { user, searchUser } = useUser();
+  const { searchUser } = useUser();
   const [searchText, setSearchText] = useState("");
   const [matchedUsers, setMatchedUsers] = useState<UserList[]>([]);
   const [invitedUsers, setInvitedUsers] = useState<UserList[]>(users);
@@ -72,26 +71,29 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
 
   return (
     <IonModal
+      cssClass='add-participants-modal'
       isOpen={showModal}
+      mode='ios'
       onDidDismiss={() => setShowModal(false)}
-      backdropDismiss={false}
-      cssClass='modal-container'
-      swipeToClose={true}
+      backdropDismiss={true}
     >
-      <IonHeader translucent>
-        <IonToolbar className='modal-search'>
+      <IonHeader className='ion-no-border'>
+        <IonToolbar color='main-beige' mode='md' className='store-header'>
           <IonButtons slot='start'>
             <IonButton
               style={{
                 margin: "0.5rem",
               }}
-              color='dark'
               onClick={() => setShowModal(false)}
             >
-              <IonIcon icon={close} />
+              <IonIcon
+                icon={close}
+                color='white'
+                style={{ fontSize: "1.5rem" }}
+              />
             </IonButton>
           </IonButtons>
-          <IonTitle style={{ fontWeight: "bold" }}>
+          <IonTitle size='large' color='white'>
             Invite participants
           </IonTitle>
           <IonButtons slot='end'>
@@ -99,17 +101,20 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
               style={{
                 margin: "0.5rem",
               }}
-              color='dark'
-              onClick={() => completionCallback(invitedUsers)}
+              onClick={() => {
+                completionCallback(invitedUsers);
+              }}
             >
-              <IonText color='accent-beige' style={{ fontWeight: "bold" }}>
-                Done
-              </IonText>
+              <IonIcon
+                icon={checkmark}
+                color='white'
+                style={{ fontSize: "1.5rem" }}
+              />
             </IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent fullscreen scrollY={false}>
         <IonSearchbar
           mode='ios'
           key='modal-search'
@@ -119,13 +124,12 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
             debouncedSearch(e.detail.value ?? "");
           }}
           debounce={0}
-          placeholder='Search a name or username'
+          placeholder='Search for a name or username'
           showCancelButton='never'
           className='ion-margin-top users-search'
           showClearButton='always'
         ></IonSearchbar>
-        <HorizontalScroll users={invitedUsers} />
-        <IonGrid className='ion-margin-top ion-no-padding'>
+        <IonGrid className='ion-margin-top'>
           <IonText
             className='ion-margin'
             style={{ fontSize: 17, fontWeight: 600 }}
@@ -134,23 +138,11 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
           </IonText>
           {matchedUsers.map((u) => {
             return (
-              <IonRow
-                className='ion-margin'
-                key={u.userId}
-                style={{ marginBottom: "1.25rem" }}
-              >
-                <IonCol className='ion-align-item-center' size='2.5'>
-                  <IonRow className='ion-justify-content-cneter'>
-                    <IonAvatar
-                      className='user-avatar'
-                      style={{
-                        width: "3rem",
-                        height: "3rem",
-                      }}
-                    >
-                      <AvatarImg avatar={u.avatar} />
-                    </IonAvatar>
-                  </IonRow>
+              <IonRow className='ion-margin' key={u.userId}>
+                <IonCol className='ion-align-item-center' size='3'>
+                  <IonAvatar className='user-avatar'>
+                    <AvatarImg avatar={u.avatar} />
+                  </IonAvatar>
                 </IonCol>
                 <IonCol
                   style={{
@@ -160,65 +152,40 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
                   }}
                   size='6'
                 >
-                  <IonRow style={{ paddingBottom: "0.25rem" }}>
+                  <IonRow style={{ paddingBottom: "0.5rem" }}>
                     <IonText style={{ fontSize: 17, fontWeight: 600 }}>
                       {u.name}
                     </IonText>
                   </IonRow>
                   <IonRow>{`@${u.username}`}</IonRow>
                 </IonCol>
-                {u.userId === user?.userId ? (
-                  <IonCol
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                    size='3.5'
+                <IonCol
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  size='3'
+                >
+                  <IonButton
+                    mode='ios'
+                    shape='round'
+                    color={
+                      invitedUsers.indexOf(u) !== -1 ? "quinary" : "quaternary"
+                    }
+                    fill='solid'
+                    style={{ height: "2.5rem", width: "4.5rem" }}
+                    onClick={() => handleInvite(u)}
                   >
-                    <IonButton
-                      mode='ios'
-                      className='ion-no-padding'
-                      color='main-beige'
-                      disabled
-                      fill='solid'
-                      style={{ height: "2rem", width: "100%" }}
-                    >
-                      You
-                    </IonButton>
-                  </IonCol>
-                ) : (
-                  <IonCol
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                    size='3.5'
-                  >
-                    <IonButton
-                      mode='ios'
-                      className='ion-no-padding'
-                      color={"main-blue"}
-                      fill={
-                        invitedUsers.findIndex((i) => i.userId === u.userId) ===
-                        -1
-                          ? "solid"
-                          : "outline"
+                    <IonIcon
+                      icon={
+                        invitedUsers.indexOf(u) !== -1
+                          ? removeOutline
+                          : addOutline
                       }
-                      style={{ height: "2rem", width: "100%" }}
-                      onClick={() => handleInvite(u)}
-                    >
-                      <IonText style={{ fontSize: "0.9rem" }}>
-                        {invitedUsers.findIndex(
-                          (i) => i.userId === u.userId
-                        ) !== -1
-                          ? "Added"
-                          : "Add"}
-                      </IonText>
-                    </IonButton>
-                  </IonCol>
-                )}
+                    />
+                  </IonButton>
+                </IonCol>
               </IonRow>
             );
           })}

@@ -45,6 +45,7 @@ const PurchasePowerUpModal: React.FC<PurchasePowerUpModalProps> = (
       cssClass={
         isPlatform("ios") ? "purhcase-item-modal-ios" : "purhcase-item-modal-md"
       }
+      mode='ios'
       isOpen={showModal}
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={true}

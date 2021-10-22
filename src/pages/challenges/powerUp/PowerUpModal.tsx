@@ -271,6 +271,7 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
     <IonModal
       cssClass='purchase-powerup-modal'
       isOpen={showModal}
+      mode='ios'
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={true}
     >

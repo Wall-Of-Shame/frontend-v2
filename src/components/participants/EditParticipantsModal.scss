@@ -1,9 +1,15 @@
-.link-button {
-  --background-activated-opacity: 30%;
-}
-
 .user-avatar {
   height: 4rem;
   width: 4rem;
   margin: 0;
+}
+
+@media only screen and (min-width: 576px) {
+  .edit-participants-modal {
+    padding: 7.5vw;
+
+    .modal-wrapper {
+      border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
+    }
+  }
 }
