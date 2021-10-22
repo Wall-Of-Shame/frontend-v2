@@ -239,6 +239,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
                 flex: 1,
                 marginLeft: "2rem",
                 marginRight: "2rem",
+                maxWidth: 300,
               }}
             >
               <IonText

@@ -241,7 +241,7 @@ const LoginModal: React.FC<LoginModalProps> = (props: LoginModalProps) => {
                 mode='ios'
                 fill='solid'
                 shape='round'
-                color='secondary'
+                color='main-beige'
                 className='ion-padding-horizontal'
                 style={{ marginTop: "2rem" }}
                 onClick={handleLogin}
