@@ -6,7 +6,7 @@ import {
   IonTabButton,
   IonIcon,
 } from "@ionic/react";
-import { Route, Redirect } from "react-router";
+import { Route, Redirect, useLocation } from "react-router";
 import {
   personOutline,
   storefrontOutline,
@@ -35,6 +35,8 @@ const redirectToChallenges = (): React.ReactNode => (
 
 const Tabs: React.FC = () => {
   const { isDesktop } = useWindowSize();
+
+  const location = useLocation();
 
   return (
     <IonTabs>
@@ -81,7 +83,14 @@ const Tabs: React.FC = () => {
         slot='bottom'
         className='mobile-nav-tabs'
         id='mobile-nav-tabs'
-        hidden={isDesktop}
+        hidden={
+          isDesktop ||
+          (location.pathname !== "/challenges" &&
+            location.pathname !== "/explore" &&
+            location.pathname !== "/wall-of-shame" &&
+            location.pathname !== "/store" &&
+            location.pathname !== "/profile")
+        }
       >
         <IonTabButton tab='challenges' href='/challenges'>
           <IonIcon icon={challengeIcon} />
