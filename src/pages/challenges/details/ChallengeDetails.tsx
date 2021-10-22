@@ -8,10 +8,10 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
+  IonInput,
   IonPage,
   IonRow,
   IonText,
-  IonTextarea,
   IonToast,
   IonToolbar,
   isPlatform,
@@ -19,9 +19,10 @@ import {
 import { useReducer, useState } from "react";
 import {
   arrowBack,
+  flash,
   paperPlane,
-  pencilOutline,
-  personAddOutline,
+  pencil,
+  personAdd,
 } from "ionicons/icons";
 import { useEffect } from "react";
 import { Redirect, useHistory, useLocation } from "react-router";
@@ -54,6 +55,7 @@ import EditParticipantsModal from "../../../components/participants/EditParticip
 import DetailsTab from "./DetailsTab";
 import Chat from "./Chat";
 import uniqid from "uniqid";
+import PowerUpModal from "../powerUp";
 
 interface ChallengeDetailsProps {}
 
@@ -62,6 +64,7 @@ interface ChallengeDetailsState {
   showUploadProofModal: boolean;
   showViewProofModal: boolean;
   userUnderViewing: UserMini | undefined;
+  showPowerUpModal: boolean;
   showVoteModal: boolean;
   showParticipantModal: boolean;
   participants: {
@@ -112,6 +115,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     }),
     {
       editMode: false,
+      showPowerUpModal: false,
       showUploadProofModal: false,
       showViewProofModal: false,
       userUnderViewing: undefined,
@@ -142,12 +146,25 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   const fetchData = async () => {
     try {
       const locationState = location.state as ChallengeData;
-      if (!locationState) {
+      const pathname = window.location.pathname;
+      const splitted = pathname.split("/");
+      let challengeId = "";
+      if (splitted.length > 3) {
+        challengeId = splitted[2];
+      }
+      if (!locationState && !challengeId) {
         return;
       }
-      const challenge = await getChallenge(locationState.challengeId);
-      if (challenge) {
-        setChallenge(challenge);
+      if (locationState) {
+        const challenge = await getChallenge(locationState.challengeId);
+        if (challenge) {
+          setChallenge(challenge);
+        }
+      } else if (challengeId) {
+        const challenge = await getChallenge(challengeId);
+        if (challenge) {
+          setChallenge(challenge);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -508,7 +525,9 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
           <Chat
             chatId={challenge.challengeId}
             participants={challenge.participants.accepted.completed.concat(
-              challenge.participants.accepted.notCompleted
+              challenge.participants.accepted.notCompleted.concat(
+                challenge.participants.accepted.protected
+              )
             )}
           />
         );
@@ -522,7 +541,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     switch (tab) {
       case "details":
         return (
-          <IonFooter translucent={true}>
+          <IonFooter translucent={true} key='details'>
             <IonToolbar>
               <FooterActions
                 challenge={challenge}
@@ -556,7 +575,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
         return <></>;
       case "chat":
         return (
-          <IonFooter translucent={true}>
+          <IonFooter translucent={true} key='chat'>
             <IonToolbar>
               <IonRow
                 className='ion-align-items-center'
@@ -566,15 +585,14 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
                   <div
                     style={{
                       width: "100%",
-                      borderRadius: "2rem",
+                      borderRadius: "0.5rem",
                       background: "#ffffff",
                       paddingLeft: "0.75rem",
                       boxShadow: "rgba(149, 149, 149, 0.2) 0px 2px 10px 0px",
                     }}
                   >
-                    <IonTextarea
+                    <IonInput
                       value={state.message ?? ""}
-                      rows={1}
                       autoCorrect='on'
                       placeholder='Message...'
                       onIonChange={(event) => {
@@ -618,6 +636,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
       <IonHeader className='ion-no-border'>
         <IonToolbar color='main-beige' style={{ paddingTop: "0.5rem" }}>
           <IonFabButton
+            className='placeholder-fab'
             color='main-beige'
             mode='ios'
             slot='start'
@@ -637,6 +656,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
               <>
                 <IonButtons slot='end'>
                   <IonFabButton
+                    className='placeholder-fab'
                     color='main-beige'
                     mode='ios'
                     slot='end'
@@ -647,12 +667,24 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
                     }}
                     onClick={() => setState({ showParticipantModal: true })}
                   >
-                    <IonIcon
-                      icon={personAddOutline}
-                      style={{ fontSize: "1.5rem" }}
-                    />
+                    <IonIcon icon={personAdd} style={{ fontSize: "1.5rem" }} />
                   </IonFabButton>
                   <IonFabButton
+                    className='placeholder-fab'
+                    color='main-beige'
+                    mode='ios'
+                    slot='end'
+                    style={{
+                      margin: "0.5rem",
+                      width: "2.75rem",
+                      height: "2.75rem",
+                    }}
+                    onClick={() => setState({ showPowerUpModal: true })}
+                  >
+                    <IonIcon icon={flash} style={{ fontSize: "1.5rem" }} />
+                  </IonFabButton>
+                  <IonFabButton
+                    className='placeholder-fab'
                     color='main-beige'
                     mode='ios'
                     slot='end'
@@ -663,10 +695,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
                     }}
                     onClick={handleEdit}
                   >
-                    <IonIcon
-                      icon={pencilOutline}
-                      style={{ fontSize: "1.5rem" }}
-                    />
+                    <IonIcon icon={pencil} style={{ fontSize: "1.5rem" }} />
                   </IonFabButton>
                 </IonButtons>
               </>
@@ -729,6 +758,16 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
           </IonButton>
         </IonRow>
         {renderTabs()}
+        <PowerUpModal
+          showModal={state.showPowerUpModal}
+          setShowModal={(showModal) => {
+            setState({ showPowerUpModal: showModal });
+          }}
+          challengeData={challenge}
+          refreshChallengeCallback={async () => {
+            return fetchData();
+          }}
+        />
         <UploadProofModal
           challenge={challenge}
           userData={challenge.participants.accepted.completed.find(

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { database } from "../../../firebase";
-import { ref, onValue, query, orderByKey } from "firebase/database";
+import { ref, query, orderByKey, onValue } from "firebase/database";
 import { Message, UserMini } from "../../../interfaces/models/Challenges";
 import { IonAvatar, IonCol, IonRow, IonText } from "@ionic/react";
 import { differenceInSeconds, format, parseISO } from "date-fns";
@@ -24,6 +24,14 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
   const [lastUpdated, setLastUpdated] = useState(Date.now());
   const [hasSynced, setHasSynced] = useState(false);
 
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(scrollToBottom, [messages]);
+
   onValue(chatRef, (snapshot) => {
     const object = snapshot.val();
 
@@ -35,21 +43,12 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
     setLastUpdated(newTime);
     if (object) {
       const parsedValues = Object.values(object) as Message[];
-      console.log(parsedValues);
       if (parsedValues) {
         setMessages(parsedValues);
         setHasSynced(true);
       }
     }
   });
-
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(scrollToBottom, [messages]);
 
   return (
     <div
@@ -62,15 +61,12 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
     >
       {messages.map((m, index) => {
         const u = participants.find((p) => p.userId === m.userId);
-        if (!u) {
-          return undefined;
-        }
         return (
           <IonRow
             key={m.messageId}
-            style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
+            style={{ marginLeft: "1rem", marginRight: "1rem" }}
           >
-            {u.userId === user?.userId ? (
+            {u?.userId === user?.userId ? (
               <>
                 <IonCol size='10'>
                   <IonRow className='ion-no-padding'>
@@ -118,7 +114,9 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
                         height: "2.5rem",
                       }}
                     >
-                      <AvatarImg avatar={u?.avatar} />
+                      {u?.avatar !== undefined && (
+                        <AvatarImg avatar={u?.avatar} />
+                      )}
                     </IonAvatar>
                   </IonRow>
                 </IonCol>
@@ -133,7 +131,9 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
                         height: "2.5rem",
                       }}
                     >
-                      <AvatarImg avatar={u?.avatar} />
+                      {u?.avatar !== undefined && (
+                        <AvatarImg avatar={u?.avatar} />
+                      )}
                     </IonAvatar>
                   </IonRow>
                 </IonCol>

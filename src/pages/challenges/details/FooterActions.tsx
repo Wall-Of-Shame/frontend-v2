@@ -83,6 +83,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
                 Vote out cheaters
               </IonText>
             </IonButton>
+            {/*
             <IonButton
               mode='ios'
               shape='round'
@@ -108,7 +109,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
               <IonText style={{ marginLeft: "1.5rem", marginRight: "1.5rem" }}>
                 Release Results
               </IonText>
-            </IonButton>
+            </IonButton>*/}
           </IonRow>
         ) : (
           <IonRow
