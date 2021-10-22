@@ -6,6 +6,7 @@ import {
   ChallengeList,
   ChallengePost,
 } from "../interfaces/models/Challenges";
+import { PowerUpType } from "../interfaces/models/Store";
 import { VoteList } from "../interfaces/models/Votes";
 import {
   setHistory,
@@ -15,6 +16,7 @@ import {
   setVotes,
 } from "../reducers/ChallengeDux";
 import ChallengeService from "../services/ChallengeService";
+import { adaptPowerUpType } from "../utils/StoreUtils";
 
 const ChallengeContext = React.createContext<
   ChallengeContextInterface | undefined
@@ -25,6 +27,7 @@ const ChallengeProvider: React.FC = (props) => {
 
   const getAllChallenges = async (): Promise<ChallengeList> => {
     try {
+      console.log("Called");
       const response = await ChallengeService.getChallenges();
       dispatch(
         setOngoing({
@@ -100,6 +103,23 @@ const ChallengeProvider: React.FC = (props) => {
     }
   };
 
+  const applyPowerUp = async (
+    type: PowerUpType,
+    targetUserId: string | undefined,
+    challengeId: string
+  ): Promise<void> => {
+    const adaptedType = adaptPowerUpType(type);
+    try {
+      await ChallengeService.applyPowerUp(
+        adaptedType,
+        targetUserId,
+        challengeId
+      );
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
   const completeChallenge = async (id: string): Promise<void> => {
     try {
       await ChallengeService.completeChallenge(id);
@@ -163,6 +183,7 @@ const ChallengeProvider: React.FC = (props) => {
         updateChallenge,
         acceptChallenge,
         rejectChallenge,
+        applyPowerUp,
         completeChallenge,
         getVotes,
         voteForParticipant,
