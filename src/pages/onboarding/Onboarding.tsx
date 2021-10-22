@@ -51,7 +51,7 @@ const Onboarding: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent fullscreen>
+      <IonContent fullscreen scrollY={false}>
         <IonFab
           horizontal='start'
           vertical='top'
