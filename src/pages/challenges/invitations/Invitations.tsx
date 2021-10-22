@@ -15,7 +15,6 @@ import {
   IonRow,
   IonText,
   IonToolbar,
-  isPlatform,
 } from "@ionic/react";
 import { arrowBack, chevronForward } from "ionicons/icons";
 import { useEffect } from "react";
@@ -27,9 +26,11 @@ import { ChallengeDux } from "../../../reducers/ChallengeDux";
 import AvatarImg from "../../../components/avatar";
 import Container from "../../../components/container";
 import "../Challenges.scss";
+import { useWindowSize } from "../../../utils/WindowUtils";
 
 const Invitations: React.FC = () => {
   const history = useHistory();
+  const { isDesktop } = useWindowSize();
 
   const selectChallenges = (state: RootState): ChallengeDux => state.challenges;
 
@@ -62,7 +63,7 @@ const Invitations: React.FC = () => {
             </IonFabButton>
           </IonButtons>
         </IonToolbar>
-        {!isPlatform("desktop") && <div className='challenges-header-curve' />}
+        {!isDesktop && <div className='challenges-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen>

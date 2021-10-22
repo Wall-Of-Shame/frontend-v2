@@ -20,9 +20,8 @@ import {
   IonText,
   IonTextarea,
   IonToolbar,
-  isPlatform,
 } from "@ionic/react";
-import { arrowBack, chevronForward, pencil } from "ionicons/icons";
+import { arrowBack, chevronForward } from "ionicons/icons";
 import { useState, useReducer, useEffect } from "react";
 import {
   addHours,
@@ -52,6 +51,7 @@ import Alert from "../../../components/alert";
 import OfflineToast from "../../../components/offlineToast";
 import { useHistory } from "react-router";
 import { intervalToDuration } from "date-fns/esm";
+import { useWindowSize } from "../../../utils/WindowUtils";
 
 interface CreateChallengeProps {}
 
@@ -77,6 +77,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
   props: CreateChallengeProps
 ) => {
   const history = useHistory();
+  const { isDesktop } = useWindowSize();
   const { createChallenge } = useChallenge();
   const [showModal, setShowModal] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -180,9 +181,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
               </IonRow>
             </IonGrid>
           </div>
-          {!isPlatform("desktop") && (
-            <div className='challenges-header-curve' />
-          )}
+          {!isDesktop && <div className='challenges-header-curve' />}
         </IonHeader>
 
         <IonContent fullscreen>
@@ -281,7 +280,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
             </IonRow>
           </IonGrid>
         </div>
-        {!isPlatform("desktop") && <div className='challenges-header-curve' />}
+        {!isDesktop && <div className='challenges-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen>

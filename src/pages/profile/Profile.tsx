@@ -50,6 +50,7 @@ import { format, parseISO } from "date-fns";
 import FeedbackModal from "../../components/feedback";
 import Alert from "../../components/alert";
 import lodash from "lodash";
+import { useWindowSize } from "../../utils/WindowUtils";
 
 export interface ProfileState {
   isLoading: boolean;
@@ -65,6 +66,7 @@ export interface ProfileState {
 const Profile: React.FC = () => {
   const { logout } = useAuth();
   const { user } = useUser();
+  const { isDesktop } = useWindowSize();
   const location = useLocation();
   const history = useHistory();
   const [popoverState, setShowPopover] = useState({
@@ -320,12 +322,7 @@ const Profile: React.FC = () => {
             color='white'
             style={{
               fontWeight: "800",
-              fontSize:
-                isPlatform("desktop") ||
-                isPlatform("tablet") ||
-                isPlatform("ipad")
-                  ? "1.5rem"
-                  : "2rem",
+              fontSize: isDesktop ? "1.5rem" : "2rem",
             }}
           >
             Profile
@@ -348,11 +345,7 @@ const Profile: React.FC = () => {
             <IonIcon icon={ellipsisVertical} />
           </IonFabButton>
         </IonToolbar>
-        {!(
-          isPlatform("desktop") ||
-          isPlatform("tablet") ||
-          isPlatform("ipad")
-        ) && <div className='profile-header-curve' />}
+        {!isDesktop && <div className='profile-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen>
@@ -578,7 +571,7 @@ const Profile: React.FC = () => {
             color='main-blue'
             shape='round'
             onClick={() => {
-              history.push("/friends");
+              history.push("/profile/friends");
             }}
           >
             See all friends and requests

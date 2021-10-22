@@ -25,9 +25,11 @@ import AvatarImg from "../../../components/avatar";
 import Container from "../../../components/container";
 import "../Profile.scss";
 import AddFriendsModal from "./AddFriendsModal";
+import { useWindowSize } from "../../../utils/WindowUtils";
 
 const Friends: React.FC = () => {
   const history = useHistory();
+  const { isDesktop } = useWindowSize();
 
   const [showModal, setShowModal] = useState(false);
 
@@ -74,7 +76,7 @@ const Friends: React.FC = () => {
             </IonFabButton>
           </IonButtons>
         </IonToolbar>
-        {!isPlatform("desktop") && <div className='profile-header-curve' />}
+        {!isDesktop && <div className='profile-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen>

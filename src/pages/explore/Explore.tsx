@@ -6,17 +6,18 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  isPlatform,
 } from "@ionic/react";
 import { funnelOutline } from "ionicons/icons";
 import { useEffect } from "react";
 import { useLocation } from "react-router";
 import Container from "../../components/container";
 import { showTabs, hideTabs } from "../../utils/TabsUtils";
+import { useWindowSize } from "../../utils/WindowUtils";
 import "./Explore.scss";
 
 const Explore: React.FC = () => {
   const location = useLocation();
+  const { isDesktop } = useWindowSize();
 
   useEffect(() => {
     if (
@@ -46,12 +47,7 @@ const Explore: React.FC = () => {
             color='white'
             style={{
               fontWeight: "800",
-              fontSize:
-                isPlatform("desktop") ||
-                isPlatform("tablet") ||
-                isPlatform("ipad")
-                  ? "1.5rem"
-                  : "2rem",
+              fontSize: isDesktop ? "1.5rem" : "2rem",
             }}
           >
             Explore
@@ -75,11 +71,7 @@ const Explore: React.FC = () => {
             />
           </IonFabButton>
         </IonToolbar>
-        {!(
-          isPlatform("desktop") ||
-          isPlatform("tablet") ||
-          isPlatform("ipad")
-        ) && <div className='explore-header-curve' />}
+        {!isDesktop && <div className='explore-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen>

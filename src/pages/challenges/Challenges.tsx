@@ -36,10 +36,10 @@ import Alert from "../../components/alert";
 import { format } from "date-fns";
 import parseISO from "date-fns/parseISO";
 import AvatarImg from "../../components/avatar";
-import { isPlatform } from "@ionic/core";
 import { useSocket } from "../../contexts/SocketContext";
 import challenge from "../../assets/onboarding/challenge.png";
 import { Avatar } from "../../interfaces/models/Users";
+import { useWindowSize } from "../../utils/WindowUtils";
 
 interface ChallengesState {
   isLoading: boolean;
@@ -55,6 +55,7 @@ interface ChallengesState {
 const Challenges: React.FC = () => {
   const { user } = useUser();
   const { connect } = useSocket();
+  const { isDesktop } = useWindowSize();
   const location = useLocation();
   const history = useHistory();
   const { getAllChallenges } = useChallenge();
@@ -423,12 +424,7 @@ const Challenges: React.FC = () => {
             color='white'
             style={{
               fontWeight: "800",
-              fontSize:
-                isPlatform("desktop") ||
-                isPlatform("tablet") ||
-                isPlatform("ipad")
-                  ? "1.5rem"
-                  : "2rem",
+              fontSize: isDesktop ? "1.5rem" : "2rem",
             }}
           >
             Challenges
@@ -466,11 +462,7 @@ const Challenges: React.FC = () => {
             )}
           </IonFabButton>
         </IonToolbar>
-        {!(
-          isPlatform("desktop") ||
-          isPlatform("tablet") ||
-          isPlatform("ipad")
-        ) && <div className='challenges-header-curve' />}
+        {!isDesktop && <div className='challenges-header-curve' />}
       </IonHeader>
       <IonContent fullscreen>
         <IonRow className='ion-justify-content-center ion-padding'>
