@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   IonAvatar,
   IonCard,
@@ -31,22 +30,12 @@ import "./WallOfShame.scss";
 import { hideTabs, showTabs } from "../../utils/TabsUtils";
 import { useLocation } from "react-router";
 import { funnelOutline, trophy } from "ionicons/icons";
-import { database } from "../../firebase";
-import {
-  ref,
-  onValue,
-  query,
-  orderByKey,
-  limitToLast,
-} from "firebase/database";
 import { Shame } from "../../interfaces/models/Challenges";
-import { differenceInSeconds, isBefore, parseISO } from "date-fns";
+import { parseISO } from "date-fns";
 import { UserList } from "../../interfaces/models/Users";
-import { useUser } from "../../contexts/UserContext";
 import LoadingSpinner from "../../components/loadingSpinner";
 import Alert from "../../components/alert";
 import AvatarImg from "../../components/avatar";
-import { Socket } from "socket.io-client";
 import { useSocket } from "../../contexts/SocketContext";
 import Container from "../../components/container";
 import { useWindowSize } from "../../utils/WindowUtils";
@@ -81,7 +70,6 @@ const WallOfShame: React.FC = () => {
   const location = useLocation();
   const { connect } = useSocket();
   const { width, isDesktop } = useWindowSize();
-  const { getGlobalRankings, getFriendsRankings } = useUser();
 
   const [tab, setTab] = useState("live");
   const [popoverState, setShowPopover] = useState({
@@ -97,6 +85,7 @@ const WallOfShame: React.FC = () => {
   const [lastShamed, setLastShamed] = useState(new Date().getTime() / 1000);
   const [overlaysPositions, setOverlaysPositions] = useState<OverlayMap>({});
   const [globalRankings, setGlobalRankings] = useState<UserList[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [friendsRankings, setFriendsRankings] = useState<UserList[]>([]);
   const trophyColors = ["#ffd73c", "#bcbcbc", "#be7b2d"];
 
@@ -120,45 +109,6 @@ const WallOfShame: React.FC = () => {
       okHandler: undefined,
     }
   );
-
-  const topShamesRef = query(
-    ref(database, "shames"),
-    orderByKey(),
-    limitToLast(100)
-  );
-
-  /*
-  onValue(topShamesRef, (snapshot) => {
-    const object = snapshot.val();
-
-    const newTime = Date.now();
-    // Debounce the events
-    if (differenceInSeconds(lastUpdated, newTime) < 2 && hasSynced) {
-      return;
-    }
-    setLastUpdated(newTime);
-    if (object) {
-      const parsedValues = Object.values(object) as Shame[];
-      if (parsedValues) {
-        const reversed = parsedValues.reverse();
-        setShames(reversed);
-        setHasSynced(true);
-      }
-    }
-  });
-  */
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const fetchData = async (): Promise<void> => {
-    try {
-      const global = await getGlobalRankings();
-      const friends = await getFriendsRankings();
-      setGlobalRankings(global);
-      setFriendsRankings(friends);
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  };
 
   const connectToSocket = async () => {
     const globalSocket = await connect();
@@ -268,7 +218,6 @@ const WallOfShame: React.FC = () => {
   };
 
   useEffect(() => {
-    // fetchData();
     connectToSocket();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
