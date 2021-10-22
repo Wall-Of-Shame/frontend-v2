@@ -564,6 +564,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                 flex: 1,
                 marginLeft: "2rem",
                 marginRight: "2rem",
+                maxWidth: 300,
               }}
             >
               <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>

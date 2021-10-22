@@ -76,6 +76,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
                 flex: 1,
                 marginLeft: "2rem",
                 marginRight: "2rem",
+                maxWidth: 300,
               }}
             >
               <IonText style={{ marginLeft: "1.5rem", marginRight: "1.5rem" }}>
@@ -101,6 +102,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
                 flex: 1,
                 marginLeft: "2rem",
                 marginRight: "2rem",
+                maxWidth: 300,
               }}
             >
               <IonText style={{ marginLeft: "1.5rem", marginRight: "1.5rem" }}>
@@ -125,6 +127,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
                 flex: 1,
                 marginLeft: "2rem",
                 marginRight: "2rem",
+                maxWidth: 300,
               }}
             >
               <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>
