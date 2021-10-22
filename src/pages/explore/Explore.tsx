@@ -1,17 +1,30 @@
 import {
+  IonAvatar,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonCol,
   IonContent,
   IonFabButton,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonPage,
+  IonRow,
+  IonText,
   IonTitle,
   IonToolbar,
   isPlatform,
 } from "@ionic/react";
+import { parseISO } from "date-fns";
 import { funnelOutline } from "ionicons/icons";
+import { format } from "path";
 import { useEffect } from "react";
 import { useLocation } from "react-router";
+import AvatarImg from "../../components/avatar";
 import Container from "../../components/container";
+import { Avatar } from "../../interfaces/models/Users";
 import { showTabs, hideTabs } from "../../utils/TabsUtils";
 import "./Explore.scss";
 
@@ -34,16 +47,16 @@ const Explore: React.FC = () => {
 
   return (
     <IonPage style={{ background: "#ffffff" }}>
-      <IonHeader className='ion-no-border'>
+      <IonHeader className="ion-no-border">
         <IonToolbar
-          color='main-blue'
-          mode='md'
-          className='explore-header'
+          color="main-blue"
+          mode="md"
+          className="explore-header"
           style={{ paddingTop: "0.5rem", paddingBottom: "0.25rem" }}
         >
           <IonTitle
-            size='large'
-            color='white'
+            size="large"
+            color="white"
             style={{
               fontWeight: "800",
               fontSize:
@@ -57,10 +70,10 @@ const Explore: React.FC = () => {
             Explore
           </IonTitle>
           <IonFabButton
-            className='placeholder-fab'
-            color='clear'
-            mode='ios'
-            slot='end'
+            className="placeholder-fab"
+            color="clear"
+            mode="ios"
+            slot="end"
             disabled
             style={{
               margin: "0.5rem",
@@ -70,7 +83,7 @@ const Explore: React.FC = () => {
           >
             <IonIcon
               icon={funnelOutline}
-              color='main-blue'
+              color="main-blue"
               style={{ fontSize: "1.5rem" }}
             />
           </IonFabButton>
@@ -79,11 +92,25 @@ const Explore: React.FC = () => {
           isPlatform("desktop") ||
           isPlatform("tablet") ||
           isPlatform("ipad")
-        ) && <div className='explore-header-curve' />}
+        ) && <div className="explore-header-curve" />}
       </IonHeader>
 
       <IonContent fullscreen>
-        <Container>Coming soon :)</Container>
+        <IonGrid style={{ marginTop: "2rem" }}>
+          <IonRow className="ion-padding ion-align-items-center">
+            <IonText style={{ fontWeight: "bold" }} color="primary">
+              Featured challenges
+            </IonText>
+          </IonRow>
+
+          <IonRow className="ion-padding ion-align-items-center">
+            <IonText style={{ fontWeight: "bold" }} color="primary">
+              Trending challenges
+            </IonText>
+          </IonRow>
+          {renderChallenges()}
+        </IonGrid>
+        {/* <Container>Coming soon :)</Container> */}
       </IonContent>
     </IonPage>
   );
