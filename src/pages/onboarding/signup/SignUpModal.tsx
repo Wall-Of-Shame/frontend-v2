@@ -1,4 +1,4 @@
-import { IonModal, isPlatform } from "@ionic/react";
+import { IonModal } from "@ionic/react";
 import { useReducer, useState } from "react";
 import "./SignUpModal.scss";
 import PersonalDetails from "./PersonalDetails";
@@ -6,6 +6,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import EmailVerification from "./EmailVerification";
 import LoadingSpinner from "../../../components/loadingSpinner";
 import Alert from "../../../components/alert";
+import { useWindowSize } from "../../../utils/WindowUtils";
 
 interface SignUpModalProps {
   showModal: boolean;
@@ -30,6 +31,7 @@ export interface SignUpModalState {
 
 const SignUpModal: React.FC<SignUpModalProps> = (props: SignUpModalProps) => {
   const { showModal, setShowModal } = props;
+  const { isDesktop } = useWindowSize();
   const [pageNumber, setPageNumber] = useState(0);
   const [animationDirection, setAnimationDirection] = useState("left");
 
@@ -91,11 +93,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props: SignUpModalProps) => {
   return (
     <IonModal
       isOpen={showModal}
-      cssClass={
-        isPlatform("desktop") || isPlatform("tablet") || isPlatform("ipad")
-          ? "signup-modal"
-          : ""
-      }
+      cssClass={isDesktop ? "signup-modal" : ""}
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={false}
     >

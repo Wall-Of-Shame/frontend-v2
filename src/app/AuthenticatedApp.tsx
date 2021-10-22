@@ -51,14 +51,12 @@ import shameIcon from "../assets/icons/shame-icon.svg";
 import { useWindowSize } from "../utils/WindowUtils";
 
 const AuthenticatedApp: React.FC = () => {
-  const { width } = useWindowSize();
+  const { width, isDesktop } = useWindowSize();
 
   return (
     <IonApp>
       <IonReactRouter>
-        {(isPlatform("desktop") ||
-          isPlatform("tablet") ||
-          isPlatform("ipad")) && (
+        {isDesktop && (
           <IonToolbar className='desktop-navbar'>
             <IonRow className='ion-align-items-center'>
               {width! >= 992 && (
@@ -130,37 +128,20 @@ const AuthenticatedApp: React.FC = () => {
         <IonSplitPane
           contentId='main'
           className={`split-pane-main ${
-            isPlatform("desktop") || isPlatform("tablet") || isPlatform("ipad")
-              ? "split-pane-main-desktop"
-              : ""
+            isDesktop ? "split-pane-main-desktop" : ""
           }`}
         >
           <IonRouterOutlet
             id='main'
-            className={`split-pane-content ${
-              !(
-                isPlatform("desktop") ||
-                isPlatform("tablet") ||
-                isPlatform("ipad")
-              )
-                ? "non-desktop"
-                : ""
-            }`}
+            className={`split-pane-content ${!isDesktop ? "non-desktop" : ""}`}
             style={{
-              marginTop:
-                isPlatform("desktop") ||
-                isPlatform("tablet") ||
-                isPlatform("ipad")
-                  ? "3.5rem"
-                  : 0,
+              marginTop: isDesktop ? "3.5rem" : 0,
             }}
           >
             <Route path='/challenges' render={() => <Tabs />} />
             <Route path='/' render={() => <Tabs />} />
           </IonRouterOutlet>
-          {(isPlatform("desktop") ||
-            isPlatform("tablet") ||
-            isPlatform("ipad")) && <RightMenu />}
+          {IdleDeadline && <RightMenu />}
         </IonSplitPane>
       </IonReactRouter>
     </IonApp>

@@ -80,7 +80,7 @@ interface OverlayMap {
 const WallOfShame: React.FC = () => {
   const location = useLocation();
   const { connect } = useSocket();
-  const { width } = useWindowSize();
+  const { width, isDesktop } = useWindowSize();
   const { getGlobalRankings, getFriendsRankings } = useUser();
 
   const [tab, setTab] = useState("live");
@@ -469,7 +469,7 @@ const WallOfShame: React.FC = () => {
           <div
             style={{
               padding: "0.5rem",
-              marginTop: !isPlatform("desktop") ? "1rem" : 0,
+              marginTop: !isDesktop ? "1rem" : 0,
             }}
           >
             <StackGrid
@@ -629,12 +629,7 @@ const WallOfShame: React.FC = () => {
             color='white'
             style={{
               fontWeight: "800",
-              fontSize:
-                isPlatform("desktop") ||
-                isPlatform("tablet") ||
-                isPlatform("ipad")
-                  ? "1.5rem"
-                  : "2rem",
+              fontSize: isDesktop ? "1.5rem" : "2rem",
             }}
           >
             Wall of Shame
@@ -657,11 +652,7 @@ const WallOfShame: React.FC = () => {
             <IonIcon icon={funnelOutline} style={{ fontSize: "1.5rem" }} />
           </IonFabButton>
         </IonToolbar>
-        {!(
-          isPlatform("desktop") ||
-          isPlatform("tablet") ||
-          isPlatform("ipad")
-        ) && <div className='wall-header-curve' />}
+        {!isDesktop && <div className='wall-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen>

@@ -5,7 +5,6 @@ import {
   IonTabBar,
   IonTabButton,
   IonIcon,
-  isPlatform,
 } from "@ionic/react";
 import { Route, Redirect } from "react-router";
 import {
@@ -28,12 +27,15 @@ import Store from "../store";
 import Invitations from "../challenges/invitations";
 import OtherProfile from "../profile/other";
 import Friends from "../profile/friends";
+import { useWindowSize } from "../../utils/WindowUtils";
 
 const redirectToChallenges = (): React.ReactNode => (
   <Redirect to={"/challenges"} />
 );
 
 const Tabs: React.FC = () => {
+  const { isDesktop } = useWindowSize();
+
   return (
     <IonTabs>
       <IonRouterOutlet animated={false}>
@@ -70,7 +72,7 @@ const Tabs: React.FC = () => {
         <Route exact path='/profile/user/:id'>
           <OtherProfile />
         </Route>
-        <Route exact path='/friends'>
+        <Route exact path='/profile/friends'>
           <Friends />
         </Route>
         <Route render={redirectToChallenges} />
@@ -79,7 +81,7 @@ const Tabs: React.FC = () => {
         slot='bottom'
         className='mobile-nav-tabs'
         id='mobile-nav-tabs'
-        hidden={isPlatform("desktop")}
+        hidden={isDesktop}
       >
         <IonTabButton tab='challenges' href='/challenges'>
           <IonIcon icon={challengeIcon} />
