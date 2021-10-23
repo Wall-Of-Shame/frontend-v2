@@ -27,7 +27,7 @@ import {
   PowerUpPostType,
   PowerUpType,
 } from "../../interfaces/models/Store";
-import PurchasePowerUpModal from "./powerUp";
+import PurchasePowerUpModal from "../../components/powerUp";
 import { useAuth } from "../../contexts/AuthContext";
 import { UserData } from "../../interfaces/models/Users";
 import LoadingSpinner from "../../components/loadingSpinner";
@@ -45,11 +45,11 @@ interface StoreState {
   okHandler?: () => void;
 }
 
-interface PowerUpMap {
+export interface PowerUpMap {
   [key: string]: boolean;
 }
 
-const powerUps: PowerUp[] = [
+export const powerUps: PowerUp[] = [
   {
     type: "Protec",
     price: 750,

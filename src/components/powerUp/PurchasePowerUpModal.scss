@@ -1,0 +1,49 @@
+.purhcase-item-modal-md {
+  --backdrop-opacity: var(--ion-backdrop-opacity, 0.32);
+  --max-height: 24rem;
+  --max-width: 24rem;
+  padding: 7.5vw;
+
+  .modal-wrapper {
+    border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
+  }
+}
+
+@media only screen and (min-width: 576px) {
+  .purhcase-item-modal-md {
+    --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.1);
+    --backdrop-opacity: var(--ion-backdrop-opacity, 0.32);
+    --max-height: 24.5rem;
+    --max-width: 24.5rem;
+    padding: 7.5vw;
+
+    .modal-wrapper {
+      border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
+    }
+  }
+}
+
+.purhcase-item-modal-ios {
+  --backdrop-opacity: var(--ion-backdrop-opacity, 0.32);
+  --max-height: 23.5rem;
+  --max-width: 23.5rem;
+  padding: 7.5vw;
+
+  .modal-wrapper {
+    border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
+  }
+}
+
+@media only screen and (min-width: 576px) {
+  .purhcase-item-modal-ios {
+    --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.1);
+    --backdrop-opacity: var(--ion-backdrop-opacity, 0.32);
+    --max-height: 24rem;
+    --max-width: 24rem;
+    padding: 7.5vw;
+
+    .modal-wrapper {
+      border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
+    }
+  }
+}

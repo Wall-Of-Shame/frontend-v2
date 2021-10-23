@@ -49,10 +49,15 @@
   }
 }
 
-@media only screen and (min-width: 500px) {
+.completed-challenge-img {
+  width: 75vw;
+  height: 75vw;
+}
+
+@media only screen and (min-width: 450px) {
   .completed-challenge-img {
-    width: 450px;
-    height: 450px;
+    width: 325px;
+    height: 325px;
   }
 }
 

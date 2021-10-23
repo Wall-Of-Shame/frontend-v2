@@ -18,7 +18,7 @@ import { UserList } from "../../../interfaces/models/Users";
 import { useCallback, useState } from "react";
 import "./Friends.scss";
 import { useUser } from "../../../contexts/UserContext";
-import { addOutline, arrowBack, removeOutline } from "ionicons/icons";
+import { arrowBack, removeOutline } from "ionicons/icons";
 import AvatarImg from "../../../components/avatar";
 import lodash from "lodash";
 
@@ -30,6 +30,7 @@ interface AddFriendsModalProps {
 }
 
 const AddFriendsModal: React.FC<AddFriendsModalProps> = (props) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { users, showModal, setShowModal, completionCallback } = props;
   const { user, searchUser } = useUser();
   const [searchText, setSearchText] = useState("");
@@ -71,6 +72,7 @@ const AddFriendsModal: React.FC<AddFriendsModalProps> = (props) => {
   return (
     <IonModal
       isOpen={showModal}
+      mode='ios'
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={false}
       cssClass='add-friends-modal'

@@ -1,3 +1,4 @@
+import { PowerUp, PowerUpPostType } from "./Store";
 import { AvatarAnimal, AvatarColor, UserList } from "./Users";
 
 export interface ChallengeId {
@@ -24,6 +25,7 @@ export interface ChallengeData {
   challengeId: string;
   title: string;
   imageURL?: string;
+  isFeatured?: boolean;
   description?: string;
   startAt: string | null;
   endAt: string;
@@ -36,6 +38,7 @@ export interface ChallengeData {
     accepted: {
       completed: UserMini[];
       notCompleted: UserMini[];
+      protected: UserMini[];
     };
     pending: UserMini[];
   };
@@ -62,6 +65,11 @@ export interface ChallengePatch {
 export interface PublicChallengeList {
   featured: ChallengeData[];
   others: ChallengeData[];
+}
+
+export interface PowerupDto {
+  type: PowerUpPostType;
+  targetUserId?: string | undefined;
 }
 
 // Internal type. They do not match to any route specifically, but rather used to construct them.
@@ -92,4 +100,12 @@ export interface Shame {
     color: AvatarColor;
     background: string;
   };
+}
+
+export interface Message {
+  messageId: string;
+  name: string;
+  userId: string;
+  content: string;
+  time: string;
 }

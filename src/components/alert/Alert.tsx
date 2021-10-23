@@ -28,6 +28,7 @@ const Alert: React.FunctionComponent<AlertProps> = (props: AlertProps) => {
 
   return (
     <IonAlert
+      mode='ios'
       isOpen={showAlert}
       onDidDismiss={closeAlert}
       header={alertHeader}

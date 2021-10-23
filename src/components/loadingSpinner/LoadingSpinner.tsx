@@ -13,6 +13,7 @@ const LoadingSpinner: React.FunctionComponent<LoadingProps> = (
   const { loading, closeLoading, message } = props;
   return (
     <IonLoading
+      mode='ios'
       isOpen={loading}
       onDidDismiss={closeLoading}
       message={message}

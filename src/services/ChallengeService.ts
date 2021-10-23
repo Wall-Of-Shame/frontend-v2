@@ -2,7 +2,9 @@ import {
   ChallengeData,
   ChallengeList,
   ChallengePost,
+  PowerupDto,
 } from "../interfaces/models/Challenges";
+import { PowerUpPostType } from "../interfaces/models/Store";
 import { VoteList } from "../interfaces/models/Votes";
 import APIService from "../services/APIService";
 
@@ -54,6 +56,22 @@ const acceptChallenge = async (challengeId: string): Promise<void> => {
 const rejectChallenge = async (challengeId: string): Promise<void> => {
   try {
     await APIService.post(`challenges/${challengeId}/reject`);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+const applyPowerUp = async (
+  type: PowerUpPostType,
+  targetUserId: string | undefined,
+  challengeId: string
+): Promise<void> => {
+  try {
+    const data: PowerupDto = {
+      type,
+      targetUserId,
+    };
+    await APIService.post(`challenges/${challengeId}/powerups`, data);
   } catch (error) {
     return Promise.reject(error);
   }
@@ -124,6 +142,7 @@ export default {
   updateChallenge,
   acceptChallenge,
   rejectChallenge,
+  applyPowerUp,
   completeChallenge,
   releaseResults,
   getVotes,

@@ -11,10 +11,11 @@ import {
   IonText,
 } from "@ionic/react";
 import { add, remove } from "ionicons/icons";
-import challenge from "../../../assets/onboarding/challenge.png";
+import challenge from "../../assets/onboarding/challenge.png";
 import "./PurchasePowerUpModal.scss";
-import { PowerUp, PowerUpType } from "../../../interfaces/models/Store";
+import { PowerUp, PowerUpType } from "../../interfaces/models/Store";
 import { useState } from "react";
+import { isPlatform } from "@ionic/core";
 
 interface PurchasePowerUpModalProps {
   powerUp: PowerUp | null;
@@ -41,7 +42,10 @@ const PurchasePowerUpModal: React.FC<PurchasePowerUpModalProps> = (
 
   return (
     <IonModal
-      cssClass='purhcase-item-modal'
+      cssClass={
+        isPlatform("ios") ? "purhcase-item-modal-ios" : "purhcase-item-modal-md"
+      }
+      mode='ios'
       isOpen={showModal}
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={true}

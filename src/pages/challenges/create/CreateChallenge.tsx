@@ -425,7 +425,6 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                 min={formatISO(Date.now()).slice(0, -6)}
                 max={formatISO(addYears(Date.now(), 1)).slice(0, -6)}
                 value={state.startAt}
-                placeholder={format(Date.now(), "d MMM yyyy HH:mm")}
                 onIonChange={(e) => setState({ startAt: e.detail.value! })}
               ></IonDatetime>
             </IonItem>
@@ -443,11 +442,11 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                 Ends at
               </IonLabel>
               <IonDatetime
+                mode='md'
                 displayFormat='D MMM YYYY HH:mm'
                 min={formatISO(Date.now()).slice(0, -6)}
                 max={formatISO(addYears(Date.now(), 10)).slice(0, -6)}
                 value={state.endAt}
-                placeholder={format(Date.now(), "d MMM yyyy HH:mm")}
                 onIonChange={(e) => setState({ endAt: e.detail.value! })}
               ></IonDatetime>
             </IonItem>
