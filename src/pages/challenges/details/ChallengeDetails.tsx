@@ -712,7 +712,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
         {!isPlatform("desktop") && <div className='challenges-header-curve' />}
       </IonHeader>
 
-      <IonContent fullscreen>
+      <IonContent fullscreen scrollY={tab === "chat" ? false : true}>
         <IonGrid className='ion-margin-top'>
           {renderHeader()}
           <IonRow className='ion-padding-horizontal ion-padding-bottom'>
