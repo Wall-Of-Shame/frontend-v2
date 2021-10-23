@@ -12,11 +12,12 @@ import {
   IonModal,
   IonRow,
   IonText,
+  IonTitle,
   IonToast,
   IonToolbar,
 } from "@ionic/react";
 import "./VoteModal.scss";
-import { arrowBackOutline, refreshOutline } from "ionicons/icons";
+import { arrowBack, refreshOutline } from "ionicons/icons";
 import { UserMini } from "../../../interfaces/models/Challenges";
 import { useUser } from "../../../contexts/UserContext";
 import { useEffect, useReducer, useState } from "react";
@@ -238,21 +239,45 @@ const VoteModal: React.FC<VoteModalProps> = (props: VoteModalProps) => {
   return (
     <IonModal
       isOpen={showModal}
+      cssClass='vote-modal'
+      mode='ios'
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={false}
     >
-      <IonHeader translucent>
-        <IonToolbar>
+      <IonHeader className='ion-no-border'>
+        <IonToolbar color='main-beige' mode='md' className='store-header'>
           <IonButtons slot='start'>
             <IonButton
+              style={{
+                margin: "0.5rem",
+              }}
               onClick={() => setShowModal(false)}
-              style={{ margin: "0.5rem" }}
             >
-              <IonIcon icon={arrowBackOutline} size='large' />
+              <IonIcon
+                icon={arrowBack}
+                color='white'
+                style={{ fontSize: "1.5rem" }}
+              />
             </IonButton>
           </IonButtons>
+          <IonTitle size='large' color='white'>
+            Vote
+          </IonTitle>
+          <IonButton
+            className='placeholder-fab ion-align-items-center'
+            color='main-beige'
+            mode='ios'
+            shape='round'
+            slot='end'
+            disabled
+            style={{
+              margin: "0.5rem",
+              height: "2.75rem",
+            }}
+          ></IonButton>
         </IonToolbar>
       </IonHeader>
+
       <IonContent fullscreen>
         <IonContent>
           <IonFab vertical='bottom' horizontal='end' slot='fixed'>
