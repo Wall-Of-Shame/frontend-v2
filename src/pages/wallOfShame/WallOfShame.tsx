@@ -607,6 +607,7 @@ const WallOfShame: React.FC = () => {
       <IonContent fullscreen>
         <IonPopover
           cssClass='popover'
+          mode='ios'
           event={popoverState.event}
           isOpen={popoverState.showPopover}
           onDidDismiss={() =>

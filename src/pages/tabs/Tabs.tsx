@@ -5,6 +5,7 @@ import {
   IonTabBar,
   IonTabButton,
   IonIcon,
+  IonBadge,
 } from "@ionic/react";
 import { Route, Redirect, useLocation } from "react-router";
 import {
@@ -30,6 +31,7 @@ import OtherProfile from "../profile/other";
 import Friends from "../profile/friends";
 import { useWindowSize } from "../../utils/WindowUtils";
 import PastChallenges from "../profile/challenges";
+import { useUser } from "../../contexts/UserContext";
 
 const redirectToChallenges = (): React.ReactNode => (
   <Redirect to={"/challenges"} />
@@ -37,6 +39,7 @@ const redirectToChallenges = (): React.ReactNode => (
 
 const Tabs: React.FC = () => {
   const { isDesktop } = useWindowSize();
+  const { user } = useUser();
 
   const location = useLocation();
 
@@ -114,6 +117,21 @@ const Tabs: React.FC = () => {
         </IonTabButton>
         <IonTabButton tab='profile' href='/profile'>
           <IonIcon icon={personOutline} />
+          {!!user?.friends.received && user?.friends.received > 0 && (
+            <IonBadge
+              mode='ios'
+              color='danger'
+              style={{
+                position: "absolute",
+                top: "0.5rem",
+                right: "0.4rem",
+                width: "0.85rem",
+                height: "0.85rem",
+              }}
+            >
+              &nbsp;
+            </IonBadge>
+          )}
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

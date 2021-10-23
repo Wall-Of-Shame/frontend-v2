@@ -1,6 +1,7 @@
 import {
   IonApp,
   IonAvatar,
+  IonBadge,
   IonButton,
   IonCol,
   IonIcon,
@@ -49,9 +50,11 @@ import logo from "../assets/icon-192x192.png";
 import challengeIcon from "../assets/icons/challenge-icon.svg";
 import shameIcon from "../assets/icons/shame-icon.svg";
 import { useWindowSize } from "../utils/WindowUtils";
+import { useUser } from "../contexts/UserContext";
 
 const AuthenticatedApp: React.FC = () => {
   const { width, isDesktop } = useWindowSize();
+  const { user } = useUser();
 
   return (
     <IonApp>
@@ -99,6 +102,21 @@ const AuthenticatedApp: React.FC = () => {
                   </IonTabButton>
                   <IonTabButton tab='profile' href='/profile'>
                     <IonIcon icon={personOutline} />
+                    {!!user?.friends.received && user?.friends.received > 0 && (
+                      <IonBadge
+                        mode='ios'
+                        color='danger'
+                        style={{
+                          position: "absolute",
+                          top: "0.5rem",
+                          right: "0.4rem",
+                          width: "0.85rem",
+                          height: "0.85rem",
+                        }}
+                      >
+                        &nbsp;
+                      </IonBadge>
+                    )}
                   </IonTabButton>
                 </IonTabBar>
               </IonCol>

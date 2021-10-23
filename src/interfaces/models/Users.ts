@@ -32,6 +32,7 @@ export interface UserData {
     protecCount: number;
   };
   friends: {
+    received: number;
     accepted: string[];
     pendingAccept: string[];
   };
