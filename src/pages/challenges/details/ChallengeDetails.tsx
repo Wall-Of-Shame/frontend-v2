@@ -56,6 +56,7 @@ import DetailsTab from "./DetailsTab";
 import Chat from "./Chat";
 import uniqid from "uniqid";
 import PowerUpModal from "../powerUp";
+import { useWindowSize } from "../../../utils/WindowUtils";
 
 interface ChallengeDetailsProps {}
 
@@ -92,6 +93,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   const location = useLocation();
   const history = useHistory();
   const { user } = useUser()!;
+  const { width } = useWindowSize();
   const {
     getChallenge,
     acceptChallenge,
@@ -581,35 +583,41 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
                 className='ion-align-items-center'
                 style={{ margin: "0.5rem" }}
               >
-                <IonCol size='11'>
-                  <div
-                    style={{
-                      width: "100%",
-                      borderRadius: "0.5rem",
-                      background: "#ffffff",
-                      paddingLeft: "0.75rem",
-                      boxShadow: "rgba(149, 149, 149, 0.2) 0px 2px 10px 0px",
-                    }}
-                  >
-                    <IonInput
-                      value={state.message ?? ""}
-                      autoCorrect='on'
-                      placeholder='Message...'
-                      onIonChange={(event) => {
-                        setState({
-                          message: event.detail.value ?? "",
-                        });
+                <IonCol size={width! >= 576 ? "11" : "10.5"}>
+                  <IonRow className='ion-justify-content-center'>
+                    <div
+                      style={{
+                        width: "100%",
+                        borderRadius: "2rem",
+                        background: "#ffffff",
+                        paddingLeft: "0.75rem",
+                        boxShadow: "rgba(149, 149, 149, 0.2) 0px 2px 10px 0px",
+                      }}
+                    >
+                      <IonInput
+                        value={state.message ?? ""}
+                        autoCorrect='on'
+                        placeholder='Message...'
+                        onIonChange={(event) => {
+                          setState({
+                            message: event.detail.value ?? "",
+                          });
+                        }}
+                      />
+                    </div>
+                  </IonRow>
+                </IonCol>
+                <IonCol size={width! >= 576 ? "1" : "1.5"}>
+                  <IonRow className='ion-justify-content-center'>
+                    <IonIcon
+                      icon={paperPlane}
+                      color='main-beige'
+                      onClick={handleSendMessage}
+                      style={{
+                        fontSize: width! < 576 ? "1.75rem" : "2rem",
                       }}
                     />
-                  </div>
-                </IonCol>
-                <IonCol size='1'>
-                  <IonIcon
-                    icon={paperPlane}
-                    color='main-beige'
-                    size='large'
-                    onClick={handleSendMessage}
-                  />
+                  </IonRow>
                 </IonCol>
               </IonRow>
             </IonToolbar>

@@ -110,7 +110,10 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
                   </IonRow>
                 </IonCol>
                 <IonCol size='2'>
-                  <IonRow className='ion-justify-content-center'>
+                  <IonRow
+                    className='ion-justify-content-center'
+                    style={{ marginTop: "0.5rem" }}
+                  >
                     <IonAvatar
                       style={{
                         width: "2.5rem",
@@ -127,7 +130,10 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
             ) : (
               <>
                 <IonCol size='2'>
-                  <IonRow className='ion-justify-content-center'>
+                  <IonRow
+                    className='ion-justify-content-center'
+                    style={{ marginTop: "0.5rem" }}
+                  >
                     <IonAvatar
                       style={{
                         width: "2.5rem",
