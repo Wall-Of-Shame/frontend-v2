@@ -183,6 +183,10 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     if (!challenge) {
       return;
     }
+    if (!state.message || state.message.trim().length === 0) {
+      setState({ message: "" });
+      return;
+    }
     const timestamp = new Date().getTime();
     try {
       set(
@@ -543,35 +547,29 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     switch (tab) {
       case "details":
         return (
-          <IonFooter translucent={true} key='details'>
-            <IonToolbar>
-              <FooterActions
-                challenge={challenge}
-                viewVoteCallback={() => setState({ showVoteModal: true })}
-                uploadProofCallback={() =>
-                  setState({ showUploadProofModal: true })
-                }
-                handleAccept={handleAccept}
-                handleReject={handleReject}
-                handleComplete={handleComplete}
-                handleReleaseResults={handleReleaseResults}
-                alertCallback={(
-                  hasConfirm,
-                  alertHeader,
-                  alertMessage,
-                  confirmHandler
-                ) => {
-                  setState({
-                    showAlert: true,
-                    hasConfirm: true,
-                    alertHeader,
-                    alertMessage,
-                    confirmHandler,
-                  });
-                }}
-              />
-            </IonToolbar>
-          </IonFooter>
+          <FooterActions
+            challenge={challenge}
+            viewVoteCallback={() => setState({ showVoteModal: true })}
+            uploadProofCallback={() => setState({ showUploadProofModal: true })}
+            handleAccept={handleAccept}
+            handleReject={handleReject}
+            handleComplete={handleComplete}
+            handleReleaseResults={handleReleaseResults}
+            alertCallback={(
+              hasConfirm,
+              alertHeader,
+              alertMessage,
+              confirmHandler
+            ) => {
+              setState({
+                showAlert: true,
+                hasConfirm: true,
+                alertHeader,
+                alertMessage,
+                confirmHandler,
+              });
+            }}
+          />
         );
       case "participants":
         return <></>;
