@@ -38,3 +38,32 @@
     color: black !important;
   }
 }
+
+ul.ba {
+  list-style-type: none;
+}
+
+.featured-horizontal-list {
+  display: flex;
+  margin-top: 0rem;
+  padding-top: 0rem;
+  padding-left: 0rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  list-style-type: none;
+  // -ms-overflow-style: none;
+  // scrollbar-width: none;
+}
+
+// .featured-horizontal-list::-webkit-scrollbar {
+//   display: none;
+// }
+
+.featured-horizontal-item {
+  height: 350px;
+  width: 250px;
+  flex-shrink: 0;
+  margin-top: 0rem;
+}

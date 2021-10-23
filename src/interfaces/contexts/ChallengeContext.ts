@@ -23,4 +23,5 @@ export default interface ChallengeContextInterface {
   getVotes(challengeId: string): Promise<VoteList>;
   voteForParticipant(challengeId: string, victimId: string): Promise<void>;
   uploadProof(id: string, data: any): Promise<string | null>;
+  getExplore(): Promise<ChallengeList>;
 }
