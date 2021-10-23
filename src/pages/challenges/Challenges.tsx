@@ -41,6 +41,7 @@ import challenge from "../../assets/onboarding/challenge.png";
 import { Avatar } from "../../interfaces/models/Users";
 import { useWindowSize } from "../../utils/WindowUtils";
 import ChallengePageImg from "./challengePageImg";
+import { transform } from "framer-motion";
 
 interface ChallengesState {
   isLoading: boolean;
@@ -466,7 +467,7 @@ const Challenges: React.FC = () => {
         {!isDesktop && <div className='challenges-header-curve' />}
       </IonHeader>
       <IonContent fullscreen>
-        <IonRow className='ion-justify-content-center ion-padding-vertical'>
+        <IonRow className='ion-justify-content-center ion-padding-bottom'>
           <ChallengePageImg
             user={user}
             active={ongoing && ongoing.length > 0}
