@@ -31,6 +31,10 @@ export interface UserData {
     griefCount: number;
     protecCount: number;
   };
+  friends: {
+    accepted: string[];
+    pendingAccept: string[];
+  };
 }
 
 // Partial return schema for the `GET /self/friends` route.
