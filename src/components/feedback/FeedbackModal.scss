@@ -1,3 +1,18 @@
+.fileUploader .fileContainer {
+  box-shadow: none;
+  background: inherit;
+  .chooseFileButton {
+    border-radius: 1.5rem;
+    height: 3rem !important;
+    background: #7dd7e1;
+    color: #ffffff;
+    font: inherit;
+    height: inherit;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+}
+
 .fileUploader .uploadPicturesWrapper .uploadPictureContainer {
   width: 50% !important;
   -webkit-transition: none !important;
@@ -11,5 +26,15 @@
     font-size: 1rem !important;
     right: -0.9rem !important;
     top: -0.9rem !important;
+  }
+}
+
+@media only screen and (min-width: 576px) {
+  .feedback-modal {
+    padding: 7.5vw;
+
+    .modal-wrapper {
+      border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
+    }
   }
 }

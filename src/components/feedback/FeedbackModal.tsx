@@ -126,27 +126,45 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
   return (
     <IonModal
       cssClass='feedback-modal'
+      mode='ios'
       isOpen={showModal}
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={false}
     >
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Feedback</IonTitle>
+      <IonHeader className='ion-no-border'>
+        <IonToolbar color='main-blue' mode='md' className='store-header'>
           <IonButtons slot='start'>
             <IonButton
               style={{
                 margin: "0.5rem",
               }}
-              color='dark'
               onClick={() => {
                 setImage("");
                 setShowModal(false);
               }}
             >
-              <IonIcon icon={close} size='large' />
+              <IonIcon
+                icon={close}
+                color='white'
+                style={{ fontSize: "1.5rem" }}
+              />
             </IonButton>
           </IonButtons>
+          <IonTitle size='large' color='white'>
+            Feedback
+          </IonTitle>
+          <IonButton
+            className='placeholder-fab ion-align-items-center'
+            color='main-blue'
+            mode='ios'
+            shape='round'
+            slot='end'
+            disabled
+            style={{
+              margin: "0.5rem",
+              height: "2.75rem",
+            }}
+          ></IonButton>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -170,6 +188,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
                 borderRadius: "0.5rem",
                 background: "#ffffff",
                 paddingLeft: "0.75rem",
+                boxShadow: "rgba(149, 149, 149, 0.2) 0px 2px 10px 0px",
               }}
             >
               <IonInput
@@ -177,7 +196,6 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
                 debounce={100}
                 type='email'
                 placeholder='Enter your email*'
-                maxlength={50}
                 autoCorrect='on'
                 onIonChange={(event) => {
                   setState({ email: event.detail.value ?? "" });
@@ -217,6 +235,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
                 borderRadius: "0.5rem",
                 background: "#ffffff",
                 paddingLeft: "0.75rem",
+                boxShadow: "rgba(149, 149, 149, 0.2) 0px 2px 10px 0px",
               }}
             >
               <IonTextarea
@@ -285,7 +304,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
           >
             <IonButton
               shape='round'
-              color='secondary'
+              color='main-blue'
               mode='ios'
               disabled={!validateInputs()}
               onClick={handleSend}
