@@ -15,6 +15,10 @@ const ChallengePageImg: React.FunctionComponent<ChallengePageImgProps> = (
 ) => {
   const { user, active } = props;
 
+  if (!user?.avatar.animal || !user?.avatar.background || !user?.avatar.color) {
+    return <div style={{ margin: "1rem" }}></div>;
+  }
+
   if (user) {
     if (active) {
       return (
