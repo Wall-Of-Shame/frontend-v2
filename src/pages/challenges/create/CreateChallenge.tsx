@@ -327,6 +327,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                 borderRadius: "0.5rem",
                 background: "#ffffff",
                 paddingLeft: "0.75rem",
+                paddingRight: "0.75rem",
                 boxShadow: "rgba(149, 149, 149, 0.2) 0px 2px 10px 0px",
               }}
             >
@@ -368,6 +369,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                 borderRadius: "0.5rem",
                 background: "#ffffff",
                 paddingLeft: "0.75rem",
+                paddingRight: "0.75rem",
                 boxShadow: "rgba(149, 149, 149, 0.2) 0px 2px 10px 0px",
               }}
             >
