@@ -85,7 +85,7 @@ const Onboarding: React.FC = () => {
             fill='clear'
             onClick={() => {
               if (swiper) {
-                swiper.slideTo(3);
+                swiper.slideTo(4);
               }
             }}
           >
@@ -105,7 +105,7 @@ const Onboarding: React.FC = () => {
           swiperCallback={() => {
             if (swiper) {
               const activeIndex = swiper.activeIndex;
-              setCompleted(activeIndex === 3);
+              setCompleted(activeIndex === 4);
               setAtStart(activeIndex === 0);
             }
           }}
