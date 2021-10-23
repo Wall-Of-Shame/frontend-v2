@@ -542,7 +542,7 @@ const Participants: React.FC<ParticipantsProps> = (
         </IonRow>
       )}
       {challenge.participants.accepted.protected.length > 0 && (
-        <IonList className='ion-margin-vertical'>
+        <IonList>
           {challenge.participants.accepted.protected.map((u) => {
             return (
               <IonItem key={u.userId} lines='none'>
@@ -550,9 +550,7 @@ const Participants: React.FC<ParticipantsProps> = (
                   <AvatarImg avatar={u.avatar} />
                 </IonAvatar>
                 <IonLabel>
-                  {u.userId === user?.userId
-                    ? "You"
-                    : trimDisplayName(u.name, 7)}
+                  {u.userId === user?.userId ? "You" : u.name}
                 </IonLabel>
               </IonItem>
             );
@@ -576,7 +574,7 @@ const Participants: React.FC<ParticipantsProps> = (
         </IonRow>
       )}
       {challenge.participants.accepted.notCompleted.length > 0 && (
-        <IonList className='ion-margin-vertical'>
+        <IonList>
           {challenge.participants.accepted.notCompleted.map((u) => {
             return (
               <IonItem key={u.userId} lines='none'>
@@ -584,9 +582,7 @@ const Participants: React.FC<ParticipantsProps> = (
                   <AvatarImg avatar={u.avatar} />
                 </IonAvatar>
                 <IonLabel>
-                  {u.userId === user?.userId
-                    ? "You"
-                    : trimDisplayName(u.name, 7)}
+                  {u.userId === user?.userId ? "You" : u.name}
                 </IonLabel>
               </IonItem>
             );
@@ -619,9 +615,7 @@ const Participants: React.FC<ParticipantsProps> = (
                   <AvatarImg avatar={u.avatar} />
                 </IonAvatar>
                 <IonLabel>
-                  {u.userId === user?.userId
-                    ? "You"
-                    : trimDisplayName(u.name, 7)}
+                  {u.userId === user?.userId ? "You" : u.name}
                 </IonLabel>
               </IonItem>
             );
