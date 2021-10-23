@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-
+import React, { useCallback, useRef, useState } from "react";
+import lodash from "lodash";
 import { database } from "../../../firebase";
 import { ref, query, orderByKey, onValue } from "firebase/database";
 import { Message, UserMini } from "../../../interfaces/models/Challenges";
@@ -30,13 +30,22 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
     messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(scrollToBottom, [messages]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedUpdate = useCallback(
+    lodash.debounce((newMessages: Message[]) => {
+      if (newMessages.length > messages.length) {
+        setMessages(newMessages);
+        scrollToBottom();
+      }
+    }, 100),
+    []
+  );
 
   onValue(chatRef, (snapshot) => {
     const newTime = Date.now();
     // Debounce the events
     if (
-      Math.abs(differenceInMilliseconds(lastUpdated, newTime)) < 1000 &&
+      Math.abs(differenceInMilliseconds(lastUpdated, newTime)) < 5000 &&
       hasSynced
     ) {
       return;
@@ -46,7 +55,7 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
     if (object) {
       const parsedValues = Object.values(object) as Message[];
       if (parsedValues) {
-        setMessages(parsedValues);
+        debouncedUpdate(parsedValues);
         setHasSynced(true);
         setLastUpdated(newTime);
       }
@@ -59,7 +68,7 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
         overflowY: "scroll",
         height: isDesktop
           ? "calc(100vh - 375px - 3.5rem)"
-          : "calc(100vh - 375px)",
+          : "calc(100vh - 354px)",
       }}
     >
       {messages.map((m, index) => {
@@ -189,7 +198,8 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
           </IonRow>
         );
       })}
-      <div ref={messagesEndRef} />
+      <div style={{ marginTop: "0rem" }}>&nbsp;</div>
+      <div ref={messagesEndRef} key={messages.length} />
     </div>
   );
 };
