@@ -43,6 +43,9 @@ import intervalToDuration from "date-fns/intervalToDuration";
 import { formatWallTime } from "../../utils/TimeUtils";
 import { egg, poop, tomato } from "../../assets/overlay";
 import useInterval from "../../hooks/useInterval";
+import eggIcon from "../../assets/icons/egg.svg";
+import tomatoIcon from "../../assets/icons/tomato.svg";
+import poopIcon from "../../assets/icons/poop.svg";
 
 interface WallOfShameState {
   isLoading: boolean;
@@ -678,8 +681,10 @@ const WallOfShame: React.FC = () => {
                 }
               }}
             >
-              <IonRow className='ion-justify-content-center'>
-                <IonText style={{ fontSize: "2rem" }}>🍅</IonText>
+              <IonRow className='throwing-icon'>
+                <div>
+                  <img src={tomatoIcon} alt='tomatoIcon' />
+                </div>
               </IonRow>
             </IonCol>
             <IonCol
@@ -695,8 +700,10 @@ const WallOfShame: React.FC = () => {
                 }
               }}
             >
-              <IonRow className='ion-justify-content-center'>
-                <IonText style={{ fontSize: "2rem" }}>🍳</IonText>
+              <IonRow className='throwing-icon'>
+                <div>
+                  <img src={eggIcon} alt='eggIcon' />
+                </div>
               </IonRow>
             </IonCol>
             <IonCol
@@ -712,8 +719,10 @@ const WallOfShame: React.FC = () => {
                 }
               }}
             >
-              <IonRow className='ion-justify-content-center'>
-                <div style={{ fontSize: "2rem" }}>💩</div>
+              <IonRow className='throwing-icon'>
+                <div>
+                  <img src={poopIcon} alt='poopIcon' />
+                </div>
               </IonRow>
             </IonCol>
           </IonRow>
