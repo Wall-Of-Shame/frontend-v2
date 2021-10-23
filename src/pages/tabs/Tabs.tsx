@@ -23,7 +23,7 @@ import ChallengeDetails from "../challenges/details";
 import EditProfile from "../profile/edit";
 import Settings from "../profile/settings";
 import Explore from "../explore";
-import Search from "../explore/search"
+import Search from "../explore/search";
 import Store from "../store";
 import Invitations from "../challenges/invitations";
 import OtherProfile from "../profile/other";
@@ -82,7 +82,7 @@ const Tabs: React.FC = () => {
         <Route exact path='/profile/friends'>
           <Friends />
         </Route>
-        <Route exact path='/profile/challenges'>
+        <Route exact path='/challenge-history'>
           <PastChallenges />
         </Route>
         <Route render={redirectToChallenges} />

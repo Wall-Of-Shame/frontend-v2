@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer, useState } from "react";
+import React, { useReducer, useState } from "react";
 import {
   IonAvatar,
   IonCard,
@@ -21,7 +21,6 @@ import {
   IonCardTitle,
   IonFabButton,
   IonBadge,
-  IonSearchbar,
   IonButton,
   IonTitle,
 } from "@ionic/react";
@@ -49,7 +48,6 @@ import { ChallengeData } from "../../interfaces/models/Challenges";
 import { format, parseISO } from "date-fns";
 import FeedbackModal from "../../components/feedback";
 import Alert from "../../components/alert";
-import lodash from "lodash";
 import { useWindowSize } from "../../utils/WindowUtils";
 
 export interface ProfileState {
@@ -97,21 +95,6 @@ const Profile: React.FC = () => {
     }
   );
 
-  const [searchText, setSearchText] = useState("");
-  const [debouncedSearchText, setDebouncedSearchText] = useState("");
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedSearch = useCallback(
-    lodash.debounce((e) => {
-      handleSearch(e);
-    }, 250),
-    []
-  );
-
-  const handleSearch = async (searchText: string) => {
-    setDebouncedSearchText(searchText);
-  };
-
   useEffect(() => {
     if (
       location.pathname === "/challenges" ||
@@ -127,14 +110,10 @@ const Profile: React.FC = () => {
   }, [location.pathname]);
 
   const renderChallengeHistory = () => {
-    const filteredChallenges = completed?.filter(
-      (c) =>
-        c.title.toLowerCase().indexOf(debouncedSearchText.toLowerCase()) !== -1
-    );
-    if (filteredChallenges && filteredChallenges.length > 0) {
+    if (completed && completed.length > 0) {
       return (
         <>
-          {filteredChallenges.slice(0, 5).map((c) => {
+          {completed.slice(0, 5).map((c) => {
             return (
               <IonCard
                 mode='ios'
@@ -203,7 +182,7 @@ const Profile: React.FC = () => {
               mode='ios'
               color='main-blue'
               shape='round'
-              onClick={() => history.push("/profile/challenges")}
+              onClick={() => history.push("/challenge-history")}
             >
               Show all
             </IonButton>

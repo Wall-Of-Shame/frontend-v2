@@ -19,9 +19,10 @@ import {
   IonTitle,
 } from "@ionic/react";
 import { useEffect } from "react";
-import { arrowBack, ellipsisVertical } from "ionicons/icons";
+import { arrowBack } from "ionicons/icons";
 import { Avatar } from "../../../interfaces/models/Users";
 import { useHistory, useLocation } from "react-router";
+import { VariableSizeList as VirtualList } from "react-window";
 import { hideTabs, showTabs } from "../../../utils/TabsUtils";
 import "./PastChallenges.scss";
 import AvatarImg from "../../../components/avatar";
@@ -35,7 +36,7 @@ import lodash from "lodash";
 import { useWindowSize } from "../../../utils/WindowUtils";
 import Container from "../../../components/container";
 
-export interface PastChallengesState {
+interface PastChallengesState {
   isLoading: boolean;
   showAlert: boolean;
   alertHeader: string;
@@ -46,13 +47,21 @@ export interface PastChallengesState {
   okHandler?: () => void;
 }
 
+interface VirtualListProps {
+  index: number;
+  style: any;
+}
+
 const PastChallenges: React.FC = () => {
-  const { isDesktop } = useWindowSize();
+  const { isDesktop, width, height } = useWindowSize();
   const location = useLocation();
   const history = useHistory();
   const selectChallenges = (state: RootState): ChallengeDux => state.challenges;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [completed, setCompleted] = useState<ChallengeData[]>(
+    useSelector(selectChallenges).history
+  );
+  const [filteredChallenges, setFilteredChallenges] = useState<ChallengeData[]>(
     useSelector(selectChallenges).history
   );
 
@@ -86,6 +95,11 @@ const PastChallenges: React.FC = () => {
 
   const handleSearch = async (searchText: string) => {
     setDebouncedSearchText(searchText);
+    const filteredData = completed?.filter(
+      (c) =>
+        c.title.toLowerCase().indexOf(debouncedSearchText.toLowerCase()) !== -1
+    );
+    setFilteredChallenges(filteredData);
   };
 
   useEffect(() => {
@@ -102,6 +116,89 @@ const PastChallenges: React.FC = () => {
     }
   }, [location.pathname]);
 
+  const Row = (props: VirtualListProps) => {
+    const { style, index } = props;
+    if (index === filteredChallenges.length) {
+      return (
+        <div style={style}>
+          <div style={{ margin: "0.5rem" }}></div>
+        </div>
+      );
+    }
+
+    const c = filteredChallenges[index];
+    return (
+      <div style={style}>
+        <IonCard
+          mode='ios'
+          button
+          key={c.challengeId}
+          onClick={() => {
+            history.push(`challenges/${c.challengeId}/details`, c);
+          }}
+        >
+          <IonGrid className='ion-no-padding'>
+            <IonRow className='ion-align-items-center'>
+              <IonCol size='12'>
+                <IonCardHeader style={{ paddingBottom: "0.75rem" }}>
+                  <IonRow>
+                    <IonCardTitle style={{ fontSize: "1.2rem" }}>
+                      <div
+                        style={{
+                          width: width! > 576 ? 536 : width! - 75,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {c.title}
+                      </div>
+                    </IonCardTitle>
+                  </IonRow>
+                </IonCardHeader>
+                <IonCardContent>
+                  <IonRow>
+                    <IonText
+                      style={{
+                        fontSize: "0.8rem",
+                        fontWeight: "bold",
+                        marginBottom: "0.25rem",
+                      }}
+                    >
+                      {`Ended on ${format(
+                        parseISO(c.endAt),
+                        "dd MMM yyyy, HH:mm"
+                      )}`}
+                    </IonText>
+                  </IonRow>
+                  <IonRow
+                    style={{ marginTop: "0.5rem" }}
+                    className='ion-align-items-center'
+                  >
+                    <IonAvatar
+                      className='avatar'
+                      key={c.owner.userId}
+                      style={{ marginRight: "0.5rem" }}
+                    >
+                      <AvatarImg avatar={c.owner.avatar as Avatar} />
+                    </IonAvatar>
+                    <IonText
+                      style={{
+                        fontSize: "0.8rem",
+                      }}
+                    >
+                      Created by {c.owner.name ?? "Anonymous"}
+                    </IonText>
+                  </IonRow>
+                </IonCardContent>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonCard>
+      </div>
+    );
+  };
+
   const renderChallengeHistory = () => {
     const filteredChallenges = completed?.filter(
       (c) =>
@@ -109,69 +206,20 @@ const PastChallenges: React.FC = () => {
     );
     if (filteredChallenges && filteredChallenges.length > 0) {
       return (
-        <>
-          {filteredChallenges.map((c) => {
-            return (
-              <IonCard
-                mode='ios'
-                button
-                key={c.challengeId}
-                onClick={() => {
-                  history.push(`challenges/${c.challengeId}/details`, c);
-                }}
-              >
-                <IonGrid className='ion-no-padding'>
-                  <IonRow className='ion-align-items-center'>
-                    <IonCol size='12'>
-                      <IonCardHeader style={{ paddingBottom: "0.75rem" }}>
-                        <IonRow>
-                          <IonCardTitle style={{ fontSize: "1.2rem" }}>
-                            {c.title}
-                          </IonCardTitle>
-                        </IonRow>
-                      </IonCardHeader>
-                      <IonCardContent>
-                        <IonRow>
-                          <IonText
-                            style={{
-                              fontSize: "0.8rem",
-                              fontWeight: "bold",
-                              marginBottom: "0.25rem",
-                            }}
-                          >
-                            {`Ended on ${format(
-                              parseISO(c.endAt),
-                              "dd MMM yyyy, HH:mm"
-                            )}`}
-                          </IonText>
-                        </IonRow>
-                        <IonRow
-                          style={{ marginTop: "0.5rem" }}
-                          className='ion-align-items-center'
-                        >
-                          <IonAvatar
-                            className='avatar'
-                            key={c.owner.userId}
-                            style={{ marginRight: "0.5rem" }}
-                          >
-                            <AvatarImg avatar={c.owner.avatar as Avatar} />
-                          </IonAvatar>
-                          <IonText
-                            style={{
-                              fontSize: "0.8rem",
-                            }}
-                          >
-                            Created by {c.owner.name ?? "Anonymous"}
-                          </IonText>
-                        </IonRow>
-                      </IonCardContent>
-                    </IonCol>
-                  </IonRow>
-                </IonGrid>
-              </IonCard>
-            );
-          })}
-        </>
+        <VirtualList
+          height={height! - 140}
+          width={width! > 576 ? 576 : width!}
+          itemCount={filteredChallenges.length + 1}
+          itemSize={(index) => {
+            if (index === filteredChallenges.length) {
+              return 24;
+            }
+            return 156;
+          }}
+          style={{ marginTop: "0.5rem" }}
+        >
+          {Row}
+        </VirtualList>
       );
     } else {
       return (
@@ -189,7 +237,7 @@ const PastChallenges: React.FC = () => {
           color='main-blue'
           mode='md'
           className='store-header'
-          style={{ paddingTop: "0.5rem", paddingBottom: "0.25rem" }}
+          style={{ paddingTop: "0.5rem" }}
         >
           <IonFabButton
             className='placeholder-fab'
@@ -197,7 +245,9 @@ const PastChallenges: React.FC = () => {
             mode='ios'
             slot='start'
             style={{
-              margin: "0.5rem",
+              marginTop: "0.25rem",
+              marginLeft: "0.5rem",
+              marginRight: "0.5rem",
               width: "2.75rem",
               height: "2.75rem",
             }}
@@ -209,21 +259,19 @@ const PastChallenges: React.FC = () => {
             size='large'
             color='white'
             style={{
+              marginTop: "0.25rem",
               fontWeight: "800",
             }}
           >
             Past challenges
           </IonTitle>
         </IonToolbar>
-        {!isDesktop && <div className='profile-header-curve' />}
-      </IonHeader>
-
-      <IonContent fullscreen>
         <IonRow
           style={{
             paddingLeft: "0.25rem",
             paddingRight: "0.25rem",
-            marginTop: "0.5rem",
+            paddingBottom: "0.5rem",
+            background: "#7dd7e1",
           }}
         >
           <IonSearchbar
@@ -237,10 +285,14 @@ const PastChallenges: React.FC = () => {
             debounce={0}
             placeholder='Search for a challenge'
             showCancelButton='never'
-            className='ion-margin-top users-search'
+            className='ion-margin-top challenges-search'
             showClearButton='always'
           ></IonSearchbar>
         </IonRow>
+        {!isDesktop && <div className='profile-header-curve' />}
+      </IonHeader>
+
+      <IonContent fullscreen scrollY={false}>
         {renderChallengeHistory()}
         <Alert
           showAlert={state.showAlert}
