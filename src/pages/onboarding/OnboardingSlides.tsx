@@ -20,6 +20,7 @@ import { OnboardingState } from "./Onboarding";
 import challenge from "../../assets/onboarding/challenge.png";
 import invite from "../../assets/onboarding/invite.png";
 import highground from "../../assets/onboarding/highground.png";
+import powerup from "../../assets/onboarding/powerup.png";
 
 interface OnboardingSlidesProps {
   initSwiper: (this: any) => Promise<void>;
@@ -141,6 +142,49 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
       <IonSlide className="slide yellow">
         <Container>
           <img
+            src={powerup}
+            alt="powerup"
+            className="onboarding-image"
+            style={{ marginTop: "0rem", marginBottom: "1rem" }}
+          />
+          <h1 style={{ marginBottom: "1.5rem" }}>Powerup and Extra Shame</h1>
+          <p>Complete challenges and get coins, which you can use to buy powerups!</p>
+          <IonRow
+            className="ion-justify-content-center"
+            style={{ marginTop: "2rem" }}
+          >
+            <IonButton
+              mode="ios"
+              color="light"
+              shape="round"
+              fill="solid"
+              onClick={swipeNext}
+              style={{
+                display: "flex",
+                flex: 1,
+                marginLeft: "2rem",
+                marginRight: "2rem",
+                maxWidth: 300,
+              }}
+            >
+              <IonText
+                color="accent-yellow"
+                style={{
+                  fontWeight: "bold",
+                  marginLeft: "2rem",
+                  marginRight: "2rem",
+                }}
+              >
+                Next
+              </IonText>
+            </IonButton>
+          </IonRow>
+        </Container>
+      </IonSlide>
+
+      <IonSlide className="slide blue">
+        <Container>
+          <img
             src={highground}
             alt="highground"
             style={{ marginTop: "0rem", marginBottom: "1rem" }}
@@ -169,7 +213,7 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
               }}
             >
               <IonText
-                color="accent-yellow"
+                color="accent-blue"
                 style={{
                   fontWeight: "bold",
                   marginLeft: "2rem",
