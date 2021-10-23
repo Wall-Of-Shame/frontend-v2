@@ -509,7 +509,7 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
                         </IonRow>
                         <IonRow className='ion-justify-content-center'>
                           <img
-                            src={challenge}
+                            src={p.img}
                             alt='Challenge'
                             className='store-card-img'
                             style={{
