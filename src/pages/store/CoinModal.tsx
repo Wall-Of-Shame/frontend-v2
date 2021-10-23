@@ -1,14 +1,4 @@
-import {
-  IonAvatar,
-  IonButton,
-  IonCol,
-  IonContent,
-  IonGrid,
-  IonItem,
-  IonModal,
-  IonRow,
-  IonText,
-} from "@ionic/react";
+import { IonContent, IonGrid, IonModal, IonRow, IonText } from "@ionic/react";
 import "./Store.scss";
 import coin from "../../assets/icons/coin.png";
 
