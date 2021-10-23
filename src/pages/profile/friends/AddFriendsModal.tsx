@@ -26,6 +26,7 @@ import LoadingSpinner from "../../../components/loadingSpinner";
 
 interface AddFriendsModalProps {
   users: UserList[];
+  requested: UserList[];
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
   completionCallback: (invitedUsers: UserList[]) => void;
@@ -44,7 +45,8 @@ interface AddFriendsModalState {
 
 const AddFriendsModal: React.FC<AddFriendsModalProps> = (props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { users, showModal, setShowModal, completionCallback } = props;
+  const { users, requested, showModal, setShowModal, completionCallback } =
+    props;
   const { user, searchUser, addFriend } = useUser();
 
   const [searchText, setSearchText] = useState("");

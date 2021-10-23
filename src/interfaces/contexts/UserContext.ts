@@ -12,6 +12,10 @@ export default interface UserContextInterface {
   searchUser(searchText: string): Promise<UserList[]>;
   getUserProfile(userId: string): Promise<UserList>;
   addFriend(userId: string): Promise<void>;
+  getFriendRequests(): Promise<UserList[]>;
+  getFriends(): Promise<UserList[]>;
+  acceptRequest(userId: string): Promise<void>;
+  rejectRequest(userId: string): Promise<void>;
   getFriendsRankings(): Promise<UserList[]>;
   getGlobalRankings(): Promise<UserList[]>;
   purchaseItem(order: PurchasePost): Promise<void>;

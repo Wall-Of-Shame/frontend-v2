@@ -462,6 +462,7 @@ const LoginModal: React.FC<LoginModalProps> = (props: LoginModalProps) => {
   return (
     <IonModal
       isOpen={showModal}
+      mode='ios'
       cssClass={isDesktop ? "login-modal" : ""}
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={false}

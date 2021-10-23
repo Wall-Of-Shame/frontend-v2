@@ -93,6 +93,7 @@ const SignUpModal: React.FC<SignUpModalProps> = (props: SignUpModalProps) => {
   return (
     <IonModal
       isOpen={showModal}
+      mode='ios'
       cssClass={isDesktop ? "signup-modal" : ""}
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={false}
