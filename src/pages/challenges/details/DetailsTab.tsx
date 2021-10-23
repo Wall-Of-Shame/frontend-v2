@@ -12,6 +12,7 @@ import ActiveChallengeImg from "../../../components/activeChallengeImg";
 import PendingChallengeImg from "../../../components/pendingChallengeImg";
 import { useUser } from "../../../contexts/UserContext";
 import { IonCard, IonGrid, IonRow, IonText } from "@ionic/react";
+import "./ChallengeDetails.scss";
 import highground from "../../../assets/onboarding/highground.png";
 import Countdown from "./CountDown";
 
@@ -33,7 +34,17 @@ const DetailsTab: React.FC<DetailsTabProps> = (props: DetailsTabProps) => {
       return <Redirect to={"challenges"} />;
     }
 
-    if (
+    if (isAfter(Date.now(), parseISO(challenge.endAt!))) {
+      return (
+        <IonRow className='ion-justify-content-center'>
+          <img
+            className='completed-challenge-img'
+            src={highground}
+            alt='Challenge Completed!'
+          ></img>
+        </IonRow>
+      );
+    } else if (
       isAfter(Date.now(), parseISO(challenge.startAt!)) &&
       isBefore(Date.now(), parseISO(challenge.endAt!))
     ) {
@@ -56,116 +67,194 @@ const DetailsTab: React.FC<DetailsTabProps> = (props: DetailsTabProps) => {
       );
     }
 
-    return (
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <img
-          className='completed-challenge-img'
-          src={highground}
-          alt='Challenge Completed!'
-        ></img>
-      </div>
-    );
+    return <></>;
+  };
+
+  const renderStatus = () => {
+    if (challenge === null) {
+      return <Redirect to={"challenges"} />;
+    }
+
+    if (isAfter(Date.now(), parseISO(challenge.endAt!))) {
+      return (
+        <>
+          {challenge.participants.accepted.completed.findIndex(
+            (p) => p.userId === user?.userId
+          ) !== -1 ? (
+            <IonCard
+              className='ion-align-items-center ion-justify-content-center'
+              style={{ margin: "1rem" }}
+            >
+              <IonRow
+                className='ion-justify-content-center'
+                style={{ marginTop: "1.5rem" }}
+              >
+                <IonText
+                  color='dark'
+                  style={{ fontSize: "1rem", fontWeight: "bold" }}
+                >
+                  You spent a total of
+                </IonText>
+              </IonRow>
+              <div style={{ margin: "0.5rem" }} />
+              <Countdown
+                countdown={intervalToDuration({
+                  start: parseISO(challenge.startAt!),
+                  end: parseISO(
+                    challenge.participants.accepted.completed.find(
+                      (p) => p.userId === user?.userId
+                    )?.completedAt!
+                  ),
+                })}
+              />
+              <div style={{ margin: "1rem" }} />
+            </IonCard>
+          ) : (
+            <IonCard
+              className='ion-align-items-center ion-justify-content-center'
+              style={{
+                marginLeft: "1rem",
+                marginRight: "1rem",
+                marginBottom: "1rem",
+                marginTop: "2rem",
+              }}
+            >
+              <IonRow
+                className='ion-justify-content-center'
+                style={{ marginTop: "1.5rem" }}
+              >
+                <IonText
+                  color='dark'
+                  style={{ fontSize: "1rem", fontWeight: "bold" }}
+                >
+                  Challenge has ended
+                </IonText>
+              </IonRow>
+              <div style={{ margin: "0.5rem" }} />
+              <Countdown countdown={countdown} />
+              <div style={{ margin: "1rem" }} />
+            </IonCard>
+          )}
+        </>
+      );
+    } else if (
+      isAfter(Date.now(), parseISO(challenge.startAt!)) &&
+      isBefore(Date.now(), parseISO(challenge.endAt!))
+    ) {
+      // render active challenge
+      return (
+        <>
+          {challenge.participants.accepted.completed.findIndex(
+            (p) => p.userId === user?.userId
+          ) === -1 ? (
+            <IonCard
+              className='ion-align-items-center ion-justify-content-center'
+              style={{
+                marginLeft: "1rem",
+                marginRight: "1rem",
+                marginBottom: "1rem",
+                marginTop: "2rem",
+              }}
+            >
+              <IonRow
+                className='ion-justify-content-center'
+                style={{ marginTop: "1.5rem" }}
+              >
+                <IonText
+                  color='dark'
+                  style={{ fontSize: "1rem", fontWeight: "bold" }}
+                >
+                  Challenge ends in
+                </IonText>
+              </IonRow>
+              <div style={{ margin: "0.5rem" }} />
+              <Countdown countdown={countdown} />
+              <div style={{ margin: "1rem" }} />
+            </IonCard>
+          ) : (
+            challenge.participants.accepted.completed.findIndex(
+              (p) => p.userId === user?.userId
+            ) !== -1 && (
+              <IonCard
+                className='ion-align-items-center ion-justify-content-center'
+                style={{ margin: "1rem" }}
+              >
+                <IonRow
+                  className='ion-justify-content-center'
+                  style={{ marginTop: "1.5rem" }}
+                >
+                  <IonText
+                    color='dark'
+                    style={{ fontSize: "1rem", fontWeight: "bold" }}
+                  >
+                    You spent a total of
+                  </IonText>
+                </IonRow>
+                <div style={{ margin: "0.5rem" }} />
+                <Countdown
+                  countdown={intervalToDuration({
+                    start: parseISO(challenge.startAt!),
+                    end: parseISO(
+                      challenge.participants.accepted.completed.find(
+                        (p) => p.userId === user?.userId
+                      )?.completedAt!
+                    ),
+                  })}
+                />
+                <div style={{ margin: "1rem" }} />
+              </IonCard>
+            )
+          )}
+        </>
+      );
+    } else if (!isAfter(Date.now(), parseISO(challenge.startAt!))) {
+      // render waiting challenge
+      return (
+        <IonGrid
+          className='ion-no-padding'
+          style={{
+            paddingLeft: "0.2rem",
+            paddingRight: "0.2rem",
+            maxWidth: "calc(480px - 0.4rem)",
+          }}
+        >
+          {startsIn > 0 && startsIn < 86400 && (
+            <IonCard
+              className='ion-align-items-center ion-justify-content-center'
+              style={{ margin: "1rem" }}
+            >
+              <IonRow
+                className='ion-justify-content-center'
+                style={{ marginTop: "1.5rem" }}
+              >
+                <IonText
+                  color='dark'
+                  style={{ fontSize: "1rem", fontWeight: "bold" }}
+                >
+                  Challenge starts in
+                </IonText>
+              </IonRow>
+              <div style={{ margin: "0.5rem" }} />
+              <Countdown
+                countdown={intervalToDuration({
+                  start: Date.now(),
+                  end: parseISO(challenge.startAt!),
+                })}
+              />
+              <div style={{ margin: "1rem" }} />
+            </IonCard>
+          )}
+        </IonGrid>
+      );
+    }
+
+    return <></>;
   };
 
   return (
     <div>
       {challenge.participants.accepted.notCompleted.length > 0 && renderImage()}
-      {isAfter(Date.now(), parseISO(challenge.startAt!)) &&
-        challenge.participants.accepted.completed.findIndex(
-          (p) => p.userId === user?.userId
-        ) === -1 && (
-          <IonCard
-            className='ion-align-items-center ion-justify-content-center'
-            style={{
-              marginLeft: "1rem",
-              marginRight: "1rem",
-              marginBottom: "1rem",
-              marginTop: "2rem",
-            }}
-          >
-            <IonRow
-              className='ion-justify-content-center'
-              style={{ marginTop: "1.5rem" }}
-            >
-              <IonText
-                color='dark'
-                style={{ fontSize: "1rem", fontWeight: "bold" }}
-              >
-                Challenge ends in
-              </IonText>
-            </IonRow>
-            <div style={{ margin: "0.5rem" }} />
-            <Countdown countdown={countdown} />
-            <div style={{ margin: "1rem" }} />
-          </IonCard>
-        )}
-      {challenge.participants.accepted.completed.findIndex(
-        (p) => p.userId === user?.userId
-      ) !== -1 && (
-        <IonCard
-          className='ion-align-items-center ion-justify-content-center'
-          style={{ margin: "1rem" }}
-        >
-          <IonRow
-            className='ion-justify-content-center'
-            style={{ marginTop: "1.5rem" }}
-          >
-            <IonText
-              color='dark'
-              style={{ fontSize: "1rem", fontWeight: "bold" }}
-            >
-              You spent a total of
-            </IonText>
-          </IonRow>
-          <div style={{ margin: "0.5rem" }} />
-          <Countdown
-            countdown={intervalToDuration({
-              start: parseISO(challenge.startAt!),
-              end: parseISO(
-                challenge.participants.accepted.completed.find(
-                  (p) => p.userId === user?.userId
-                )?.completedAt!
-              ),
-            })}
-          />
-          <div style={{ margin: "1rem" }} />
-        </IonCard>
-      )}
-      <IonGrid
-        className='ion-no-padding'
-        style={{
-          paddingLeft: "0.2rem",
-          paddingRight: "0.2rem",
-          maxWidth: "calc(480px - 0.4rem)",
-        }}
-      >
-        {startsIn > 0 && startsIn < 86400 && (
-          <IonCard
-            className='ion-align-items-center ion-justify-content-center'
-            style={{ margin: "1rem" }}
-          >
-            <IonRow
-              className='ion-justify-content-center'
-              style={{ marginTop: "1.5rem" }}
-            >
-              <IonText
-                color='dark'
-                style={{ fontSize: "1rem", fontWeight: "bold" }}
-              >
-                Challenge starts in
-              </IonText>
-            </IonRow>
-            <div style={{ margin: "0.5rem" }} />
-            <Countdown
-              countdown={intervalToDuration({
-                start: Date.now(),
-                end: parseISO(challenge.startAt!),
-              })}
-            />
-            <div style={{ margin: "1rem" }} />
-          </IonCard>
-        )}
-      </IonGrid>
+      {renderStatus()}
       <IonGrid style={{ marginBottom: "0.5rem" }}>
         <IonRow className='ion-padding'>
           <IonText style={{ fontWeight: "bold" }}>
