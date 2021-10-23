@@ -1,4 +1,4 @@
-import { PowerUp, PowerUpPostType } from "./Store";
+import { PowerUpPostType } from "./Store";
 import { AvatarAnimal, AvatarColor, UserList } from "./Users";
 
 export interface ChallengeId {

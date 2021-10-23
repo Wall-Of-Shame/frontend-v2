@@ -15,7 +15,6 @@ import { closeCircle, informationCircle } from "ionicons/icons";
 import { useEffect, useReducer, useState } from "react";
 import { useLocation } from "react-router";
 import ReactCardFlip from "react-card-flip";
-import challenge from "../../assets/onboarding/challenge.png";
 import coin from "../../assets/icons/coin.png";
 import { showTabs, hideTabs } from "../../utils/TabsUtils";
 import "./Store.scss";
@@ -35,6 +34,7 @@ import Alert from "../../components/alert";
 import Container from "../../components/container";
 import ProtecImg from "../../assets/powerup/protec.png";
 import U2Img from "../../assets/powerup/u2.png";
+import CoinModal from "./CoinModal";
 
 interface StoreState {
   isLoading: boolean;
@@ -77,7 +77,8 @@ const Store: React.FC = () => {
   const [refreshedUser, setRefreshedUser] = useState<UserData | null>(user);
   const [hasPurchased, setHasPurchased] = useState(false);
   const [tab, setTab] = useState("powerups");
-  const [showModal, setShowModal] = useState(false);
+  const [showCoinInfoModal, setShowCoinInfoModal] = useState(false);
+  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [selectedPowerUp, setSelectedPowerUp] = useState<PowerUp | null>(null);
 
   const [isPowerUpFlipped, setIsPowerUpFlipped] = useState<PowerUpMap>({
@@ -343,7 +344,7 @@ const Store: React.FC = () => {
                       onClick={() => {
                         setSelectedPowerUp(p);
                         setHasPurchased(false);
-                        setShowModal(true);
+                        setShowPurchaseModal(true);
                       }}
                     >
                       Buy
@@ -377,11 +378,9 @@ const Store: React.FC = () => {
           >
             Store
           </IonTitle>
-          <IonButton
+          <IonRow
             className='placeholder-fab ion-align-items-center'
             color='main-beige'
-            mode='ios'
-            shape='round'
             slot='end'
             style={{
               margin: "0.5rem",
@@ -397,10 +396,15 @@ const Store: React.FC = () => {
                 marginRight: "0.5rem",
               }}
             />
-            <IonText style={{ fontWeight: "bold" }}>
+            <IonText style={{ fontWeight: "bold", marginRight: "0.5rem" }}>
               {refreshedUser?.store.points ?? 0}
             </IonText>
-          </IonButton>
+            <IonIcon
+              icon={informationCircle}
+              style={{ fontSize: "1.5rem", marginRight: "0.5rem" }}
+              onClick={() => setShowCoinInfoModal(true)}
+            />
+          </IonRow>
         </IonToolbar>
         {!isDesktop && <div className='store-header-curve' />}
       </IonHeader>
@@ -434,6 +438,10 @@ const Store: React.FC = () => {
         ) : (
           <Container>Coming soon :)</Container>
         )}
+        <CoinModal
+          showModal={showCoinInfoModal}
+          setShowModal={setShowCoinInfoModal}
+        />
         <PurchasePowerUpModal
           powerUp={selectedPowerUp}
           purchaseCallback={handlePurchasePowerUp}
@@ -443,8 +451,8 @@ const Store: React.FC = () => {
               ? refreshedUser?.store.protecCount
               : refreshedUser?.store.griefCount) ?? 0
           }
-          showModal={showModal}
-          setShowModal={setShowModal}
+          showModal={showPurchaseModal}
+          setShowModal={setShowPurchaseModal}
         />
         <LoadingSpinner
           loading={state.isLoading}

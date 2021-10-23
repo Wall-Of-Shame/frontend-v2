@@ -28,3 +28,28 @@
     max-width: 150px;
   }
 }
+
+.coin-info-modal {
+  --backdrop-opacity: var(--ion-backdrop-opacity, 0.32);
+  --max-height: 23.5rem;
+  --max-width: 24rem;
+  padding: 7.5vw;
+
+  .modal-wrapper {
+    border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
+  }
+}
+
+@media only screen and (min-width: 576px) {
+  .coin-info-modal {
+    --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.1);
+    --backdrop-opacity: var(--ion-backdrop-opacity, 0.32);
+    --max-height: 23.5rem;
+    --max-width: 24.5rem;
+    padding: 7.5vw;
+
+    .modal-wrapper {
+      border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
+    }
+  }
+}
