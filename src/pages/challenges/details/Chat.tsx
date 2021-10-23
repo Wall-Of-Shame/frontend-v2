@@ -4,7 +4,7 @@ import { database } from "../../../firebase";
 import { ref, query, orderByKey, onValue } from "firebase/database";
 import { Message, UserMini } from "../../../interfaces/models/Challenges";
 import { IonAvatar, IonCol, IonRow, IonText } from "@ionic/react";
-import { differenceInSeconds, format, parseISO } from "date-fns";
+import { differenceInMilliseconds, format, parseISO } from "date-fns";
 import AvatarImg from "../../../components/avatar";
 import { useUser } from "../../../contexts/UserContext";
 import { useWindowSize } from "../../../utils/WindowUtils";
@@ -33,19 +33,22 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
   useEffect(scrollToBottom, [messages]);
 
   onValue(chatRef, (snapshot) => {
-    const object = snapshot.val();
-
     const newTime = Date.now();
     // Debounce the events
-    if (differenceInSeconds(lastUpdated, newTime) < 2 && hasSynced) {
+    if (
+      Math.abs(differenceInMilliseconds(lastUpdated, newTime)) < 1000 &&
+      hasSynced
+    ) {
       return;
     }
-    setLastUpdated(newTime);
+
+    const object = snapshot.val();
     if (object) {
       const parsedValues = Object.values(object) as Message[];
       if (parsedValues) {
         setMessages(parsedValues);
         setHasSynced(true);
+        setLastUpdated(newTime);
       }
     }
   });
