@@ -131,14 +131,14 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
       backdropDismiss={false}
     >
       <IonHeader>
-        <IonToolbar>
+        <IonToolbar color="main-blue">
           <IonTitle>Feedback</IonTitle>
           <IonButtons slot='start'>
             <IonButton
               style={{
                 margin: "0.5rem",
               }}
-              color='dark'
+              color='white'
               onClick={() => {
                 setImage("");
                 setShowModal(false);
@@ -285,7 +285,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
           >
             <IonButton
               shape='round'
-              color='secondary'
+              color='accent-blue'
               mode='ios'
               disabled={!validateInputs()}
               onClick={handleSend}
