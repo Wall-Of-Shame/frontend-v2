@@ -134,7 +134,7 @@ const Profile: React.FC = () => {
     if (filteredChallenges && filteredChallenges.length > 0) {
       return (
         <>
-          {filteredChallenges.map((c) => {
+          {filteredChallenges.slice(0, 5).map((c) => {
             return (
               <IonCard
                 mode='ios'
@@ -195,6 +195,19 @@ const Profile: React.FC = () => {
               </IonCard>
             );
           })}
+          <IonRow
+            className='ion-justify-content-center'
+            style={{ marginBottom: "1.5rem" }}
+          >
+            <IonButton
+              mode='ios'
+              color='main-blue'
+              shape='round'
+              onClick={() => history.push("/profile/challenges")}
+            >
+              Show all
+            </IonButton>
+          </IonRow>
         </>
       );
     } else {
@@ -213,6 +226,7 @@ const Profile: React.FC = () => {
     <IonPage style={{ background: "#ffffff" }}>
       <IonPopover
         cssClass='popover'
+        mode='ios'
         event={popoverState.event}
         isOpen={popoverState.showPopover}
         onDidDismiss={() =>
@@ -349,16 +363,6 @@ const Profile: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        {/*<div
-          className='fault-line'
-          style={{
-            position: "absolute",
-            top: 0,
-            width: "100%",
-            height: "11rem",
-            backgroundColor: "#C0D1FF",
-          }}
-        />*/}
         <IonRow
           className='ion-align-items-center ion-margin'
           style={{ marginTop: "2.5rem" }}
@@ -546,21 +550,14 @@ const Profile: React.FC = () => {
           </IonCol>
         </IonRow>
         <IonRow
-          className='ion-padding-horizontal'
+          className='ion-padding-horizontal ion-justify-content-center'
           style={{
             marginBottom: "1rem",
-            display: "flex",
-            justifyContent: "fl",
           }}
         >
-          <IonCol>
-            <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
-              Friends
-            </IonText>
-          </IonCol>
-          <IonCol>
-            <IonText style={{}}>Find friends</IonText>
-          </IonCol>
+          <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
+            Friends
+          </IonText>
         </IonRow>
         <IonRow
           className='ion-justify-content-center'
@@ -581,22 +578,6 @@ const Profile: React.FC = () => {
           <IonText style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
             Past challenges
           </IonText>
-        </IonRow>
-        <IonRow style={{ paddingLeft: "0.25rem", paddingRight: "0.25rem" }}>
-          <IonSearchbar
-            mode='ios'
-            key='modal-search'
-            value={searchText}
-            onIonChange={(e) => {
-              setSearchText(e.detail.value ?? "");
-              debouncedSearch(e.detail.value ?? "");
-            }}
-            debounce={0}
-            placeholder='Search for a challenge'
-            showCancelButton='never'
-            className='ion-margin-top users-search'
-            showClearButton='always'
-          ></IonSearchbar>
         </IonRow>
         {renderChallengeHistory()}
         <FeedbackModal

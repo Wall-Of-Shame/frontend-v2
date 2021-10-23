@@ -31,6 +31,7 @@ import Alert from "../../../components/alert";
 import { useHistory } from "react-router";
 import { hideTabs } from "../../../utils/TabsUtils";
 import AvatarImg from "../../../components/avatar";
+import { useWindowSize } from "../../../utils/WindowUtils";
 
 export interface EditProfileState {
   displayName: string;
@@ -49,6 +50,7 @@ export interface EditProfileState {
 const EditProfile: React.FC = () => {
   const history = useHistory();
   const { user, updateProfile } = useUser();
+  const { isDesktop } = useWindowSize();
 
   const animals = ["CAT", "DOG", "RABBIT"];
   const colors = ["PRIMARY", "SECONDARY", "TERTIARY"];
@@ -135,51 +137,53 @@ const EditProfile: React.FC = () => {
   return (
     <IonPage style={{ background: "#ffffff" }}>
       <IonHeader className='ion-no-border'>
-        <IonToolbar color='main-blue' style={{ paddingTop: "0.5rem" }}>
-          <IonTitle
+        <IonToolbar
+          color='main-blue'
+          mode='md'
+          style={{ paddingTop: "0.5rem" }}
+        >
+          <IonFabButton
+            className='placeholder-fab'
+            color='main-blue'
+            mode='ios'
+            slot='start'
             style={{
-              textAlign: "left",
-              fontSize: "1.2rem",
+              margin: "0.5rem",
+              width: "2.75rem",
+              height: "2.75rem",
+            }}
+            onClick={() => {
+              history.goBack();
             }}
           >
-            Edit Profile
+            <IonIcon icon={arrowBack} />
+          </IonFabButton>
+          <IonTitle
+            size='large'
+            color='white'
+            style={{
+              fontWeight: "800",
+            }}
+          >
+            Edit profile
           </IonTitle>
-          <IonButtons slot='start'>
-            <IonFabButton
-              className='placeholder-fab'
-              color='main-blue'
-              mode='ios'
-              slot='start'
-              style={{
-                margin: "0.5rem",
-                width: "2.75rem",
-                height: "2.75rem",
-              }}
-              onClick={() => {
-                history.goBack();
-              }}
-            >
-              <IonIcon icon={arrowBack} />
-            </IonFabButton>
-          </IonButtons>
-          <IonButtons slot='end'>
-            <IonFabButton
-              className='placeholder-fab'
-              color='main-blue'
-              mode='ios'
-              slot='start'
-              style={{
-                margin: "0.5rem",
-                width: "2.75rem",
-                height: "2.75rem",
-              }}
-              disabled={!verifyInputs()}
-              onClick={handleSubmit}
-            >
-              <IonIcon icon={checkmark} />
-            </IonFabButton>
-          </IonButtons>
+          <IonFabButton
+            className='placeholder-fab'
+            color='main-blue'
+            mode='ios'
+            slot='end'
+            style={{
+              margin: "0.5rem",
+              width: "2.75rem",
+              height: "2.75rem",
+            }}
+            disabled={!verifyInputs()}
+            onClick={handleSubmit}
+          >
+            <IonIcon icon={checkmark} />
+          </IonFabButton>
         </IonToolbar>
+        {!isDesktop && <div className='profile-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen>

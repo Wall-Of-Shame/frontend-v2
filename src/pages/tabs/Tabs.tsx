@@ -28,6 +28,7 @@ import Invitations from "../challenges/invitations";
 import OtherProfile from "../profile/other";
 import Friends from "../profile/friends";
 import { useWindowSize } from "../../utils/WindowUtils";
+import PastChallenges from "../profile/challenges";
 
 const redirectToChallenges = (): React.ReactNode => (
   <Redirect to={"/challenges"} />
@@ -76,6 +77,9 @@ const Tabs: React.FC = () => {
         </Route>
         <Route exact path='/profile/friends'>
           <Friends />
+        </Route>
+        <Route exact path='/profile/challenges'>
+          <PastChallenges />
         </Route>
         <Route render={redirectToChallenges} />
       </IonRouterOutlet>

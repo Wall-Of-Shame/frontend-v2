@@ -14,6 +14,7 @@ import {
   IonPage,
   IonRow,
   IonText,
+  IonTitle,
   IonToolbar,
   isPlatform,
 } from "@ionic/react";
@@ -41,40 +42,45 @@ const Friends: React.FC = () => {
     <IonPage style={{ background: "#ffffff" }}>
       <IonHeader className='ion-no-border'>
         <IonToolbar color='main-blue' style={{ paddingTop: "0.5rem" }}>
-          <IonButtons slot='start'>
-            <IonFabButton
-              className='placeholder-fab'
-              color='main-blue'
-              mode='ios'
-              slot='start'
-              style={{
-                margin: "0.5rem",
-                width: "2.75rem",
-                height: "2.75rem",
-              }}
-              onClick={() => {
-                history.goBack();
-              }}
-            >
-              <IonIcon icon={arrowBackOutline} />
-            </IonFabButton>
-          </IonButtons>
-          <IonButtons slot='end'>
-            <IonFabButton
-              className='placeholder-fab'
-              color='main-blue'
-              mode='ios'
-              slot='end'
-              style={{
-                margin: "0.5rem",
-                width: "2.75rem",
-                height: "2.75rem",
-              }}
-              onClick={() => setShowModal(true)}
-            >
-              <IonIcon icon={personAddOutline} />
-            </IonFabButton>
-          </IonButtons>
+          <IonFabButton
+            className='placeholder-fab'
+            color='main-blue'
+            mode='ios'
+            slot='start'
+            style={{
+              margin: "0.5rem",
+              width: "2.75rem",
+              height: "2.75rem",
+            }}
+            onClick={() => {
+              history.goBack();
+            }}
+          >
+            <IonIcon icon={arrowBackOutline} />
+          </IonFabButton>
+          <IonTitle
+            size='large'
+            color='white'
+            style={{
+              fontWeight: "800",
+            }}
+          >
+            Friends
+          </IonTitle>
+          <IonFabButton
+            className='placeholder-fab'
+            color='main-blue'
+            mode='ios'
+            slot='end'
+            style={{
+              margin: "0.5rem",
+              width: "2.75rem",
+              height: "2.75rem",
+            }}
+            onClick={() => setShowModal(true)}
+          >
+            <IonIcon icon={personAddOutline} />
+          </IonFabButton>
         </IonToolbar>
         {!isDesktop && <div className='profile-header-curve' />}
       </IonHeader>
