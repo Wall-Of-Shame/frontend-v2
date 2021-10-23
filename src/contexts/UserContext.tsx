@@ -54,6 +54,40 @@ const UserProvider: React.FunctionComponent = (props) => {
     }
   };
 
+  const getFriendRequests = async (): Promise<UserList[]> => {
+    try {
+      const response = await UserService.getFriendRequests();
+      return response;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
+  const getFriends = async (): Promise<UserList[]> => {
+    try {
+      const response = await UserService.getFriends();
+      return response;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
+  const acceptRequest = async (userId: string): Promise<void> => {
+    try {
+      await UserService.acceptRequest(userId);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
+  const rejectRequest = async (userId: string): Promise<void> => {
+    try {
+      await UserService.rejectRequest(userId);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
   const getFriendsRankings = async (): Promise<UserList[]> => {
     try {
       const data = await UserService.getFriendsRankings();
@@ -100,6 +134,10 @@ const UserProvider: React.FunctionComponent = (props) => {
         searchUser,
         getUserProfile,
         addFriend,
+        getFriendRequests,
+        getFriends,
+        acceptRequest,
+        rejectRequest,
         getFriendsRankings,
         getGlobalRankings,
         purchaseItem,

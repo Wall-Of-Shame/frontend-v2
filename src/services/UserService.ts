@@ -51,6 +51,40 @@ const addFriend = async (userId: string): Promise<void> => {
   }
 };
 
+const getFriends = async (): Promise<UserList[]> => {
+  try {
+    const response = await APIService.get("friends");
+    return response.data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+const getFriendRequests = async (): Promise<UserList[]> => {
+  try {
+    const response = await APIService.get("requests");
+    return response.data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+const acceptRequest = async (userId: string): Promise<void> => {
+  try {
+    await APIService.post("requests/accept", { userId: userId });
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+const rejectRequest = async (userId: string): Promise<void> => {
+  try {
+    await APIService.post("requests/reject", { userId: userId });
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 const getFriendsRankings = async (): Promise<UserList[]> => {
   try {
     const response = await APIService.get(`users/?operation=wallRecents`);
@@ -99,6 +133,10 @@ export default {
   searchUser,
   getUserProfile,
   addFriend,
+  getFriendRequests,
+  getFriends,
+  acceptRequest,
+  rejectRequest,
   getFriendsRankings,
   getGlobalRankings,
   purchaseItem,
