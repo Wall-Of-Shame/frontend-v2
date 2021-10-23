@@ -268,7 +268,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
             </IonFabButton>
           </IonButtons>
         </IonToolbar>
-        <div className='header'>
+        <div className='create-challenge-header'>
           <IonGrid>
             <IonRow className='ion-padding-horizontal ion-padding-bottom'>
               <IonText
