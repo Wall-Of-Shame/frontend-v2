@@ -481,7 +481,7 @@ const Challenges: React.FC = () => {
             shape='round'
             mode='ios'
             fill='solid'
-            color='main-blue'
+            color='main-yellow'
             routerLink='challenges/create'
           >
             Create a new challenge
