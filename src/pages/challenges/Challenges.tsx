@@ -40,6 +40,7 @@ import { useSocket } from "../../contexts/SocketContext";
 import challenge from "../../assets/onboarding/challenge.png";
 import { Avatar } from "../../interfaces/models/Users";
 import { useWindowSize } from "../../utils/WindowUtils";
+import ChallengePageImg from "./challengePageImg";
 
 interface ChallengesState {
   isLoading: boolean;
@@ -465,11 +466,10 @@ const Challenges: React.FC = () => {
         {!isDesktop && <div className='challenges-header-curve' />}
       </IonHeader>
       <IonContent fullscreen>
-        <IonRow className='ion-justify-content-center ion-padding'>
-          <img
-            src={challenge}
-            alt='Challenge'
-            className='create-challenge-img'
+        <IonRow className='ion-justify-content-center ion-padding-vertical'>
+          <ChallengePageImg
+            user={user}
+            active={ongoing && ongoing.length > 0}
           />
         </IonRow>
         <IonRow
