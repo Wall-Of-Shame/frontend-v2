@@ -26,7 +26,6 @@ import { useState, useReducer, useEffect } from "react";
 import {
   addHours,
   addYears,
-  format,
   formatDuration,
   formatISO,
   isAfter,
@@ -169,9 +168,9 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
               </IonFabButton>
             </IonButtons>
           </IonToolbar>
-          <div className='header'>
+          <div className='create-challenge-header'>
             <IonGrid>
-              <IonRow className='ion-padding'>
+              <IonRow className='ion-padding-horizontal ion-padding-bottom'>
                 <IonText
                   color='white'
                   style={{ fontWeight: "bold", fontSize: "1.5rem" }}
