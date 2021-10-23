@@ -23,6 +23,7 @@ import ChallengeDetails from "../challenges/details";
 import EditProfile from "../profile/edit";
 import Settings from "../profile/settings";
 import Explore from "../explore";
+import Search from "../explore/search"
 import Store from "../store";
 import Invitations from "../challenges/invitations";
 import OtherProfile from "../profile/other";
@@ -56,6 +57,9 @@ const Tabs: React.FC = () => {
         </Route>
         <Route exact path='/explore'>
           <Explore />
+        </Route>
+        <Route exact path='/explore/search'>
+          <Search />
         </Route>
         <Route exact path='/wall-of-shame'>
           <WallOfShame />

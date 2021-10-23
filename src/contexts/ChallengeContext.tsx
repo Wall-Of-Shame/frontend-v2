@@ -14,6 +14,8 @@ import {
   setPendingResponse,
   setPendingStart,
   setVotes,
+  setFeatured,
+  setOthers,
 } from "../reducers/ChallengeDux";
 import ChallengeService from "../services/ChallengeService";
 import { adaptPowerUpType } from "../utils/StoreUtils";
@@ -174,6 +176,28 @@ const ChallengeProvider: React.FC = (props) => {
     }
   };
 
+  const getExplore = async (): Promise<ChallengeList> => {
+    try {
+      // console.log("Called explore");
+      const response = await ChallengeService.getExplore();
+      dispatch(
+        setFeatured({
+          challenges: response.featured,
+          lastRetrieved: Date.now(),
+        })
+      );
+      dispatch(
+        setOthers ({
+          challenges: response.others,
+          lastRetrieved: Date.now(),
+        })
+      );
+      return response;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
   return (
     <ChallengeContext.Provider
       value={{
@@ -189,6 +213,7 @@ const ChallengeProvider: React.FC = (props) => {
         voteForParticipant,
         releaseResults,
         uploadProof,
+        getExplore,
       }}
       {...props}
     />

@@ -151,13 +151,13 @@ const EditChallenge: React.FC<EditChallengeProps> = (
   return (
     <IonPage style={{ background: "#ffffff" }}>
       <IonHeader>
-        <IonToolbar style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar color='main-beige' style={{ paddingTop: "0.5rem" }}>
           <IonButtons slot='start'>
             <IonButton
               style={{
                 margin: "0.5rem",
               }}
-              color='dark'
+              color='white'
               onClick={backAction}
             >
               <IonIcon icon={arrowBackOutline} size='large' />
@@ -357,7 +357,7 @@ const EditChallenge: React.FC<EditChallengeProps> = (
             <IonButton
               mode='ios'
               shape='round'
-              color='secondary'
+              color='accent-beige'
               fill='solid'
               onClick={handleSubmit}
             >

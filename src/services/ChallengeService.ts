@@ -134,6 +134,17 @@ const uploadProof = async (
   }
 };
 
+const getExplore = async (): Promise<ChallengeList> => {
+  try {
+    const response = await APIService.get(
+      `challenges?operation=explore`
+    );
+    return response.data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   getChallenges,
@@ -148,4 +159,5 @@ export default {
   getVotes,
   voteForParticipant,
   uploadProof,
+  getExplore,
 };

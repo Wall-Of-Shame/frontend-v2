@@ -304,7 +304,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
           >
             <IonButton
               shape='round'
-              color='main-blue'
+              color='accent-blue'
               mode='ios'
               disabled={!validateInputs()}
               onClick={handleSend}
