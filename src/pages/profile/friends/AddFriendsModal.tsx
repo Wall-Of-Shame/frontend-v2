@@ -88,7 +88,11 @@ const AddFriendsModal: React.FC<AddFriendsModalProps> = (props) => {
   };
 
   const handleInvite = async (u: UserList) => {
-    const index = invitedUsers.indexOf(u);
+    let index = invitedUsers.indexOf(u);
+    if (index !== -1) {
+      return;
+    }
+    index = user?.friends.pendingAccept.indexOf(u.userId) ?? -1;
     if (index !== -1) {
       return;
     }
@@ -157,6 +161,10 @@ const AddFriendsModal: React.FC<AddFriendsModalProps> = (props) => {
             Search results
           </IonText>
           {matchedUsers.map((u) => {
+            const isFriend = user?.friends.accepted.indexOf(u.userId) !== -1;
+            const hasRequested =
+              invitedUsers.indexOf(u) !== -1 ||
+              user?.friends.pendingAccept.indexOf(u.userId) !== -1;
             return (
               <IonRow className='ion-margin' key={u.userId}>
                 <IonCol className='ion-align-item-center' size='2.5'>
@@ -220,14 +228,21 @@ const AddFriendsModal: React.FC<AddFriendsModalProps> = (props) => {
                       mode='ios'
                       className='ion-no-padding'
                       color={"main-blue"}
-                      fill={
-                        invitedUsers.indexOf(u) === -1 ? "solid" : "outline"
-                      }
+                      fill={!isFriend && !hasRequested ? "outline" : "solid"}
                       style={{ height: "2rem", width: "100%" }}
-                      onClick={() => handleInvite(u)}
+                      onClick={() => {
+                        if (isFriend || hasRequested) {
+                          return;
+                        }
+                        handleInvite(u);
+                      }}
                     >
                       <IonText style={{ fontSize: "0.9rem" }}>
-                        {invitedUsers.indexOf(u) !== -1 ? "Requested" : "Add"}
+                        {!isFriend && !hasRequested
+                          ? "Add"
+                          : isFriend
+                          ? "Added"
+                          : "Requested"}
                       </IonText>
                     </IonButton>
                   </IonCol>
