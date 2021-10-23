@@ -29,7 +29,9 @@ import { Redirect, useHistory, useLocation } from "react-router";
 import { useChallenge } from "../../../contexts/ChallengeContext";
 import {
   ChallengeData,
+  ChallengeInviteType,
   ChallengePost,
+  ChallengeType,
   UserMini,
 } from "../../../interfaces/models/Challenges";
 import "./ChallengeDetails.scss";
@@ -89,6 +91,23 @@ interface ChallengeDetailsState {
   toastMessage: string;
 }
 
+export interface EditChallengeState {
+  title: string;
+  description: string;
+  punishmentType: ChallengeType;
+  inviteType: ChallengeInviteType;
+  startAt: string;
+  endAt: string;
+  participants: {
+    accepted: {
+      completed: UserMini[];
+      notCompleted: UserMini[];
+    };
+    pending: UserMini[];
+  };
+  invitedUsers: UserMini[];
+}
+
 const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   const location = useLocation();
   const history = useHistory();
@@ -110,6 +129,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   const [countdown, setCountdown] = useState<Duration | null>(null);
   const [didFinish, setDidFinish] = useState(false);
   const [showOfflineToast, setShowOfflineToast] = useState(false);
+  const [hasEditError, setHasEditError] = useState(false);
   const [state, setState] = useReducer(
     (s: ChallengeDetailsState, a: Partial<ChallengeDetailsState>) => ({
       ...s,
@@ -142,6 +162,32 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
       okHandler: undefined,
       showToast: false,
       toastMessage: "",
+    }
+  );
+
+  const [editState, setEditState] = useReducer(
+    (s: EditChallengeState, a: Partial<EditChallengeState>) => ({
+      ...s,
+      ...a,
+    }),
+    {
+      title: challenge?.title ?? "",
+      description: challenge?.description ?? "",
+      punishmentType: challenge?.type ?? "NOT_COMPLETED",
+      inviteType: challenge?.inviteType ?? "PRIVATE",
+      startAt: challenge?.startAt ?? formatISO(Date.now()),
+      endAt: challenge?.endAt ?? formatISO(Date.now()),
+      participants: challenge?.participants ?? {
+        accepted: {
+          completed: [],
+          notCompleted: [],
+        },
+        pending: [],
+      },
+      invitedUsers:
+        challenge?.participants.accepted.notCompleted.concat(
+          challenge?.participants.pending
+        ) ?? [],
     }
   );
 
@@ -376,6 +422,58 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     setState({ showUploadProofModal: true });
   };
 
+  const handleSubmit = async () => {
+    if (!challenge) {
+      return;
+    }
+    const startAtTime = parseISO(editState.startAt);
+    const endAtTime = parseISO(editState.endAt);
+    if (
+      editState.title.length <= 0 ||
+      editState.description.length <= 0 ||
+      isAfter(startAtTime, endAtTime) ||
+      isAfter(Date.now(), startAtTime)
+    ) {
+      setHasEditError(true);
+      return;
+    }
+    const updatedParticipants: string[] = state.invitedUsers.map(
+      (u) => u.userId
+    );
+    const data: ChallengePost = {
+      title: editState.title,
+      description: editState.description,
+      startAt: editState.startAt,
+      endAt: editState.endAt,
+      type: editState.punishmentType,
+      inviteType: editState.inviteType,
+      participants: updatedParticipants,
+    };
+    setState({ isLoading: true });
+    try {
+      await updateChallenge(challenge.challengeId, data);
+      await fetchData();
+      setTimeout(() => {
+        setState({
+          isLoading: false,
+          editMode: false,
+          showAlert: true,
+          hasConfirm: false,
+          alertHeader: "Success!",
+          alertMessage: `You have successfully edited <strong>${challenge.title}</strong> :)`,
+        });
+      }, 1000);
+    } catch (error) {
+      setState({
+        isLoading: false,
+        showAlert: true,
+        hasConfirm: false,
+        alertHeader: "Ooooops",
+        alertMessage: "Our server is taking a break, come back later please :)",
+      });
+    }
+  };
+
   const handleReleaseResults = async () => {
     if (challenge === null) {
       return;
@@ -546,6 +644,33 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     }
     switch (tab) {
       case "details":
+        if (state.editMode) {
+          return (
+            <IonFooter translucent={true} key='details-edit'>
+              <IonToolbar>
+                <IonRow
+                  className='ion-justify-content-around'
+                  style={{ margin: "0.5rem" }}
+                >
+                  <IonButton
+                    mode='ios'
+                    shape='round'
+                    color='main-beige'
+                    expand='block'
+                    fill='solid'
+                    onClick={handleSubmit}
+                  >
+                    <IonText
+                      style={{ marginLeft: "2rem", marginRight: "2rem" }}
+                    >
+                      Confirm changes
+                    </IonText>
+                  </IonButton>
+                </IonRow>
+              </IonToolbar>
+            </IonFooter>
+          );
+        }
         return (
           <FooterActions
             challenge={challenge}
@@ -628,15 +753,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     return <Redirect to={"challenges"} />;
   }
 
-  if (state.editMode) {
-    return (
-      <EditChallenge
-        challenge={challenge}
-        backAction={() => setState({ editMode: false })}
-      />
-    );
-  }
-
   return (
     <IonPage style={{ background: "#ffffff" }}>
       <IonHeader className='ion-no-border'>
@@ -652,12 +768,17 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
               height: "2.75rem",
             }}
             onClick={() => {
-              history.goBack();
+              if (state.editMode) {
+                setState({ editMode: false });
+              } else {
+                history.goBack();
+              }
             }}
           >
             <IonIcon icon={arrowBack} />
           </IonFabButton>
-          {user?.userId === challenge.owner.userId &&
+          {!state.editMode &&
+            user?.userId === challenge.owner.userId &&
             !isAfter(Date.now(), parseISO(challenge.startAt!)) && (
               <>
                 <IonButtons slot='end'>
@@ -707,63 +828,88 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
               </>
             )}
         </IonToolbar>
+        {state.editMode && (
+          <div className='create-challenge-header'>
+            <IonGrid>
+              <IonRow className='ion-padding-horizontal ion-padding-bottom'>
+                <IonText
+                  color='white'
+                  style={{ fontWeight: "bold", fontSize: "1.5rem" }}
+                >
+                  Edit your challenge
+                </IonText>
+              </IonRow>
+            </IonGrid>
+          </div>
+        )}
+
         {!isPlatform("desktop") && <div className='challenges-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen scrollY={tab === "chat" ? false : true}>
-        <IonGrid className='ion-margin-top'>
-          {renderHeader()}
-          <IonRow className='ion-padding-horizontal ion-padding-bottom'>
-            <IonText style={{ fontWeight: "bold", fontSize: "1.5rem" }}>
-              {challenge.title}
-            </IonText>
-          </IonRow>
-        </IonGrid>
-        <IonRow
-          className='ion-justify-content-start ion-padding-horizontal ion-padding-top'
-          style={{ marginBottom: "1rem" }}
-        >
-          <IonButton
-            shape='round'
-            mode='ios'
-            fill='solid'
-            color={tab === "details" ? "main-beige" : "light"}
-            onClick={() => setTab("details")}
-            style={{
-              width: "5rem",
-              height: "2.5rem",
-            }}
-          >
-            <IonText style={{ fontWeight: "bold" }}>Details</IonText>
-          </IonButton>
-          <IonButton
-            shape='round'
-            mode='ios'
-            fill='solid'
-            color={tab === "participants" ? "main-beige" : "light"}
-            onClick={() => setTab("participants")}
-            style={{
-              width: "7.75rem",
-              height: "2.5rem",
-            }}
-          >
-            <IonText style={{ fontWeight: "bold" }}>Participants</IonText>
-          </IonButton>
-          <IonButton
-            shape='round'
-            mode='ios'
-            fill='solid'
-            color={tab === "chat" ? "main-beige" : "light"}
-            onClick={() => setTab("chat")}
-            style={{
-              width: "4rem",
-              height: "2.5rem",
-            }}
-          >
-            <IonText style={{ fontWeight: "bold" }}>Chat</IonText>
-          </IonButton>
-        </IonRow>
-        {renderTabs()}
+        {state.editMode ? (
+          <EditChallenge
+            state={editState}
+            setState={setEditState}
+            hasError={hasEditError}
+          />
+        ) : (
+          <>
+            <IonGrid className='ion-margin-top'>
+              {renderHeader()}
+              <IonRow className='ion-padding-horizontal ion-padding-bottom'>
+                <IonText style={{ fontWeight: "bold", fontSize: "1.5rem" }}>
+                  {challenge.title}
+                </IonText>
+              </IonRow>
+            </IonGrid>
+            <IonRow
+              className='ion-justify-content-start ion-padding-horizontal ion-padding-top'
+              style={{ marginBottom: "1rem" }}
+            >
+              <IonButton
+                shape='round'
+                mode='ios'
+                fill='solid'
+                color={tab === "details" ? "main-beige" : "light"}
+                onClick={() => setTab("details")}
+                style={{
+                  width: "5rem",
+                  height: "2.5rem",
+                }}
+              >
+                <IonText style={{ fontWeight: "bold" }}>Details</IonText>
+              </IonButton>
+              <IonButton
+                shape='round'
+                mode='ios'
+                fill='solid'
+                color={tab === "participants" ? "main-beige" : "light"}
+                onClick={() => setTab("participants")}
+                style={{
+                  width: "7.75rem",
+                  height: "2.5rem",
+                }}
+              >
+                <IonText style={{ fontWeight: "bold" }}>Participants</IonText>
+              </IonButton>
+              <IonButton
+                shape='round'
+                mode='ios'
+                fill='solid'
+                color={tab === "chat" ? "main-beige" : "light"}
+                onClick={() => setTab("chat")}
+                style={{
+                  width: "4rem",
+                  height: "2.5rem",
+                }}
+              >
+                <IonText style={{ fontWeight: "bold" }}>Chat</IonText>
+              </IonButton>
+            </IonRow>
+            {renderTabs()}
+          </>
+        )}
         <PowerUpModal
           showModal={state.showPowerUpModal}
           setShowModal={(showModal) => {
