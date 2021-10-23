@@ -46,6 +46,14 @@ const UserProvider: React.FunctionComponent = (props) => {
     }
   };
 
+  const addFriend = async (userId: string): Promise<void> => {
+    try {
+      await UserService.addFriend(userId);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
   const getFriendsRankings = async (): Promise<UserList[]> => {
     try {
       const data = await UserService.getFriendsRankings();
@@ -91,6 +99,7 @@ const UserProvider: React.FunctionComponent = (props) => {
         updateProfile,
         searchUser,
         getUserProfile,
+        addFriend,
         getFriendsRankings,
         getGlobalRankings,
         purchaseItem,

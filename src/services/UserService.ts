@@ -43,6 +43,14 @@ const getUserProfile = async (userId: string): Promise<UserList> => {
   }
 };
 
+const addFriend = async (userId: string): Promise<void> => {
+  try {
+    await APIService.post("requests", { userId: userId });
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 const getFriendsRankings = async (): Promise<UserList[]> => {
   try {
     const response = await APIService.get(`users/?operation=wallRecents`);
@@ -90,6 +98,7 @@ export default {
   updateProfile,
   searchUser,
   getUserProfile,
+  addFriend,
   getFriendsRankings,
   getGlobalRankings,
   purchaseItem,
