@@ -33,6 +33,8 @@ import { UserData } from "../../interfaces/models/Users";
 import LoadingSpinner from "../../components/loadingSpinner";
 import Alert from "../../components/alert";
 import Container from "../../components/container";
+import ProtecImg from "../../assets/powerup/protec.png";
+import U2Img from "../../assets/powerup/u2.png";
 
 interface StoreState {
   isLoading: boolean;
@@ -53,12 +55,14 @@ export const powerUps: PowerUp[] = [
   {
     type: "Protec",
     price: 750,
+    img: ProtecImg,
     description:
       "Makes you immune to one failure, you're safe from the Wall of Shame this time :)",
   },
   {
     type: "U2",
     price: 500,
+    img: U2Img,
     description:
       "Arrow a friend to take the challenge with you. This invitation cannot be rejected :')",
   },
@@ -223,7 +227,7 @@ const Store: React.FC = () => {
                       </IonRow>
                       <IonRow className='ion-justify-content-center'>
                         <img
-                          src={challenge}
+                          src={p.img}
                           alt='Challenge'
                           className='store-card-img'
                           style={{
