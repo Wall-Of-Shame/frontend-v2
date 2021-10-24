@@ -30,6 +30,7 @@ import { useUser } from "../../../contexts/UserContext";
 import { UserList } from "../../../interfaces/models/Users";
 import LoadingSpinner from "../../../components/loadingSpinner";
 import Alert from "../../../components/alert";
+import { useAuth } from "../../../contexts/AuthContext";
 
 interface FriendsState {
   isLoading: boolean;
@@ -45,8 +46,14 @@ interface FriendsState {
 const Friends: React.FC = () => {
   const history = useHistory();
   const { isDesktop } = useWindowSize();
-  const { getFriendRequests, getFriends, acceptRequest, rejectRequest } =
-    useUser();
+  const { refreshUser } = useAuth();
+  const {
+    getFriendRequests,
+    getFriends,
+    acceptRequest,
+    rejectRequest,
+    notifyShouldRefreshUser,
+  } = useUser();
 
   const [showModal, setShowModal] = useState(false);
   const [requests, setRequests] = useState<UserList[]>([]);
@@ -75,8 +82,6 @@ const Friends: React.FC = () => {
       const friendsData = await getFriends();
       setRequests(requestsData);
       setFriends(friendsData);
-      console.log(requestsData);
-      console.log(friendsData);
     } catch (error) {}
   };
 
@@ -94,12 +99,16 @@ const Friends: React.FC = () => {
     try {
       await acceptRequest(userId);
       await fetchData();
+      await refreshUser();
+      notifyShouldRefreshUser(true);
     } catch (error) {}
   };
   const handleReject = async (userId: string) => {
     try {
       await rejectRequest(userId);
       await fetchData();
+      await refreshUser();
+      notifyShouldRefreshUser(true);
     } catch (error) {}
   };
 
@@ -261,7 +270,7 @@ const Friends: React.FC = () => {
                       flexDirection: "column",
                       justifyContent: "center",
                     }}
-                    size='9.5'
+                    size='6.5'
                   >
                     <IonRow style={{ paddingBottom: "0.25rem" }}>
                       <IonText style={{ fontSize: 17, fontWeight: 600 }}>

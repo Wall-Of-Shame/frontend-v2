@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   IonTabs,
   IonRouterOutlet,
@@ -32,6 +32,7 @@ import Friends from "../profile/friends";
 import { useWindowSize } from "../../utils/WindowUtils";
 import PastChallenges from "../profile/challenges";
 import { useUser } from "../../contexts/UserContext";
+import { UserList } from "../../interfaces/models/Users";
 
 const redirectToChallenges = (): React.ReactNode => (
   <Redirect to={"/challenges"} />
@@ -39,9 +40,29 @@ const redirectToChallenges = (): React.ReactNode => (
 
 const Tabs: React.FC = () => {
   const { isDesktop } = useWindowSize();
-  const { user } = useUser();
+  const { getFriendRequests, shouldRefreshUser } = useUser();
 
   const location = useLocation();
+
+  const [requests, setRequests] = useState<UserList[]>([]);
+
+  const fetchData = async () => {
+    try {
+      const requestsData = await getFriendRequests();
+      setRequests(requestsData);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    // Fetch requests
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shouldRefreshUser]);
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <IonTabs>
@@ -117,7 +138,7 @@ const Tabs: React.FC = () => {
         </IonTabButton>
         <IonTabButton tab='profile' href='/profile'>
           <IonIcon icon={personOutline} />
-          {!!user?.friends.received && user?.friends.received > 0 && (
+          {requests.length > 0 && (
             <IonBadge
               mode='ios'
               color='danger'

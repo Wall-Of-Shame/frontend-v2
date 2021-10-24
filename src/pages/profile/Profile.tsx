@@ -63,7 +63,13 @@ export interface ProfileState {
 
 const Profile: React.FC = () => {
   const { logout } = useAuth();
-  const { user, getFriendRequests, getFriends } = useUser();
+  const {
+    user,
+    getFriendRequests,
+    getFriends,
+    shouldRefreshUser,
+    notifyShouldRefreshUser,
+  } = useUser();
   const { isDesktop } = useWindowSize();
   const location = useLocation();
   const history = useHistory();
@@ -119,6 +125,13 @@ const Profile: React.FC = () => {
       setFriends(friendsData);
     } catch (error) {}
   };
+
+  useEffect(() => {
+    // Fetch requests
+    fetchData();
+    notifyShouldRefreshUser(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shouldRefreshUser]);
 
   useEffect(() => {
     // Fetch requests
@@ -191,19 +204,21 @@ const Profile: React.FC = () => {
               </IonCard>
             );
           })}
-          <IonRow
-            className='ion-justify-content-center'
-            style={{ marginBottom: "1.5rem" }}
-          >
-            <IonButton
-              mode='ios'
-              color='main-blue'
-              shape='round'
-              onClick={() => history.push("/challenge-history")}
+          {completed.length > 5 && (
+            <IonRow
+              className='ion-justify-content-center'
+              style={{ marginBottom: "1.5rem" }}
             >
-              Show all
-            </IonButton>
-          </IonRow>
+              <IonButton
+                mode='ios'
+                color='main-blue'
+                shape='round'
+                onClick={() => history.push("/challenge-history")}
+              >
+                Show all
+              </IonButton>
+            </IonRow>
+          )}
         </>
       );
     } else {
@@ -307,7 +322,15 @@ const Profile: React.FC = () => {
             lines='none'
             onClick={() => {
               setShowPopover({ showPopover: false, event: undefined });
-              logout();
+              setState({
+                showAlert: true,
+                hasConfirm: true,
+                alertHeader: "Are you sure?",
+                alertMessage: "You would need to log in again.",
+                confirmHandler: () => {
+                  logout();
+                },
+              });
             }}
             style={{ marginBottom: isPlatform("ios") ? "0.5rem" : "0rem" }}
           >

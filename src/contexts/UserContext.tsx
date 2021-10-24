@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import UserContextInterface from "../interfaces/contexts/UserContext";
 import { PurchasePost } from "../interfaces/models/Store";
@@ -14,6 +14,12 @@ const UserContext = React.createContext<UserContextInterface | undefined>(
 // Allows user data to be accessible from everywhere
 const UserProvider: React.FunctionComponent = (props) => {
   const { data } = useAuth();
+
+  const [shouldRefreshUser, setShouldRefreshUser] = useState(false);
+
+  const notifyShouldRefreshUser = (shouldRefresh: boolean) => {
+    setShouldRefreshUser(shouldRefresh);
+  };
 
   const updateProfile = async (
     name: string,
@@ -130,6 +136,8 @@ const UserProvider: React.FunctionComponent = (props) => {
     <UserContext.Provider
       value={{
         user: data,
+        shouldRefreshUser,
+        notifyShouldRefreshUser,
         updateProfile,
         searchUser,
         getUserProfile,

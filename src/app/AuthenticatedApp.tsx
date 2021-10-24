@@ -52,12 +52,14 @@ import shameIcon from "../assets/icons/shame-icon.svg";
 import { useWindowSize } from "../utils/WindowUtils";
 import { useUser } from "../contexts/UserContext";
 import { useEffect, useState } from "react";
+import { UserList } from "../interfaces/models/Users";
 
 const AuthenticatedApp: React.FC = () => {
   const { width, isDesktop } = useWindowSize();
-  const { user } = useUser();
+  const { getFriendRequests, shouldRefreshUser } = useUser();
 
   const [isDesktopBefore, setIsDesktopBefore] = useState(isDesktop);
+  const [requests, setRequests] = useState<UserList[]>([]);
 
   useEffect(() => {
     if (isDesktop !== isDesktopBefore && !isPlatform("desktop")) {
@@ -66,6 +68,24 @@ const AuthenticatedApp: React.FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDesktop]);
+
+  const fetchData = async () => {
+    try {
+      const requestsData = await getFriendRequests();
+      setRequests(requestsData);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    // Fetch requests
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shouldRefreshUser]);
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <IonApp>
@@ -113,7 +133,7 @@ const AuthenticatedApp: React.FC = () => {
                   </IonTabButton>
                   <IonTabButton tab='profile' href='/profile'>
                     <IonIcon icon={personOutline} />
-                    {!!user?.friends.received && user?.friends.received > 0 && (
+                    {requests.length > 0 && (
                       <IonBadge
                         mode='ios'
                         color='danger'

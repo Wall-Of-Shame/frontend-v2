@@ -3,6 +3,8 @@ import { Avatar, Settings, UserData, UserList } from "../models/Users";
 
 export default interface UserContextInterface {
   user: UserData | null;
+  shouldRefreshUser: boolean;
+  notifyShouldRefreshUser: (shouldRefresh: boolean) => void;
   updateProfile(
     name: string,
     username: string,
