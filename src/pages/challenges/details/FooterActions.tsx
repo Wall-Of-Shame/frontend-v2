@@ -42,12 +42,13 @@ const FooterActions: React.FC<FooterActionsProps> = (
   } = props;
   const { user } = useUser();
 
+  const noCompleted = challenge.participants.accepted.completed.length === 0;
+  const oneManChallenge =
+    challenge.participants.accepted.completed.length === 0 &&
+    challenge.participants.accepted.completed[0].userId === user?.userId;
+
   if (challenge.hasReleasedResult) {
-    if (
-      challenge.participants.accepted.completed.length === 0 ||
-      (challenge.participants.accepted.completed.length === 0 &&
-        challenge.participants.accepted.completed[0].userId === user?.userId)
-    ) {
+    if (noCompleted || oneManChallenge) {
       return <></>;
     }
     return (
@@ -75,11 +76,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
     );
   }
   if (isAfter(Date.now(), parseISO(challenge.endAt!))) {
-    if (
-      challenge.participants.accepted.completed.length === 0 ||
-      (challenge.participants.accepted.completed.length === 0 &&
-        challenge.participants.accepted.completed[0].userId === user?.userId)
-    ) {
+    if (noCompleted || oneManChallenge) {
       return <></>;
     }
     return (
