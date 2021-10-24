@@ -10,6 +10,7 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
+  IonImg,
   IonPage,
   IonRow,
   IonText,
@@ -63,53 +64,98 @@ const Explore: React.FC = () => {
   };
 
   const renderFeaturedChallenges = () => {
-    // Change others to featured
-    if (others && others.length > 0) {
+    if (featured && featured.length > 0) {
       return (
         <div>
-          <ul className="featured-horizontal-list">
-            {/* Change others to featured */}
-            {others.map((c) => {
-              return (
-                <li
-                  className="featured-horizontal-item"
-                  key={`${c.challengeId}-horizontal`}
-                >
-                  <IonCard
-                    mode="ios"
-                    button
-                    key={c.challengeId}
-                    onClick={() => {
-                      history.push(`challenges/${c.challengeId}/details`, c);
-                    }}
+          {isDesktop ? (
+            <ul className="featured-horizontal-list">
+              {featured.map((c) => {
+                return (
+                  <li
+                    className="featured-horizontal-item"
+                    key={`${c.challengeId}-horizontal`}
                   >
-                    {/* Replace div with image */}
-                    <div
-                      style={{ height: 200, backgroundColor: "lightblue" }}
-                    ></div>
-                    <IonCardHeader style={{ paddingTop: "1rem" }}>
-                      <IonText
-                        style={{
-                          fontSize: "1rem",
-                          fontWeight: "bold",
-                          color: "black",
-                        }}
-                      >
-                        {c.title}
-                      </IonText>
-                    </IonCardHeader>
-                    <IonCardContent>
-                      {`Starts ${formatDistance(
-                        parseISO(c.startAt!),
-                        new Date(),
-                        { addSuffix: true }
-                      )}`}
-                    </IonCardContent>
-                  </IonCard>
-                </li>
-              );
-            })}
-          </ul>
+                    <IonCard
+                      mode="ios"
+                      button
+                      key={c.challengeId}
+                      onClick={() => {
+                        history.push(`challenges/${c.challengeId}/details`, c);
+                      }}
+                    >
+                      {/* Image height: 200, width: 220 */}
+                      <IonImg
+                        src={c.imageURL}
+                        style={{ height: 200, width: 220 }}
+                      />
+                      <IonCardHeader style={{ paddingTop: "1rem" }}>
+                        <IonText
+                          style={{
+                            fontSize: "1rem",
+                            fontWeight: "bold",
+                            color: "black",
+                          }}
+                        >
+                          {c.title}
+                        </IonText>
+                      </IonCardHeader>
+                      <IonCardContent>
+                        {`Starts ${formatDistance(
+                          parseISO(c.startAt!),
+                          new Date(),
+                          { addSuffix: true }
+                        )}`}
+                      </IonCardContent>
+                    </IonCard>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <ul className="featured-horizontal-list mobile">
+              {featured.map((c) => {
+                return (
+                  <li
+                    className="featured-horizontal-item"
+                    key={`${c.challengeId}-horizontal`}
+                  >
+                    <IonCard
+                      mode="ios"
+                      button
+                      key={c.challengeId}
+                      onClick={() => {
+                        history.push(`challenges/${c.challengeId}/details`, c);
+                      }}
+                    >
+                      {/* Image height: 200, width: 220 */}
+                      <IonImg
+                        src={c.imageURL}
+                        style={{ height: 200, width: 220 }}
+                      />
+                      <IonCardHeader style={{ paddingTop: "1rem" }}>
+                        <IonText
+                          style={{
+                            fontSize: "1rem",
+                            fontWeight: "bold",
+                            color: "black",
+                          }}
+                        >
+                          {c.title}
+                        </IonText>
+                      </IonCardHeader>
+                      <IonCardContent>
+                        {`Starts ${formatDistance(
+                          parseISO(c.startAt!),
+                          new Date(),
+                          { addSuffix: true }
+                        )}`}
+                      </IonCardContent>
+                    </IonCard>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
       );
     } else {

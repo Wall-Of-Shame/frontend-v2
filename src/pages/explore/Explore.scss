@@ -57,9 +57,9 @@ ul.ba {
   // scrollbar-width: none;
 }
 
-// .featured-horizontal-list::-webkit-scrollbar {
-//   display: none;
-// }
+.mobile::-webkit-scrollbar {
+  display: none;
+}
 
 .featured-horizontal-item {
   height: 350px;
