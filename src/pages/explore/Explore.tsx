@@ -17,9 +17,8 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { formatDistance, parseISO } from "date-fns";
+import { format, formatDistanceToNowStrict, parseISO } from "date-fns";
 import { search } from "ionicons/icons";
-import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router";
 import AvatarImg from "../../components/avatar";
@@ -100,9 +99,8 @@ const Explore: React.FC = () => {
                         </IonText>
                       </IonCardHeader>
                       <IonCardContent>
-                        {`Starts ${formatDistance(
+                        {`Starts ${formatDistanceToNowStrict(
                           parseISO(c.startAt!),
-                          new Date(),
                           { addSuffix: true }
                         )}`}
                       </IonCardContent>
@@ -142,10 +140,9 @@ const Explore: React.FC = () => {
                           {c.title}
                         </IonText>
                       </IonCardHeader>
-                      <IonCardContent>
-                        {`Starts ${formatDistance(
+                      <IonCardContent className="card-start-time">
+                        {`Starts ${formatDistanceToNowStrict(
                           parseISO(c.startAt!),
-                          new Date(),
                           { addSuffix: true }
                         )}`}
                       </IonCardContent>

@@ -67,3 +67,10 @@ ul.ba {
   flex-shrink: 0;
   margin-top: 0rem;
 }
+
+.card-start-time {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
