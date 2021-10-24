@@ -159,7 +159,7 @@ const Explore: React.FC = () => {
       );
     } else {
       return (
-        <IonRow className="ion-padding-horizontal ion-padding-bottom ion-justify-content-center">
+        <IonRow className="ion-padding">
           {"Currently there are no featured challenges!"}
         </IonRow>
       );
@@ -241,11 +241,8 @@ const Explore: React.FC = () => {
       );
     } else {
       return (
-        <IonRow
-          className="ion-padding ion-justify-content-center"
-          style={{ marginTop: "1.5rem" }}
-        >
-          {"There's nothing here >_<"}
+        <IonRow className="ion-padding">
+          {"Currently there are no trending challenges!"}
         </IonRow>
       );
     }
