@@ -1,7 +1,6 @@
 import {
   IonButton,
   IonButtons,
-  IonCol,
   IonContent,
   IonFab,
   IonFabButton,
@@ -9,7 +8,6 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
-  IonInput,
   IonPage,
   IonRow,
   IonText,
@@ -22,7 +20,6 @@ import {
   arrowBack,
   chatbubbles,
   flash,
-  paperPlane,
   pencil,
   personAdd,
 } from "ionicons/icons";
@@ -59,7 +56,6 @@ import EditParticipantsModal from "../../../components/participants/EditParticip
 import DetailsTab from "./DetailsTab";
 import Chat from "./Chat";
 import PowerUpModal from "../powerUp";
-import { useWindowSize } from "../../../utils/WindowUtils";
 
 interface ChallengeDetailsProps {}
 
@@ -114,7 +110,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   const location = useLocation();
   const history = useHistory();
   const { user } = useUser()!;
-  const { width } = useWindowSize();
   const {
     getChallenge,
     acceptChallenge,
@@ -501,7 +496,8 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     if (didFinish) {
       return;
     }
-    if (challenge === null) {
+    if (!challenge) {
+      window.location.href = "challenges";
       return;
     }
     const endAtTime = parseISO(challenge.endAt);
@@ -672,8 +668,9 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     .concat(challenge.participants.accepted.protected);
   const noCompleted = challenge.participants.accepted.completed.length === 0;
   const oneManChallenge =
-    challenge.participants.accepted.completed.length === 1 &&
-    challenge.participants.accepted.completed[0].userId === user?.userId;
+    challenge.participants.accepted.completed.length === 1
+      ? challenge.participants.accepted.completed[0].userId === user?.userId
+      : false;
 
   console.log(noCompleted);
 

@@ -42,10 +42,14 @@ const FooterActions: React.FC<FooterActionsProps> = (
   } = props;
   const { user } = useUser();
 
+  const allParticipants = challenge.participants.accepted.completed
+    .concat(challenge.participants.accepted.notCompleted)
+    .concat(challenge.participants.accepted.protected);
   const noCompleted = challenge.participants.accepted.completed.length === 0;
   const oneManChallenge =
-    challenge.participants.accepted.completed.length === 1 &&
-    challenge.participants.accepted.completed[0].userId === user?.userId;
+    challenge.participants.accepted.completed.length === 1
+      ? challenge.participants.accepted.completed[0].userId === user?.userId
+      : false;
 
   if (challenge.hasReleasedResult) {
     if (noCompleted || oneManChallenge) {
@@ -239,6 +243,40 @@ const FooterActions: React.FC<FooterActionsProps> = (
                 <IonText>I'm ready!</IonText>
               </IonButton>
             </IonCol>
+          </IonRow>
+        </IonToolbar>
+      </IonFooter>
+    );
+  }
+
+  if (
+    challenge.inviteType === "PUBLIC" &&
+    allParticipants.findIndex((p) => p.userId === user?.userId) === -1
+  ) {
+    return (
+      <IonFooter translucent={true} key='details'>
+        <IonToolbar>
+          <IonRow
+            className='ion-justify-content-center'
+            style={{ margin: "0.5rem" }}
+          >
+            <IonButton
+              shape='round'
+              color='main-beige'
+              mode='ios'
+              onClick={() => {
+                alertCallback(
+                  true,
+                  "Are you sure?",
+                  "Once accepted, you will need to complete the challenge or get thrown onto the Wall of Shame 🙈",
+                  handleAccept
+                );
+              }}
+            >
+              <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>
+                Join challenge
+              </IonText>
+            </IonButton>
           </IonRow>
         </IonToolbar>
       </IonFooter>
