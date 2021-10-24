@@ -118,6 +118,7 @@ const LoginModal: React.FC<LoginModalProps> = (props: LoginModalProps) => {
           alertHeader: "Ooooops",
           alertMessage:
             "Our server does not recognise your email or password, try again?",
+          okHandler: () => setState({ showAlert: false }),
         });
       });
   };

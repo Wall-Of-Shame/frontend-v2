@@ -428,7 +428,7 @@ const WallOfShame: React.FC = () => {
             <StackGrid
               columnWidth={width! <= 576 ? "50%" : "33.3%"}
               monitorImagesLoaded={true}
-              appearDelay={100}
+              appearDelay={0}
               gridRef={(r) => (grid.current = r)}
             >
               {shames.map((s, index) => {
