@@ -204,7 +204,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
             className='ion-justify-content-around'
             style={{ margin: "0.5rem" }}
           >
-            <IonCol>
+            <IonCol className='ion-no-padding'>
               <IonButton
                 mode='ios'
                 shape='round'
@@ -223,14 +223,13 @@ const FooterActions: React.FC<FooterActionsProps> = (
                 <IonText>Nope</IonText>
               </IonButton>
             </IonCol>
-            <IonCol>
+            <IonCol className='ion-no-padding'>
               <IonButton
                 mode='ios'
                 shape='round'
                 color='main-beige'
                 fill='solid'
                 expand='block'
-                style={{ marginBottom: "0.5rem" }}
                 onClick={() => {
                   alertCallback(
                     true,

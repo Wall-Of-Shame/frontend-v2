@@ -3,6 +3,7 @@ import {
   IonButtons,
   IonCol,
   IonContent,
+  IonFab,
   IonFabButton,
   IonFooter,
   IonGrid,
@@ -19,6 +20,7 @@ import {
 import { useReducer, useState } from "react";
 import {
   arrowBack,
+  chatbubbles,
   flash,
   paperPlane,
   pencil,
@@ -56,7 +58,6 @@ import FooterActions from "./FooterActions";
 import EditParticipantsModal from "../../../components/participants/EditParticipantsModal";
 import DetailsTab from "./DetailsTab";
 import Chat from "./Chat";
-import uniqid from "uniqid";
 import PowerUpModal from "../powerUp";
 import { useWindowSize } from "../../../utils/WindowUtils";
 
@@ -70,6 +71,7 @@ interface ChallengeDetailsState {
   showPowerUpModal: boolean;
   showVoteModal: boolean;
   showParticipantModal: boolean;
+  showChatModal: boolean;
   participants: {
     accepted: {
       completed: UserMini[];
@@ -143,6 +145,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
       userUnderViewing: undefined,
       showVoteModal: false,
       showParticipantModal: false,
+      showChatModal: false,
       participants: challenge?.participants ?? {
         accepted: { completed: [], notCompleted: [] },
         pending: [],
@@ -222,36 +225,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
         alertHeader: "Ooooops",
         alertMessage: "Our server is taking a break, come back later please :)",
       });
-    }
-  };
-
-  const handleSendMessage = async (): Promise<void> => {
-    if (!challenge) {
-      return;
-    }
-    if (!state.message || state.message.trim().length === 0) {
-      setState({ message: "" });
-      return;
-    }
-    const timestamp = new Date().getTime();
-    try {
-      set(
-        ref(
-          database,
-          `chat/${challenge.challengeId}/${timestamp}+${user?.userId}`
-        ),
-        {
-          messageId: uniqid(),
-          name: user?.name,
-          userId: user?.userId,
-          content: state.message,
-          time: formatISO(Date.now()),
-        }
-      ).then(() => {
-        setState({ message: "" });
-      });
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -624,17 +597,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
             />
           </div>
         );
-      case "chat":
-        return (
-          <Chat
-            chatId={challenge.challengeId}
-            participants={challenge.participants.accepted.completed.concat(
-              challenge.participants.accepted.notCompleted.concat(
-                challenge.participants.accepted.protected
-              )
-            )}
-          />
-        );
     }
   };
 
@@ -698,60 +660,16 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
         );
       case "participants":
         return <></>;
-      case "chat":
-        return (
-          <IonFooter translucent={true} key='chat'>
-            <IonToolbar>
-              <IonRow
-                className='ion-align-items-center'
-                style={{ margin: "0.5rem" }}
-              >
-                <IonCol size={width! >= 576 ? "11" : "10.5"}>
-                  <IonRow className='ion-justify-content-center'>
-                    <div
-                      style={{
-                        width: "100%",
-                        borderRadius: "2rem",
-                        background: "#ffffff",
-                        paddingLeft: "0.75rem",
-                        boxShadow: "rgba(149, 149, 149, 0.2) 0px 2px 10px 0px",
-                      }}
-                    >
-                      <IonInput
-                        value={state.message ?? ""}
-                        autoCorrect='on'
-                        placeholder='Message...'
-                        onIonChange={(event) => {
-                          setState({
-                            message: event.detail.value ?? "",
-                          });
-                        }}
-                      />
-                    </div>
-                  </IonRow>
-                </IonCol>
-                <IonCol size={width! >= 576 ? "1" : "1.5"}>
-                  <IonRow className='ion-justify-content-center'>
-                    <IonIcon
-                      icon={paperPlane}
-                      color='main-beige'
-                      onClick={handleSendMessage}
-                      style={{
-                        fontSize: width! < 576 ? "1.75rem" : "2rem",
-                      }}
-                    />
-                  </IonRow>
-                </IonCol>
-              </IonRow>
-            </IonToolbar>
-          </IonFooter>
-        );
     }
   };
 
   if (!challenge) {
     return <Redirect to={"challenges"} />;
   }
+
+  const allParticipants = challenge.participants.accepted.completed
+    .concat(challenge.participants.accepted.notCompleted)
+    .concat(challenge.participants.accepted.protected);
 
   return (
     <IonPage style={{ background: "#ffffff" }}>
@@ -846,7 +764,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
         {!isPlatform("desktop") && <div className='challenges-header-curve' />}
       </IonHeader>
 
-      <IonContent fullscreen scrollY={tab === "chat" ? false : true}>
+      <IonContent fullscreen>
         {state.editMode ? (
           <EditChallenge
             state={editState}
@@ -892,19 +810,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
                 }}
               >
                 <IonText style={{ fontWeight: "bold" }}>Participants</IonText>
-              </IonButton>
-              <IonButton
-                shape='round'
-                mode='ios'
-                fill='solid'
-                color={tab === "chat" ? "main-beige" : "light"}
-                onClick={() => setTab("chat")}
-                style={{
-                  width: "4rem",
-                  height: "2.5rem",
-                }}
-              >
-                <IonText style={{ fontWeight: "bold" }}>Chat</IonText>
               </IonButton>
             </IonRow>
             {renderTabs()}
@@ -984,6 +889,13 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
               });
           }}
         />
+
+        <Chat
+          chatId={challenge.challengeId}
+          participants={allParticipants}
+          showModal={state.showChatModal}
+          setShowModal={(showModal) => setState({ showChatModal: showModal })}
+        />
         <OfflineToast
           message='Sorry, we need the internets to do that :('
           showToast={showOfflineToast}
@@ -1015,6 +927,22 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
           duration={1500}
         />
       </IonContent>
+
+      {allParticipants.findIndex((p) => p.userId === user?.userId) !== -1 && (
+        <IonFab
+          horizontal='end'
+          vertical='bottom'
+          style={{ bottom: tab === "details" ? "5rem" : "0.75rem" }}
+        >
+          <IonFabButton
+            color='main-beige'
+            mode='ios'
+            onClick={() => setState({ showChatModal: true })}
+          >
+            <IonIcon icon={chatbubbles} style={{ fontSize: "1.5rem" }} />
+          </IonFabButton>
+        </IonFab>
+      )}
       {renderFooter()}
     </IonPage>
   );
