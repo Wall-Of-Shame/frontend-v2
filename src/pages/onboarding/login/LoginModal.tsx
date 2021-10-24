@@ -21,7 +21,6 @@ import { isValidEmail } from "../../../utils/ProfileUtils";
 import { Link } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import "./LoginModal.scss";
-import { useWindowSize } from "../../../utils/WindowUtils";
 
 interface LoginModalProps {
   showModal: boolean;
@@ -44,7 +43,6 @@ export interface LoginModalState {
 
 const LoginModal: React.FC<LoginModalProps> = (props: LoginModalProps) => {
   const { showModal, setShowModal } = props;
-  const { isDesktop } = useWindowSize();
   const { login, resetPassword } = useAuth();
   const [pageNumber, setPageNumber] = useState(0);
   const [animationDirection, setAnimationDirection] = useState("left");
@@ -463,7 +461,6 @@ const LoginModal: React.FC<LoginModalProps> = (props: LoginModalProps) => {
     <IonModal
       isOpen={showModal}
       mode='ios'
-      cssClass={isDesktop ? "login-modal" : ""}
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={false}
     >

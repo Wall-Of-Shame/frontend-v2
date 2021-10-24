@@ -122,11 +122,10 @@ const AddFriendsModal: React.FC<AddFriendsModalProps> = (props) => {
       mode='ios'
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={false}
-      cssClass='add-friends-modal'
       swipeToClose={true}
     >
       <IonHeader className='ion-no-border'>
-        <IonToolbar className='modal-search' color='main-blue'>
+        <IonToolbar className='modal-search' mode='md' color='main-blue'>
           <IonTitle>Find friends</IonTitle>
           <IonButtons slot='start'>
             <IonButton

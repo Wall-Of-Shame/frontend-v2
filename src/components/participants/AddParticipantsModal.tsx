@@ -71,7 +71,6 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
 
   return (
     <IonModal
-      cssClass='add-participants-modal'
       isOpen={showModal}
       mode='ios'
       onDidDismiss={() => setShowModal(false)}

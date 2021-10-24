@@ -345,6 +345,21 @@ ion-item {
   --border-color: #d4d4d4;
 }
 
+@media only screen and (min-width: 576px) {
+  ion-modal {
+    padding: 7.5vw !important;
+
+    .modal-wrapper {
+      --height: 90vh;
+      border-radius: 1.5rem 1.5rem 1.5rem 1.5rem !important;
+    }
+
+    .ion-page {
+      border-radius: inherit !important;
+    }
+  }
+}
+
 /*
 @media (prefers-color-scheme: dark) {
   body {

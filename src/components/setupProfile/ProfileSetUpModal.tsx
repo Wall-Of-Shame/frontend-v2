@@ -139,7 +139,6 @@ const ProfileSetUpModal: React.FC<ProfileSetUpModalProps> = (
   return (
     <IonModal
       isOpen={showModal}
-      cssClass='set-up-profile-modal'
       mode='ios'
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={false}

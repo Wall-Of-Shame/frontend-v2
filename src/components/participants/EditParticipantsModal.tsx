@@ -82,7 +82,6 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
 
   return (
     <IonModal
-      cssClass='edit-participants-modal'
       isOpen={showModal}
       mode='ios'
       onDidDismiss={() => setShowModal(false)}

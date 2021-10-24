@@ -159,7 +159,7 @@ const AuthenticatedApp: React.FC = () => {
             <Route path='/challenges' render={() => <Tabs />} />
             <Route path='/' render={() => <Tabs />} />
           </IonRouterOutlet>
-          {IdleDeadline && <RightMenu />}
+          {isDesktop && <RightMenu />}
         </IonSplitPane>
       </IonReactRouter>
     </IonApp>

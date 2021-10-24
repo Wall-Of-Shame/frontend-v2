@@ -125,7 +125,6 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
 
   return (
     <IonModal
-      cssClass='feedback-modal'
       mode='ios'
       isOpen={showModal}
       onDidDismiss={() => setShowModal(false)}
@@ -295,46 +294,46 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
             />
           </IonRow>
         </IonGrid>
-      </IonContent>
-      <IonFooter>
-        <IonToolbar>
-          <IonRow
-            className='ion-justify-content-around'
-            style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
-          >
-            <IonButton
-              shape='round'
-              color='accent-blue'
-              mode='ios'
-              disabled={!validateInputs()}
-              onClick={handleSend}
+        <IonFooter>
+          <IonToolbar>
+            <IonRow
+              className='ion-justify-content-around'
+              style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
             >
-              <IonText style={{ marginLeft: "1rem", marginRight: "1rem" }}>
-                Send
-              </IonText>
-            </IonButton>
-          </IonRow>
-        </IonToolbar>
-      </IonFooter>
-      <LoadingSpinner
-        loading={state.isLoading}
-        message={"Loading"}
-        closeLoading={() => {}}
-      />
-      <Alert
-        showAlert={state.showAlert}
-        closeAlert={(): void => {
-          setState({
-            showAlert: false,
-          });
-        }}
-        alertHeader={state.alertHeader}
-        alertMessage={state.alertMessage}
-        hasConfirm={state.hasConfirm}
-        confirmHandler={state.confirmHandler}
-        cancelHandler={state.cancelHandler}
-        okHandler={state.okHandler}
-      />
+              <IonButton
+                shape='round'
+                color='accent-blue'
+                mode='ios'
+                disabled={!validateInputs()}
+                onClick={handleSend}
+              >
+                <IonText style={{ marginLeft: "1rem", marginRight: "1rem" }}>
+                  Send
+                </IonText>
+              </IonButton>
+            </IonRow>
+          </IonToolbar>
+        </IonFooter>
+        <LoadingSpinner
+          loading={state.isLoading}
+          message={"Loading"}
+          closeLoading={() => {}}
+        />
+        <Alert
+          showAlert={state.showAlert}
+          closeAlert={(): void => {
+            setState({
+              showAlert: false,
+            });
+          }}
+          alertHeader={state.alertHeader}
+          alertMessage={state.alertMessage}
+          hasConfirm={state.hasConfirm}
+          confirmHandler={state.confirmHandler}
+          cancelHandler={state.cancelHandler}
+          okHandler={state.okHandler}
+        />
+      </IonContent>
     </IonModal>
   );
 };

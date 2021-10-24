@@ -331,7 +331,6 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
     <IonModal
       isOpen={showModal}
       mode='ios'
-      cssClass='upload-proof-modal'
       onDidDismiss={() => {
         setShowModal(false);
         setTimeout(() => {

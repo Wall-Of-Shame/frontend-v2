@@ -239,7 +239,6 @@ const VoteModal: React.FC<VoteModalProps> = (props: VoteModalProps) => {
   return (
     <IonModal
       isOpen={showModal}
-      cssClass='vote-modal'
       mode='ios'
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={false}

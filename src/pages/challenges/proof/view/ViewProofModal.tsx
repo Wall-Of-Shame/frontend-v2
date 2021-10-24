@@ -28,7 +28,7 @@ const ViewProofModal: React.FC<ViewProofModalProps> = (
 
   return (
     <IonModal
-      cssClass='view-proof-modal'
+      mode='ios'
       isOpen={showModal}
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={false}

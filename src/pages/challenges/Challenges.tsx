@@ -467,14 +467,12 @@ const Challenges: React.FC = () => {
         {!isDesktop && <div className='challenges-header-curve' />}
       </IonHeader>
       <IonContent fullscreen>
-        {user?.username !== undefined && user?.name !== undefined && (
-          <IonRow className='ion-justify-content-center ion-padding-bottom'>
-            <ChallengePageImg
-              user={user}
-              active={ongoing && ongoing.length > 0}
-            />
-          </IonRow>
-        )}
+        <IonRow className='ion-justify-content-center ion-padding-bottom'>
+          <ChallengePageImg
+            user={user}
+            active={ongoing && ongoing.length > 0}
+          />
+        </IonRow>
         <IonRow
           className='ion-justify-content-center'
           style={{ marginBottom: "1.5rem" }}
