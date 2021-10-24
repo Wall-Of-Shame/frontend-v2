@@ -672,8 +672,10 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     .concat(challenge.participants.accepted.protected);
   const noCompleted = challenge.participants.accepted.completed.length === 0;
   const oneManChallenge =
-    challenge.participants.accepted.completed.length === 0 &&
+    challenge.participants.accepted.completed.length === 1 &&
     challenge.participants.accepted.completed[0].userId === user?.userId;
+
+  console.log(noCompleted);
 
   return (
     <IonPage style={{ background: "#ffffff" }}>
@@ -938,10 +940,11 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
           vertical='bottom'
           style={{
             bottom:
-              tab === "details" &&
-              isAfter(Date.now(), parseISO(challenge.endAt!)) &&
-              !(noCompleted || oneManChallenge)
-                ? "5rem"
+              tab === "details"
+                ? isAfter(Date.now(), parseISO(challenge.endAt!)) &&
+                  (noCompleted || oneManChallenge)
+                  ? "0.75rem"
+                  : "5rem"
                 : "0.75rem",
           }}
         >

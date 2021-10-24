@@ -44,7 +44,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
 
   const noCompleted = challenge.participants.accepted.completed.length === 0;
   const oneManChallenge =
-    challenge.participants.accepted.completed.length === 0 &&
+    challenge.participants.accepted.completed.length === 1 &&
     challenge.participants.accepted.completed[0].userId === user?.userId;
 
   if (challenge.hasReleasedResult) {
