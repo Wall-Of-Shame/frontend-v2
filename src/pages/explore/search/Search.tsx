@@ -21,20 +21,23 @@ import { arrowBack } from "ionicons/icons";
 import { useCallback, useEffect, useState } from "react";
 import { hideTabs } from "../../../utils/TabsUtils";
 import { useHistory } from "react-router";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../reducers/RootReducer";
-import { ChallengeDux } from "../../../reducers/ChallengeDux";
-import Container from "../../../components/container";
+import { useChallenge } from "../../../contexts/ChallengeContext";
 import "../Explore.scss";
 import { useWindowSize } from "../../../utils/WindowUtils";
 import lodash from "lodash";
+import { ChallengeData } from "../../../interfaces/models/Challenges";
+import { format, parseISO } from "date-fns";
+import AvatarImg from "../../../components/avatar";
+import { Avatar } from "../../../interfaces/models/Users";
 
 const Search: React.FC = () => {
   const history = useHistory();
   const { isDesktop } = useWindowSize();
 
+  const { searchChallenge } = useChallenge();
+
   const [searchText, setSearchText] = useState("");
-  const [challenges, setChallenges] = useState([]);
+  const [challenges, setChallenges] = useState<ChallengeData[]>([]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(
@@ -45,14 +48,91 @@ const Search: React.FC = () => {
   );
 
   const handleSearch = async (searchText: string) => {
+    console.log("CALLED HANDLESEARCH");
     if (searchText.length <= 0) {
       setChallenges([]);
       return;
     }
     try {
-      // const response = await searchUser(searchText);
-      // setMatchedUsers(response);
+      const response = await searchChallenge(searchText);
+      setChallenges(response);
     } catch (error) {}
+  };
+
+  const renderChallenges = () => {
+    if (challenges && challenges.length > 0) {
+      return (
+        <>
+          {challenges?.map((c) => {
+            const acceptedCount = c.participants.accepted.completed.concat(
+              c.participants.accepted.notCompleted
+            ).length;
+            return (
+              <IonCard
+                mode="ios"
+                button
+                key={c.challengeId}
+                onClick={() => {
+                  history.push(`challenges/${c.challengeId}/details`, c);
+                }}
+              >
+                <IonGrid className="ion-no-padding">
+                  <IonRow className="ion-align-items-center">
+                    <IonCol size="12">
+                      <IonCardHeader style={{ paddingBottom: "0.75rem" }}>
+                        <IonCardTitle style={{ fontSize: "1.2rem" }}>
+                          {c.title}
+                        </IonCardTitle>
+                      </IonCardHeader>
+                      <IonCardContent>
+                        <IonRow>
+                          <IonText
+                            style={{
+                              fontSize: "0.8rem",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {`Starts on: ${format(
+                              parseISO(c.startAt!),
+                              "dd MMM yyyy, HH:mm"
+                            )}`}
+                          </IonText>
+                        </IonRow>
+                        <IonRow style={{ marginTop: "0.5rem" }}>
+                          <IonText style={{ fontSize: "0.8rem" }}>
+                            {acceptedCount} participant
+                            {acceptedCount === 1 ? "" : "s"}
+                          </IonText>
+                        </IonRow>
+                        <IonRow
+                          style={{ marginTop: "0.5rem" }}
+                          className="ion-align-items-center"
+                        >
+                          <IonAvatar
+                            className="avatar"
+                            key={c.owner.userId}
+                            style={{ marginRight: "0.5rem" }}
+                          >
+                            <AvatarImg avatar={c.owner.avatar as Avatar} />
+                          </IonAvatar>
+                          <IonText
+                            style={{
+                              fontSize: "0.8rem",
+                            }}
+                          >
+                            Created by {c.owner.name ?? "Anonymous"}
+                          </IonText>
+                        </IonRow>
+                      </IonCardContent>
+                    </IonCol>
+                  </IonRow>
+                </IonGrid>
+              </IonCard>
+            );
+          })}
+        </>
+      );
+    }
   };
 
   useEffect(() => {
@@ -100,7 +180,19 @@ const Search: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        <Container>{"There's nothing here >_<"}</Container>
+        <IonGrid style={{ marginTop: "2rem" }}>
+          <IonRow className="ion-padding-horizontal ion-padding-top ion-align-items-center">
+            <IonText
+              style={{ fontSize: "16px", fontWeight: "bold" }}
+              color="primary"
+            >
+              {`${challenges.length} result${
+                challenges.length > 1 || challenges.length == 0 ? "s" : ""
+              } found`}
+            </IonText>
+          </IonRow>
+          {renderChallenges()}
+        </IonGrid>
       </IonContent>
     </IonPage>
   );

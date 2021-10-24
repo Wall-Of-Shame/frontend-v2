@@ -24,4 +24,5 @@ export default interface ChallengeContextInterface {
   voteForParticipant(challengeId: string, victimId: string): Promise<void>;
   uploadProof(id: string, data: any): Promise<string | null>;
   getExplore(): Promise<ChallengeList>;
+  searchChallenge(searchText: string): Promise<ChallengeData[]>;
 }

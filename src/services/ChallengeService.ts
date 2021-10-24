@@ -145,6 +145,17 @@ const getExplore = async (): Promise<ChallengeList> => {
   }
 };
 
+const searchChallenge = async (searchText: string): Promise<ChallengeData[]> => {
+  try {
+    const response = await APIService.get(
+      `challenges?operation=search&query=${searchText}`
+    );
+    return response.data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   getChallenges,
@@ -160,4 +171,5 @@ export default {
   voteForParticipant,
   uploadProof,
   getExplore,
+  searchChallenge,
 };

@@ -198,6 +198,15 @@ const ChallengeProvider: React.FC = (props) => {
     }
   };
 
+  const searchChallenge = async (searchText: string): Promise<ChallengeData[]> => {
+    try {
+      const response = await ChallengeService.searchChallenge(searchText);
+      return response;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
   return (
     <ChallengeContext.Provider
       value={{
@@ -214,6 +223,7 @@ const ChallengeProvider: React.FC = (props) => {
         releaseResults,
         uploadProof,
         getExplore,
+        searchChallenge,
       }}
       {...props}
     />
