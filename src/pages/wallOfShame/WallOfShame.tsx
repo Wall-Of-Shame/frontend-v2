@@ -1,10 +1,10 @@
 import {
   IonAvatar,
+  IonButton,
   IonCard,
   IonCol,
   IonContent,
   IonFabButton,
-  IonFooter,
   IonHeader,
   IonIcon,
   IonItem,
@@ -15,8 +15,6 @@ import {
   IonRadio,
   IonRadioGroup,
   IonRow,
-  IonSegment,
-  IonSegmentButton,
   IonText,
   IonTitle,
   IonToolbar,
@@ -43,9 +41,6 @@ import intervalToDuration from "date-fns/intervalToDuration";
 import { formatWallTime } from "../../utils/TimeUtils";
 import { egg, poop, tomato } from "../../assets/overlay";
 import useInterval from "../../hooks/useInterval";
-import eggIcon from "../../assets/icons/egg.svg";
-import tomatoIcon from "../../assets/icons/tomato.svg";
-import poopIcon from "../../assets/icons/poop.svg";
 import ShameModal from "./shameModal";
 
 interface WallOfShameState {
@@ -87,6 +82,7 @@ const WallOfShame: React.FC = () => {
   const [selectedShameId, setSelectedShameId] = useState<string | null>(null);
   const [selectedShame, setSelectedShame] = useState<Shame | null>(null);
   const [showShameModal, setShowShameModal] = useState(false);
+  const [turn, setTurn] = useState(0);
   const [lastShamed, setLastShamed] = useState(new Date().getTime() / 1000);
   const [overlaysPositions, setOverlaysPositions] = useState<OverlayMap>({});
   const [globalRankings, setGlobalRankings] = useState<UserList[]>([]);
@@ -262,7 +258,10 @@ const WallOfShame: React.FC = () => {
       .slice(0, 3);
     return (
       <>
-        <IonRow className='ion-align-items-end' style={{ marginTop: "1rem" }}>
+        <IonRow
+          className='ion-align-items-end ion-justify-content-center'
+          style={{ marginTop: "1rem" }}
+        >
           {rankings.length > 1 && (
             <IonCol size='4'>
               <IonRow className='ion-justify-content-center'>
@@ -446,7 +445,10 @@ const WallOfShame: React.FC = () => {
                         button
                         onClick={() => {
                           setSelectedShame(s);
-                          setShowShameModal(true);
+                          if (turn === 0) {
+                            setTurn(1);
+                            setShowShameModal(true);
+                          }
                         }}
                         style={{
                           width: "100%",
@@ -556,32 +558,28 @@ const WallOfShame: React.FC = () => {
       case "shameful":
         return (
           <>
-            <IonRow style={{ borderBottom: "1px #cecece solid" }}>
-              <IonCol size='6' className='ion-no-padding'>
-                <IonSegment
-                  onIonChange={(e) => setType(e.detail.value ?? "Global")}
-                  value={type}
-                  mode='md'
-                  color='dark'
-                  style={{
-                    marginLeft: "1rem",
-                    marginRight: "1rem",
-                  }}
-                >
-                  <IonSegmentButton
-                    value='Global'
-                    className='ion-text-capitalize'
-                  >
-                    <IonLabel>Global</IonLabel>
-                  </IonSegmentButton>
-                  <IonSegmentButton
-                    value='Friends'
-                    className='ion-text-capitalize'
-                  >
-                    <IonLabel>Friends</IonLabel>
-                  </IonSegmentButton>
-                </IonSegment>
-              </IonCol>
+            <IonRow
+              className='ion-justify-content-start ion-padding-horizontal ion-padding-top'
+              style={{ marginTop: "1rem", marginBottom: "1.5rem" }}
+            >
+              <IonButton
+                shape='round'
+                mode='ios'
+                fill='solid'
+                color={type === "Global" ? "main-yellow" : "light"}
+                onClick={() => setType("Global")}
+              >
+                <IonText style={{ fontWeight: "bold" }}>Global</IonText>
+              </IonButton>
+              <IonButton
+                shape='round'
+                mode='ios'
+                fill='solid'
+                color={type === "pending" ? "main-yellow" : "light"}
+                onClick={() => setType("Friends")}
+              >
+                <IonText style={{ fontWeight: "bold" }}>Friends</IonText>
+              </IonButton>
             </IonRow>
             {type === "Global" && renderLeaderboard(globalRankings)}
             {type === "Friends" && renderLeaderboard(friendsRankings)}
@@ -668,15 +666,19 @@ const WallOfShame: React.FC = () => {
           </IonList>
         </IonPopover>
         {renderWall()}
-        {!!selectedShame && (
-          <ShameModal
-            shame={selectedShame}
-            handleShame={handleShame}
-            overlaysPositions={overlaysPositions}
-            showModal={showShameModal}
-            setShowModal={setShowShameModal}
-          />
-        )}
+
+        <ShameModal
+          shame={selectedShame}
+          handleShame={handleShame}
+          overlaysPositions={overlaysPositions}
+          showModal={showShameModal}
+          setShowModal={(showModal) => {
+            setShowShameModal(false);
+            setTimeout(() => {
+              setTurn(0);
+            }, 500);
+          }}
+        />
         <LoadingSpinner
           loading={state.isLoading}
           message={"Loading"}

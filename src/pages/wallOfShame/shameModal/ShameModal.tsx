@@ -1,29 +1,21 @@
 import {
-  IonAvatar,
   IonButton,
   IonCard,
   IonCol,
   IonContent,
-  IonFab,
-  IonFabButton,
-  IonGrid,
   IonIcon,
-  IonItem,
   IonLabel,
   IonModal,
   IonRow,
   IonText,
 } from "@ionic/react";
-import { add, arrowBack, close, remove } from "ionicons/icons";
+import { close } from "ionicons/icons";
 import { motion, AnimatePresence } from "framer-motion";
-import StackGrid, { Grid } from "react-stack-grid";
-import challenge from "../../assets/onboarding/challenge.png";
 import "./ShameModal.scss";
 import eggIcon from "../../../assets/icons/egg.svg";
 import tomatoIcon from "../../../assets/icons/tomato.svg";
 import poopIcon from "../../../assets/icons/poop.svg";
 import { egg, poop, tomato } from "../../../assets/overlay";
-import { useRef, useState } from "react";
 import { Shame } from "../../../interfaces/models/Challenges";
 import AvatarImg from "../../../components/avatar";
 import { formatWallTime } from "../../../utils/TimeUtils";
@@ -33,7 +25,7 @@ import { useWindowSize } from "../../../utils/WindowUtils";
 import Container from "../../../components/container";
 
 interface ShameModalProps {
-  shame: Shame;
+  shame: Shame | null;
   handleShame: (key: string, tool: ShameTool) => void;
   overlaysPositions: OverlayMap;
   showModal: boolean;
@@ -44,6 +36,10 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
   const { shame, handleShame, overlaysPositions, showModal, setShowModal } =
     props;
   const { width } = useWindowSize();
+
+  if (shame === null) {
+    return <></>;
+  }
 
   const duration = intervalToDuration({
     start: parseISO(shame.time),
@@ -62,7 +58,7 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
       mode='ios'
       isOpen={showModal}
       onDidDismiss={() => setShowModal(false)}
-      backdropDismiss={false}
+      backdropDismiss={true}
     >
       <IonContent fullscreen scrollY={false}>
         <IonButton
@@ -90,7 +86,6 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
             <IonCard
               className='ion-no-margin ion-text-center wall-of-shame-poster'
               mode='ios'
-              button
               style={{ width: width! < 576 ? width! / 2 - 26.5 : "172.7px" }}
             >
               <IonRow className='ion-justify-content-center ion-padding-horizontal ion-padding-top'>
@@ -196,54 +191,40 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
             <IonRow
               style={{
                 maxWidth: "15rem",
+                marginTop: "0.5rem",
               }}
             >
               <IonCol>
                 <IonRow className='throwing-icon'>
-                  <IonButton
-                    color='light'
-                    mode='ios'
-                    shape='round'
-                    className='ion-no-padding'
-                    style={{ width: "3.5rem", height: "3.5rem" }}
+                  <IonIcon
+                    src={tomatoIcon}
+                    style={{ fontSize: "3rem", marginRight: "0.5rem" }}
                     onClick={() => {
                       handleShame(shame.id, "tomato");
                     }}
-                  >
-                    <img src={tomatoIcon} alt='tomatoIcon' />
-                  </IonButton>
+                  />
                 </IonRow>
               </IonCol>
               <IonCol>
                 <IonRow className='throwing-icon'>
-                  <IonButton
-                    color='light'
-                    mode='ios'
-                    shape='round'
-                    className='ion-no-padding'
-                    style={{ width: "3.5rem", height: "3.5rem" }}
+                  <IonIcon
+                    src={eggIcon}
+                    style={{ fontSize: "3rem" }}
                     onClick={() => {
                       handleShame(shame.id, "egg");
                     }}
-                  >
-                    <img src={eggIcon} alt='eggIcon' />
-                  </IonButton>
+                  />
                 </IonRow>
               </IonCol>
               <IonCol>
                 <IonRow className='throwing-icon'>
-                  <IonButton
-                    color='light'
-                    mode='ios'
-                    shape='round'
-                    className='ion-no-padding'
-                    style={{ width: "3.5rem", height: "3.5rem" }}
+                  <IonIcon
+                    src={poopIcon}
+                    style={{ fontSize: "3rem", marginLeft: "0.5rem" }}
                     onClick={() => {
                       handleShame(shame.id, "poop");
                     }}
-                  >
-                    <img src={poopIcon} alt='poopIcon' />
-                  </IonButton>
+                  />
                 </IonRow>
               </IonCol>
             </IonRow>
