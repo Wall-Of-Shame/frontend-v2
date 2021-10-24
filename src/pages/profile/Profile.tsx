@@ -33,7 +33,7 @@ import {
   hammerOutline,
   bugOutline,
 } from "ionicons/icons";
-import { Avatar } from "../../interfaces/models/Users";
+import { Avatar, UserList } from "../../interfaces/models/Users";
 import { useHistory, useLocation } from "react-router";
 import { PieChart } from "react-minimal-pie-chart";
 import { useAuth } from "../../contexts/AuthContext";
@@ -63,7 +63,7 @@ export interface ProfileState {
 
 const Profile: React.FC = () => {
   const { logout } = useAuth();
-  const { user } = useUser();
+  const { user, getFriendRequests, getFriends } = useUser();
   const { isDesktop } = useWindowSize();
   const location = useLocation();
   const history = useHistory();
@@ -76,6 +76,8 @@ const Profile: React.FC = () => {
   const [completed, setCompleted] = useState<ChallengeData[]>(
     useSelector(selectChallenges).history
   );
+  const [requests, setRequests] = useState<UserList[]>([]);
+  const [friends, setFriends] = useState<UserList[]>([]);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
   const [state, setState] = useReducer(
@@ -108,6 +110,21 @@ const Profile: React.FC = () => {
       hideTabs();
     }
   }, [location.pathname]);
+
+  const fetchData = async () => {
+    try {
+      const requestsData = await getFriendRequests();
+      const friendsData = await getFriends();
+      setRequests(requestsData);
+      setFriends(friendsData);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    // Fetch requests
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const renderChallengeHistory = () => {
     if (completed && completed.length > 0) {
@@ -538,6 +555,101 @@ const Profile: React.FC = () => {
             Friends
           </IonText>
         </IonRow>
+        {requests.length > 0 && (
+          <IonGrid
+            className='ion-margin-top ion-no-padding'
+            style={{ marginTop: "1rem" }}
+          >
+            <IonText
+              className='ion-margin'
+              style={{ fontSize: 17, fontWeight: 600 }}
+            >
+              Friend request{requests.length !== 1 ? "s" : ""} -{" "}
+              {requests.length}
+            </IonText>
+            {requests.slice(0, 5).map((u) => {
+              return (
+                <IonRow className='ion-margin' key={u.userId}>
+                  <IonCol className='ion-align-item-center' size='2.5'>
+                    <IonRow className='ion-justify-content-cneter'>
+                      <IonAvatar
+                        className='user-avatar'
+                        style={{
+                          width: "3rem",
+                          height: "3rem",
+                        }}
+                      >
+                        <AvatarImg avatar={u.avatar} />
+                      </IonAvatar>
+                    </IonRow>
+                  </IonCol>
+                  <IonCol
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                    }}
+                    size='9.5'
+                  >
+                    <IonRow style={{ paddingBottom: "0.25rem" }}>
+                      <IonText style={{ fontSize: 17, fontWeight: 600 }}>
+                        {u.name}
+                      </IonText>
+                    </IonRow>
+                    <IonRow>{`@${u.username}`}</IonRow>
+                  </IonCol>
+                </IonRow>
+              );
+            })}
+          </IonGrid>
+        )}
+        {friends.length > 0 && (
+          <IonGrid
+            className='ion-margin-top ion-no-padding'
+            style={{ marginTop: "1rem" }}
+          >
+            <IonText
+              className='ion-margin'
+              style={{ fontSize: 17, fontWeight: 600 }}
+            >
+              Friend{friends.length !== 1 ? "s" : ""} - {friends.length}
+            </IonText>
+            {friends.slice(0, 5).map((u) => {
+              return (
+                <IonRow className='ion-margin' key={u.userId}>
+                  <IonCol className='ion-align-item-center' size='2.5'>
+                    <IonRow className='ion-justify-content-cneter'>
+                      <IonAvatar
+                        className='user-avatar'
+                        style={{
+                          width: "3rem",
+                          height: "3rem",
+                        }}
+                      >
+                        <AvatarImg avatar={u.avatar} />
+                      </IonAvatar>
+                    </IonRow>
+                  </IonCol>
+                  <IonCol
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                    }}
+                    size='9.5'
+                  >
+                    <IonRow style={{ paddingBottom: "0.25rem" }}>
+                      <IonText style={{ fontSize: 17, fontWeight: 600 }}>
+                        {u.name}
+                      </IonText>
+                    </IonRow>
+                    <IonRow>{`@${u.username}`}</IonRow>
+                  </IonCol>
+                </IonRow>
+              );
+            })}
+          </IonGrid>
+        )}
         <IonRow
           className='ion-justify-content-center'
           style={{ marginBottom: "2rem" }}

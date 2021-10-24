@@ -16,7 +16,6 @@ import {
   arrowBackOutline,
   checkmarkCircle,
   closeCircle,
-  ellipsisHorizontal,
   personAddOutline,
 } from "ionicons/icons";
 import { useEffect, useReducer, useState } from "react";
@@ -161,7 +160,8 @@ const Friends: React.FC = () => {
               className='ion-margin'
               style={{ fontSize: 17, fontWeight: 600 }}
             >
-              Friend requests - {requests.length}
+              Friend request{requests.length !== 1 ? "s" : ""} -{" "}
+              {requests.length}
             </IonText>
             {requests.map((u) => {
               return (
@@ -237,7 +237,7 @@ const Friends: React.FC = () => {
               className='ion-margin'
               style={{ fontSize: 17, fontWeight: 600 }}
             >
-              Friend - {friends.length}
+              Friend{friends.length !== 1 ? "s" : ""} - {friends.length}
             </IonText>
             {friends.map((u) => {
               return (
@@ -261,7 +261,7 @@ const Friends: React.FC = () => {
                       flexDirection: "column",
                       justifyContent: "center",
                     }}
-                    size='6.5'
+                    size='9.5'
                   >
                     <IonRow style={{ paddingBottom: "0.25rem" }}>
                       <IonText style={{ fontSize: 17, fontWeight: 600 }}>
@@ -270,7 +270,7 @@ const Friends: React.FC = () => {
                     </IonRow>
                     <IonRow>{`@${u.username}`}</IonRow>
                   </IonCol>
-                  <IonCol
+                  {/*<IonCol
                     style={{
                       display: "flex",
                       justifyContent: "center",
@@ -284,7 +284,7 @@ const Friends: React.FC = () => {
                       style={{ fontSize: "2.5rem" }}
                       onClick={() => handleReject(u.userId)}
                     />
-                  </IonCol>
+                  </IonCol>*/}
                 </IonRow>
               );
             })}
