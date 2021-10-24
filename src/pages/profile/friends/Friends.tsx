@@ -63,10 +63,10 @@ const Friends: React.FC = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [requests, setRequests] = useState<UserList[]>(
-    (location.state as FriendsPushState).requests ?? []
+    (location.state as FriendsPushState)?.requests ?? []
   );
   const [friends, setFriends] = useState<UserList[]>(
-    (location.state as FriendsPushState).friends ?? []
+    (location.state as FriendsPushState)?.friends ?? []
   );
 
   const [state, setState] = useReducer(
