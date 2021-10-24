@@ -2,7 +2,6 @@ import {
   IonButton,
   IonButtons,
   IonContent,
-  IonFab,
   IonFabButton,
   IonFooter,
   IonGrid,
@@ -666,13 +665,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   const allParticipants = challenge.participants.accepted.completed
     .concat(challenge.participants.accepted.notCompleted)
     .concat(challenge.participants.accepted.protected);
-  const noCompleted = challenge.participants.accepted.completed.length === 0;
-  const oneManChallenge =
-    challenge.participants.accepted.completed.length === 1
-      ? challenge.participants.accepted.completed[0].userId === user?.userId
-      : false;
-
-  console.log(noCompleted);
 
   return (
     <IonPage style={{ background: "#ffffff" }}>
@@ -703,6 +695,27 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
             !isAfter(Date.now(), parseISO(challenge.startAt!)) && (
               <>
                 <IonButtons slot='end'>
+                  {allParticipants.findIndex(
+                    (p) => p.userId === user?.userId
+                  ) !== -1 && (
+                    <IonFabButton
+                      className='placeholder-fab'
+                      color='main-beige'
+                      mode='ios'
+                      slot='end'
+                      style={{
+                        margin: "0.5rem",
+                        width: "2.75rem",
+                        height: "2.75rem",
+                      }}
+                      onClick={() => setState({ showChatModal: true })}
+                    >
+                      <IonIcon
+                        icon={chatbubbles}
+                        style={{ fontSize: "1.5rem" }}
+                      />
+                    </IonFabButton>
+                  )}
                   <IonFabButton
                     className='placeholder-fab'
                     color='main-beige'
@@ -744,6 +757,46 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
                     onClick={handleEdit}
                   >
                     <IonIcon icon={pencil} style={{ fontSize: "1.5rem" }} />
+                  </IonFabButton>
+                </IonButtons>
+              </>
+            )}
+          {!state.editMode &&
+            user?.userId !== challenge.owner.userId &&
+            allParticipants.findIndex((p) => p.userId === user?.userId) !==
+              -1 && (
+              <>
+                <IonButtons slot='end'>
+                  <IonFabButton
+                    className='placeholder-fab'
+                    color='main-beige'
+                    mode='ios'
+                    slot='end'
+                    style={{
+                      margin: "0.5rem",
+                      width: "2.75rem",
+                      height: "2.75rem",
+                    }}
+                    onClick={() => setState({ showChatModal: true })}
+                  >
+                    <IonIcon
+                      icon={chatbubbles}
+                      style={{ fontSize: "1.5rem" }}
+                    />
+                  </IonFabButton>
+                  <IonFabButton
+                    className='placeholder-fab'
+                    color='main-beige'
+                    mode='ios'
+                    slot='end'
+                    style={{
+                      margin: "0.5rem",
+                      width: "2.75rem",
+                      height: "2.75rem",
+                    }}
+                    onClick={() => setState({ showPowerUpModal: true })}
+                  >
+                    <IonIcon icon={flash} style={{ fontSize: "1.5rem" }} />
                   </IonFabButton>
                 </IonButtons>
               </>
@@ -935,30 +988,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
           duration={1500}
         />
       </IonContent>
-
-      {allParticipants.findIndex((p) => p.userId === user?.userId) !== -1 && (
-        <IonFab
-          horizontal='end'
-          vertical='bottom'
-          style={{
-            bottom:
-              tab === "details"
-                ? isAfter(Date.now(), parseISO(challenge.endAt!)) &&
-                  (noCompleted || oneManChallenge)
-                  ? "0.75rem"
-                  : "5rem"
-                : "0.75rem",
-          }}
-        >
-          <IonFabButton
-            color='main-beige'
-            mode='ios'
-            onClick={() => setState({ showChatModal: true })}
-          >
-            <IonIcon icon={chatbubbles} style={{ fontSize: "1.5rem" }} />
-          </IonFabButton>
-        </IonFab>
-      )}
       {renderFooter()}
     </IonPage>
   );
