@@ -20,7 +20,7 @@ import {
 } from "ionicons/icons";
 import { useEffect, useReducer, useState } from "react";
 import { hideTabs } from "../../../utils/TabsUtils";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import AvatarImg from "../../../components/avatar";
 import Container from "../../../components/container";
 import "../Profile.scss";
@@ -43,8 +43,14 @@ interface FriendsState {
   okHandler?: () => void;
 }
 
+interface FriendsPushState {
+  friends: UserList[];
+  requests: UserList[];
+}
+
 const Friends: React.FC = () => {
   const history = useHistory();
+  const location = useLocation();
   const { isDesktop } = useWindowSize();
   const { refreshUser } = useAuth();
   const {
@@ -56,8 +62,12 @@ const Friends: React.FC = () => {
   } = useUser();
 
   const [showModal, setShowModal] = useState(false);
-  const [requests, setRequests] = useState<UserList[]>([]);
-  const [friends, setFriends] = useState<UserList[]>([]);
+  const [requests, setRequests] = useState<UserList[]>(
+    (location.state as FriendsPushState).requests ?? []
+  );
+  const [friends, setFriends] = useState<UserList[]>(
+    (location.state as FriendsPushState).friends ?? []
+  );
 
   const [state, setState] = useReducer(
     (s: FriendsState, a: Partial<FriendsState>) => ({

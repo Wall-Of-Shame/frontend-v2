@@ -684,7 +684,10 @@ const Profile: React.FC = () => {
             color='main-blue'
             shape='round'
             onClick={() => {
-              history.push("/profile/friends");
+              history.push("/profile/friends", {
+                friends: friends,
+                requests: requests,
+              });
             }}
           >
             See all friends and requests
