@@ -32,7 +32,7 @@ const ProfileSetUp: React.FC<ProfileSetUpProps> = (
   return (
     <IonContent fullscreen>
       <Container>
-        <IonRow slot="start" className="ion-text-start">
+        <IonRow slot='start' className='ion-text-start'>
           <IonText
             style={{
               fontSize: "32px",
@@ -44,29 +44,31 @@ const ProfileSetUp: React.FC<ProfileSetUpProps> = (
             Set up your profile
           </IonText>
         </IonRow>
-        <IonList className="ion-padding-vertical">
-          <IonItem lines="full">
-            <IonLabel color="primary" position="floating">
+        <IonList className='ion-padding-vertical'>
+          <IonItem lines='full'>
+            <IonLabel color='primary' position='floating'>
               Display name*
             </IonLabel>
             <IonInput
-              name="display_name"
-              type="text"
+              name='display_name'
+              type='text'
               value={state.displayName}
+              maxlength={20}
               required
               onIonChange={(event: CustomEvent) => {
                 setState({ displayName: event.detail.value });
               }}
             />
           </IonItem>
-          <IonItem lines="full">
-            <IonLabel color="primary" position="floating">
+          <IonItem lines='full'>
+            <IonLabel color='primary' position='floating'>
               Username*
             </IonLabel>
             <IonInput
-              name="username"
-              type="text"
+              name='username'
+              type='text'
               value={state.username}
+              maxlength={20}
               required
               onIonChange={(event: CustomEvent) => {
                 setState({ username: event.detail.value });
@@ -74,15 +76,17 @@ const ProfileSetUp: React.FC<ProfileSetUpProps> = (
             />
           </IonItem>
         </IonList>
-        <IonRow slot="start" style={{ textAlign: "left", margin: "1rem" }}>
-          <IonText color="medium">Your username will allow others to find you easily</IonText>
+        <IonRow slot='start' style={{ textAlign: "left", margin: "1rem" }}>
+          <IonText color='medium'>
+            Your username will allow others to find you easily
+          </IonText>
         </IonRow>
         <IonButton
-          mode="ios"
-          fill="solid"
-          shape="round"
-          color="main-blue"
-          className="ion-padding-horizontal"
+          mode='ios'
+          fill='solid'
+          shape='round'
+          color='main-blue'
+          className='ion-padding-horizontal'
           style={{
             display: "flex",
             margin: "1rem",
@@ -92,7 +96,7 @@ const ProfileSetUp: React.FC<ProfileSetUpProps> = (
           onClick={completionCallback}
         >
           <IonText
-            color="white"
+            color='white'
             style={{ marginLeft: "2rem", marginRight: "2rem" }}
           >
             Next

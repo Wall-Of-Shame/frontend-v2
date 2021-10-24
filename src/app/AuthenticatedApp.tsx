@@ -51,10 +51,21 @@ import challengeIcon from "../assets/icons/challenge-icon.svg";
 import shameIcon from "../assets/icons/shame-icon.svg";
 import { useWindowSize } from "../utils/WindowUtils";
 import { useUser } from "../contexts/UserContext";
+import { useEffect, useState } from "react";
 
 const AuthenticatedApp: React.FC = () => {
   const { width, isDesktop } = useWindowSize();
   const { user } = useUser();
+
+  const [isDesktopBefore, setIsDesktopBefore] = useState(isDesktop);
+
+  useEffect(() => {
+    if (isDesktop !== isDesktopBefore && !isPlatform("desktop")) {
+      setIsDesktopBefore(isDesktop);
+      window.location.reload();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDesktop]);
 
   return (
     <IonApp>
@@ -151,7 +162,15 @@ const AuthenticatedApp: React.FC = () => {
         >
           <IonRouterOutlet
             id='main'
-            className={`split-pane-content ${!isDesktop ? "non-desktop" : ""}`}
+            className={`split-pane-content ${
+              !(
+                isPlatform("desktop") ||
+                isPlatform("tablet") ||
+                isPlatform("ipad")
+              )
+                ? "non-desktop"
+                : ""
+            }`}
             style={{
               marginTop: isDesktop ? "3.5rem" : 0,
             }}
@@ -159,7 +178,9 @@ const AuthenticatedApp: React.FC = () => {
             <Route path='/challenges' render={() => <Tabs />} />
             <Route path='/' render={() => <Tabs />} />
           </IonRouterOutlet>
-          {isDesktop && <RightMenu />}
+          {(isPlatform("desktop") ||
+            isPlatform("tablet") ||
+            isPlatform("ipad")) && <RightMenu />}
         </IonSplitPane>
       </IonReactRouter>
     </IonApp>

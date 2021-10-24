@@ -46,6 +46,7 @@ import useInterval from "../../hooks/useInterval";
 import eggIcon from "../../assets/icons/egg.svg";
 import tomatoIcon from "../../assets/icons/tomato.svg";
 import poopIcon from "../../assets/icons/poop.svg";
+import ShameModal from "./shameModal";
 
 interface WallOfShameState {
   isLoading: boolean;
@@ -58,14 +59,16 @@ interface WallOfShameState {
   okHandler?: () => void;
 }
 
-interface Overlay {
+export type ShameTool = "tomato" | "egg" | "poop";
+
+export interface Overlay {
   id: string;
   type: "tomato" | "egg" | "poop";
   top: number;
   left: number;
 }
 
-interface OverlayMap {
+export interface OverlayMap {
   [key: string]: Overlay[];
 }
 
@@ -82,9 +85,8 @@ const WallOfShame: React.FC = () => {
   const grid = useRef<Grid | null>(null);
   const [shames, setShames] = useState<Shame[]>([]);
   const [selectedShameId, setSelectedShameId] = useState<string | null>(null);
-  const [shameTool, setShameTool] = useState<"tomato" | "egg" | "poop" | "">(
-    ""
-  );
+  const [selectedShame, setSelectedShame] = useState<Shame | null>(null);
+  const [showShameModal, setShowShameModal] = useState(false);
   const [lastShamed, setLastShamed] = useState(new Date().getTime() / 1000);
   const [overlaysPositions, setOverlaysPositions] = useState<OverlayMap>({});
   const [globalRankings, setGlobalRankings] = useState<UserList[]>([]);
@@ -129,11 +131,11 @@ const WallOfShame: React.FC = () => {
     });
   };
 
-  const handleShame = (key: string) => {
+  const handleShame = (key: string, tool: ShameTool) => {
     setLastShamed(new Date().getTime() / 1000);
     if (key !== selectedShameId) {
       setSelectedShameId(key);
-      switch (shameTool) {
+      switch (tool) {
         case "tomato":
           const newTomatoPosition: Overlay = {
             id: uniqid(),
@@ -174,7 +176,7 @@ const WallOfShame: React.FC = () => {
           });
       }
     } else {
-      switch (shameTool) {
+      switch (tool) {
         case "tomato":
           const newTomatoPosition: Overlay = {
             id: uniqid(),
@@ -443,7 +445,8 @@ const WallOfShame: React.FC = () => {
                         mode='ios'
                         button
                         onClick={() => {
-                          handleShame(s.id);
+                          setSelectedShame(s);
+                          setShowShameModal(true);
                         }}
                         style={{
                           width: "100%",
@@ -457,12 +460,32 @@ const WallOfShame: React.FC = () => {
                         <IonRow className='ion-justify-content-center ion-padding'>
                           <IonLabel>
                             <h6>
-                              <strong>{s.name} </strong>
+                              <IonText
+                                style={{
+                                  fontWeight: "bold",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "break-spaces",
+                                  wordBreak: "break-all",
+                                }}
+                              >
+                                {s.name}{" "}
+                              </IonText>
                               {s.type === "cheat"
                                 ? "cheated in:"
                                 : "failed to:"}
                             </h6>
-                            <h4 style={{ fontWeight: "bold" }}>{s.title}</h4>
+                            <h4
+                              style={{
+                                fontWeight: "bold",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "break-spaces",
+                                wordBreak: "break-all",
+                              }}
+                            >
+                              {s.title}
+                            </h4>
                             <h6>
                               {formatWallTime(duration)}
                               {" ago"}
@@ -645,6 +668,15 @@ const WallOfShame: React.FC = () => {
           </IonList>
         </IonPopover>
         {renderWall()}
+        {!!selectedShame && (
+          <ShameModal
+            shame={selectedShame}
+            handleShame={handleShame}
+            overlaysPositions={overlaysPositions}
+            showModal={showShameModal}
+            setShowModal={setShowShameModal}
+          />
+        )}
         <LoadingSpinner
           loading={state.isLoading}
           message={"Loading"}
@@ -665,69 +697,6 @@ const WallOfShame: React.FC = () => {
           okHandler={state.okHandler}
         />
       </IonContent>
-      <IonFooter className='transparent' mode='ios'>
-        <div className='glass'>
-          <IonRow style={{ margin: "0.5rem" }}>
-            <IonCol
-              style={{
-                backgroundColor: shameTool === "tomato" ? "#FFC83C" : undefined,
-                borderRadius: "2rem",
-              }}
-              onClick={() => {
-                if (shameTool !== "tomato") {
-                  setShameTool("tomato");
-                } else {
-                  setShameTool("");
-                }
-              }}
-            >
-              <IonRow className='throwing-icon'>
-                <div>
-                  <img src={tomatoIcon} alt='tomatoIcon' />
-                </div>
-              </IonRow>
-            </IonCol>
-            <IonCol
-              style={{
-                backgroundColor: shameTool === "egg" ? "#FFC83C" : undefined,
-                borderRadius: "2rem",
-              }}
-              onClick={() => {
-                if (shameTool !== "egg") {
-                  setShameTool("egg");
-                } else {
-                  setShameTool("");
-                }
-              }}
-            >
-              <IonRow className='throwing-icon'>
-                <div>
-                  <img src={eggIcon} alt='eggIcon' />
-                </div>
-              </IonRow>
-            </IonCol>
-            <IonCol
-              style={{
-                backgroundColor: shameTool === "poop" ? "#FFC83C" : undefined,
-                borderRadius: "2rem",
-              }}
-              onClick={() => {
-                if (shameTool !== "poop") {
-                  setShameTool("poop");
-                } else {
-                  setShameTool("");
-                }
-              }}
-            >
-              <IonRow className='throwing-icon'>
-                <div>
-                  <img src={poopIcon} alt='poopIcon' />
-                </div>
-              </IonRow>
-            </IonCol>
-          </IonRow>
-        </div>
-      </IonFooter>
     </IonPage>
   );
 };

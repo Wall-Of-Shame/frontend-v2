@@ -1,6 +1,15 @@
-import { IonContent, IonGrid, IonModal, IonRow, IonText } from "@ionic/react";
+import {
+  IonButton,
+  IonContent,
+  IonGrid,
+  IonIcon,
+  IonModal,
+  IonRow,
+  IonText,
+} from "@ionic/react";
 import "./Store.scss";
 import coin from "../../assets/icons/coin.png";
+import { close } from "ionicons/icons";
 
 interface CoinModalProps {
   showModal: boolean;
@@ -19,6 +28,23 @@ const CoinModal: React.FC<CoinModalProps> = (props: CoinModalProps) => {
       backdropDismiss={true}
     >
       <IonContent fullscreen scrollY={false}>
+        <IonButton
+          color='light'
+          shape='round'
+          mode='ios'
+          className='ion-no-padding'
+          onClick={() => setShowModal(false)}
+          style={{
+            position: "absolute",
+            top: "0.25rem",
+            left: "0.5rem",
+            width: "2.5rem",
+            height: "2.5rem",
+            zIndex: 20000,
+          }}
+        >
+          <IonIcon icon={close} size='large' color='main-yellow' />
+        </IonButton>
         <IonGrid className='ion-padding' style={{ marginTop: "2rem" }}>
           <IonRow className='ion-justify-content-center ion-align-items-center'>
             <img
