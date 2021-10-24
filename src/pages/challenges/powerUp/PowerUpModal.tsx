@@ -23,7 +23,6 @@ import {
 } from "ionicons/icons";
 import lodash from "lodash";
 import coin from "../../../assets/icons/coin.png";
-import challenge from "../../../assets/onboarding/challenge.png";
 import "./PowerUpModal.scss";
 import { PowerUp, PowerUpType } from "../../../interfaces/models/Store";
 import { useCallback, useReducer, useState } from "react";
@@ -628,7 +627,7 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
 
   return (
     <IonModal
-      cssClass='purchase-powerup-modal'
+      cssClass='use-powerup-modal'
       isOpen={showModal}
       mode='ios'
       onDidDismiss={() => setShowModal(false)}
