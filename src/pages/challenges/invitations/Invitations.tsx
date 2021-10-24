@@ -69,8 +69,13 @@ const Invitations: React.FC = () => {
       <IonContent fullscreen>
         {pendingResponse.length > 0 ? (
           <>
-            <IonRow className='ion-padding-horizontal ion-margin-top'>
-              <IonText style={{ color: "gray" }}>Pending Invitations</IonText>
+            <IonRow
+              className='ion-padding-horizontal'
+              style={{ marginTop: "2rem" }}
+            >
+              <IonText style={{ fontWeight: "bold", fontSize: "1.5rem" }}>
+                Pending Invitations
+              </IonText>
             </IonRow>
             {pendingResponse?.map((c) => {
               const acceptedCount = c.participants.accepted.completed.concat(
@@ -82,7 +87,7 @@ const Invitations: React.FC = () => {
                   button
                   key={c.challengeId}
                   onClick={() => {
-                    history.push(`challenges/${c.challengeId}/details`, c);
+                    history.push(`/challenges/${c.challengeId}/details`, c);
                   }}
                 >
                   <IonGrid className='ion-no-padding'>

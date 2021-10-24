@@ -212,6 +212,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
                 color='danger'
                 expand='block'
                 fill='solid'
+                style={{ paddingRight: "0.25rem" }}
                 onClick={() => {
                   alertCallback(
                     true,
@@ -231,6 +232,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
                 color='main-beige'
                 fill='solid'
                 expand='block'
+                style={{ paddingLeft: "0.25rem" }}
                 onClick={() => {
                   alertCallback(
                     true,
