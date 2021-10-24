@@ -38,6 +38,10 @@
   .modal-wrapper {
     border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
   }
+
+  .ion-page {
+    border-radius: inherit;
+  }
 }
 
 @media only screen and (min-width: 576px) {
