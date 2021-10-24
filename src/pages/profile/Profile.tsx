@@ -271,8 +271,10 @@ const Profile: React.FC = () => {
               setShowPopover({ showPopover: false, event: undefined });
               setState({
                 showAlert: true,
+                hasConfirm: false,
                 alertHeader: "Coming soon :)",
                 alertMessage: "Thank you for using Wall of Shame",
+                confirmHandler: () => {},
               });
             }}
           >
