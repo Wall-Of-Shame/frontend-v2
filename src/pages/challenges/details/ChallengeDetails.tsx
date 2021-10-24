@@ -692,7 +692,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
           </IonFabButton>
           {!state.editMode &&
             user?.userId === challenge.owner.userId &&
-            !isAfter(Date.now(), parseISO(challenge.startAt!)) && (
+            !isAfter(Date.now(), parseISO(challenge.endAt!)) && (
               <>
                 <IonButtons slot='end'>
                   {allParticipants.findIndex(
@@ -716,20 +716,25 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
                       />
                     </IonFabButton>
                   )}
-                  <IonFabButton
-                    className='placeholder-fab'
-                    color='main-beige'
-                    mode='ios'
-                    slot='end'
-                    style={{
-                      margin: "0.5rem",
-                      width: "2.75rem",
-                      height: "2.75rem",
-                    }}
-                    onClick={() => setState({ showParticipantModal: true })}
-                  >
-                    <IonIcon icon={personAdd} style={{ fontSize: "1.5rem" }} />
-                  </IonFabButton>
+                  {!isAfter(Date.now(), parseISO(challenge.startAt!)) && (
+                    <IonFabButton
+                      className='placeholder-fab'
+                      color='main-beige'
+                      mode='ios'
+                      slot='end'
+                      style={{
+                        margin: "0.5rem",
+                        width: "2.75rem",
+                        height: "2.75rem",
+                      }}
+                      onClick={() => setState({ showParticipantModal: true })}
+                    >
+                      <IonIcon
+                        icon={personAdd}
+                        style={{ fontSize: "1.5rem" }}
+                      />
+                    </IonFabButton>
+                  )}
                   <IonFabButton
                     className='placeholder-fab'
                     color='main-beige'
@@ -744,27 +749,30 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
                   >
                     <IonIcon icon={flash} style={{ fontSize: "1.5rem" }} />
                   </IonFabButton>
-                  <IonFabButton
-                    className='placeholder-fab'
-                    color='main-beige'
-                    mode='ios'
-                    slot='end'
-                    style={{
-                      margin: "0.5rem",
-                      width: "2.75rem",
-                      height: "2.75rem",
-                    }}
-                    onClick={handleEdit}
-                  >
-                    <IonIcon icon={pencil} style={{ fontSize: "1.5rem" }} />
-                  </IonFabButton>
+                  {!isAfter(Date.now(), parseISO(challenge.startAt!)) && (
+                    <IonFabButton
+                      className='placeholder-fab'
+                      color='main-beige'
+                      mode='ios'
+                      slot='end'
+                      style={{
+                        margin: "0.5rem",
+                        width: "2.75rem",
+                        height: "2.75rem",
+                      }}
+                      onClick={handleEdit}
+                    >
+                      <IonIcon icon={pencil} style={{ fontSize: "1.5rem" }} />
+                    </IonFabButton>
+                  )}
                 </IonButtons>
               </>
             )}
           {!state.editMode &&
             user?.userId !== challenge.owner.userId &&
             allParticipants.findIndex((p) => p.userId === user?.userId) !==
-              -1 && (
+              -1 &&
+            !isAfter(Date.now(), parseISO(challenge.endAt!)) && (
               <>
                 <IonButtons slot='end'>
                   <IonFabButton
@@ -801,6 +809,26 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
                 </IonButtons>
               </>
             )}
+          {isAfter(Date.now(), parseISO(challenge.endAt!)) && (
+            <>
+              <IonButtons slot='end'>
+                <IonFabButton
+                  className='placeholder-fab'
+                  color='main-beige'
+                  mode='ios'
+                  slot='end'
+                  style={{
+                    margin: "0.5rem",
+                    width: "2.75rem",
+                    height: "2.75rem",
+                  }}
+                  onClick={() => setState({ showChatModal: true })}
+                >
+                  <IonIcon icon={chatbubbles} style={{ fontSize: "1.5rem" }} />
+                </IonFabButton>
+              </IonButtons>
+            </>
+          )}
         </IonToolbar>
         {state.editMode && (
           <div className='create-challenge-header'>

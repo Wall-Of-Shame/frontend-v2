@@ -76,7 +76,7 @@ const Participants: React.FC<ParticipantsProps> = (
           </IonRow>
         )}
         {nonCheaters.length > 0 && (
-          <IonList className='ion-margin-vertical'>
+          <IonList>
             {challenge.participants.accepted.completed.map((u) => {
               return (
                 <IonItem key={u.userId} lines='none'>
@@ -126,7 +126,7 @@ const Participants: React.FC<ParticipantsProps> = (
           </IonRow>
         )}
         {cheaters.length > 0 && (
-          <IonList className='ion-margin-vertical'>
+          <IonList>
             {cheaters.map((u) => {
               return (
                 <IonItem key={u.userId} lines='none'>
@@ -194,7 +194,7 @@ const Participants: React.FC<ParticipantsProps> = (
           </IonRow>
         )}
         {challenge.participants.accepted.notCompleted.length > 0 && (
-          <IonList className='ion-margin-vertical'>
+          <IonList>
             {challenge.participants.accepted.notCompleted.map((u) => {
               return (
                 <IonItem key={u.userId} lines='none'>
@@ -250,7 +250,7 @@ const Participants: React.FC<ParticipantsProps> = (
           </IonRow>
         )}
         {challenge.participants.accepted.completed.length > 0 && (
-          <IonList className='ion-margin-vertical'>
+          <IonList>
             {challenge.participants.accepted.completed.map((u) => {
               return (
                 <IonItem key={u.userId} lines='none'>
@@ -297,7 +297,7 @@ const Participants: React.FC<ParticipantsProps> = (
           </IonRow>
         )}
         {challenge.participants.accepted.protected.length > 0 && (
-          <IonList className='ion-margin-vertical'>
+          <IonList>
             {challenge.participants.accepted.protected.map((u) => {
               return (
                 <IonItem key={u.userId} lines='none'>
@@ -346,7 +346,7 @@ const Participants: React.FC<ParticipantsProps> = (
           </IonRow>
         )}
         {challenge.participants.accepted.notCompleted.length > 0 && (
-          <IonList className='ion-margin-vertical'>
+          <IonList>
             {challenge.participants.accepted.notCompleted.map((u) => {
               return (
                 <IonItem key={u.userId} lines='none'>
@@ -402,7 +402,7 @@ const Participants: React.FC<ParticipantsProps> = (
           </IonRow>
         )}
         {challenge.participants.accepted.completed.length > 0 && (
-          <IonList className='ion-margin-vertical'>
+          <IonList>
             {challenge.participants.accepted.completed.map((u) => {
               return (
                 <IonItem key={u.userId} lines='none'>
@@ -449,7 +449,7 @@ const Participants: React.FC<ParticipantsProps> = (
           </IonRow>
         )}
         {challenge.participants.accepted.protected.length > 0 && (
-          <IonList className='ion-margin-vertical'>
+          <IonList>
             {challenge.participants.accepted.protected.map((u) => {
               return (
                 <IonItem key={u.userId} lines='none'>
@@ -487,7 +487,7 @@ const Participants: React.FC<ParticipantsProps> = (
           </IonRow>
         )}
         {challenge.participants.accepted.notCompleted.length > 0 && (
-          <IonList className='ion-margin-vertical'>
+          <IonList>
             {challenge.participants.accepted.notCompleted.map((u) => {
               return (
                 <IonItem key={u.userId} lines='none'>
