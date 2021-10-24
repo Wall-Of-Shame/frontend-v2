@@ -127,7 +127,6 @@ const Explore: React.FC = () => {
                         history.push(`challenges/${c.challengeId}/details`, c);
                       }}
                     >
-                      {/* Image height: 200, width: 220 */}
                       <IonImg
                         src={c.imageURL}
                         style={{ height: 200, width: 220 }}
