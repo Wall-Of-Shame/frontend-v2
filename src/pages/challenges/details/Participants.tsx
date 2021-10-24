@@ -607,7 +607,7 @@ const Participants: React.FC<ParticipantsProps> = (
         </IonRow>
       )}
       {challenge.participants.pending.length > 0 && (
-        <IonList className='ion-margin-vertical'>
+        <IonList>
           {challenge.participants.pending.map((u) => {
             return (
               <IonItem key={u.userId} lines='none'>

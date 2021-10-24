@@ -883,16 +883,21 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
               participants: updatedParticipants,
             };
             setState({ isLoading: true });
-            await updateChallenge(challenge.challengeId, data)
-              .then(() => {
-                setState({ isLoading: false });
-                window.location.reload();
-              })
-              .catch((error) => {
-                console.log(error);
-                setState({ isLoading: false });
-                setShowOfflineToast(true);
+            try {
+              await updateChallenge(challenge.challengeId, data);
+              await fetchData();
+              setState({ isLoading: false, showParticipantModal: false });
+            } catch (error) {
+              console.log(error);
+              setState({
+                isLoading: false,
+                hasConfirm: false,
+                showAlert: true,
+                alertHeader: "Ooooops",
+                alertMessage:
+                  "Our server is taking a break, come back later please :)",
               });
+            }
           }}
         />
 

@@ -164,7 +164,7 @@ const AddFriendsModal: React.FC<AddFriendsModalProps> = (props) => {
           {matchedUsers.map((u) => {
             const isFriend = user?.friends.accepted.indexOf(u.userId) !== -1;
             const hasRequested =
-              invitedUsers.indexOf(u) !== -1 ||
+              invitedUsers.findIndex((i) => i.userId === u.userId) !== -1 ||
               user?.friends.pendingAccept.indexOf(u.userId) !== -1;
             return (
               <IonRow className='ion-margin' key={u.userId}>

@@ -19,7 +19,7 @@ import "./AddParticipantsModal.scss";
 import { UserList } from "../../interfaces/models/Users";
 import { useCallback, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
-import { addOutline, checkmark, close, removeOutline } from "ionicons/icons";
+import { checkmark, close } from "ionicons/icons";
 import AvatarImg from "../avatar";
 import lodash from "lodash";
 
@@ -32,7 +32,7 @@ interface AddParticipantsModalProps {
 
 const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
   const { users, showModal, setShowModal, completionCallback } = props;
-  const { searchUser } = useUser();
+  const { user, searchUser } = useUser();
   const [searchText, setSearchText] = useState("");
   const [matchedUsers, setMatchedUsers] = useState<UserList[]>([]);
   const [invitedUsers, setInvitedUsers] = useState<UserList[]>(users);
@@ -128,7 +128,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
           className='ion-margin-top users-search'
           showClearButton='always'
         ></IonSearchbar>
-        <IonGrid className='ion-margin-top'>
+        <IonGrid className='ion-margin-top ion-no-padding'>
           <IonText
             className='ion-margin'
             style={{ fontSize: 17, fontWeight: 600 }}
@@ -138,10 +138,18 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
           {matchedUsers.map((u) => {
             return (
               <IonRow className='ion-margin' key={u.userId}>
-                <IonCol className='ion-align-item-center' size='3'>
-                  <IonAvatar className='user-avatar'>
-                    <AvatarImg avatar={u.avatar} />
-                  </IonAvatar>
+                <IonCol className='ion-align-item-center' size='2.5'>
+                  <IonRow className='ion-justify-content-cneter'>
+                    <IonAvatar
+                      className='user-avatar'
+                      style={{
+                        width: "3rem",
+                        height: "3rem",
+                      }}
+                    >
+                      <AvatarImg avatar={u.avatar} />
+                    </IonAvatar>
+                  </IonRow>
                 </IonCol>
                 <IonCol
                   style={{
@@ -151,40 +159,64 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
                   }}
                   size='6'
                 >
-                  <IonRow style={{ paddingBottom: "0.5rem" }}>
+                  <IonRow style={{ paddingBottom: "0.25rem" }}>
                     <IonText style={{ fontSize: 17, fontWeight: 600 }}>
                       {u.name}
                     </IonText>
                   </IonRow>
                   <IonRow>{`@${u.username}`}</IonRow>
                 </IonCol>
-                <IonCol
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  size='3'
-                >
-                  <IonButton
-                    mode='ios'
-                    shape='round'
-                    color={
-                      invitedUsers.indexOf(u) !== -1 ? "quinary" : "quaternary"
-                    }
-                    fill='solid'
-                    style={{ height: "2.5rem", width: "4.5rem" }}
-                    onClick={() => handleInvite(u)}
+                {u.userId === user?.userId ? (
+                  <IonCol
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    size='3.5'
                   >
-                    <IonIcon
-                      icon={
-                        invitedUsers.indexOf(u) !== -1
-                          ? removeOutline
-                          : addOutline
+                    <IonButton
+                      mode='ios'
+                      className='ion-no-padding'
+                      color='main-beige'
+                      disabled
+                      fill='solid'
+                      style={{ height: "2rem", width: "100%" }}
+                    >
+                      You
+                    </IonButton>
+                  </IonCol>
+                ) : (
+                  <IonCol
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    size='3.5'
+                  >
+                    <IonButton
+                      mode='ios'
+                      className='ion-no-padding'
+                      color={"main-blue"}
+                      fill={
+                        invitedUsers.findIndex((i) => i.userId === u.userId)
+                          ? "outline"
+                          : "solid"
                       }
-                    />
-                  </IonButton>
-                </IonCol>
+                      style={{ height: "2rem", width: "100%" }}
+                      onClick={() => {
+                        handleInvite(u);
+                      }}
+                    >
+                      <IonText style={{ fontSize: "0.9rem" }}>
+                        {invitedUsers.findIndex((i) => i.userId === u.userId)
+                          ? "Add"
+                          : "Added"}
+                      </IonText>
+                    </IonButton>
+                  </IonCol>
+                )}
               </IonRow>
             );
           })}

@@ -18,7 +18,7 @@ import {
 import "./EditParticipantsModal.scss";
 import { useCallback, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
-import { addOutline, checkmark, close, removeOutline } from "ionicons/icons";
+import { checkmark, close } from "ionicons/icons";
 import { UserMini } from "../../interfaces/models/Challenges";
 import AvatarImg from "../avatar";
 import lodash from "lodash";
@@ -32,15 +32,19 @@ interface EditParticipantsModalProps {
 }
 
 const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
-  const { pending, showModal, setShowModal, completionCallback } = props;
-  const { searchUser } = useUser();
+  const { accepted, pending, showModal, setShowModal, completionCallback } =
+    props;
+  const { user, searchUser } = useUser();
   const [searchText, setSearchText] = useState("");
   const [matchedUsers, setMatchedUsers] = useState<UserMini[]>([]);
-  const [invitedUsers, setInvitedUsers] = useState<UserMini[]>(pending);
+  const [invitedUsers, setInvitedUsers] = useState<UserMini[]>(
+    pending.concat(accepted)
+  );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(
     lodash.debounce((e) => {
+      console.log(invitedUsers);
       handleSearch(e);
     }, 250),
     []
@@ -139,7 +143,7 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
           className='ion-margin-top users-search'
           showClearButton='always'
         ></IonSearchbar>
-        <IonGrid className='ion-margin-top'>
+        <IonGrid className='ion-margin-top ion-no-padding'>
           <IonText
             className='ion-margin'
             style={{ fontSize: 17, fontWeight: 600 }}
@@ -147,12 +151,22 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
             Search results
           </IonText>
           {matchedUsers.map((u) => {
+            const added =
+              invitedUsers.findIndex((i) => i.userId === u.userId) === -1;
             return (
               <IonRow className='ion-margin' key={u.userId}>
-                <IonCol className='ion-align-item-center' size='3'>
-                  <IonAvatar className='user-avatar'>
-                    <AvatarImg avatar={u.avatar} />
-                  </IonAvatar>
+                <IonCol className='ion-align-item-center' size='2.5'>
+                  <IonRow className='ion-justify-content-cneter'>
+                    <IonAvatar
+                      className='user-avatar'
+                      style={{
+                        width: "3rem",
+                        height: "3rem",
+                      }}
+                    >
+                      <AvatarImg avatar={u.avatar} />
+                    </IonAvatar>
+                  </IonRow>
                 </IonCol>
                 <IonCol
                   style={{
@@ -162,40 +176,57 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
                   }}
                   size='6'
                 >
-                  <IonRow style={{ paddingBottom: "0.5rem" }}>
+                  <IonRow style={{ paddingBottom: "0.25rem" }}>
                     <IonText style={{ fontSize: 17, fontWeight: 600 }}>
                       {u.name}
                     </IonText>
                   </IonRow>
                   <IonRow>{`@${u.username}`}</IonRow>
                 </IonCol>
-                <IonCol
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  size='3'
-                >
-                  <IonButton
-                    mode='ios'
-                    shape='round'
-                    color={
-                      invitedUsers.indexOf(u) !== -1 ? "quinary" : "quaternary"
-                    }
-                    fill='solid'
-                    style={{ height: "2.5rem", width: "4.5rem" }}
-                    onClick={() => handleInvite(u)}
+                {u.userId === user?.userId ? (
+                  <IonCol
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    size='3.5'
                   >
-                    <IonIcon
-                      icon={
-                        invitedUsers.indexOf(u) !== -1
-                          ? removeOutline
-                          : addOutline
-                      }
-                    />
-                  </IonButton>
-                </IonCol>
+                    <IonButton
+                      mode='ios'
+                      className='ion-no-padding'
+                      color='main-beige'
+                      disabled
+                      fill='solid'
+                      style={{ height: "2rem", width: "100%" }}
+                    >
+                      You
+                    </IonButton>
+                  </IonCol>
+                ) : (
+                  <IonCol
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    size='3.5'
+                  >
+                    <IonButton
+                      mode='ios'
+                      className='ion-no-padding'
+                      color={added ? "main-blue" : "main-beige"}
+                      style={{ height: "2rem", width: "100%" }}
+                      onClick={() => {
+                        handleInvite(u);
+                      }}
+                    >
+                      <IonText style={{ fontSize: "0.9rem" }}>
+                        {added ? "Add" : "Invited"}
+                      </IonText>
+                    </IonButton>
+                  </IonCol>
+                )}
               </IonRow>
             );
           })}
