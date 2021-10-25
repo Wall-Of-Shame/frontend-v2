@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import ChallengeContextInterface from "../interfaces/contexts/ChallengeContext";
 import {
@@ -26,6 +26,7 @@ const ChallengeContext = React.createContext<
 
 const ChallengeProvider: React.FC = (props) => {
   const dispatch = useDispatch();
+  const [shouldRefreshChallenges, setShouldRefreshChallenges] = useState(false);
 
   const getAllChallenges = async (): Promise<ChallengeList> => {
     try {
@@ -68,6 +69,10 @@ const ChallengeProvider: React.FC = (props) => {
     } catch (error) {
       return Promise.reject(error);
     }
+  };
+
+  const notifyShouldRefreshChallenges = (shouldRefresh: boolean) => {
+    setShouldRefreshChallenges(shouldRefresh);
   };
 
   const createChallenge = async (data: ChallengePost): Promise<void> => {
@@ -187,7 +192,7 @@ const ChallengeProvider: React.FC = (props) => {
         })
       );
       dispatch(
-        setOthers ({
+        setOthers({
           challenges: response.others,
           lastRetrieved: Date.now(),
         })
@@ -198,7 +203,9 @@ const ChallengeProvider: React.FC = (props) => {
     }
   };
 
-  const searchChallenge = async (searchText: string): Promise<ChallengeData[]> => {
+  const searchChallenge = async (
+    searchText: string
+  ): Promise<ChallengeData[]> => {
     try {
       const response = await ChallengeService.searchChallenge(searchText);
       return response;
@@ -212,6 +219,8 @@ const ChallengeProvider: React.FC = (props) => {
       value={{
         getAllChallenges,
         getChallenge,
+        shouldRefreshChallenges,
+        notifyShouldRefreshChallenges,
         createChallenge,
         updateChallenge,
         acceptChallenge,

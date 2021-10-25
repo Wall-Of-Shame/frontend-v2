@@ -9,6 +9,8 @@ import { VoteList } from "../models/Votes";
 export default interface ChallengeContextInterface {
   getAllChallenges(): Promise<ChallengeList>;
   getChallenge(id: string): Promise<ChallengeData | null>;
+  shouldRefreshChallenges: boolean;
+  notifyShouldRefreshChallenges(shouldRefresh: boolean): void;
   createChallenge(data: ChallengePost): Promise<void>;
   updateChallenge(id: string, data: ChallengePost): Promise<void>;
   acceptChallenge(id: string): Promise<void>;
