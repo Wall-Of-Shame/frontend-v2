@@ -34,8 +34,6 @@ import {
 } from "../../../interfaces/models/Challenges";
 import "./ChallengeDetails.scss";
 import { formatISO, parseISO } from "date-fns";
-import { database } from "../../../firebase";
-import { ref, set } from "firebase/database";
 import { useUser } from "../../../contexts/UserContext";
 import EditChallenge from "../edit";
 import LoadingSpinner from "../../../components/loadingSpinner";
@@ -47,7 +45,6 @@ import UploadProofModal from "../proof/upload";
 import VoteModal from "../vote";
 import ViewProofModal from "../proof/view";
 import { hideTabs } from "../../../utils/TabsUtils";
-import { VoteData } from "../../../interfaces/models/Votes";
 import OfflineToast from "../../../components/offlineToast";
 import Participants from "./Participants";
 import FooterActions from "./FooterActions";
@@ -109,14 +106,8 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   const location = useLocation();
   const history = useHistory();
   const { user } = useUser()!;
-  const {
-    getChallenge,
-    acceptChallenge,
-    rejectChallenge,
-    getVotes,
-    releaseResults,
-    updateChallenge,
-  } = useChallenge();
+  const { getChallenge, acceptChallenge, rejectChallenge, updateChallenge } =
+    useChallenge();
 
   const [challenge, setChallenge] = useState<ChallengeData | null>(
     location.state as ChallengeData
@@ -267,71 +258,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     }
   };
 
-  const handlePublishFailedUsersToFirebase = async (
-    usersToShame: UserMini[]
-  ): Promise<void> => {
-    if (!challenge) {
-      return;
-    }
-    const promises = usersToShame.map((u) => {
-      const timestamp = new Date().getTime();
-      return new Promise<void>((resolve, reject) => {
-        set(ref(database, `shames/${timestamp}+${u.userId}`), {
-          name: u.name,
-          title: challenge.title,
-          time: formatISO(Date.now()),
-          timestamp: timestamp,
-          avatar: u.avatar,
-        })
-          .then(() => resolve())
-          .catch(() => reject());
-      });
-    });
-    return await Promise.all(promises)
-      .then(() => {
-        return;
-      })
-      .catch((error) => {
-        return Promise.reject(error);
-      });
-  };
-
-  const handlePublishCheatersToFirebase = async (
-    usersToShame: VoteData[]
-  ): Promise<void> => {
-    if (!challenge) {
-      return;
-    }
-    const promises = usersToShame.map((u) => {
-      const timestamp = new Date().getTime();
-      const victimData = challenge.participants.accepted.completed.find(
-        (p) => p.userId === u.victim.userId
-      );
-      if (!victimData) {
-        return Promise.resolve();
-      }
-      return new Promise<void>((resolve, reject) => {
-        set(ref(database, `shames/${timestamp}+${u.victim.userId}`), {
-          name: u.victim.name,
-          title: challenge.title,
-          type: "cheat",
-          time: formatISO(Date.now()),
-          timestamp: timestamp,
-          avatar: victimData.avatar,
-        })
-          .then(() => resolve())
-          .catch(() => reject());
-      });
-    });
-    return await Promise.all(promises)
-      .then(() => {
-        return;
-      })
-      .catch((error) => {
-        return Promise.reject(error);
-      });
-  };
-
   const handleAccept = async () => {
     if (challenge === null) {
       return;
@@ -438,56 +364,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
         alertHeader: "Ooooops",
         alertMessage: "Our server is taking a break, come back later please :)",
       });
-    }
-  };
-
-  const handleReleaseResults = async () => {
-    if (challenge === null) {
-      return;
-    }
-    setState({ isLoading: true });
-    try {
-      const votes = await getVotes(challenge.challengeId);
-      const cheaters: VoteData[] = votes.filter((v) => {
-        return (
-          v.accusers.length >=
-          challenge.participants.accepted.completed.concat(
-            challenge.participants.accepted.notCompleted
-          ).length /
-            2
-        );
-      });
-      const cheaterIds = cheaters.map((c) => c.victim.userId);
-      await releaseResults(challenge.challengeId, cheaterIds);
-      const updatedChallenge = await getChallenge(challenge.challengeId);
-      if (updatedChallenge) {
-        setChallenge(updatedChallenge);
-        await handlePublishFailedUsersToFirebase(
-          updatedChallenge.participants.accepted.notCompleted
-        );
-      } else {
-        await handlePublishFailedUsersToFirebase(
-          challenge.participants.accepted.notCompleted
-        );
-      }
-      await handlePublishCheatersToFirebase(cheaters);
-      setState({
-        isLoading: false,
-        showAlert: true,
-        hasConfirm: false,
-        alertHeader: "Woohoo",
-        alertMessage:
-          "You have released the results of this challenge. Check out the Wall :)",
-      });
-    } catch (error) {
-      setState({
-        isLoading: false,
-        showAlert: true,
-        hasConfirm: false,
-        alertHeader: "Ooooops",
-        alertMessage: "Our server is taking a break, come back later please :)",
-      });
-      setShowOfflineToast(true);
     }
   };
 
@@ -636,7 +512,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
             handleAccept={handleAccept}
             handleReject={handleReject}
             handleComplete={handleComplete}
-            handleReleaseResults={handleReleaseResults}
             alertCallback={(
               hasConfirm,
               alertHeader,

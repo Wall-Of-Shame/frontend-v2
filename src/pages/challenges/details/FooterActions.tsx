@@ -18,7 +18,6 @@ interface FooterActionsProps {
   handleAccept: () => Promise<void>;
   handleReject: () => Promise<void>;
   handleComplete: () => Promise<void>;
-  handleReleaseResults: () => Promise<void>;
   alertCallback: (
     hasConfirm: boolean,
     alertHeader: string,
@@ -37,7 +36,6 @@ const FooterActions: React.FC<FooterActionsProps> = (
     handleAccept,
     handleReject,
     handleComplete,
-    handleReleaseResults,
     alertCallback,
   } = props;
   const { user } = useUser();

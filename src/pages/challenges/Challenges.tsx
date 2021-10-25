@@ -37,11 +37,9 @@ import { format } from "date-fns";
 import parseISO from "date-fns/parseISO";
 import AvatarImg from "../../components/avatar";
 import { useSocket } from "../../contexts/SocketContext";
-import challenge from "../../assets/onboarding/challenge.png";
 import { Avatar } from "../../interfaces/models/Users";
 import { useWindowSize } from "../../utils/WindowUtils";
 import ChallengePageImg from "./challengePageImg";
-import { transform } from "framer-motion";
 
 interface ChallengesState {
   isLoading: boolean;
