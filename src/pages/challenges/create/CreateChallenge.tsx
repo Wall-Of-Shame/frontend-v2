@@ -518,7 +518,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
               }),
             };
             handleSubmit(data);
-            history.replace("/challenges");
+            history.push("/challenges");
           }}
         />
         <OfflineToast
