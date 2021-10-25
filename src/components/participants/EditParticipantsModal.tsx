@@ -40,6 +40,7 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
   const [invitedUsers, setInvitedUsers] = useState<UserMini[]>(
     pending.concat(accepted)
   );
+  const [addedUsers, setAddedUsers] = useState<UserMini[]>([]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(
@@ -72,15 +73,15 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
   };
 
   const handleInvite = (user: UserMini) => {
-    const index = invitedUsers.indexOf(user);
+    const index = addedUsers.indexOf(user);
     if (index !== -1) {
-      var newInvitedUsers = invitedUsers.slice(0);
-      newInvitedUsers = invitedUsers.filter((u) => u.userId !== user.userId);
-      setInvitedUsers(newInvitedUsers);
+      var newAddedUsers = addedUsers.slice(0);
+      newAddedUsers = addedUsers.filter((u) => u.userId !== user.userId);
+      setAddedUsers(newAddedUsers);
     } else {
-      const newInvitedUsers = invitedUsers.slice(0);
-      newInvitedUsers.push(user);
-      setInvitedUsers(newInvitedUsers);
+      const newAddedUsers = addedUsers.slice(0);
+      newAddedUsers.push(user);
+      setAddedUsers(newAddedUsers);
     }
   };
 
@@ -116,7 +117,7 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
                 margin: "0.5rem",
               }}
               onClick={() => {
-                completionCallback(invitedUsers);
+                completionCallback(addedUsers.concat(invitedUsers));
               }}
             >
               <IonIcon
@@ -128,7 +129,7 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen scrollY={false}>
+      <IonContent fullscreen scrollY={true}>
         <IonSearchbar
           mode='ios'
           key='modal-search'
@@ -152,11 +153,15 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
           </IonText>
           {matchedUsers.map((u) => {
             const added =
-              invitedUsers.findIndex((i) => i.userId === u.userId) === -1;
+              addedUsers.findIndex((i) => i.userId === u.userId) !== -1;
+            const invited =
+              invitedUsers.findIndex((a) => a.userId === u.userId) !== -1;
+            const joined =
+              accepted.findIndex((a) => a.userId === u.userId) !== -1;
             return (
               <IonRow className='ion-margin' key={u.userId}>
                 <IonCol className='ion-align-item-center' size='2.5'>
-                  <IonRow className='ion-justify-content-cneter'>
+                  <IonRow className='ion-justify-content-center'>
                     <IonAvatar
                       className='user-avatar'
                       style={{
@@ -215,14 +220,27 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
                     <IonButton
                       mode='ios'
                       className='ion-no-padding'
-                      color={added ? "main-blue" : "main-beige"}
+                      color={
+                        joined || invited
+                          ? "main-blue"
+                          : added
+                          ? "main-yellow"
+                          : "main-beige"
+                      }
                       style={{ height: "2rem", width: "100%" }}
+                      disabled={joined || invited}
                       onClick={() => {
                         handleInvite(u);
                       }}
                     >
                       <IonText style={{ fontSize: "0.9rem" }}>
-                        {added ? "Add" : "Invited"}
+                        {joined
+                          ? "Joined"
+                          : invited
+                          ? "Invited"
+                          : added
+                          ? "Added"
+                          : "Add"}
                       </IonText>
                     </IonButton>
                   </IonCol>

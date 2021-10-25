@@ -29,7 +29,7 @@ const RightSection = () => {
       setShames(data);
     });
     globalSocket?.on("shameListUpdate", (data: Shame[]) => {
-      setShames([...data, ...shames]);
+      setShames((prevState) => [...data, ...prevState]);
     });
   };
 
@@ -70,13 +70,16 @@ const RightSection = () => {
             </IonRow>
           </IonCol>
         </IonRow>
-        {shames.slice(0, 5).map((s) => {
+        {shames.slice(0, 5).map((s, index) => {
           const duration = intervalToDuration({
             start: parseISO(s.time),
             end: Date.now(),
           });
           return (
-            <IonCard key={`${s.id}-side`} className='shame-notification'>
+            <IonCard
+              key={`${s.id}-side-${index}`}
+              className='shame-notification'
+            >
               <IonItem lines='none'>
                 <IonAvatar slot='start'>
                   <AvatarImg avatar={s.avatar} />

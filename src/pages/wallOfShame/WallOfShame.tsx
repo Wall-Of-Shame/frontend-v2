@@ -21,7 +21,6 @@ import {
   isPlatform,
 } from "@ionic/react";
 import { useEffect, useReducer, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import StackGrid, { Grid } from "react-stack-grid";
 import uniqid from "uniqid";
 import "./WallOfShame.scss";
@@ -39,8 +38,6 @@ import Container from "../../components/container";
 import { useWindowSize } from "../../utils/WindowUtils";
 import intervalToDuration from "date-fns/intervalToDuration";
 import { formatWallTime } from "../../utils/TimeUtils";
-import { egg, poop, tomato } from "../../assets/overlay";
-import useInterval from "../../hooks/useInterval";
 import ShameModal from "./shameModal";
 
 interface WallOfShameState {
@@ -83,7 +80,6 @@ const WallOfShame: React.FC = () => {
   const [selectedShame, setSelectedShame] = useState<Shame | null>(null);
   const [showShameModal, setShowShameModal] = useState(false);
   const [turn, setTurn] = useState(0);
-  const [lastShamed, setLastShamed] = useState(new Date().getTime() / 1000);
   const [overlaysPositions, setOverlaysPositions] = useState<OverlayMap>({});
   const [globalRankings, setGlobalRankings] = useState<UserList[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -123,12 +119,20 @@ const WallOfShame: React.FC = () => {
       setShames(data);
     });
     globalSocket?.on("shameListUpdate", (data: Shame[]) => {
-      setShames([...data, ...shames]);
+      console.log("Old");
+      console.log(shames);
+      console.log("Data");
+      console.log(data);
+      const oldShames = shames.slice(0);
+      const newShames = oldShames.concat(data);
+      console.log("New");
+      console.log(newShames);
+      // setShames(newShames);
+      setShames((prevState) => [...data, ...prevState]);
     });
   };
 
   const handleShame = (key: string, tool: ShameTool) => {
-    setLastShamed(new Date().getTime() / 1000);
     if (key !== selectedShameId) {
       setSelectedShameId(key);
       switch (tool) {
@@ -218,6 +222,10 @@ const WallOfShame: React.FC = () => {
     }
   };
 
+  const clearOverlays = () => {
+    setOverlaysPositions({});
+  };
+
   useEffect(() => {
     connectToSocket();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -241,12 +249,6 @@ const WallOfShame: React.FC = () => {
       }
     });
   }, [location.pathname]);
-
-  useInterval(() => {
-    if (new Date().getTime() / 1000 - lastShamed > 3) {
-      setOverlaysPositions({});
-    }
-  }, 1000);
 
   const renderLeaderboard = (rankings: UserList[]) => {
     const topThree = rankings
@@ -437,7 +439,7 @@ const WallOfShame: React.FC = () => {
                   end: Date.now(),
                 });
                 return (
-                  <div key={s.id} style={{ padding: "0.5rem" }}>
+                  <div key={`${s.id}-${index}`} style={{ padding: "0.5rem" }}>
                     <IonRow className='ion-justify-content-center'>
                       <IonCard
                         className='ion-no-margin ion-text-center wall-of-shame-poster'
@@ -500,53 +502,6 @@ const WallOfShame: React.FC = () => {
                         >
                           {`🍅 12 🍳 9 💩 5`}
                         </IonRow>
-                        <AnimatePresence>
-                          {!!overlaysPositions[s.id] &&
-                            overlaysPositions[s.id].length > 0 &&
-                            overlaysPositions[s.id].map((overlay) => {
-                              return (
-                                <motion.img
-                                  key={`${s.id}-${overlay.type}-${overlay.id}`}
-                                  initial={{
-                                    opacity: 0,
-                                    y: 100,
-                                  }}
-                                  animate={{
-                                    opacity:
-                                      overlay.type === "tomato"
-                                        ? 0.7
-                                        : overlay.type === "egg"
-                                        ? 0.9
-                                        : 0.7,
-                                    scale: 1,
-                                    y: 0,
-                                  }}
-                                  exit={{
-                                    opacity: 0,
-                                    y: 100,
-                                    transition: {
-                                      duration: 2,
-                                    },
-                                  }}
-                                  src={
-                                    overlay.type === "tomato"
-                                      ? tomato
-                                      : overlay.type === "egg"
-                                      ? egg
-                                      : poop
-                                  }
-                                  style={{
-                                    position: "absolute",
-                                    top: `calc(${overlay.top}% - 2.5rem)`,
-                                    left: `calc(${overlay.left}% - 2.5rem)`,
-                                    width: "5rem",
-                                    height: "5rem",
-                                  }}
-                                  alt=''
-                                />
-                              );
-                            })}
-                        </AnimatePresence>
                       </IonCard>
                     </IonRow>
                   </div>
@@ -671,6 +626,7 @@ const WallOfShame: React.FC = () => {
           shame={selectedShame}
           handleShame={handleShame}
           overlaysPositions={overlaysPositions}
+          clearOverlays={clearOverlays}
           showModal={showShameModal}
           setShowModal={(showModal) => {
             setShowShameModal(false);

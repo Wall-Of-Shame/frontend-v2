@@ -70,12 +70,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
   };
 
   return (
-    <IonModal
-      isOpen={showModal}
-      mode='ios'
-      onDidDismiss={() => setShowModal(false)}
-      backdropDismiss={true}
-    >
+    <IonModal isOpen={showModal} mode='ios' backdropDismiss={false}>
       <IonHeader className='ion-no-border'>
         <IonToolbar color='main-beige' mode='md' className='store-header'>
           <IonButtons slot='start'>
@@ -83,7 +78,10 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
               style={{
                 margin: "0.5rem",
               }}
-              onClick={() => setShowModal(false)}
+              onClick={() => {
+                setInvitedUsers([]);
+                setShowModal(false);
+              }}
             >
               <IonIcon
                 icon={close}
@@ -101,6 +99,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
                 margin: "0.5rem",
               }}
               onClick={() => {
+                setInvitedUsers([]);
                 completionCallback(invitedUsers);
               }}
             >
@@ -113,7 +112,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen scrollY={false}>
+      <IonContent fullscreen scrollY={true}>
         <IonSearchbar
           mode='ios'
           key='modal-search'
@@ -139,7 +138,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
             return (
               <IonRow className='ion-margin' key={u.userId}>
                 <IonCol className='ion-align-item-center' size='2.5'>
-                  <IonRow className='ion-justify-content-cneter'>
+                  <IonRow className='ion-justify-content-center'>
                     <IonAvatar
                       className='user-avatar'
                       style={{

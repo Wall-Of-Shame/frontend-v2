@@ -28,13 +28,20 @@ interface ShameModalProps {
   shame: Shame | null;
   handleShame: (key: string, tool: ShameTool) => void;
   overlaysPositions: OverlayMap;
+  clearOverlays: () => void;
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
 }
 
 const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
-  const { shame, handleShame, overlaysPositions, showModal, setShowModal } =
-    props;
+  const {
+    shame,
+    handleShame,
+    overlaysPositions,
+    clearOverlays,
+    showModal,
+    setShowModal,
+  } = props;
   const { width } = useWindowSize();
 
   if (shame === null) {
@@ -66,7 +73,10 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
           shape='round'
           mode='ios'
           className='ion-no-padding'
-          onClick={() => setShowModal(false)}
+          onClick={() => {
+            clearOverlays();
+            setShowModal(false);
+          }}
           style={{
             position: "absolute",
             top: "0.25rem",
