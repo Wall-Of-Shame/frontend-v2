@@ -98,23 +98,30 @@ const RightSection = () => {
           style={{ paddingLeft: "1.5rem" }}
         >
           <IonButton
-            fill='clear'
             mode='ios'
+            color='transparent'
             className='ion-no-padding'
             style={{ height: "2rem" }}
           >
-            <IonText style={{ fontSize: "0.9rem" }}>About</IonText>
+            <IonText
+              color='medium'
+              style={{ fontSize: "0.9rem", color: "#5a5a5a" }}
+            >
+              About
+            </IonText>
           </IonButton>
           <IonText style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}>
             &bull;
           </IonText>
           <IonButton
-            fill='clear'
             mode='ios'
+            color='transparent'
             className='ion-no-padding'
             style={{ height: "2rem" }}
           >
-            <IonText style={{ fontSize: "0.9rem" }}>NoPrivacy</IonText>
+            <IonText style={{ fontSize: "0.9rem", color: "#5a5a5a" }}>
+              NoPrivacy
+            </IonText>
           </IonButton>
         </IonRow>
         <IonRow style={{ paddingLeft: "1.5rem" }}>
