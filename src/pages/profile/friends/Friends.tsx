@@ -186,7 +186,7 @@ const Friends: React.FC = () => {
               return (
                 <IonRow className='ion-margin' key={u.userId}>
                   <IonCol className='ion-align-item-center' size='2.5'>
-                    <IonRow className='ion-justify-content-cneter'>
+                    <IonRow className='ion-justify-content-center'>
                       <IonAvatar
                         className='user-avatar'
                         style={{
@@ -262,7 +262,7 @@ const Friends: React.FC = () => {
               return (
                 <IonRow className='ion-margin' key={u.userId}>
                   <IonCol className='ion-align-item-center' size='2.5'>
-                    <IonRow className='ion-justify-content-cneter'>
+                    <IonRow className='ion-justify-content-center'>
                       <IonAvatar
                         className='user-avatar'
                         style={{

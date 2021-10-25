@@ -23,6 +23,7 @@ import {
   IonBadge,
   IonButton,
   IonTitle,
+  IonFab,
 } from "@ionic/react";
 import { useEffect } from "react";
 import {
@@ -32,6 +33,9 @@ import {
   logOutOutline,
   hammerOutline,
   bugOutline,
+  closeCircle,
+  checkmarkCircle,
+  refreshOutline,
 } from "ionicons/icons";
 import { Avatar, UserList } from "../../interfaces/models/Users";
 import { useHistory, useLocation } from "react-router";
@@ -62,13 +66,15 @@ export interface ProfileState {
 }
 
 const Profile: React.FC = () => {
-  const { logout } = useAuth();
+  const { logout, refreshUser } = useAuth();
   const {
     user,
     getFriendRequests,
     getFriends,
     shouldRefreshUser,
     notifyShouldRefreshUser,
+    acceptRequest,
+    rejectRequest,
   } = useUser();
   const { isDesktop } = useWindowSize();
   const location = useLocation();
@@ -123,6 +129,23 @@ const Profile: React.FC = () => {
       const friendsData = await getFriends();
       setRequests(requestsData);
       setFriends(friendsData);
+    } catch (error) {}
+  };
+
+  const handleAccept = async (userId: string) => {
+    try {
+      await acceptRequest(userId);
+      await fetchData();
+      await refreshUser();
+      notifyShouldRefreshUser(true);
+    } catch (error) {}
+  };
+  const handleReject = async (userId: string) => {
+    try {
+      await rejectRequest(userId);
+      await fetchData();
+      await refreshUser();
+      notifyShouldRefreshUser(true);
     } catch (error) {}
   };
 
@@ -596,7 +619,7 @@ const Profile: React.FC = () => {
               return (
                 <IonRow className='ion-margin' key={u.userId}>
                   <IonCol className='ion-align-item-center' size='2.5'>
-                    <IonRow className='ion-justify-content-cneter'>
+                    <IonRow className='ion-justify-content-center'>
                       <IonAvatar
                         className='user-avatar'
                         style={{
@@ -614,7 +637,7 @@ const Profile: React.FC = () => {
                       flexDirection: "column",
                       justifyContent: "center",
                     }}
-                    size='9.5'
+                    size='6.5'
                   >
                     <IonRow style={{ paddingBottom: "0.25rem" }}>
                       <IonText style={{ fontSize: 17, fontWeight: 600 }}>
@@ -622,6 +645,35 @@ const Profile: React.FC = () => {
                       </IonText>
                     </IonRow>
                     <IonRow>{`@${u.username}`}</IonRow>
+                  </IonCol>
+                  <IonCol
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    size='3'
+                  >
+                    <IonIcon
+                      icon={closeCircle}
+                      color='main-beige'
+                      style={{ fontSize: "2.5rem" }}
+                      onClick={() => {
+                        setState({
+                          showAlert: true,
+                          hasConfirm: true,
+                          alertHeader: "Hold on...",
+                          alertMessage: `Are you sure you would like to reject ${u.name}'s friend request?`,
+                          confirmHandler: () => handleReject(u.userId),
+                        });
+                      }}
+                    />
+                    <IonIcon
+                      icon={checkmarkCircle}
+                      color='main-blue'
+                      style={{ fontSize: "2.5rem" }}
+                      onClick={() => handleAccept(u.userId)}
+                    />
                   </IonCol>
                 </IonRow>
               );
@@ -643,7 +695,7 @@ const Profile: React.FC = () => {
               return (
                 <IonRow className='ion-margin' key={u.userId}>
                   <IonCol className='ion-align-item-center' size='2.5'>
-                    <IonRow className='ion-justify-content-cneter'>
+                    <IonRow className='ion-justify-content-center'>
                       <IonAvatar
                         className='user-avatar'
                         style={{
@@ -699,6 +751,17 @@ const Profile: React.FC = () => {
           </IonText>
         </IonRow>
         {renderChallengeHistory()}
+        <IonFab vertical='bottom' horizontal='end' slot='fixed'>
+          <IonFabButton
+            color='main-blue'
+            onClick={() => {
+              notifyShouldRefreshUser(true);
+            }}
+            mode='ios'
+          >
+            <IonIcon icon={refreshOutline} />
+          </IonFabButton>
+        </IonFab>
         <FeedbackModal
           showModal={showFeedbackModal}
           setShowModal={setShowFeedbackModal}
