@@ -2,7 +2,7 @@ import { UserData } from "../../../interfaces/models/Users";
 import "./ChallengePageImg.scss";
 import hasActiveBg from "../../../assets/challenge/has-active.gif";
 import noActiveBg from "../../../assets/challenge/no-active.png";
-import { waitingAnimalMap, bg } from "../../../assets/pendingChallenge";
+import { waitingAnimalMap } from "../../../assets/pendingChallenge";
 import { activeAnimalMap } from "../../../assets/activeChallenge";
 
 interface ChallengePageImgProps {

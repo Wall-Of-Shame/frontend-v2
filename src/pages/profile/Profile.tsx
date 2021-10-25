@@ -423,7 +423,7 @@ const Profile: React.FC = () => {
         </IonRow>
 
         <IonRow className='ion-justify-content-center'>
-          <IonCol sizeXs='12' sizeMd='8' sizeLg='6'>
+          <IonCol sizeXs='12' sizeMd='8' sizeLg='7'>
             <IonCard mode='ios' style={{ marginBottom: "2rem" }}>
               {(user?.completedChallengeCount ?? 0) +
                 (user?.failedChallengeCount ?? 0) +

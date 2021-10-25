@@ -510,7 +510,7 @@ const Challenges: React.FC = () => {
         </IonRow>
         {renderChallenges()}
         <IonFab vertical='bottom' horizontal='end' slot='fixed'>
-          <IonFabButton color='senary' onClick={fetchData} mode='ios'>
+          <IonFabButton color='main-beige' onClick={fetchData} mode='ios'>
             <IonIcon icon={refreshOutline} />
           </IonFabButton>
         </IonFab>
