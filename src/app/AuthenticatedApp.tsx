@@ -53,6 +53,7 @@ import { useWindowSize } from "../utils/WindowUtils";
 import { useUser } from "../contexts/UserContext";
 import { useEffect, useState } from "react";
 import { UserList } from "../interfaces/models/Users";
+import FeedbackModal from "../components/feedback";
 
 const AuthenticatedApp: React.FC = () => {
   const { width, isDesktop } = useWindowSize();
@@ -60,6 +61,7 @@ const AuthenticatedApp: React.FC = () => {
 
   const [isDesktopBefore, setIsDesktopBefore] = useState(isDesktop);
   const [requests, setRequests] = useState<UserList[]>([]);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
   useEffect(() => {
     if (isDesktop !== isDesktopBefore && !isPlatform("desktop")) {
@@ -161,7 +163,11 @@ const AuthenticatedApp: React.FC = () => {
                         style={{ fontSize: "1.5rem" }}
                       />
                     </IonButton>
-                    <IonButton mode='ios' color='clear'>
+                    <IonButton
+                      mode='ios'
+                      color='clear'
+                      onClick={() => setShowFeedbackModal(true)}
+                    >
                       <IonIcon
                         icon={bugOutline}
                         color='dark'
@@ -203,6 +209,10 @@ const AuthenticatedApp: React.FC = () => {
             isPlatform("ipad")) && <RightMenu />}
         </IonSplitPane>
       </IonReactRouter>
+      <FeedbackModal
+        showModal={showFeedbackModal}
+        setShowModal={setShowFeedbackModal}
+      />
     </IonApp>
   );
 };

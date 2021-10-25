@@ -11,7 +11,6 @@ import {
   IonCol,
 } from "@ionic/react";
 import "./RightSection.scss";
-import FeedbackModal from "../feedback";
 import { useSocket } from "../../contexts/SocketContext";
 import { Shame } from "../../interfaces/models/Challenges";
 import { intervalToDuration, parseISO } from "date-fns";
@@ -22,7 +21,6 @@ import { useHistory } from "react-router";
 const RightSection = () => {
   const { connect } = useSocket();
   const history = useHistory();
-  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [shames, setShames] = useState<Shame[]>([]);
 
   const connectToSocket = async () => {
@@ -124,11 +122,6 @@ const RightSection = () => {
             &copy; 2021 Wall of Shame
           </IonText>
         </IonRow>
-
-        <FeedbackModal
-          showModal={showFeedbackModal}
-          setShowModal={setShowFeedbackModal}
-        />
       </IonContent>
     </IonMenu>
   );

@@ -52,184 +52,192 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
     >
       <IonSlide className='slide beige'>
         <Container>
-          <img
-            src={challenge}
-            alt='challenge'
-            style={{ marginTop: "0rem", marginBottom: "1rem" }}
-          />
-          <h1 style={{ marginBottom: "1.5rem" }}>Create a Challenge</h1>
-          <p>
-            Can’t stop procrastinating?
-            <br />
-            Create a challenge and set a deadline for your task!
-          </p>
-          <IonRow
-            className='ion-justify-content-center'
-            style={{ marginTop: "2rem" }}
-          >
-            <IonButton
-              mode='ios'
-              color='light'
-              shape='round'
-              fill='solid'
-              onClick={swipeNext}
-              style={{
-                display: "flex",
-                flex: 1,
-                marginLeft: "2rem",
-                marginRight: "2rem",
-                maxWidth: 300,
-              }}
+          <div style={{ paddingBottom: "2rem" }}>
+            <img
+              src={challenge}
+              alt='challenge'
+              style={{ marginTop: "0rem", marginBottom: "1rem" }}
+            />
+            <h1 style={{ marginBottom: "1.5rem" }}>Create a challenge</h1>
+            <p>
+              Can’t stop procrastinating?
+              <br />
+              Create a challenge and set a deadline for your task!
+            </p>
+            <IonRow
+              className='ion-justify-content-center'
+              style={{ marginTop: "2rem" }}
             >
-              <IonText
-                color='accent-beige'
+              <IonButton
+                mode='ios'
+                color='light'
+                shape='round'
+                fill='solid'
+                onClick={swipeNext}
                 style={{
-                  fontWeight: "bold",
+                  display: "flex",
+                  flex: 1,
                   marginLeft: "2rem",
                   marginRight: "2rem",
+                  maxWidth: 300,
                 }}
               >
-                Next
-              </IonText>
-            </IonButton>
-          </IonRow>
+                <IonText
+                  color='accent-beige'
+                  style={{
+                    fontWeight: "bold",
+                    marginLeft: "2rem",
+                    marginRight: "2rem",
+                  }}
+                >
+                  Next
+                </IonText>
+              </IonButton>
+            </IonRow>
+          </div>
         </Container>
       </IonSlide>
 
       <IonSlide className='slide blue'>
         <Container>
-          <img
-            src={invite}
-            alt='invite'
-            className='onboarding-image'
-            style={{ marginTop: "0rem", marginBottom: "1rem" }}
-          />
-          <h1 style={{ marginBottom: "1.5rem" }}>Invite your friends</h1>
-          <p>
-            Why suffer alone? Invite your friends and complete the challenge
-            together!
-          </p>
-          <IonRow
-            className='ion-justify-content-center'
-            style={{ marginTop: "2rem" }}
-          >
-            <IonButton
-              mode='ios'
-              color='light'
-              shape='round'
-              fill='solid'
-              onClick={swipeNext}
-              style={{
-                display: "flex",
-                flex: 1,
-                marginLeft: "2rem",
-                marginRight: "2rem",
-                maxWidth: 300,
-              }}
+          <div style={{ paddingBottom: "2rem" }}>
+            <img
+              src={invite}
+              alt='invite'
+              className='onboarding-image'
+              style={{ marginTop: "0rem", marginBottom: "1rem" }}
+            />
+            <h1 style={{ marginBottom: "1.5rem" }}>Invite your friends</h1>
+            <p>
+              Why suffer alone? Invite your friends and complete the challenge
+              together!
+            </p>
+            <IonRow
+              className='ion-justify-content-center'
+              style={{ marginTop: "2rem" }}
             >
-              <IonText
-                color='accent-blue'
+              <IonButton
+                mode='ios'
+                color='light'
+                shape='round'
+                fill='solid'
+                onClick={swipeNext}
                 style={{
-                  fontWeight: "bold",
+                  display: "flex",
+                  flex: 1,
                   marginLeft: "2rem",
                   marginRight: "2rem",
+                  maxWidth: 300,
                 }}
               >
-                Next
-              </IonText>
-            </IonButton>
-          </IonRow>
+                <IonText
+                  color='accent-blue'
+                  style={{
+                    fontWeight: "bold",
+                    marginLeft: "2rem",
+                    marginRight: "2rem",
+                  }}
+                >
+                  Next
+                </IonText>
+              </IonButton>
+            </IonRow>
+          </div>
         </Container>
       </IonSlide>
 
       <IonSlide className='slide yellow'>
         <Container>
-          <img
-            src={powerup}
-            alt='powerup'
-            className='onboarding-image'
-            style={{ marginTop: "0rem", marginBottom: "1rem" }}
-          />
-          <h1 style={{ marginBottom: "1.5rem" }}>Powerup and Extra Shame</h1>
-          <p>
-            Complete challenges and get coins, which you can use to buy
-            powerups!
-          </p>
-          <IonRow
-            className='ion-justify-content-center'
-            style={{ marginTop: "2rem" }}
-          >
-            <IonButton
-              mode='ios'
-              color='light'
-              shape='round'
-              fill='solid'
-              onClick={swipeNext}
-              style={{
-                display: "flex",
-                flex: 1,
-                marginLeft: "2rem",
-                marginRight: "2rem",
-                maxWidth: 300,
-              }}
+          <div style={{ paddingBottom: "2rem" }}>
+            <img
+              src={powerup}
+              alt='powerup'
+              className='onboarding-image'
+              style={{ marginTop: "0rem", marginBottom: "1rem" }}
+            />
+            <h1 style={{ marginBottom: "1.5rem" }}>Use powerups</h1>
+            <p>
+              Complete challenges and get coins, which you can use to buy
+              powerups!
+            </p>
+            <IonRow
+              className='ion-justify-content-center'
+              style={{ marginTop: "2rem" }}
             >
-              <IonText
-                color='accent-yellow'
+              <IonButton
+                mode='ios'
+                color='light'
+                shape='round'
+                fill='solid'
+                onClick={swipeNext}
                 style={{
-                  fontWeight: "bold",
+                  display: "flex",
+                  flex: 1,
                   marginLeft: "2rem",
                   marginRight: "2rem",
+                  maxWidth: 300,
                 }}
               >
-                Next
-              </IonText>
-            </IonButton>
-          </IonRow>
+                <IonText
+                  color='accent-yellow'
+                  style={{
+                    fontWeight: "bold",
+                    marginLeft: "2rem",
+                    marginRight: "2rem",
+                  }}
+                >
+                  Next
+                </IonText>
+              </IonButton>
+            </IonRow>
+          </div>
         </Container>
       </IonSlide>
 
       <IonSlide className='slide blue'>
         <Container>
-          <img
-            src={highground}
-            alt='highground'
-            style={{ marginTop: "0rem", marginBottom: "1rem" }}
-          />
-          <h1 style={{ marginBottom: "1.5rem" }}>To the WALL OF SHAME</h1>
-          <p>
-            Losers of the challenge get thrown to the wall, where their names
-            will be for all to see!
-          </p>
-          <IonRow
-            className='ion-justify-content-center'
-            style={{ marginTop: "2rem" }}
-          >
-            <IonButton
-              mode='ios'
-              color='light'
-              shape='round'
-              fill='solid'
-              onClick={swipeNext}
-              style={{
-                display: "flex",
-                flex: 1,
-                marginLeft: "2rem",
-                marginRight: "2rem",
-                maxWidth: 300,
-              }}
+          <div style={{ paddingBottom: "2rem" }}>
+            <img
+              src={highground}
+              alt='highground'
+              style={{ marginTop: "0rem", marginBottom: "1rem" }}
+            />
+            <h1 style={{ marginBottom: "1.5rem" }}>To the WALL OF SHAME</h1>
+            <p>
+              Losers of the challenge get thrown to the wall, where their names
+              will be for all to see!
+            </p>
+            <IonRow
+              className='ion-justify-content-center'
+              style={{ marginTop: "2rem" }}
             >
-              <IonText
-                color='accent-blue'
+              <IonButton
+                mode='ios'
+                color='light'
+                shape='round'
+                fill='solid'
+                onClick={swipeNext}
                 style={{
-                  fontWeight: "bold",
+                  display: "flex",
+                  flex: 1,
                   marginLeft: "2rem",
                   marginRight: "2rem",
+                  maxWidth: 300,
                 }}
               >
-                Next
-              </IonText>
-            </IonButton>
-          </IonRow>
+                <IonText
+                  color='accent-blue'
+                  style={{
+                    fontWeight: "bold",
+                    marginLeft: "2rem",
+                    marginRight: "2rem",
+                  }}
+                >
+                  Next
+                </IonText>
+              </IonButton>
+            </IonRow>
+          </div>
         </Container>
       </IonSlide>
 

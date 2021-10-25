@@ -41,6 +41,19 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = (
   };
 
   const handleSubmit = () => {
+    const splitted = state.email.split("@");
+    if (splitted.length > 1) {
+      if (splitted[1].includes("edu")) {
+        setState({
+          isLoading: false,
+          showAlert: true,
+          alertHeader: "Notice",
+          alertMessage:
+            "Our server currently does not support education emails. Please try another one :)",
+        });
+        return;
+      }
+    }
     setState({ isLoading: true });
     signup(state.email, state.password)
       .then(() => {
