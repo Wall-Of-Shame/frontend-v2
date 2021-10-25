@@ -77,7 +77,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
 ) => {
   const history = useHistory();
   const { isDesktop } = useWindowSize();
-  const { createChallenge } = useChallenge();
+  const { createChallenge, notifyShouldRefreshChallenges } = useChallenge();
   const [showModal, setShowModal] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [showOfflineToast, setShowOfflineToast] = useState(false);
@@ -127,8 +127,28 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
     setState({ isLoading: true });
     try {
       await createChallenge(data);
-      setState({ isLoading: false });
-      window.location.href = "challenges";
+      setState({
+        isLoading: false,
+        showAlert: true,
+        hasConfirm: false,
+        alertHeader: "Success!",
+        alertMessage: `You have successfully created a new challenge <strong>${data.title}</strong>! Time to try your best :)`,
+        confirmHandler: () => {},
+        okHandler: () => {
+          notifyShouldRefreshChallenges(true);
+          setState({
+            title: "",
+            description: "",
+            punishmentType: "NOT_COMPLETED",
+            startAt: formatISO(addHours(Date.now(), 1)),
+            endAt: formatISO(addHours(Date.now(), 2)),
+            inviteType: "PRIVATE",
+          });
+          setHasSetInviteType(false);
+          setShowModal(false);
+          history.push("/challenges");
+        },
+      });
     } catch (error) {
       console.log(error);
       setState({ isLoading: false });
@@ -518,7 +538,6 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
               }),
             };
             handleSubmit(data);
-            history.push("/challenges");
           }}
         />
         <OfflineToast

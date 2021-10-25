@@ -106,8 +106,13 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   const location = useLocation();
   const history = useHistory();
   const { user } = useUser()!;
-  const { getChallenge, acceptChallenge, rejectChallenge, updateChallenge } =
-    useChallenge();
+  const {
+    notifyShouldRefreshChallenges,
+    getChallenge,
+    acceptChallenge,
+    rejectChallenge,
+    updateChallenge,
+  } = useChallenge();
 
   const [challenge, setChallenge] = useState<ChallengeData | null>(
     location.state as ChallengeData
@@ -839,7 +844,11 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
             try {
               await updateChallenge(challenge.challengeId, data);
               await fetchData();
-              setState({ isLoading: false, showParticipantModal: false });
+              notifyShouldRefreshChallenges(true);
+              setState({
+                isLoading: false,
+                showParticipantModal: false,
+              });
             } catch (error) {
               console.log(error);
               setState({

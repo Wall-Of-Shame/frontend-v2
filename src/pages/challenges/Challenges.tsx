@@ -58,7 +58,11 @@ const Challenges: React.FC = () => {
   const { isDesktop } = useWindowSize();
   const location = useLocation();
   const history = useHistory();
-  const { getAllChallenges } = useChallenge();
+  const {
+    getAllChallenges,
+    shouldRefreshChallenges,
+    notifyShouldRefreshChallenges,
+  } = useChallenge();
   const selectChallenges = (state: RootState): ChallengeDux => state.challenges;
 
   const [tab, setTab] = useState("ongoing");
@@ -104,6 +108,11 @@ const Challenges: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shouldRefreshChallenges]);
+
+  useEffect(() => {
     if (
       location.pathname === "/challenges" ||
       location.pathname === "/explore" ||
@@ -123,6 +132,7 @@ const Challenges: React.FC = () => {
       setOngoing(allChallenges.ongoing);
       setPendingStart(allChallenges.pendingStart);
       setPendingResponse(allChallenges.pendingResponse);
+      notifyShouldRefreshChallenges(false);
     } catch (error) {
       console.log(error);
     }
