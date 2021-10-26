@@ -31,6 +31,7 @@ import {
   parseISO,
 } from "date-fns";
 import uniqid from "uniqid";
+import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
 import AvatarImg from "../../../components/avatar";
 import { useUser } from "../../../contexts/UserContext";
 import { useWindowSize } from "../../../utils/WindowUtils";
@@ -46,7 +47,7 @@ interface ChatProps {
 const Chat: React.FC<ChatProps> = (props: ChatProps) => {
   const { chatId, participants, showModal, setShowModal } = props;
   const { user } = useUser();
-  const { isDesktop, width } = useWindowSize();
+  const { width } = useWindowSize();
   const chatRef = query(ref(database, `chat/${chatId}`), orderByKey());
 
   const [message, setMessage] = useState("");
@@ -54,11 +55,7 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
   const [lastUpdated, setLastUpdated] = useState(Date.now());
   const [hasSynced, setHasSynced] = useState(false);
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef?.current?.scrollIntoView(false);
-  };
+  const virtuoso = useRef<VirtuosoHandle | null>(null);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedUpdate = useCallback(
@@ -116,8 +113,8 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
       }).then(() => {
         setMessage("");
         setTimeout(() => {
-          scrollToBottom();
-        }, 200);
+          virtuoso.current?.scrollToIndex(messages.length - 1);
+        }, 300);
       });
     } catch (error) {
       console.log(error);
@@ -153,241 +150,244 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
           </IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent
-        fullscreen={false}
-        style={{
-          height: isDesktop ? "calc(100vh - 3.5rem)" : "calc(100vh - 8rem)",
-        }}
-      >
-        {messages.map((m, index) => {
-          const u = participants.find((p) => p.userId === m.userId);
-          const isSelf = u?.userId === user?.userId;
-          const messageTime = parseISO(m.time);
-          const isSameSender =
-            index > 0 &&
-            messages[index].userId === messages[index - 1].userId &&
-            Math.abs(
-              differenceInMinutes(
-                messageTime,
-                parseISO(messages[index - 1].time)
-              )
-            ) < 1;
-          const isNextSenderDiff =
-            index === messages.length - 1 ||
-            messages[index].userId !== messages[index + 1].userId ||
-            Math.abs(
-              differenceInMinutes(
-                messageTime,
-                parseISO(messages[index + 1].time)
-              )
-            ) >= 1;
-          return (
-            <IonRow
-              key={m.messageId}
-              className={
-                isSelf ? "ion-justify-content-end" : "ion-justify-content-start"
-              }
-              style={{
-                marginLeft: "1rem",
-                marginRight: "1rem",
-                marginTop: isSameSender ? "0.25rem" : "1rem",
-                marginBottom: !isNextSenderDiff ? "0.25rem" : "1rem",
-              }}
-            >
-              {u?.userId === user?.userId ? (
-                <IonRow>
-                  <IonCol className='ion-no-padding ion-no-margin'>
-                    {!isSameSender && (
-                      <IonRow className='ion-text-end'>
-                        <IonCol className='ion-no-padding ion-no-margin'>
-                          <IonText
-                            style={{
-                              fontSize: "0.8rem",
-                              color: "#787878",
-                            }}
-                          >
-                            {m.name}
-                          </IonText>
-                        </IonCol>
-                      </IonRow>
-                    )}
-                    <IonRow
-                      className='ion-justify-content-end'
-                      style={{
-                        marginBottom: !isSameSender ? "0.25rem" : "0.25rem",
-                      }}
-                    >
-                      <IonCard
-                        className='ion-no-margin ion-no-padding'
+      <IonContent fullscreen={false} scrollY={false}>
+        <Virtuoso
+          ref={virtuoso}
+          totalCount={messages.length}
+          itemContent={(index) => {
+            const m = messages[index];
+            const u = participants.find((p) => p.userId === m.userId);
+            const isSelf = u?.userId === user?.userId;
+            const messageTime = parseISO(m.time);
+            const isSameSender =
+              index > 0 &&
+              messages[index].userId === messages[index - 1].userId &&
+              Math.abs(
+                differenceInMinutes(
+                  messageTime,
+                  parseISO(messages[index - 1].time)
+                )
+              ) < 1;
+            const isNextSenderDiff =
+              index === messages.length - 1 ||
+              messages[index].userId !== messages[index + 1].userId ||
+              Math.abs(
+                differenceInMinutes(
+                  messageTime,
+                  parseISO(messages[index + 1].time)
+                )
+              ) >= 1;
+            return (
+              <IonRow
+                key={m.messageId}
+                className={
+                  isSelf
+                    ? "ion-justify-content-end"
+                    : "ion-justify-content-start"
+                }
+                style={{
+                  marginLeft: "1rem",
+                  marginRight: "1rem",
+                  marginTop:
+                    index === 0 ? "0.25rem" : isSameSender ? "0.25rem" : "1rem",
+                  marginBottom: !isNextSenderDiff ? "0.25rem" : "1rem",
+                }}
+              >
+                {u?.userId === user?.userId ? (
+                  <IonRow>
+                    <IonCol className='ion-no-padding ion-no-margin'>
+                      {!isSameSender && (
+                        <IonRow className='ion-text-end'>
+                          <IonCol className='ion-no-padding ion-no-margin'>
+                            <IonText
+                              style={{
+                                fontSize: "0.8rem",
+                                color: "#787878",
+                              }}
+                            >
+                              {m.name}
+                            </IonText>
+                          </IonCol>
+                        </IonRow>
+                      )}
+                      <IonRow
+                        className='ion-justify-content-end'
                         style={{
-                          paddingTop: "0.5rem",
-                          paddingBottom: "0.5rem",
-                          paddingLeft: "1rem",
-                          paddingRight: "1rem",
-                          marginLeft: "2rem",
-                          borderRadius: `1rem ${
-                            isSameSender ? "0.5rem" : "1rem"
-                          } ${isNextSenderDiff ? "0.25rem" : "0.5rem"} 1rem`,
+                          marginBottom: !isSameSender ? "0.25rem" : "0.25rem",
                         }}
                       >
-                        <IonText
-                          color='dark'
+                        <IonCard
+                          className='ion-no-margin ion-no-padding'
                           style={{
-                            fontSize: "0.9rem",
+                            paddingTop: "0.5rem",
+                            paddingBottom: "0.5rem",
+                            paddingLeft: "1rem",
+                            paddingRight: "1rem",
+                            marginLeft: "2rem",
+                            borderRadius: `1rem ${
+                              isSameSender ? "0.5rem" : "1rem"
+                            } ${isNextSenderDiff ? "0.25rem" : "0.5rem"} 1rem`,
                           }}
                         >
-                          {m.content}
-                        </IonText>
-                      </IonCard>
-                    </IonRow>
-                    {isNextSenderDiff && (
-                      <IonRow className='ion-text-end ion-justify-content-end'>
-                        <IonText
-                          style={{
-                            fontSize: "0.7rem",
-                            color: "#787878",
-                            marginTop: "0.25rem",
-                          }}
-                        >
-                          {isSameDay(messageTime, new Date())
-                            ? `${format(messageTime, "HH:mm")}`
-                            : `${format(messageTime, "dd MM yyyy, HH:mm")}`}
-                        </IonText>
+                          <IonText
+                            color='dark'
+                            style={{
+                              fontSize: "0.9rem",
+                            }}
+                          >
+                            {m.content}
+                          </IonText>
+                        </IonCard>
                       </IonRow>
-                    )}
-                  </IonCol>
-                  {isNextSenderDiff ? (
-                    <IonRow
-                      className='ion-justify-content-center ion-align-items-end'
-                      style={{ marginLeft: "1rem", marginBottom: "1.5rem" }}
-                    >
-                      <IonAvatar
+                      {isNextSenderDiff && (
+                        <IonRow className='ion-text-end ion-justify-content-end'>
+                          <IonText
+                            style={{
+                              fontSize: "0.7rem",
+                              color: "#787878",
+                              marginTop: "0.25rem",
+                              marginBottom:
+                                index === messages.length - 1 ? "0.5rem" : 0,
+                            }}
+                          >
+                            {isSameDay(messageTime, new Date())
+                              ? `${format(messageTime, "HH:mm")}`
+                              : `${format(messageTime, "dd MM yyyy, HH:mm")}`}
+                          </IonText>
+                        </IonRow>
+                      )}
+                    </IonCol>
+                    {isNextSenderDiff ? (
+                      <IonRow
+                        className='ion-justify-content-center ion-align-items-end'
+                        style={{ marginLeft: "1rem", marginBottom: "1.5rem" }}
+                      >
+                        <IonAvatar
+                          style={{
+                            width: "2.5rem",
+                            height: "2.5rem",
+                          }}
+                        >
+                          {u?.avatar !== undefined && (
+                            <AvatarImg avatar={u?.avatar} />
+                          )}
+                        </IonAvatar>
+                      </IonRow>
+                    ) : (
+                      <div
                         style={{
                           width: "2.5rem",
                           height: "2.5rem",
+                          marginLeft: "1rem",
                         }}
+                      ></div>
+                    )}
+                  </IonRow>
+                ) : (
+                  <IonRow>
+                    {isNextSenderDiff ? (
+                      <IonRow
+                        className='ion-justify-content-center ion-align-items-end'
+                        style={{ marginRight: "1rem", marginBottom: "1.5rem" }}
                       >
-                        {u?.avatar !== undefined && (
-                          <AvatarImg avatar={u?.avatar} />
-                        )}
-                      </IonAvatar>
-                    </IonRow>
-                  ) : (
-                    <div
-                      style={{
-                        width: "2.5rem",
-                        height: "2.5rem",
-                        marginLeft: "1rem",
-                      }}
-                    ></div>
-                  )}
-                </IonRow>
-              ) : (
-                <IonRow>
-                  {isNextSenderDiff ? (
-                    <IonRow
-                      className='ion-justify-content-center ion-align-items-end'
-                      style={{ marginRight: "1rem", marginBottom: "1.5rem" }}
-                    >
-                      <IonAvatar
+                        <IonAvatar
+                          style={{
+                            width: "2.5rem",
+                            height: "2.5rem",
+                          }}
+                        >
+                          {u?.avatar !== undefined && (
+                            <AvatarImg avatar={u?.avatar} />
+                          )}
+                        </IonAvatar>
+                      </IonRow>
+                    ) : (
+                      <div
                         style={{
                           width: "2.5rem",
                           height: "2.5rem",
+                          marginRight: "1rem",
+                        }}
+                      ></div>
+                    )}
+                    <IonCol className='ion-no-padding ion-no-margin'>
+                      {!isSameSender && (
+                        <IonRow className='ion-text-start'>
+                          <IonCol className='ion-no-padding ion-no-margin'>
+                            <IonText
+                              style={{
+                                fontSize: "0.8rem",
+                                color: "#787878",
+                              }}
+                            >
+                              {m.name}
+                            </IonText>
+                          </IonCol>
+                        </IonRow>
+                      )}
+                      <IonRow
+                        className='ion-justify-content-start'
+                        style={{
+                          marginBottom: !isSameSender ? "0.25rem" : "0.25rem",
                         }}
                       >
-                        {u?.avatar !== undefined && (
-                          <AvatarImg avatar={u?.avatar} />
-                        )}
-                      </IonAvatar>
-                    </IonRow>
-                  ) : (
-                    <div
-                      style={{
-                        width: "2.5rem",
-                        height: "2.5rem",
-                        marginRight: "1rem",
-                      }}
-                    ></div>
-                  )}
-                  <IonCol className='ion-no-padding ion-no-margin'>
-                    {!isSameSender && (
-                      <IonRow className='ion-text-start'>
-                        <IonCol className='ion-no-padding ion-no-margin'>
+                        <IonCard
+                          className='ion-no-margin ion-no-padding'
+                          style={{
+                            paddingTop: "0.5rem",
+                            paddingBottom: "0.5rem",
+                            paddingLeft: "1rem",
+                            paddingRight: "1rem",
+                            marginRight: "2rem",
+                            borderRadius: `${
+                              isSameSender ? "0.5rem" : "1rem"
+                            } 1rem 1rem ${
+                              isNextSenderDiff ? "0.25rem" : "0.5rem"
+                            }`,
+                          }}
+                        >
                           <IonText
+                            color='dark'
                             style={{
-                              fontSize: "0.8rem",
-                              color: "#787878",
+                              fontSize: "0.9rem",
                             }}
                           >
-                            {m.name}
+                            {m.content}
                           </IonText>
-                        </IonCol>
+                        </IonCard>
                       </IonRow>
-                    )}
-                    <IonRow
-                      className='ion-justify-content-start'
-                      style={{
-                        marginBottom: !isSameSender ? "0.25rem" : "0.25rem",
-                      }}
-                    >
-                      <IonCard
-                        className='ion-no-margin ion-no-padding'
-                        style={{
-                          paddingTop: "0.5rem",
-                          paddingBottom: "0.5rem",
-                          paddingLeft: "1rem",
-                          paddingRight: "1rem",
-                          marginRight: "2rem",
-                          borderRadius: `${
-                            isSameSender ? "0.5rem" : "1rem"
-                          } 1rem 1rem ${
-                            isNextSenderDiff ? "0.25rem" : "0.5rem"
-                          }`,
-                        }}
-                      >
-                        <IonText
-                          color='dark'
-                          style={{
-                            fontSize: "0.9rem",
-                          }}
-                        >
-                          {m.content}
-                        </IonText>
-                      </IonCard>
-                    </IonRow>
-                    {isNextSenderDiff && (
-                      <IonRow className='ion-text-end ion-justify-content-start'>
-                        <IonText
-                          style={{
-                            fontSize: "0.7rem",
-                            color: "#787878",
-                            marginTop: "0.25rem",
-                          }}
-                        >
-                          {isSameDay(messageTime, new Date())
-                            ? `${format(messageTime, "HH:mm")}`
-                            : `${format(messageTime, "dd MM yyyy, HH:mm")}`}
-                        </IonText>
-                      </IonRow>
-                    )}
-                  </IonCol>
-                </IonRow>
-              )}
-            </IonRow>
-          );
-        })}
-        <div ref={messagesEndRef} key={messages.length} />
+                      {isNextSenderDiff && (
+                        <IonRow className='ion-text-end ion-justify-content-start'>
+                          <IonText
+                            style={{
+                              fontSize: "0.7rem",
+                              color: "#787878",
+                              marginTop: "0.25rem",
+                            }}
+                          >
+                            {isSameDay(messageTime, new Date())
+                              ? `${format(messageTime, "HH:mm")}`
+                              : `${format(messageTime, "dd MM yyyy, HH:mm")}`}
+                          </IonText>
+                        </IonRow>
+                      )}
+                    </IonCol>
+                  </IonRow>
+                )}
+              </IonRow>
+            );
+          }}
+        ></Virtuoso>
       </IonContent>
-      <IonFab horizontal='end' vertical='bottom' style={{ bottom: "5.5rem" }}>
+      <IonFab horizontal='end' vertical='bottom' style={{ bottom: "5.35rem" }}>
         <IonFabButton
-          onClick={scrollToBottom}
+          onClick={() => {
+            virtuoso.current?.scrollToIndex(messages.length - 1);
+          }}
+          color='main-beige'
           style={{ width: "1.5rem", height: "1.5rem" }}
         >
-          <IonIcon
-            icon={arrowDown}
-            color='white'
-            style={{ fontSize: "1rem" }}
-          />
+          <IonIcon icon={arrowDown} style={{ fontSize: "1rem" }} />
         </IonFabButton>
       </IonFab>
       <IonFooter key='chat'>
