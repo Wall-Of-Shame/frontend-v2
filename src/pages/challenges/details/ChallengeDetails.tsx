@@ -1,4 +1,5 @@
 import {
+  IonBadge,
   IonButton,
   IonButtons,
   IonContent,
@@ -14,7 +15,7 @@ import {
   IonToolbar,
   isPlatform,
 } from "@ionic/react";
-import { useReducer, useState } from "react";
+import { useCallback, useReducer, useState } from "react";
 import {
   arrowBack,
   chatbubbles,
@@ -30,10 +31,14 @@ import {
   ChallengeInviteType,
   ChallengePost,
   ChallengeType,
+  Message,
   UserMini,
 } from "../../../interfaces/models/Challenges";
 import "./ChallengeDetails.scss";
-import { formatISO, parseISO } from "date-fns";
+import { differenceInMilliseconds, formatISO, parseISO } from "date-fns";
+import { database } from "../../../firebase";
+import { ref, query, orderByKey, onValue, Query } from "firebase/database";
+import lodash from "lodash";
 import { useUser } from "../../../contexts/UserContext";
 import EditChallenge from "../edit";
 import LoadingSpinner from "../../../components/loadingSpinner";
@@ -122,6 +127,13 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   const [didFinish, setDidFinish] = useState(false);
   const [showOfflineToast, setShowOfflineToast] = useState(false);
   const [hasEditError, setHasEditError] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [chatRef, setChatRef] = useState<Query | null>(null);
+  const [lastUpdated, setLastUpdated] = useState(Date.now());
+  const [hasSynced, setHasSynced] = useState(false);
+  const [showChatAlert, setShowChatAlert] = useState(false);
+
   const [state, setState] = useReducer(
     (s: ChallengeDetailsState, a: Partial<ChallengeDetailsState>) => ({
       ...s,
@@ -183,6 +195,49 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
         ) ?? [],
     }
   );
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedUpdate = useCallback(
+    lodash.debounce((newMessages: Message[]) => {
+      if (newMessages.length > messages.length) {
+        setMessages(newMessages);
+        setShowChatAlert(true);
+      }
+    }, 200),
+    []
+  );
+
+  useEffect(() => {
+    if (!challenge) {
+      return;
+    }
+    const chatRefObj = query(
+      ref(database, `chat/${challenge.challengeId}`),
+      orderByKey()
+    );
+    setChatRef(chatRefObj);
+    onValue(chatRefObj, (snapshot) => {
+      const newTime = Date.now();
+      // Debounce the events
+      if (
+        Math.abs(differenceInMilliseconds(lastUpdated, newTime)) < 5000 &&
+        hasSynced
+      ) {
+        return;
+      }
+
+      const object = snapshot.val();
+      if (object) {
+        const parsedValues = Object.values(object) as Message[];
+        if (parsedValues) {
+          debouncedUpdate(parsedValues);
+          setHasSynced(true);
+          setLastUpdated(newTime);
+        }
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [challenge]);
 
   const fetchData = async () => {
     try {
@@ -588,12 +643,30 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
                         width: "2.75rem",
                         height: "2.75rem",
                       }}
-                      onClick={() => setState({ showChatModal: true })}
+                      onClick={() => {
+                        setShowChatAlert(false);
+                        setState({ showChatModal: true });
+                      }}
                     >
                       <IonIcon
                         icon={chatbubbles}
                         style={{ fontSize: "1.5rem" }}
                       />
+                      {showChatAlert && (
+                        <IonBadge
+                          mode='ios'
+                          color='danger'
+                          style={{
+                            position: "absolute",
+                            top: "0.4rem",
+                            right: "0.3rem",
+                            width: "1rem",
+                            height: "1rem",
+                          }}
+                        >
+                          &nbsp;
+                        </IonBadge>
+                      )}
                     </IonFabButton>
                   )}
                   {!isAfter(Date.now(), parseISO(challenge.startAt!)) && (
@@ -665,12 +738,30 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
                       width: "2.75rem",
                       height: "2.75rem",
                     }}
-                    onClick={() => setState({ showChatModal: true })}
+                    onClick={() => {
+                      setShowChatAlert(false);
+                      setState({ showChatModal: true });
+                    }}
                   >
                     <IonIcon
                       icon={chatbubbles}
                       style={{ fontSize: "1.5rem" }}
                     />
+                    {showChatAlert && (
+                      <IonBadge
+                        mode='ios'
+                        color='danger'
+                        style={{
+                          position: "absolute",
+                          top: "0.4rem",
+                          right: "0.3rem",
+                          width: "1rem",
+                          height: "1rem",
+                        }}
+                      >
+                        &nbsp;
+                      </IonBadge>
+                    )}
                   </IonFabButton>
                   <IonFabButton
                     className='placeholder-fab'
@@ -702,9 +793,27 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
                     width: "2.75rem",
                     height: "2.75rem",
                   }}
-                  onClick={() => setState({ showChatModal: true })}
+                  onClick={() => {
+                    setShowChatAlert(false);
+                    setState({ showChatModal: true });
+                  }}
                 >
                   <IonIcon icon={chatbubbles} style={{ fontSize: "1.5rem" }} />
+                  {showChatAlert && (
+                    <IonBadge
+                      mode='ios'
+                      color='danger'
+                      style={{
+                        position: "absolute",
+                        top: "0.4rem",
+                        right: "0.3rem",
+                        width: "1rem",
+                        height: "1rem",
+                      }}
+                    >
+                      &nbsp;
+                    </IonBadge>
+                  )}
                 </IonFabButton>
               </IonButtons>
             </>
