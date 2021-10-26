@@ -37,6 +37,7 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
   const { user, searchUser } = useUser();
   const [searchText, setSearchText] = useState("");
   const [matchedUsers, setMatchedUsers] = useState<UserMini[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [invitedUsers, setInvitedUsers] = useState<UserMini[]>(
     pending.concat(accepted)
   );
