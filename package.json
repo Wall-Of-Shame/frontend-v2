@@ -42,6 +42,7 @@
     "react-scripts": "4.0.2",
     "react-stack-grid": "^0.7.1",
     "react-transition-group": "^4.4.2",
+    "react-virtuoso": "^2.2.4",
     "react-window": "^1.8.6",
     "redux": "^4.1.1",
     "redux-persist": "^6.0.0",
