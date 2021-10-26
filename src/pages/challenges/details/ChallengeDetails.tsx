@@ -127,7 +127,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   const [didFinish, setDidFinish] = useState(false);
   const [showOfflineToast, setShowOfflineToast] = useState(false);
   const [hasEditError, setHasEditError] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [lastCount, setLastCount] = useState(0);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [chatRef, setChatRef] = useState<Query | null>(null);
   const [lastUpdated, setLastUpdated] = useState(Date.now());
@@ -199,9 +199,9 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedUpdate = useCallback(
     lodash.debounce((newMessages: Message[]) => {
-      if (newMessages.length > messages.length) {
-        setMessages(newMessages);
+      if (newMessages.length > lastCount) {
         setShowChatAlert(true);
+        setLastCount(newMessages.length);
       }
     }, 200),
     []
