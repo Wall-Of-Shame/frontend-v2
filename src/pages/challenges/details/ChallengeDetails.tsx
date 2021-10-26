@@ -15,7 +15,7 @@ import {
   IonToolbar,
   isPlatform,
 } from "@ionic/react";
-import { useCallback, useReducer, useState } from "react";
+import { useReducer, useState } from "react";
 import {
   arrowBack,
   chatbubbles,
@@ -31,14 +31,10 @@ import {
   ChallengeInviteType,
   ChallengePost,
   ChallengeType,
-  Message,
   UserMini,
 } from "../../../interfaces/models/Challenges";
 import "./ChallengeDetails.scss";
-import { differenceInMilliseconds, formatISO, parseISO } from "date-fns";
-import { database } from "../../../firebase";
-import { ref, query, orderByKey, onValue, Query } from "firebase/database";
-import lodash from "lodash";
+import { formatISO, parseISO } from "date-fns";
 import { useUser } from "../../../contexts/UserContext";
 import EditChallenge from "../edit";
 import LoadingSpinner from "../../../components/loadingSpinner";
@@ -127,11 +123,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   const [didFinish, setDidFinish] = useState(false);
   const [showOfflineToast, setShowOfflineToast] = useState(false);
   const [hasEditError, setHasEditError] = useState(false);
-  const [lastCount, setLastCount] = useState(0);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [chatRef, setChatRef] = useState<Query | null>(null);
-  const [lastUpdated, setLastUpdated] = useState(Date.now());
-  const [hasSynced, setHasSynced] = useState(false);
   const [showChatAlert, setShowChatAlert] = useState(false);
 
   const [state, setState] = useReducer(
@@ -195,49 +186,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
         ) ?? [],
     }
   );
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedUpdate = useCallback(
-    lodash.debounce((newMessages: Message[]) => {
-      if (newMessages.length > lastCount) {
-        setShowChatAlert(true);
-        setLastCount(newMessages.length);
-      }
-    }, 200),
-    []
-  );
-
-  useEffect(() => {
-    if (!challenge) {
-      return;
-    }
-    const chatRefObj = query(
-      ref(database, `chat/${challenge.challengeId}`),
-      orderByKey()
-    );
-    setChatRef(chatRefObj);
-    onValue(chatRefObj, (snapshot) => {
-      const newTime = Date.now();
-      // Debounce the events
-      if (
-        Math.abs(differenceInMilliseconds(lastUpdated, newTime)) < 5000 &&
-        hasSynced
-      ) {
-        return;
-      }
-
-      const object = snapshot.val();
-      if (object) {
-        const parsedValues = Object.values(object) as Message[];
-        if (parsedValues) {
-          debouncedUpdate(parsedValues);
-          setHasSynced(true);
-          setLastUpdated(newTime);
-        }
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [challenge]);
 
   const fetchData = async () => {
     try {
