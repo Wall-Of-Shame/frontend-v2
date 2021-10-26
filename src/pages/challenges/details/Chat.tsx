@@ -7,8 +7,11 @@ import {
   IonAvatar,
   IonButton,
   IonButtons,
+  IonCard,
   IonCol,
   IonContent,
+  IonFab,
+  IonFabButton,
   IonFooter,
   IonHeader,
   IonIcon,
@@ -21,15 +24,17 @@ import {
 } from "@ionic/react";
 import {
   differenceInMilliseconds,
+  differenceInMinutes,
   format,
   formatISO,
+  isSameDay,
   parseISO,
 } from "date-fns";
 import uniqid from "uniqid";
 import AvatarImg from "../../../components/avatar";
 import { useUser } from "../../../contexts/UserContext";
 import { useWindowSize } from "../../../utils/WindowUtils";
-import { close, paperPlane } from "ionicons/icons";
+import { arrowDown, close, paperPlane } from "ionicons/icons";
 
 interface ChatProps {
   chatId: string;
@@ -52,7 +57,7 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef?.current?.scrollIntoView(false);
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -60,9 +65,6 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
     lodash.debounce((newMessages: Message[]) => {
       if (newMessages.length > messages.length) {
         setMessages(newMessages);
-        setTimeout(() => {
-          scrollToBottom();
-        }, 200);
       }
     }, 200),
     []
@@ -89,6 +91,15 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
     }
   });
 
+  const handleEnterKeyPress = async (
+    event:
+      | React.FormEvent<HTMLFormElement>
+      | React.KeyboardEvent<HTMLIonInputElement>
+  ): Promise<void> => {
+    event.preventDefault();
+    handleSendMessage();
+  };
+
   const handleSendMessage = async (): Promise<void> => {
     if (!message || message.trim().length === 0) {
       setMessage("");
@@ -104,6 +115,9 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
         time: formatISO(Date.now()),
       }).then(() => {
         setMessage("");
+        setTimeout(() => {
+          scrollToBottom();
+        }, 200);
       });
     } catch (error) {
       console.log(error);
@@ -147,55 +161,105 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
       >
         {messages.map((m, index) => {
           const u = participants.find((p) => p.userId === m.userId);
+          const isSelf = u?.userId === user?.userId;
+          const messageTime = parseISO(m.time);
+          const isSameSender =
+            index > 0 &&
+            messages[index].userId === messages[index - 1].userId &&
+            Math.abs(
+              differenceInMinutes(
+                messageTime,
+                parseISO(messages[index - 1].time)
+              )
+            ) < 1;
+          const isNextSenderDiff =
+            index === messages.length - 1 ||
+            messages[index].userId !== messages[index + 1].userId ||
+            Math.abs(
+              differenceInMinutes(
+                messageTime,
+                parseISO(messages[index + 1].time)
+              )
+            ) >= 1;
           return (
             <IonRow
               key={m.messageId}
-              style={{ marginLeft: "1rem", marginRight: "1rem" }}
+              className={
+                isSelf ? "ion-justify-content-end" : "ion-justify-content-start"
+              }
+              style={{
+                marginLeft: "1rem",
+                marginRight: "1rem",
+                marginTop: isSameSender ? "0.25rem" : "1rem",
+                marginBottom: !isNextSenderDiff ? "0.25rem" : "1rem",
+              }}
             >
               {u?.userId === user?.userId ? (
-                <>
-                  <IonCol size='10'>
-                    <IonRow className='ion-no-padding'>
-                      <IonCol className='ion-text-left ion-no-padding'>
-                        <IonText
-                          style={{
-                            fontSize: "0.8rem",
-                            color: "#787878",
-                          }}
-                        >
-                          {`${format(parseISO(m.time), "dd MMM yyyy, HH:mm")}`}
-                        </IonText>
-                      </IonCol>
-                      <IonCol className='ion-text-right ion-no-padding'>
-                        <IonText
-                          style={{
-                            fontWeight: "bold",
-                            fontSize: "0.9rem",
-                          }}
-                        >
-                          {m.name}
-                        </IonText>
-                      </IonCol>
-                    </IonRow>
+                <IonRow>
+                  <IonCol className='ion-no-padding ion-no-margin'>
+                    {!isSameSender && (
+                      <IonRow className='ion-text-end'>
+                        <IonCol className='ion-no-padding ion-no-margin'>
+                          <IonText
+                            style={{
+                              fontSize: "0.8rem",
+                              color: "#787878",
+                            }}
+                          >
+                            {m.name}
+                          </IonText>
+                        </IonCol>
+                      </IonRow>
+                    )}
                     <IonRow
-                      className='ion-no-padding'
-                      style={{ marginTop: "0.25rem" }}
+                      className='ion-justify-content-end'
+                      style={{
+                        marginBottom: !isSameSender ? "0.25rem" : "0.25rem",
+                      }}
                     >
-                      <IonCol className='ion-text-right ion-no-padding'>
+                      <IonCard
+                        className='ion-no-margin ion-no-padding'
+                        style={{
+                          paddingTop: "0.5rem",
+                          paddingBottom: "0.5rem",
+                          paddingLeft: "1rem",
+                          paddingRight: "1rem",
+                          marginLeft: "2rem",
+                          borderRadius: `1rem ${
+                            isSameSender ? "0.5rem" : "1rem"
+                          } ${isNextSenderDiff ? "0.25rem" : "0.5rem"} 1rem`,
+                        }}
+                      >
                         <IonText
+                          color='dark'
                           style={{
                             fontSize: "0.9rem",
                           }}
                         >
                           {m.content}
                         </IonText>
-                      </IonCol>
+                      </IonCard>
                     </IonRow>
+                    {isNextSenderDiff && (
+                      <IonRow className='ion-text-end ion-justify-content-end'>
+                        <IonText
+                          style={{
+                            fontSize: "0.7rem",
+                            color: "#787878",
+                            marginTop: "0.25rem",
+                          }}
+                        >
+                          {isSameDay(messageTime, new Date())
+                            ? `${format(messageTime, "HH:mm")}`
+                            : `${format(messageTime, "dd MM yyyy, HH:mm")}`}
+                        </IonText>
+                      </IonRow>
+                    )}
                   </IonCol>
-                  <IonCol size='2'>
+                  {isNextSenderDiff ? (
                     <IonRow
-                      className='ion-justify-content-center'
-                      style={{ marginTop: "0.5rem" }}
+                      className='ion-justify-content-center ion-align-items-end'
+                      style={{ marginLeft: "1rem", marginBottom: "1.5rem" }}
                     >
                       <IonAvatar
                         style={{
@@ -208,14 +272,22 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
                         )}
                       </IonAvatar>
                     </IonRow>
-                  </IonCol>
-                </>
+                  ) : (
+                    <div
+                      style={{
+                        width: "2.5rem",
+                        height: "2.5rem",
+                        marginLeft: "1rem",
+                      }}
+                    ></div>
+                  )}
+                </IonRow>
               ) : (
-                <>
-                  <IonCol size='2'>
+                <IonRow>
+                  {isNextSenderDiff ? (
                     <IonRow
-                      className='ion-justify-content-center'
-                      style={{ marginTop: "0.5rem" }}
+                      className='ion-justify-content-center ion-align-items-end'
+                      style={{ marginRight: "1rem", marginBottom: "1.5rem" }}
                     >
                       <IonAvatar
                         style={{
@@ -228,52 +300,96 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
                         )}
                       </IonAvatar>
                     </IonRow>
-                  </IonCol>
-                  <IonCol size='10'>
-                    <IonRow className='ion-no-padding'>
-                      <IonCol className='ion-text-left ion-no-padding'>
-                        <IonText
-                          style={{
-                            fontWeight: "bold",
-                            fontSize: "0.9rem",
-                          }}
-                        >
-                          {m.name}
-                        </IonText>
-                      </IonCol>
-                      <IonCol className='ion-text-right ion-no-padding'>
-                        <IonText
-                          style={{
-                            fontSize: "0.8rem",
-                            color: "#787878",
-                          }}
-                        >
-                          {`${format(parseISO(m.time), "dd MMM yyyy, HH:mm")}`}
-                        </IonText>
-                      </IonCol>
-                    </IonRow>
+                  ) : (
+                    <div
+                      style={{
+                        width: "2.5rem",
+                        height: "2.5rem",
+                        marginRight: "1rem",
+                      }}
+                    ></div>
+                  )}
+                  <IonCol className='ion-no-padding ion-no-margin'>
+                    {!isSameSender && (
+                      <IonRow className='ion-text-start'>
+                        <IonCol className='ion-no-padding ion-no-margin'>
+                          <IonText
+                            style={{
+                              fontSize: "0.8rem",
+                              color: "#787878",
+                            }}
+                          >
+                            {m.name}
+                          </IonText>
+                        </IonCol>
+                      </IonRow>
+                    )}
                     <IonRow
-                      className='ion-no-padding'
-                      style={{ marginTop: "0.25rem" }}
+                      className='ion-justify-content-start'
+                      style={{
+                        marginBottom: !isSameSender ? "0.25rem" : "0.25rem",
+                      }}
                     >
-                      <IonCol className='ion-text-left ion-no-padding'>
+                      <IonCard
+                        className='ion-no-margin ion-no-padding'
+                        style={{
+                          paddingTop: "0.5rem",
+                          paddingBottom: "0.5rem",
+                          paddingLeft: "1rem",
+                          paddingRight: "1rem",
+                          marginRight: "2rem",
+                          borderRadius: `${
+                            isSameSender ? "0.5rem" : "1rem"
+                          } 1rem 1rem ${
+                            isNextSenderDiff ? "0.25rem" : "0.5rem"
+                          }`,
+                        }}
+                      >
                         <IonText
+                          color='dark'
                           style={{
                             fontSize: "0.9rem",
                           }}
                         >
                           {m.content}
                         </IonText>
-                      </IonCol>
+                      </IonCard>
                     </IonRow>
+                    {isNextSenderDiff && (
+                      <IonRow className='ion-text-end ion-justify-content-start'>
+                        <IonText
+                          style={{
+                            fontSize: "0.7rem",
+                            color: "#787878",
+                            marginTop: "0.25rem",
+                          }}
+                        >
+                          {isSameDay(messageTime, new Date())
+                            ? `${format(messageTime, "HH:mm")}`
+                            : `${format(messageTime, "dd MM yyyy, HH:mm")}`}
+                        </IonText>
+                      </IonRow>
+                    )}
                   </IonCol>
-                </>
+                </IonRow>
               )}
             </IonRow>
           );
         })}
         <div ref={messagesEndRef} key={messages.length} />
       </IonContent>
+      <IonFab horizontal='end' vertical='bottom' style={{ bottom: "5.5rem" }}>
+        <IonFabButton
+          onClick={scrollToBottom}
+          style={{ width: "1.5rem", height: "1.5rem" }}
+        >
+          <IonIcon
+            icon={arrowDown}
+            color='white'
+            style={{ fontSize: "1rem" }}
+          />
+        </IonFabButton>
+      </IonFab>
       <IonFooter key='chat'>
         <IonToolbar>
           <IonRow
@@ -298,6 +414,9 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
                     onIonChange={(event) => {
                       setMessage(event.detail.value ?? "");
                     }}
+                    onKeyPress={(
+                      event: React.KeyboardEvent<HTMLIonInputElement>
+                    ) => event.key === "Enter" && handleEnterKeyPress(event)}
                   />
                 </div>
               </IonRow>

@@ -13,7 +13,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { auth, messaging } from "../firebase";
+import { auth } from "../firebase";
 import LoadingSpinner from "../components/loadingSpinner/LoadingSpinner";
 import AuthContextInterface from "../interfaces/contexts/AuthContext";
 import AuthService from "../services/AuthService";
@@ -81,8 +81,7 @@ const AuthProvider: React.FunctionComponent = (props) => {
       const user = userCredential.user;
       await sendEmailVerification(user);
       const token = await user.getIdToken();
-      const messagingToken = await getToken(messaging).catch((_) => undefined);
-      AuthService.login(token, messagingToken);
+      AuthService.login(token);
       await AuthService.getUser();
     } catch (error) {
       return Promise.reject(error);
@@ -94,8 +93,7 @@ const AuthProvider: React.FunctionComponent = (props) => {
       const result = await signInWithPopup(auth, googleProvider);
       callback();
       const token = await result.user.getIdToken();
-      const messagingToken = await getToken(messaging).catch((_) => undefined);
-      await AuthService.login(token, messagingToken);
+      await AuthService.login(token);
       await connect();
       await AuthService.getUser();
     } catch (error) {
@@ -108,8 +106,7 @@ const AuthProvider: React.FunctionComponent = (props) => {
       const result = await signInWithPopup(auth, facebookProvider);
       callback();
       const token = await result.user.getIdToken();
-      const messagingToken = await getToken(messaging).catch((_) => undefined);
-      await AuthService.login(token, messagingToken);
+      await AuthService.login(token);
       await connect();
       await AuthService.getUser();
     } catch (error) {
@@ -126,8 +123,7 @@ const AuthProvider: React.FunctionComponent = (props) => {
       );
       const user = userCredential.user;
       const token = await user.getIdToken();
-      const messagingToken = await getToken(messaging).catch((_) => undefined);
-      await AuthService.login(token, messagingToken);
+      await AuthService.login(token);
       await connect();
       await AuthService.getUser();
     } catch (error) {
