@@ -14,6 +14,7 @@ import {
   IonPage,
   IonRow,
   IonText,
+  IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { arrowBack, chevronForward } from "ionicons/icons";
@@ -43,7 +44,10 @@ const Invitations: React.FC = () => {
   return (
     <IonPage>
       <IonHeader className='ion-no-border'>
-        <IonToolbar color='main-beige' style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar
+          color='main-beige'
+          style={{ paddingTop: "0.5rem", paddingBottom: "0.25rem" }}
+        >
           <IonButtons slot='start'>
             <IonFabButton
               className='placeholder-fab'
@@ -62,6 +66,15 @@ const Invitations: React.FC = () => {
               <IonIcon icon={arrowBack} />
             </IonFabButton>
           </IonButtons>
+          <IonTitle
+            size='large'
+            color='white'
+            style={{
+              fontWeight: "800",
+            }}
+          >
+            Pending Invitations
+          </IonTitle>
         </IonToolbar>
         {!isDesktop && <div className='challenges-header-curve' />}
       </IonHeader>
@@ -69,14 +82,6 @@ const Invitations: React.FC = () => {
       <IonContent fullscreen>
         {pendingResponse.length > 0 ? (
           <>
-            <IonRow
-              className='ion-padding-horizontal'
-              style={{ marginTop: "2rem" }}
-            >
-              <IonText style={{ fontWeight: "bold", fontSize: "1.5rem" }}>
-                Pending Invitations
-              </IonText>
-            </IonRow>
             {pendingResponse?.map((c) => {
               const acceptedCount = c.participants.accepted.completed.concat(
                 c.participants.accepted.notCompleted
