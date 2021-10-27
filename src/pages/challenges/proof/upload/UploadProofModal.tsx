@@ -31,7 +31,6 @@ import { useSocket } from "../../../../contexts/SocketContext";
 interface UploadProofModalProps {
   challenge: ChallengeData;
   userData: UserMini | undefined;
-  uploadCallback: (data: ChallengeData) => void;
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
 }
@@ -54,10 +53,9 @@ export interface UploadProofModalState {
 const UploadProofModal: React.FC<UploadProofModalProps> = (
   props: UploadProofModalProps
 ) => {
-  const { challenge, userData, uploadCallback, showModal, setShowModal } =
-    props;
+  const { challenge, userData, showModal, setShowModal } = props;
   const { connect } = useSocket();
-  const { getChallenge, uploadProof, completeChallenge } = useChallenge();
+  const { uploadProof } = useChallenge();
 
   const [state, setState] = useReducer(
     (s: UploadProofModalState, a: Partial<UploadProofModalState>) => ({
@@ -147,22 +145,6 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
         alertHeader: "Error processing the image you uploaded",
         alertMessage: "Please refresh and try again later",
       });
-    }
-  };
-
-  const fetchData = async () => {
-    try {
-      const updatedChallenge = await getChallenge(challenge.challengeId);
-      if (updatedChallenge) {
-        const evidenceLink =
-          updatedChallenge.participants.accepted.completed.find(
-            (p) => p.userId === userData?.userId
-          )?.evidenceLink ?? "";
-        setState({ challenge: updatedChallenge, evidenceLink });
-        uploadCallback(updatedChallenge);
-      }
-    } catch (error) {
-      console.log(error);
     }
   };
 
