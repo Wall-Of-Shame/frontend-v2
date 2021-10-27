@@ -530,7 +530,7 @@ const WallOfShame: React.FC = () => {
                 shape='round'
                 mode='ios'
                 fill='solid'
-                color={type === "pending" ? "main-yellow" : "light"}
+                color={type === "Friends" ? "main-yellow" : "light"}
                 onClick={() => setType("Friends")}
               >
                 <IonText style={{ fontWeight: "bold" }}>Friends</IonText>
