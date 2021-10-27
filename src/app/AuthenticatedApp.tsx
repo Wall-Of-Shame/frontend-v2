@@ -120,10 +120,7 @@ const AuthenticatedApp: React.FC = () => {
                 className='ion-no-padding ion-no-margin'
                 size={width! >= 992 ? "4" : "12"}
               >
-                <IonTabBar
-                  className='desktop-navbar-tabs'
-                  mode={isPlatform("ios") ? "ios" : "md"}
-                >
+                <IonTabBar className='desktop-navbar-tabs ion-margin-top'>
                   <IonTabButton tab='challenges' href='/challenges'>
                     <IonIcon icon={challengeIcon} />
                   </IonTabButton>

@@ -199,7 +199,8 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
                       className='ion-no-padding'
                       color={"main-blue"}
                       fill={
-                        invitedUsers.findIndex((i) => i.userId === u.userId)
+                        invitedUsers.findIndex((i) => i.userId === u.userId) ===
+                        -1
                           ? "outline"
                           : "solid"
                       }
@@ -209,7 +210,9 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
                       }}
                     >
                       <IonText style={{ fontSize: "0.9rem" }}>
-                        {invitedUsers.findIndex((i) => i.userId === u.userId)
+                        {invitedUsers.findIndex(
+                          (i) => i.userId === u.userId
+                        ) === -1
                           ? "Add"
                           : "Added"}
                       </IonText>
