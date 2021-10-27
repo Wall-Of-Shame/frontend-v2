@@ -26,6 +26,7 @@ import imageCompression from "browser-image-compression";
 import isAfter from "date-fns/isAfter";
 import parseISO from "date-fns/parseISO";
 import Scrollbars from "react-custom-scrollbars";
+import { useSocket } from "../../../../contexts/SocketContext";
 
 interface UploadProofModalProps {
   challenge: ChallengeData;
@@ -55,6 +56,7 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
 ) => {
   const { challenge, userData, uploadCallback, showModal, setShowModal } =
     props;
+  const { connect } = useSocket();
   const { getChallenge, uploadProof, completeChallenge } = useChallenge();
 
   const [state, setState] = useReducer(
@@ -122,8 +124,10 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
       reader.onloadend = async () => {
         if (reader.result && typeof reader.result === "string") {
           await uploadProof(challenge.challengeId, reader.result);
-          await completeChallenge(challenge.challengeId);
-          await fetchData();
+          const socket = await connect();
+          socket.emit("challengeComplete", {
+            challengeId: challenge.challengeId,
+          });
           setState({
             isLoading: false,
             showAlert: true,

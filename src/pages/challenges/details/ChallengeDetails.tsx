@@ -53,6 +53,7 @@ import EditParticipantsModal from "../../../components/participants/EditParticip
 import DetailsTab from "./DetailsTab";
 import Chat from "./Chat";
 import PowerUpModal from "../powerUp";
+import { useSocket } from "../../../contexts/SocketContext";
 
 interface ChallengeDetailsProps {}
 
@@ -106,6 +107,7 @@ export interface EditChallengeState {
 const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   const location = useLocation();
   const history = useHistory();
+  const { connect } = useSocket();
   const { user } = useUser()!;
   const {
     notifyShouldRefreshChallenges,
@@ -272,11 +274,11 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     }
     setState({ isLoading: true });
     try {
-      await acceptChallenge(challenge.challengeId);
-      const updatedChallenge = await getChallenge(challenge.challengeId);
-      if (updatedChallenge) {
-        setChallenge(updatedChallenge);
-      }
+      const socket = await connect();
+      socket.emit("challengeAccept", {
+        challengeId: challenge.challengeId,
+      });
+      // await acceptChallenge(challenge.challengeId);
       setState({
         isLoading: false,
         showAlert: true,
@@ -400,9 +402,23 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     }
   }, 1000);
 
+  const connectToSocket = async () => {
+    if (!challenge) {
+      return;
+    }
+    const globalSocket = await connect();
+    globalSocket?.emit("roomJoin", {
+      challengeId: challenge.challengeId,
+    });
+    globalSocket?.on("roomUpdate", (data: ChallengeData) => {
+      setChallenge(data);
+    });
+  };
+
   useEffect(() => {
-    fetchData();
+    // fetchData();
     hideTabs();
+    connectToSocket();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [didFinish]);
 
@@ -550,7 +566,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     .concat(challenge.participants.accepted.protected);
 
   return (
-    <IonPage style={{ background: "#ffffff" }}>
+    <IonPage style={{ background: "#ffffff" }} key={challenge.challengeId}>
       <IonHeader className='ion-no-border'>
         <IonToolbar color='main-beige' style={{ paddingTop: "0.5rem" }}>
           <IonFabButton
@@ -567,6 +583,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
               if (state.editMode) {
                 setState({ editMode: false });
               } else {
+                window.history.replaceState({}, "");
                 history.goBack();
               }
             }}

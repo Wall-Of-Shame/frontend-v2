@@ -33,8 +33,8 @@ const ViewProofModal: React.FC<ViewProofModalProps> = (
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={false}
     >
-      <IonHeader translucent>
-        <IonToolbar>
+      <IonHeader className='ion-no-border'>
+        <IonToolbar color='main-beige'>
           <IonTitle>{`${userData?.name}'s proof`}</IonTitle>
           <IonButtons slot='start'>
             <IonButton
