@@ -294,26 +294,6 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
             />
           </IonRow>
         </IonGrid>
-        <IonFooter>
-          <IonToolbar>
-            <IonRow
-              className='ion-justify-content-around'
-              style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
-            >
-              <IonButton
-                shape='round'
-                color='accent-blue'
-                mode='ios'
-                disabled={!validateInputs()}
-                onClick={handleSend}
-              >
-                <IonText style={{ marginLeft: "1rem", marginRight: "1rem" }}>
-                  Send
-                </IonText>
-              </IonButton>
-            </IonRow>
-          </IonToolbar>
-        </IonFooter>
         <LoadingSpinner
           loading={state.isLoading}
           message={"Loading"}
@@ -334,6 +314,26 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
           okHandler={state.okHandler}
         />
       </IonContent>
+      <IonFooter>
+        <IonToolbar>
+          <IonRow
+            className='ion-justify-content-around'
+            style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
+          >
+            <IonButton
+              shape='round'
+              color='accent-blue'
+              mode='ios'
+              disabled={!validateInputs()}
+              onClick={handleSend}
+            >
+              <IonText style={{ marginLeft: "1rem", marginRight: "1rem" }}>
+                Send
+              </IonText>
+            </IonButton>
+          </IonRow>
+        </IonToolbar>
+      </IonFooter>
     </IonModal>
   );
 };
