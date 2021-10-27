@@ -125,7 +125,10 @@ const Friends: React.FC = () => {
   return (
     <IonPage style={{ background: "#ffffff" }}>
       <IonHeader className='ion-no-border'>
-        <IonToolbar color='main-blue' style={{ paddingTop: "0.5rem" }}>
+        <IonToolbar
+          color='main-blue'
+          style={{ paddingTop: "0.5rem", paddingBottom: "0.25rem" }}
+        >
           <IonFabButton
             className='placeholder-fab'
             color='main-blue'
