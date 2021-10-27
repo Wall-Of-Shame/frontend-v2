@@ -237,7 +237,7 @@ const PastChallenges: React.FC = () => {
           color='main-blue'
           mode='md'
           className='store-header'
-          style={{ paddingTop: "0.5rem" }}
+          style={{ paddingTop: "0.5rem", paddingBottom: "0.5rem" }}
         >
           <IonFabButton
             className='placeholder-fab'
@@ -266,12 +266,15 @@ const PastChallenges: React.FC = () => {
             Past challenges
           </IonTitle>
         </IonToolbar>
+        {!isDesktop && <div className='profile-header-curve' />}
+      </IonHeader>
+
+      <IonContent fullscreen scrollY={false}>
         <IonRow
           style={{
+            marginTop: "1rem",
             paddingLeft: "0.25rem",
             paddingRight: "0.25rem",
-            paddingBottom: "0.5rem",
-            background: "#7dd7e1",
           }}
         >
           <IonSearchbar
@@ -289,10 +292,6 @@ const PastChallenges: React.FC = () => {
             showClearButton='always'
           ></IonSearchbar>
         </IonRow>
-        {!isDesktop && <div className='profile-header-curve' />}
-      </IonHeader>
-
-      <IonContent fullscreen scrollY={false}>
         {renderChallengeHistory()}
         <Alert
           showAlert={state.showAlert}
