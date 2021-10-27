@@ -69,16 +69,16 @@ const Search: React.FC = () => {
             ).length;
             return (
               <IonCard
-                mode="ios"
+                mode='ios'
                 button
                 key={c.challengeId}
                 onClick={() => {
                   history.push(`challenges/${c.challengeId}/details`, c);
                 }}
               >
-                <IonGrid className="ion-no-padding">
-                  <IonRow className="ion-align-items-center">
-                    <IonCol size="12">
+                <IonGrid className='ion-no-padding'>
+                  <IonRow className='ion-align-items-center'>
+                    <IonCol size='12'>
                       <IonCardHeader style={{ paddingBottom: "0.75rem" }}>
                         <IonCardTitle style={{ fontSize: "1.2rem" }}>
                           {c.title}
@@ -106,10 +106,10 @@ const Search: React.FC = () => {
                         </IonRow>
                         <IonRow
                           style={{ marginTop: "0.5rem" }}
-                          className="ion-align-items-center"
+                          className='ion-align-items-center'
                         >
                           <IonAvatar
-                            className="avatar"
+                            className='avatar'
                             key={c.owner.userId}
                             style={{ marginRight: "0.5rem" }}
                           >
@@ -141,14 +141,17 @@ const Search: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader className="ion-no-border">
-        <IonToolbar color="main-blue" style={{ paddingTop: "0.5rem" }}>
-          <IonButtons slot="start">
+      <IonHeader className='ion-no-border'>
+        <IonToolbar
+          color='main-blue'
+          style={{ paddingTop: "0.5rem", paddingBottom: "0.25rem" }}
+        >
+          <IonButtons slot='start'>
             <IonFabButton
-              className="placeholder-fab"
-              color="clear"
-              mode="ios"
-              slot="start"
+              className='placeholder-fab'
+              color='clear'
+              mode='ios'
+              slot='start'
               style={{
                 margin: "0.5rem",
                 width: "2.75rem",
@@ -162,32 +165,32 @@ const Search: React.FC = () => {
             </IonFabButton>
           </IonButtons>
           <IonSearchbar
-            mode="ios"
-            key="modal-search"
+            mode='ios'
+            key='modal-search'
             value={searchText}
             onIonChange={(e) => {
               setSearchText(e.detail.value ?? "");
               debouncedSearch(e.detail.value ?? "");
             }}
             debounce={0}
-            placeholder="Search for a challenge"
-            showCancelButton="never"
-            className="ion-margin-top explore-search users-search"
-            showClearButton="always"
+            placeholder='Search for a challenge'
+            showCancelButton='never'
+            className='ion-margin-top explore-search users-search'
+            showClearButton='always'
           ></IonSearchbar>
         </IonToolbar>
-        {!isDesktop && <div className="explore-header-curve" />}
+        {!isDesktop && <div className='explore-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen>
         <IonGrid style={{ marginTop: "2rem" }}>
-          <IonRow className="ion-padding-horizontal ion-padding-top ion-align-items-center">
+          <IonRow className='ion-padding-horizontal ion-padding-top ion-align-items-center'>
             <IonText
               style={{ fontSize: "16px", fontWeight: "bold" }}
-              color="primary"
+              color='primary'
             >
               {`${challenges.length} result${
-                challenges.length > 1 || challenges.length == 0 ? "s" : ""
+                challenges.length > 1 || challenges.length === 0 ? "s" : ""
               } found`}
             </IonText>
           </IonRow>
