@@ -33,7 +33,7 @@ import { RootState } from "../../reducers/RootReducer";
 import { ChallengeDux } from "../../reducers/ChallengeDux";
 import LoadingSpinner from "../../components/loadingSpinner";
 import Alert from "../../components/alert";
-import { format } from "date-fns";
+import { addHours, format } from "date-fns";
 import parseISO from "date-fns/parseISO";
 import AvatarImg from "../../components/avatar";
 import { useSocket } from "../../contexts/SocketContext";
@@ -71,11 +71,12 @@ const Challenges: React.FC = () => {
   const [ongoing, setOngoing] = useState<ChallengeData[]>(
     useSelector(selectChallenges).ongoing
   );
-
+  const [voting, setVoting] = useState<ChallengeData[]>(
+    useSelector(selectChallenges).votingPeriod
+  );
   const [pendingResponse, setPendingResponse] = useState<ChallengeData[]>(
     useSelector(selectChallenges).pendingResponse
   );
-
   const [pendingStart, setPendingStart] = useState<ChallengeData[]>(
     useSelector(selectChallenges).pendingStart
   );
@@ -132,6 +133,7 @@ const Challenges: React.FC = () => {
       setOngoing(allChallenges.ongoing);
       setPendingStart(allChallenges.pendingStart);
       setPendingResponse(allChallenges.pendingResponse);
+      setVoting(allChallenges.votingPeriod);
       notifyShouldRefreshChallenges(false);
     } catch (error) {
       console.log(error);
@@ -140,6 +142,89 @@ const Challenges: React.FC = () => {
 
   const renderChallenges = () => {
     switch (tab) {
+      case "voting":
+        if (voting && voting.length > 0) {
+          return (
+            <>
+              {voting?.map((c) => {
+                const acceptedCount = c.participants.accepted.completed.concat(
+                  c.participants.accepted.notCompleted
+                ).length;
+                return (
+                  <IonCard
+                    mode='ios'
+                    button
+                    key={c.challengeId}
+                    onClick={() => {
+                      history.push(`challenges/${c.challengeId}/details`, c);
+                    }}
+                  >
+                    <IonGrid className='ion-no-padding'>
+                      <IonRow className='ion-align-items-center'>
+                        <IonCol size='12'>
+                          <IonCardHeader style={{ paddingBottom: "0.75rem" }}>
+                            <IonCardTitle style={{ fontSize: "1.2rem" }}>
+                              {c.title}
+                            </IonCardTitle>
+                          </IonCardHeader>
+                          <IonCardContent>
+                            <IonRow>
+                              <IonText
+                                style={{
+                                  fontSize: "0.8rem",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {`Vote out cheaters before: ${format(
+                                  addHours(parseISO(c.endAt), 1),
+                                  "dd MMM yyyy, HH:mm"
+                                )}`}
+                              </IonText>
+                            </IonRow>
+                            <IonRow style={{ marginTop: "0.5rem" }}>
+                              <IonText style={{ fontSize: "0.8rem" }}>
+                                {acceptedCount} participant
+                                {acceptedCount === 1 ? "" : "s"}
+                              </IonText>
+                            </IonRow>
+                            <IonRow
+                              style={{ marginTop: "0.5rem" }}
+                              className='ion-align-items-center'
+                            >
+                              <IonAvatar
+                                className='avatar'
+                                key={c.owner.userId}
+                                style={{ marginRight: "0.5rem" }}
+                              >
+                                <AvatarImg avatar={c.owner.avatar as Avatar} />
+                              </IonAvatar>
+                              <IonText
+                                style={{
+                                  fontSize: "0.8rem",
+                                }}
+                              >
+                                Created by {c.owner.name ?? "Anonymous"}
+                              </IonText>
+                            </IonRow>
+                          </IonCardContent>
+                        </IonCol>
+                      </IonRow>
+                    </IonGrid>
+                  </IonCard>
+                );
+              })}
+            </>
+          );
+        } else {
+          return (
+            <IonRow
+              className='ion-padding ion-justify-content-center'
+              style={{ marginTop: "1.5rem" }}
+            >
+              {"There's nothing here >_<"}
+            </IonRow>
+          );
+        }
       case "ongoing":
         if (ongoing && ongoing.length > 0) {
           return (
@@ -224,173 +309,77 @@ const Challenges: React.FC = () => {
           );
         }
       case "pending":
-        if (
-          (pendingResponse && pendingResponse.length > 0) ||
-          (pendingStart && pendingStart.length > 0)
-        ) {
+        if (pendingStart && pendingStart.length > 0) {
           return (
             <>
-              {pendingResponse.length > 0 && (
-                <>
-                  <IonRow className='ion-padding-horizontal ion-margin-top'>
-                    <IonText style={{ color: "gray" }}>
-                      Pending Invitations
-                    </IonText>
-                  </IonRow>
-                  {pendingResponse?.map((c) => {
-                    const acceptedCount =
-                      c.participants.accepted.completed.concat(
-                        c.participants.accepted.notCompleted
-                      ).length;
-                    return (
-                      <IonCard
-                        mode='ios'
-                        button
-                        key={c.challengeId}
-                        onClick={() => {
-                          history.push(
-                            `challenges/${c.challengeId}/details`,
-                            c
-                          );
-                        }}
-                      >
-                        <IonGrid className='ion-no-padding'>
-                          <IonRow className='ion-align-items-center'>
-                            <IonCol size='12'>
-                              <IonCardHeader
-                                style={{ paddingBottom: "0.75rem" }}
+              {pendingStart?.map((c) => {
+                const acceptedCount = c.participants.accepted.completed.concat(
+                  c.participants.accepted.notCompleted
+                ).length;
+                return (
+                  <IonCard
+                    mode='ios'
+                    button
+                    key={c.challengeId}
+                    onClick={() => {
+                      history.push(`challenges/${c.challengeId}/details`, c);
+                    }}
+                  >
+                    <IonGrid className='ion-no-padding'>
+                      <IonRow className='ion-align-items-center'>
+                        <IonCol size='12'>
+                          <IonCardHeader style={{ paddingBottom: "0.75rem" }}>
+                            <IonCardTitle style={{ fontSize: "1.2rem" }}>
+                              {c.title}
+                            </IonCardTitle>
+                          </IonCardHeader>
+                          <IonCardContent>
+                            <IonRow>
+                              <IonText
+                                style={{
+                                  fontSize: "0.8rem",
+                                  fontWeight: "bold",
+                                }}
                               >
-                                <IonCardTitle style={{ fontSize: "1.2rem" }}>
-                                  {c.title}
-                                </IonCardTitle>
-                              </IonCardHeader>
-                              <IonCardContent>
-                                <IonRow>
-                                  <IonText
-                                    style={{
-                                      fontSize: "0.8rem",
-                                      fontWeight: "bold",
-                                    }}
-                                  >
-                                    Waiting for your response
-                                  </IonText>
-                                </IonRow>
-                                <IonRow style={{ marginTop: "0.5rem" }}>
-                                  <IonText style={{ fontSize: "0.8rem" }}>
-                                    {acceptedCount} participant
-                                    {acceptedCount === 1 ? "" : "s"}
-                                  </IonText>
-                                </IonRow>
-                                <IonRow
-                                  style={{ marginTop: "0.5rem" }}
-                                  className='ion-align-items-center'
-                                >
-                                  <IonAvatar
-                                    className='avatar'
-                                    key={c.owner.userId}
-                                    style={{ marginRight: "0.5rem" }}
-                                  >
-                                    <AvatarImg
-                                      avatar={c.owner.avatar as Avatar}
-                                    />
-                                  </IonAvatar>
-                                  <IonText
-                                    style={{
-                                      fontSize: "0.8rem",
-                                    }}
-                                  >
-                                    Created by {c.owner.name ?? "Anonymous"}
-                                  </IonText>
-                                </IonRow>
-                              </IonCardContent>
-                            </IonCol>
-                          </IonRow>
-                        </IonGrid>
-                      </IonCard>
-                    );
-                  })}
-                </>
-              )}
-              {pendingStart.length > 0 && (
-                <>
-                  {pendingStart?.map((c) => {
-                    const acceptedCount =
-                      c.participants.accepted.completed.concat(
-                        c.participants.accepted.notCompleted
-                      ).length;
-                    return (
-                      <IonCard
-                        mode='ios'
-                        button
-                        key={c.challengeId}
-                        onClick={() => {
-                          history.push(
-                            `challenges/${c.challengeId}/details`,
-                            c
-                          );
-                        }}
-                      >
-                        <IonGrid className='ion-no-padding'>
-                          <IonRow className='ion-align-items-center'>
-                            <IonCol size='12'>
-                              <IonCardHeader
-                                style={{ paddingBottom: "0.75rem" }}
+                                {`Starts on ${format(
+                                  parseISO(c.startAt!),
+                                  "dd MMM yyyy, HH:mm"
+                                )}`}
+                              </IonText>
+                            </IonRow>
+                            <IonRow style={{ marginTop: "0.5rem" }}>
+                              <IonText style={{ fontSize: "0.8rem" }}>
+                                {acceptedCount} participant
+                                {acceptedCount === 1 ? " has " : "s have "}
+                                accepted
+                              </IonText>
+                            </IonRow>
+                            <IonRow
+                              style={{ marginTop: "0.5rem" }}
+                              className='ion-align-items-center'
+                            >
+                              <IonAvatar
+                                className='avatar'
+                                key={c.owner.userId}
+                                style={{ marginRight: "0.5rem" }}
                               >
-                                <IonCardTitle style={{ fontSize: "1.2rem" }}>
-                                  {c.title}
-                                </IonCardTitle>
-                              </IonCardHeader>
-                              <IonCardContent>
-                                <IonRow>
-                                  <IonText
-                                    style={{
-                                      fontSize: "0.8rem",
-                                      fontWeight: "bold",
-                                    }}
-                                  >
-                                    {`Starts on ${format(
-                                      parseISO(c.startAt!),
-                                      "dd MMM yyyy, HH:mm"
-                                    )}`}
-                                  </IonText>
-                                </IonRow>
-                                <IonRow style={{ marginTop: "0.5rem" }}>
-                                  <IonText style={{ fontSize: "0.8rem" }}>
-                                    {acceptedCount} participant
-                                    {acceptedCount === 1 ? " has " : "s have "}
-                                    accepted
-                                  </IonText>
-                                </IonRow>
-                                <IonRow
-                                  style={{ marginTop: "0.5rem" }}
-                                  className='ion-align-items-center'
-                                >
-                                  <IonAvatar
-                                    className='avatar'
-                                    key={c.owner.userId}
-                                    style={{ marginRight: "0.5rem" }}
-                                  >
-                                    <AvatarImg
-                                      avatar={c.owner.avatar as Avatar}
-                                    />
-                                  </IonAvatar>
-                                  <IonText
-                                    style={{
-                                      fontSize: "0.8rem",
-                                    }}
-                                  >
-                                    Created by {c.owner.name ?? "Anonymous"}
-                                  </IonText>
-                                </IonRow>
-                              </IonCardContent>
-                            </IonCol>
-                          </IonRow>
-                        </IonGrid>
-                      </IonCard>
-                    );
-                  })}
-                </>
-              )}
+                                <AvatarImg avatar={c.owner.avatar as Avatar} />
+                              </IonAvatar>
+                              <IonText
+                                style={{
+                                  fontSize: "0.8rem",
+                                }}
+                              >
+                                Created by {c.owner.name ?? "Anonymous"}
+                              </IonText>
+                            </IonRow>
+                          </IonCardContent>
+                        </IonCol>
+                      </IonRow>
+                    </IonGrid>
+                  </IonCard>
+                );
+              })}
             </>
           );
         } else {
@@ -497,14 +486,31 @@ const Challenges: React.FC = () => {
         </IonRow>
         <IonRow
           className='ion-justify-content-start ion-padding-horizontal ion-padding-top'
-          style={{ marginBottom: "1.5rem" }}
+          style={{ marginBottom: "1rem" }}
         >
+          <IonButton
+            shape='round'
+            mode='ios'
+            fill='solid'
+            color={tab === "voting" ? "main-beige" : "light"}
+            onClick={() => setTab("voting")}
+            style={{
+              width: "6.5rem",
+              height: "2.5rem",
+            }}
+          >
+            <IonText style={{ fontWeight: "bold" }}>Voting</IonText>
+          </IonButton>
           <IonButton
             shape='round'
             mode='ios'
             fill='solid'
             color={tab === "ongoing" ? "main-beige" : "light"}
             onClick={() => setTab("ongoing")}
+            style={{
+              width: "6.5rem",
+              height: "2.5rem",
+            }}
           >
             <IonText style={{ fontWeight: "bold" }}>Ongoing</IonText>
           </IonButton>
@@ -514,6 +520,10 @@ const Challenges: React.FC = () => {
             fill='solid'
             color={tab === "pending" ? "main-beige" : "light"}
             onClick={() => setTab("pending")}
+            style={{
+              width: "7.5rem",
+              height: "2.5rem",
+            }}
           >
             <IonText style={{ fontWeight: "bold" }}>Upcoming</IonText>
           </IonButton>
