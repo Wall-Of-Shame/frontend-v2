@@ -7,6 +7,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { isAfter, parseISO } from "date-fns";
+import { addHours } from "date-fns/esm";
 import React from "react";
 import { useUser } from "../../../contexts/UserContext";
 import { ChallengeData } from "../../../interfaces/models/Challenges";
@@ -49,7 +50,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
       ? challenge.participants.accepted.completed[0].userId === user?.userId
       : false;
 
-  if (challenge.hasReleasedResult) {
+  if (isAfter(Date.now(), addHours(parseISO(challenge.endAt!), 1))) {
     if (noCompleted || oneManChallenge) {
       return <></>;
     }

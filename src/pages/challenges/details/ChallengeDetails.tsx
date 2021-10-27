@@ -868,7 +868,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
           showModal={state.showVoteModal}
           setShowModal={(showModal) => setState({ showVoteModal: showModal })}
           challengeId={challenge.challengeId}
-          hasReleasedResults={challenge.hasReleasedResult}
+          endAt={challenge.endAt!}
           participantsCompleted={challenge.participants.accepted.completed}
           participantsCount={
             challenge.participants.accepted.completed.length +
