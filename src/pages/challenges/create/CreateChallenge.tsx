@@ -136,6 +136,8 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
         confirmHandler: () => {},
         okHandler: () => {
           notifyShouldRefreshChallenges(true);
+          setHasSetInviteType(false);
+          setShowModal(false);
           setState({
             title: "",
             description: "",
@@ -143,9 +145,8 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
             startAt: formatISO(addHours(Date.now(), 1)),
             endAt: formatISO(addHours(Date.now(), 2)),
             inviteType: "PRIVATE",
+            invitedUsers: [],
           });
-          setHasSetInviteType(false);
-          setShowModal(false);
           history.push("/challenges");
         },
       });
