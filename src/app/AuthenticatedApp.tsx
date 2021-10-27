@@ -117,10 +117,13 @@ const AuthenticatedApp: React.FC = () => {
                 </IonCol>
               )}
               <IonCol
-                className='ion-no-padding'
+                className='ion-no-padding ion-no-margin'
                 size={width! >= 992 ? "4" : "12"}
               >
-                <IonTabBar className='desktop-navbar-tabs'>
+                <IonTabBar
+                  className='desktop-navbar-tabs'
+                  mode={isPlatform("ios") ? "ios" : "md"}
+                >
                   <IonTabButton tab='challenges' href='/challenges'>
                     <IonIcon icon={challengeIcon} />
                   </IonTabButton>
@@ -160,7 +163,9 @@ const AuthenticatedApp: React.FC = () => {
                       <IonIcon
                         icon={hammerOutline}
                         color='dark'
-                        style={{ fontSize: "1.5rem" }}
+                        style={{
+                          fontSize: isPlatform("ios") ? "1.75rem" : "1.5rem",
+                        }}
                       />
                     </IonButton>
                     <IonButton
@@ -171,7 +176,9 @@ const AuthenticatedApp: React.FC = () => {
                       <IonIcon
                         icon={bugOutline}
                         color='dark'
-                        style={{ fontSize: "1.5rem" }}
+                        style={{
+                          fontSize: isPlatform("ios") ? "1.75rem" : "1.5rem",
+                        }}
                       />
                     </IonButton>
                   </IonRow>
@@ -198,7 +205,11 @@ const AuthenticatedApp: React.FC = () => {
                 : ""
             }`}
             style={{
-              marginTop: isDesktop ? "3.5rem" : 0,
+              marginTop: isPlatform("ipad")
+                ? "3.95rem"
+                : isDesktop
+                ? "3.5rem"
+                : 0,
             }}
           >
             <Route path='/challenges' render={() => <Tabs />} />
