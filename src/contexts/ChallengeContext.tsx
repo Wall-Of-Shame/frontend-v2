@@ -16,6 +16,7 @@ import {
   setVotes,
   setFeatured,
   setOthers,
+  setVotingPeriod,
 } from "../reducers/ChallengeDux";
 import ChallengeService from "../services/ChallengeService";
 import { adaptPowerUpType } from "../utils/StoreUtils";
@@ -47,6 +48,12 @@ const ChallengeProvider: React.FC = (props) => {
       dispatch(
         setPendingStart({
           challenges: response.pendingStart,
+          lastRetrieved: Date.now(),
+        })
+      );
+      dispatch(
+        setVotingPeriod({
+          challenges: response.votingPeriod,
           lastRetrieved: Date.now(),
         })
       );

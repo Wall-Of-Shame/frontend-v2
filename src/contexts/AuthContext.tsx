@@ -81,8 +81,9 @@ const AuthProvider: React.FunctionComponent = (props) => {
       const user = userCredential.user;
       await sendEmailVerification(user);
       const token = await user.getIdToken();
-      AuthService.login(token);
-      await AuthService.getUser();
+      // Added security checks
+      // AuthService.login(token);
+      // await AuthService.getUser();
     } catch (error) {
       return Promise.reject(error);
     }

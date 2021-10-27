@@ -49,6 +49,7 @@ export interface ChallengeList {
   ongoing: ChallengeData[];
   pendingResponse: ChallengeData[];
   pendingStart: ChallengeData[];
+  votingPeriod: ChallengeData[];
   history: ChallengeData[];
   featured: ChallengeData[];
   others: ChallengeData[];
