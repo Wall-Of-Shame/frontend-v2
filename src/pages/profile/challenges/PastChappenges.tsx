@@ -207,7 +207,7 @@ const PastChallenges: React.FC = () => {
     if (filteredChallenges && filteredChallenges.length > 0) {
       return (
         <VirtualList
-          height={height! - 140}
+          height={isDesktop ? height! - 184 : height! - 140}
           width={width! > 576 ? 576 : width!}
           itemCount={filteredChallenges.length + 1}
           itemSize={(index) => {
@@ -216,7 +216,7 @@ const PastChallenges: React.FC = () => {
             }
             return 156;
           }}
-          style={{ marginTop: "0.5rem" }}
+          style={{ zIndex: 1 }}
         >
           {Row}
         </VirtualList>
