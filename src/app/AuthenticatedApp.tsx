@@ -54,6 +54,7 @@ import { useUser } from "../contexts/UserContext";
 import { useEffect, useState } from "react";
 import { UserList } from "../interfaces/models/Users";
 import FeedbackModal from "../components/feedback";
+import Alert from "../components/alert";
 
 const AuthenticatedApp: React.FC = () => {
   const { width, isDesktop } = useWindowSize();
@@ -62,6 +63,7 @@ const AuthenticatedApp: React.FC = () => {
   const [isDesktopBefore, setIsDesktopBefore] = useState(isDesktop);
   const [requests, setRequests] = useState<UserList[]>([]);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [showTutorialAlert, setShowTutorialAlert] = useState(false);
 
   useEffect(() => {
     if (isDesktop !== isDesktopBefore && !isPlatform("desktop")) {
@@ -96,7 +98,7 @@ const AuthenticatedApp: React.FC = () => {
           <IonToolbar className='desktop-navbar'>
             <IonRow className='ion-align-items-center'>
               {width! >= 992 && (
-                <IonCol size='4'>
+                <IonCol size='4' className='ion-no-padding ion-no-margin'>
                   <IonRow className='ion-align-items-center'>
                     <IonAvatar
                       style={{
@@ -120,7 +122,7 @@ const AuthenticatedApp: React.FC = () => {
                 className='ion-no-padding ion-no-margin'
                 size={width! >= 992 ? "4" : "12"}
               >
-                <IonTabBar className='desktop-navbar-tabs ion-margin-top'>
+                <IonTabBar className='desktop-navbar-tabs'>
                   <IonTabButton tab='challenges' href='/challenges'>
                     <IonIcon icon={challengeIcon} />
                   </IonTabButton>
@@ -154,7 +156,7 @@ const AuthenticatedApp: React.FC = () => {
                 </IonTabBar>
               </IonCol>
               {width! >= 992 && (
-                <IonCol size='4'>
+                <IonCol size='4' className='ion-no-padding ion-no-margin'>
                   <IonRow className='ion-align-items-center ion-justify-content-end'>
                     <IonButton mode='ios' color='clear'>
                       <IonIcon
@@ -202,11 +204,7 @@ const AuthenticatedApp: React.FC = () => {
                 : ""
             }`}
             style={{
-              marginTop: isPlatform("ipad")
-                ? "3.95rem"
-                : isDesktop
-                ? "3.5rem"
-                : 0,
+              marginTop: isPlatform("ipad") || isDesktop ? "3.5rem" : 0,
             }}
           >
             <Route path='/challenges' render={() => <Tabs />} />
@@ -220,6 +218,14 @@ const AuthenticatedApp: React.FC = () => {
       <FeedbackModal
         showModal={showFeedbackModal}
         setShowModal={setShowFeedbackModal}
+      />
+      <Alert
+        showAlert={showTutorialAlert}
+        closeAlert={() => setShowTutorialAlert(false)}
+        alertHeader='Coming soon'
+        alertMessage='Thank you for using Wall of Shame :)'
+        hasConfirm={false}
+        confirmHandler={() => {}}
       />
     </IonApp>
   );
