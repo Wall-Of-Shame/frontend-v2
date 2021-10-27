@@ -923,8 +923,12 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
         <Chat
           chatId={challenge.challengeId}
           participants={allParticipants}
+          newMessageCallback={(showAlert) => setShowChatAlert(showAlert)}
           showModal={state.showChatModal}
-          setShowModal={(showModal) => setState({ showChatModal: showModal })}
+          setShowModal={(showModal) => {
+            setShowChatAlert(false);
+            setState({ showChatModal: showModal });
+          }}
         />
         <OfflineToast
           message='Sorry, we need the internets to do that :('
