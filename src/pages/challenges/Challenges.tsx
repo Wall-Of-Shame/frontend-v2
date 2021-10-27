@@ -483,7 +483,7 @@ const Challenges: React.FC = () => {
         </IonRow>
         <IonRow
           className='ion-justify-content-center'
-          style={{ marginBottom: "1.5rem" }}
+          style={{ marginTop: "0.5rem", marginBottom: "1.5rem" }}
         >
           <IonButton
             shape='round'
