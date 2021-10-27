@@ -31,7 +31,6 @@ const ChallengeProvider: React.FC = (props) => {
 
   const getAllChallenges = async (): Promise<ChallengeList> => {
     try {
-      console.log("Called");
       const response = await ChallengeService.getChallenges();
       dispatch(
         setOngoing({
@@ -190,7 +189,6 @@ const ChallengeProvider: React.FC = (props) => {
 
   const getExplore = async (): Promise<ChallengeList> => {
     try {
-      // console.log("Called explore");
       const response = await ChallengeService.getExplore();
       dispatch(
         setFeatured({

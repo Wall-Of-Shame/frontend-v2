@@ -119,15 +119,6 @@ const WallOfShame: React.FC = () => {
       setShames(data);
     });
     globalSocket?.on("shameListUpdate", (data: Shame[]) => {
-      console.log("Old");
-      console.log(shames);
-      console.log("Data");
-      console.log(data);
-      const oldShames = shames.slice(0);
-      const newShames = oldShames.concat(data);
-      console.log("New");
-      console.log(newShames);
-      // setShames(newShames);
       setShames((prevState) => [...data, ...prevState]);
     });
   };
