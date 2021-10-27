@@ -27,12 +27,13 @@ import { useChallenge } from "../../../contexts/ChallengeContext";
 import { VoteList } from "../../../interfaces/models/Votes";
 import AvatarImg from "../../../components/avatar";
 import ViewProofModal from "../proof/view";
+import { addHours, isAfter, parseISO } from "date-fns";
 
 interface VoteModalProps {
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
   challengeId: string;
-  hasReleasedResults: boolean;
+  endAt: string;
   participantsCount: number;
   participantsCompleted: UserMini[];
 }
@@ -55,14 +56,10 @@ interface VoteModalState {
 
 const VoteModal: React.FC<VoteModalProps> = (props: VoteModalProps) => {
   const { user } = useUser();
-  const {
-    showModal,
-    setShowModal,
-    challengeId,
-    hasReleasedResults,
-    participantsCompleted,
-  } = props;
+  const { showModal, setShowModal, challengeId, endAt, participantsCompleted } =
+    props;
   const { getVotes, voteForParticipant } = useChallenge();
+  const hasVotingEnded = isAfter(Date.now(), addHours(parseISO(endAt), 1));
 
   const [votes, setVotes] = useState<VoteList>([]);
   const [state, setState] = useReducer(
@@ -188,13 +185,13 @@ const VoteModal: React.FC<VoteModalProps> = (props: VoteModalProps) => {
           </IonText>
         </IonRow>
         <IonRow>
-          {!hasReleasedResults &&
+          {!hasVotingEnded &&
             u.evidenceLink !== undefined &&
             u.evidenceLink !== "" && (
               <IonButton
                 mode='ios'
                 shape='round'
-                color='tertiary'
+                color='main-blue'
                 fill='solid'
                 style={{ height: "2.5rem", width: "4.5rem" }}
                 onClick={() => {
@@ -211,11 +208,11 @@ const VoteModal: React.FC<VoteModalProps> = (props: VoteModalProps) => {
                 </IonText>
               </IonButton>
             )}
-          {!hasReleasedResults && (
+          {!hasVotingEnded && (
             <IonButton
               mode='ios'
               shape='round'
-              color='secondary'
+              color='main-yellow'
               fill='solid'
               style={{ height: "2.5rem", width: "4.5rem" }}
               onClick={() => handleVote(u.userId)}
@@ -287,7 +284,7 @@ const VoteModal: React.FC<VoteModalProps> = (props: VoteModalProps) => {
           <IonGrid>
             <IonRow className='ion-padding'>
               <IonText style={{ fontWeight: "bold", fontSize: "1.5rem" }}>
-                {hasReleasedResults
+                {isAfter(Date.now(), addHours(parseISO(endAt), 1))
                   ? "Here are the voting results"
                   : "Vote to banish a cheater to the wall"}
               </IonText>
