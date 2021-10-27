@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import lodash from "lodash";
 import { database } from "../../../firebase";
 import { ref, query, orderByKey, onValue, set } from "firebase/database";
@@ -37,12 +37,14 @@ import { close, paperPlane } from "ionicons/icons";
 interface ChatProps {
   chatId: string;
   participants: UserMini[];
+  newMessageCallback: (showAlert: boolean) => void;
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
 }
 
 const Chat: React.FC<ChatProps> = (props: ChatProps) => {
-  const { chatId, participants, showModal, setShowModal } = props;
+  const { chatId, participants, newMessageCallback, showModal, setShowModal } =
+    props;
   const { user } = useUser();
   const { width } = useWindowSize();
   const chatRef = query(ref(database, `chat/${chatId}`), orderByKey());
@@ -78,9 +80,12 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
     if (object) {
       const parsedValues = Object.values(object) as Message[];
       if (parsedValues) {
+        if (hasSynced && parsedValues.length > messages.length) {
+          newMessageCallback(true);
+        }
         debouncedUpdate(parsedValues);
-        setHasSynced(true);
         setLastUpdated(newTime);
+        setHasSynced(true);
       }
     }
   });
@@ -123,7 +128,10 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
       cssClass='use-powerup-modal'
       isOpen={showModal}
       mode='ios'
-      onDidDismiss={() => setShowModal(false)}
+      onDidDismiss={() => {
+        newMessageCallback(false);
+        setShowModal(false);
+      }}
       backdropDismiss={true}
     >
       <IonHeader className='ion-no-border'>
@@ -133,7 +141,10 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
               style={{
                 margin: "0.5rem",
               }}
-              onClick={() => setShowModal(false)}
+              onClick={() => {
+                newMessageCallback(false);
+                setShowModal(false);
+              }}
             >
               <IonIcon
                 icon={close}
@@ -150,6 +161,9 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
       <Virtuoso
         ref={virtuoso}
         totalCount={messages.length}
+        initialTopMostItemIndex={
+          messages.length - 1 >= 0 ? messages.length - 1 : 0
+        }
         itemContent={(index) => {
           const m = messages[index];
           const u = participants.find((p) => p.userId === m.userId);
@@ -241,7 +255,7 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
                             color: "#787878",
                             marginTop: "0.25rem",
                             marginBottom:
-                              index === messages.length - 1 ? "0.5rem" : 0,
+                              index === messages.length - 1 ? "1rem" : 0,
                           }}
                         >
                           {isSameDay(messageTime, new Date())
@@ -254,7 +268,11 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
                   {isNextSenderDiff ? (
                     <IonRow
                       className='ion-justify-content-center ion-align-items-end'
-                      style={{ marginLeft: "1rem", marginBottom: "1.5rem" }}
+                      style={{
+                        marginLeft: "1rem",
+                        marginBottom:
+                          index === messages.length - 1 ? "2.5rem" : "1.5rem",
+                      }}
                     >
                       <IonAvatar
                         style={{
@@ -282,7 +300,11 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
                   {isNextSenderDiff ? (
                     <IonRow
                       className='ion-justify-content-center ion-align-items-end'
-                      style={{ marginRight: "1rem", marginBottom: "1.5rem" }}
+                      style={{
+                        marginRight: "1rem",
+                        marginBottom:
+                          index === messages.length - 1 ? "2.5rem" : "1.5rem",
+                      }}
                     >
                       <IonAvatar
                         style={{
@@ -357,6 +379,8 @@ const Chat: React.FC<ChatProps> = (props: ChatProps) => {
                             fontSize: "0.7rem",
                             color: "#787878",
                             marginTop: "0.25rem",
+                            marginBottom:
+                              index === messages.length - 1 ? "1rem" : 0,
                           }}
                         >
                           {isSameDay(messageTime, new Date())
