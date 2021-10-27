@@ -431,6 +431,7 @@ const WallOfShame: React.FC = () => {
               columnWidth={width! <= 576 ? "50%" : "33.3%"}
               monitorImagesLoaded={true}
               appearDelay={0}
+              horizontal={false}
               gridRef={(r) => (grid.current = r)}
             >
               {shames.map((s, index) => {
@@ -467,10 +468,8 @@ const WallOfShame: React.FC = () => {
                               <IonText
                                 style={{
                                   fontWeight: "bold",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
                                   whiteSpace: "break-spaces",
-                                  wordBreak: "break-all",
+                                  wordBreak: "break-word",
                                 }}
                               >
                                 {s.name}{" "}
@@ -482,10 +481,8 @@ const WallOfShame: React.FC = () => {
                             <h4
                               style={{
                                 fontWeight: "bold",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
                                 whiteSpace: "break-spaces",
-                                wordBreak: "break-all",
+                                wordBreak: "break-word",
                               }}
                             >
                               {s.title}
