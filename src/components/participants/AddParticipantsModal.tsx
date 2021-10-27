@@ -79,8 +79,10 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
                 margin: "0.5rem",
               }}
               onClick={() => {
-                setInvitedUsers([]);
                 setShowModal(false);
+                setTimeout(() => {
+                  setInvitedUsers([]);
+                }, 200);
               }}
             >
               <IonIcon
@@ -99,7 +101,6 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
                 margin: "0.5rem",
               }}
               onClick={() => {
-                setInvitedUsers([]);
                 completionCallback(invitedUsers);
               }}
             >
