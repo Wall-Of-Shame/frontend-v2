@@ -112,7 +112,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   const {
     notifyShouldRefreshChallenges,
     getChallenge,
-    acceptChallenge,
     rejectChallenge,
     updateChallenge,
   } = useChallenge();
@@ -868,7 +867,6 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
           userData={challenge.participants.accepted.completed.find(
             (p) => p.userId === user?.userId
           )}
-          uploadCallback={(data) => setChallenge(data)}
           showModal={state.showUploadProofModal}
           setShowModal={(showModal) =>
             setState({ showUploadProofModal: showModal })
