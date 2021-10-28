@@ -26,6 +26,7 @@ import AvatarImg from "../avatar";
 import lodash from "lodash";
 import { RootState } from "../../reducers/RootReducer";
 import { useSelector } from "react-redux";
+import { useWindowSize } from "../../utils/WindowUtils";
 
 interface AddParticipantsModalProps {
   users: UserList[];
@@ -39,6 +40,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
   const { users, challengeId, showModal, setShowModal, completionCallback } =
     props;
   const { user, searchUser } = useUser();
+  const { isDesktop } = useWindowSize();
 
   const selectFriends = (state: RootState): UserList[] =>
     state.misc.friends ?? [];
@@ -348,6 +350,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
         <IonToast
           isOpen={copied}
           mode='ios'
+          position={isDesktop ? "top" : "bottom"}
           onDidDismiss={() => setCopied(false)}
           message={"Copied to clipboard :)"}
           duration={1500}

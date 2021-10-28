@@ -27,6 +27,7 @@ import lodash from "lodash";
 import { UserList } from "../../interfaces/models/Users";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers/RootReducer";
+import { useWindowSize } from "../../utils/WindowUtils";
 
 interface EditParticipantsModalProps {
   challengeId: string;
@@ -47,6 +48,8 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
     completionCallback,
   } = props;
   const { user, searchUser } = useUser();
+  const { isDesktop } = useWindowSize();
+
   const selectFriends = (state: RootState): UserList[] =>
     state.misc.friends ?? [];
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -389,6 +392,7 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
         <IonToast
           isOpen={copied}
           mode='ios'
+          position={isDesktop ? "top" : "bottom"}
           onDidDismiss={() => setCopied(false)}
           message={"Copied to clipboard :)"}
           duration={1500}
