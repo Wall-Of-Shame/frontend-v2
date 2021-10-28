@@ -6,7 +6,7 @@ import {
   IonFooter,
   IonToolbar,
 } from "@ionic/react";
-import { isAfter, parseISO } from "date-fns";
+import { isAfter, isBefore, parseISO } from "date-fns";
 import { addHours } from "date-fns/esm";
 import React from "react";
 import { useUser } from "../../../contexts/UserContext";
@@ -44,18 +44,23 @@ const FooterActions: React.FC<FooterActionsProps> = (
   const allParticipants = challenge.participants.accepted.completed
     .concat(challenge.participants.accepted.notCompleted)
     .concat(challenge.participants.accepted.protected);
+  const isParticipant =
+    allParticipants.findIndex((p) => p.userId === user?.userId) !== -1;
   const noCompleted = challenge.participants.accepted.completed.length === 0;
   const oneManChallenge =
     challenge.participants.accepted.completed.length === 1
       ? challenge.participants.accepted.completed[0].userId === user?.userId
       : false;
 
-  if (isAfter(Date.now(), addHours(parseISO(challenge.endAt!), 1))) {
+  if (
+    isAfter(Date.now(), addHours(parseISO(challenge.endAt!), 1)) &&
+    isParticipant
+  ) {
     if (noCompleted || oneManChallenge) {
       return <></>;
     }
     return (
-      <IonFooter translucent={true} key='details'>
+      <IonFooter key='details'>
         <IonToolbar>
           <IonRow
             className='ion-justify-content-center'
@@ -78,12 +83,12 @@ const FooterActions: React.FC<FooterActionsProps> = (
       </IonFooter>
     );
   }
-  if (isAfter(Date.now(), parseISO(challenge.endAt!))) {
+  if (isAfter(Date.now(), parseISO(challenge.endAt!)) && isParticipant) {
     if (noCompleted || oneManChallenge) {
       return <></>;
     }
     return (
-      <IonFooter translucent={true} key='details'>
+      <IonFooter key='details'>
         <IonToolbar>
           <IonRow
             className='ion-justify-content-center'
@@ -123,7 +128,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
     );
     const evidenceLink = viewingUser?.evidenceLink ?? "";
     return (
-      <IonFooter translucent={true} key='details'>
+      <IonFooter key='details'>
         <IonToolbar>
           <IonRow
             className='ion-justify-content-around'
@@ -147,9 +152,9 @@ const FooterActions: React.FC<FooterActionsProps> = (
     );
   }
 
-  if (isAfter(Date.now(), parseISO(challenge.startAt!))) {
+  if (isAfter(Date.now(), parseISO(challenge.startAt!)) && isParticipant) {
     return (
-      <IonFooter translucent={true} key='details'>
+      <IonFooter key='details'>
         <IonToolbar>
           <IonRow
             className='ion-justify-content-around'
@@ -173,9 +178,43 @@ const FooterActions: React.FC<FooterActionsProps> = (
     );
   }
 
-  if (user?.userId === challenge.owner.userId) {
+  if (
+    challenge.inviteType === "PUBLIC" &&
+    allParticipants.findIndex((p) => p.userId === user?.userId) === -1
+  ) {
     return (
-      <IonFooter translucent={true} key='details'>
+      <IonFooter key='details'>
+        <IonToolbar>
+          <IonRow
+            className='ion-justify-content-center'
+            style={{ margin: "0.5rem" }}
+          >
+            <IonButton
+              shape='round'
+              color='main-beige'
+              mode='ios'
+              onClick={() => {
+                alertCallback(
+                  true,
+                  "Are you sure?",
+                  "Once accepted, you will need to complete the challenge or get thrown onto the Wall of Shame 🙈",
+                  handleAccept
+                );
+              }}
+            >
+              <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>
+                Join challenge
+              </IonText>
+            </IonButton>
+          </IonRow>
+        </IonToolbar>
+      </IonFooter>
+    );
+  }
+
+  if (isBefore(Date.now(), parseISO(challenge.startAt!)) && isParticipant) {
+    return (
+      <IonFooter key='details'>
         <IonToolbar>
           <IonRow
             className='ion-justify-content-center'
@@ -192,13 +231,9 @@ const FooterActions: React.FC<FooterActionsProps> = (
     );
   }
 
-  if (
-    challenge.participants.pending.findIndex(
-      (p) => p.userId === user?.userId
-    ) !== -1
-  ) {
+  if (isBefore(Date.now(), parseISO(challenge.startAt!))) {
     return (
-      <IonFooter translucent={true} key='details'>
+      <IonFooter key='details'>
         <IonToolbar>
           <IonRow
             className='ion-justify-content-around'
@@ -250,56 +285,7 @@ const FooterActions: React.FC<FooterActionsProps> = (
     );
   }
 
-  if (
-    challenge.inviteType === "PUBLIC" &&
-    allParticipants.findIndex((p) => p.userId === user?.userId) === -1
-  ) {
-    return (
-      <IonFooter translucent={true} key='details'>
-        <IonToolbar>
-          <IonRow
-            className='ion-justify-content-center'
-            style={{ margin: "0.5rem" }}
-          >
-            <IonButton
-              shape='round'
-              color='main-beige'
-              mode='ios'
-              onClick={() => {
-                alertCallback(
-                  true,
-                  "Are you sure?",
-                  "Once accepted, you will need to complete the challenge or get thrown onto the Wall of Shame 🙈",
-                  handleAccept
-                );
-              }}
-            >
-              <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>
-                Join challenge
-              </IonText>
-            </IonButton>
-          </IonRow>
-        </IonToolbar>
-      </IonFooter>
-    );
-  }
-
-  return (
-    <IonFooter translucent={true} key='details'>
-      <IonToolbar>
-        <IonRow
-          className='ion-justify-content-center'
-          style={{ margin: "0.5rem" }}
-        >
-          <IonButton shape='round' color='main-beige' disabled mode='ios'>
-            <IonText style={{ marginLeft: "2rem", marginRight: "2rem" }}>
-              Waiting to start
-            </IonText>
-          </IonButton>
-        </IonRow>
-      </IonToolbar>
-    </IonFooter>
-  );
+  return <></>;
 };
 
 export default FooterActions;

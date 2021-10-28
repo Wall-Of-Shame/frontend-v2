@@ -59,6 +59,7 @@ const Challenges: React.FC = () => {
   const location = useLocation();
   const history = useHistory();
   const {
+    getChallenge,
     getAllChallenges,
     shouldRefreshChallenges,
     notifyShouldRefreshChallenges,
@@ -142,6 +143,36 @@ const Challenges: React.FC = () => {
     }
   };
 
+  const redirectIfValid = async (challengeId: string) => {
+    try {
+      const sharedChallenge = await getChallenge(challengeId);
+      window.localStorage.removeItem("share");
+      window.localStorage.setItem("referer", "challenges");
+      history.push(`challenges/${challengeId}/details`, sharedChallenge);
+    } catch (error) {
+      window.localStorage.removeItem("share");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    connectToSocket();
+    const shareLink = window.localStorage.getItem("share");
+    if (shareLink && user?.name !== undefined && user?.username !== undefined) {
+      redirectIfValid(shareLink);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (!user?.username || !user?.name) {
+        setShowModal(true);
+      }
+    }, 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const renderChallenges = () => {
     switch (tab) {
       case "voting":
@@ -158,6 +189,7 @@ const Challenges: React.FC = () => {
                     button
                     key={c.challengeId}
                     onClick={() => {
+                      window.localStorage.setItem("referer", "challenges");
                       history.push(`challenges/${c.challengeId}/details`, c);
                     }}
                   >
@@ -241,6 +273,7 @@ const Challenges: React.FC = () => {
                     button
                     key={c.challengeId}
                     onClick={() => {
+                      window.localStorage.setItem("referer", "challenges");
                       history.push(`challenges/${c.challengeId}/details`, c);
                     }}
                   >
@@ -324,6 +357,7 @@ const Challenges: React.FC = () => {
                     button
                     key={c.challengeId}
                     onClick={() => {
+                      window.localStorage.setItem("referer", "challenges");
                       history.push(`challenges/${c.challengeId}/details`, c);
                     }}
                   >
@@ -396,20 +430,6 @@ const Challenges: React.FC = () => {
         }
     }
   };
-
-  useEffect(() => {
-    // fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (!user?.username || !user?.name) {
-        setShowModal(true);
-      }
-    }, 1000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <IonPage style={{ background: "#ffffff" }}>

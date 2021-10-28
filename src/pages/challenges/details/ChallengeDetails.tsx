@@ -117,7 +117,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   } = useChallenge();
 
   const [challenge, setChallenge] = useState<ChallengeData | null>(
-    location.state as ChallengeData
+    history.location.state as ChallengeData
   );
   const [tab, setTab] = useState("details");
   const [countdown, setCountdown] = useState<Duration | null>(null);
@@ -204,11 +204,13 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
         const challenge = await getChallenge(locationState.challengeId);
         if (challenge) {
           setChallenge(challenge);
+          setState({ participants: challenge.participants });
         }
       } else if (challengeId) {
         const challenge = await getChallenge(challengeId);
         if (challenge) {
           setChallenge(challenge);
+          setState({ participants: challenge.participants });
         }
       }
     } catch (error) {
@@ -583,7 +585,12 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
                 setState({ editMode: false });
               } else {
                 window.history.replaceState({}, "");
-                history.goBack();
+                const referer = window.localStorage.getItem("referer");
+                if (referer) {
+                  history.push(`/${referer}`);
+                } else {
+                  history.push("/challenges");
+                }
               }
             }}
           >
@@ -644,7 +651,9 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
                         width: "2.75rem",
                         height: "2.75rem",
                       }}
-                      onClick={() => setState({ showParticipantModal: true })}
+                      onClick={() => {
+                        setState({ showParticipantModal: true });
+                      }}
                     >
                       <IonIcon
                         icon={personAdd}
@@ -810,7 +819,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
           />
         ) : (
           <>
-            <IonGrid className='ion-margin-top'>
+            <IonGrid style={{ marginTop: "2rem" }}>
               {renderHeader()}
               <IonRow className='ion-padding-horizontal ion-padding-bottom'>
                 <IonText style={{ fontWeight: "bold", fontSize: "1.5rem" }}>
@@ -891,8 +900,10 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
           }
         />
         <EditParticipantsModal
-          accepted={state.participants.accepted.notCompleted}
-          pending={state.participants.pending}
+          accepted={challenge.participants.accepted.notCompleted
+            .concat(challenge.participants.accepted.completed)
+            .concat(challenge.participants.accepted.protected)}
+          pending={challenge.participants.pending}
           showModal={state.showParticipantModal}
           setShowModal={(showModal) =>
             setState({ showParticipantModal: showModal })
