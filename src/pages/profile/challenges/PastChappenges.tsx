@@ -35,6 +35,7 @@ import Alert from "../../../components/alert";
 import lodash from "lodash";
 import { useWindowSize } from "../../../utils/WindowUtils";
 import Container from "../../../components/container";
+import { isPlatform } from "@ionic/core";
 
 interface PastChallengesState {
   isLoading: boolean;
@@ -208,7 +209,13 @@ const PastChallenges: React.FC = () => {
     if (filteredChallenges && filteredChallenges.length > 0) {
       return (
         <VirtualList
-          height={isDesktop ? height! - 184 : height! - 140}
+          height={
+            isPlatform("ipad")
+              ? height! - 216
+              : isDesktop
+              ? height! - 184
+              : height! - 140
+          }
           width={width! > 576 ? 576 : width!}
           itemCount={filteredChallenges.length + 1}
           itemSize={(index) => {

@@ -102,8 +102,8 @@ const AuthenticatedApp: React.FC = () => {
                   <IonRow className='ion-align-items-center'>
                     <IonAvatar
                       style={{
-                        width: "2.5rem",
-                        height: "2.5rem",
+                        width: "2.25rem",
+                        height: "2.25rem",
                         marginLeft: "1rem",
                         marginRight: "1rem",
                       }}
@@ -123,19 +123,39 @@ const AuthenticatedApp: React.FC = () => {
                 size={width! >= 992 ? "4" : "12"}
               >
                 <IonTabBar className='desktop-navbar-tabs'>
-                  <IonTabButton tab='challenges' href='/challenges'>
+                  <IonTabButton
+                    tab='challenges'
+                    href='/challenges'
+                    style={{ marginTop: isPlatform("ipad") ? "1.25rem" : 0 }}
+                  >
                     <IonIcon icon={challengeIcon} />
                   </IonTabButton>
-                  <IonTabButton tab='explore' href='/explore'>
+                  <IonTabButton
+                    tab='explore'
+                    href='/explore'
+                    style={{ marginTop: isPlatform("ipad") ? "1.25rem" : 0 }}
+                  >
                     <IonIcon icon={flashlightOutline} />
                   </IonTabButton>
-                  <IonTabButton tab='wall-of-shame' href='/wall-of-shame'>
+                  <IonTabButton
+                    tab='wall-of-shame'
+                    href='/wall-of-shame'
+                    style={{ marginTop: isPlatform("ipad") ? "1.25rem" : 0 }}
+                  >
                     <IonIcon icon={shameIcon} />
                   </IonTabButton>
-                  <IonTabButton tab='store' href='/store'>
+                  <IonTabButton
+                    tab='store'
+                    href='/store'
+                    style={{ marginTop: isPlatform("ipad") ? "1.25rem" : 0 }}
+                  >
                     <IonIcon icon={storefrontOutline} />
                   </IonTabButton>
-                  <IonTabButton tab='profile' href='/profile'>
+                  <IonTabButton
+                    tab='profile'
+                    href='/profile'
+                    style={{ marginTop: isPlatform("ipad") ? "1.25rem" : 0 }}
+                  >
                     <IonIcon icon={personOutline} />
                     {requests.length > 0 && (
                       <IonBadge
@@ -163,7 +183,7 @@ const AuthenticatedApp: React.FC = () => {
                         icon={hammerOutline}
                         color='dark'
                         style={{
-                          fontSize: isPlatform("ios") ? "1.75rem" : "1.5rem",
+                          fontSize: "1.5rem",
                         }}
                       />
                     </IonButton>
@@ -176,7 +196,7 @@ const AuthenticatedApp: React.FC = () => {
                         icon={bugOutline}
                         color='dark'
                         style={{
-                          fontSize: isPlatform("ios") ? "1.75rem" : "1.5rem",
+                          fontSize: "1.5rem",
                         }}
                       />
                     </IonButton>
@@ -204,7 +224,7 @@ const AuthenticatedApp: React.FC = () => {
                 : ""
             }`}
             style={{
-              marginTop: isPlatform("ipad") || isDesktop ? "3.5rem" : 0,
+              marginTop: isPlatform("ipad") ? "4.5rem" : "3.5rem",
             }}
           >
             <Route path='/challenges' render={() => <Tabs />} />
