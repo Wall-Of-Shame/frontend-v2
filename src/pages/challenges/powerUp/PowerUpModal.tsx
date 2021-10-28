@@ -294,7 +294,11 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
   const renderAction = (p: PowerUp) => {
     switch (p.type) {
       case "Protec":
-        if ((refreshedUser?.store.protecCount ?? 0) > 0) {
+        const activated =
+          refreshedChallenge.participants.accepted.protected.findIndex(
+            (p) => p.userId === user?.userId
+          ) !== -1;
+        if (activated) {
           return (
             <IonButton
               color='main-blue'
@@ -306,11 +310,22 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
               }}
               onClick={handleApplyProtec}
             >
-              {refreshedChallenge.participants.accepted.protected.findIndex(
-                (p) => p.userId === user?.userId
-              ) !== -1
-                ? "Activated"
-                : "Use"}
+              Activated
+            </IonButton>
+          );
+        } else if ((refreshedUser?.store.protecCount ?? 0) > 0) {
+          return (
+            <IonButton
+              color='main-blue'
+              expand='block'
+              mode='ios'
+              style={{
+                height: "2rem",
+                width: width! < 375 ? "40vw" : "10rem",
+              }}
+              onClick={handleApplyProtec}
+            >
+              Use
             </IonButton>
           );
         } else {
