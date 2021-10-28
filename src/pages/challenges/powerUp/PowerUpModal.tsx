@@ -39,6 +39,8 @@ import { adaptPowerUpType } from "../../../utils/StoreUtils";
 import { ChallengeData } from "../../../interfaces/models/Challenges";
 import { useChallenge } from "../../../contexts/ChallengeContext";
 import AvatarImg from "../../../components/avatar";
+import { isAfter } from "date-fns";
+import parseISO from "date-fns/parseISO";
 
 interface PowerUpModalProps {
   challengeData: ChallengeData;
@@ -110,6 +112,7 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchData = async () => {
@@ -340,7 +343,19 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
                 height: "2rem",
                 width: width! < 375 ? "40vw" : "10rem",
               }}
-              onClick={() => setIsSelectingTargetUser(true)}
+              onClick={() => {
+                if (isAfter(new Date(), parseISO(challengeData.startAt!))) {
+                  setState({
+                    showAlert: true,
+                    hasConfirm: false,
+                    alertHeader: "Notice",
+                    alertMessage:
+                      "This challenge has already started, U2 is currently disabled :)",
+                  });
+                  return;
+                }
+                setIsSelectingTargetUser(true);
+              }}
             >
               Use
             </IonButton>
