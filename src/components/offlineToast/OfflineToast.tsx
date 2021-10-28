@@ -1,6 +1,4 @@
-import {
-  IonToast,
-} from "@ionic/react";
+import { IonToast } from "@ionic/react";
 
 interface OfflineToastProps {
   message: string;
@@ -14,10 +12,11 @@ const OfflineToast: React.FC<OfflineToastProps> = (props) => {
   return (
     <IonToast
       isOpen={showToast}
+      mode='ios'
       onDidDismiss={() => setShowToast(false)}
       message={message}
       duration={2000}
-      color="dark"
+      color='dark'
     />
   );
 };
