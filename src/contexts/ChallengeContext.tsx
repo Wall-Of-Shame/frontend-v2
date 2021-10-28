@@ -81,9 +81,10 @@ const ChallengeProvider: React.FC = (props) => {
     setShouldRefreshChallenges(shouldRefresh);
   };
 
-  const createChallenge = async (data: ChallengePost): Promise<void> => {
+  const createChallenge = async (data: ChallengePost): Promise<string> => {
     try {
-      await ChallengeService.createChallenge(data);
+      const challengeId = await ChallengeService.createChallenge(data);
+      return challengeId;
     } catch (error) {
       return Promise.reject(error);
     }

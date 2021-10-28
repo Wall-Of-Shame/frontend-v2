@@ -11,7 +11,7 @@ export default interface ChallengeContextInterface {
   getChallenge(id: string): Promise<ChallengeData | null>;
   shouldRefreshChallenges: boolean;
   notifyShouldRefreshChallenges(shouldRefresh: boolean): void;
-  createChallenge(data: ChallengePost): Promise<void>;
+  createChallenge(data: ChallengePost): Promise<string>;
   updateChallenge(id: string, data: ChallengePost): Promise<void>;
   acceptChallenge(id: string): Promise<void>;
   rejectChallenge(id: string): Promise<void>;

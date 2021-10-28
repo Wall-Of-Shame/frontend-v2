@@ -26,9 +26,10 @@ const getChallenge = async (id: string): Promise<ChallengeData | null> => {
   }
 };
 
-const createChallenge = async (data: ChallengePost): Promise<void> => {
+const createChallenge = async (data: ChallengePost): Promise<string> => {
   try {
-    await APIService.post("challenges", data);
+    const response = await APIService.post("challenges", data);
+    return response.data.challengeId;
   } catch (error) {
     return Promise.reject(error);
   }
@@ -136,16 +137,16 @@ const uploadProof = async (
 
 const getExplore = async (): Promise<ChallengeList> => {
   try {
-    const response = await APIService.get(
-      `challenges?operation=explore`
-    );
+    const response = await APIService.get(`challenges?operation=explore`);
     return response.data;
   } catch (error) {
     return Promise.reject(error);
   }
 };
 
-const searchChallenge = async (searchText: string): Promise<ChallengeData[]> => {
+const searchChallenge = async (
+  searchText: string
+): Promise<ChallengeData[]> => {
   try {
     const response = await APIService.get(
       `challenges?operation=search&query=${searchText}`
