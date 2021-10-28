@@ -14,6 +14,8 @@ import {
   IonSearchbar,
   IonTitle,
   IonButtons,
+  IonInput,
+  IonToast,
 } from "@ionic/react";
 import "./AddParticipantsModal.scss";
 import { UserList } from "../../interfaces/models/Users";
@@ -27,20 +29,22 @@ import { useSelector } from "react-redux";
 
 interface AddParticipantsModalProps {
   users: UserList[];
+  challengeId: string;
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
   completionCallback: (invitedUsers: UserList[]) => void;
 }
 
 const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
-  const { users, showModal, setShowModal, completionCallback } = props;
+  const { users, challengeId, showModal, setShowModal, completionCallback } =
+    props;
   const { user, searchUser } = useUser();
 
   const selectFriends = (state: RootState): UserList[] =>
     state.misc.friends ?? [];
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [friends, setFriends] = useState<any>(useSelector(selectFriends));
-
+  const [copied, setCopied] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [matchedUsers, setMatchedUsers] = useState<UserList[]>([]);
   const [invitedUsers, setInvitedUsers] = useState<UserList[]>(users);
@@ -341,38 +345,77 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
             })}
           </IonGrid>
         )}
+        <IonToast
+          isOpen={copied}
+          mode='ios'
+          onDidDismiss={() => setCopied(false)}
+          message={"Copied to clipboard :)"}
+          duration={1500}
+        />
       </IonContent>
-      <IonFooter>
-        <IonToolbar>
-          <IonRow
-            className='ion-justify-content-around'
-            style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
-          >
-            <IonButton
-              mode='ios'
-              color='main-beige'
-              shape='round'
-              style={{
-                display: "flex",
-                flex: 1,
-                marginLeft: "2rem",
-                marginRight: "2rem",
-                maxWidth: 300,
-              }}
+      {challengeId !== "" && (
+        <IonFooter>
+          <IonToolbar>
+            <IonRow
+              className='ion-justify-content-center'
+              style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
             >
-              <IonText
+              <div
                 style={{
-                  marginLeft: "1rem",
-                  marginRight: "1rem",
-                  fontSize: 19,
+                  display: "flex",
+                  flex: 1,
+                  marginLeft: "2rem",
+                  marginRight: "2rem",
+                  maxWidth: 300,
+                  borderRadius: "0.5rem",
+                  background: "#ffffff",
+                  paddingLeft: "0.75rem",
+                  paddingRight: "0.75rem",
+                  boxShadow: "rgba(149, 149, 149, 0.2) 0px 2px 10px 0px",
                 }}
               >
-                Share link
-              </IonText>
-            </IonButton>
-          </IonRow>
-        </IonToolbar>
-      </IonFooter>
+                <IonInput
+                  value={`https://wallofshame.io/share/link=${challengeId}`}
+                />
+              </div>
+            </IonRow>
+
+            <IonRow
+              className='ion-justify-content-around'
+              style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
+            >
+              <IonButton
+                mode='ios'
+                color='main-beige'
+                shape='round'
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  marginLeft: "2rem",
+                  marginRight: "2rem",
+                  maxWidth: 300,
+                }}
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    `https://wallofshame.io/share/link=${challengeId}`
+                  );
+                  setCopied(true);
+                }}
+              >
+                <IonText
+                  style={{
+                    marginLeft: "1rem",
+                    marginRight: "1rem",
+                    fontSize: 19,
+                  }}
+                >
+                  Share link
+                </IonText>
+              </IonButton>
+            </IonRow>
+          </IonToolbar>
+        </IonFooter>
+      )}
     </IonModal>
   );
 };
