@@ -71,7 +71,7 @@ export const powerUps: PowerUp[] = [
 const Store: React.FC = () => {
   const location = useLocation();
   const { refreshUser } = useAuth();
-  const { user, purchaseItem } = useUser();
+  const { user, purchaseItem, shouldRefreshUser } = useUser();
   const { width, isDesktop } = useWindowSize();
 
   const [refreshedUser, setRefreshedUser] = useState<UserData | null>(user);
@@ -117,6 +117,16 @@ const Store: React.FC = () => {
       hideTabs();
     }
   }, [location.pathname]);
+
+  useEffect(() => {
+    refreshState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shouldRefreshUser]);
+
+  const refreshState = async () => {
+    const refreshedData = await refreshUser();
+    setRefreshedUser(refreshedData);
+  };
 
   const computePowerUpStock = (type: PowerUpType) => {
     switch (type) {
