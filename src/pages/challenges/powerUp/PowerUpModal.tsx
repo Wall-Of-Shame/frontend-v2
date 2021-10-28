@@ -25,7 +25,7 @@ import lodash from "lodash";
 import coin from "../../../assets/icons/coin.png";
 import "./PowerUpModal.scss";
 import { PowerUp, PowerUpType } from "../../../interfaces/models/Store";
-import { useCallback, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import { PowerUpMap, powerUps } from "../../store/Store";
 import ReactCardFlip from "react-card-flip";
 import { useWindowSize } from "../../../utils/WindowUtils";
@@ -64,7 +64,12 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
   const { showModal, setShowModal, challengeData, refreshChallengeCallback } =
     props;
   const { refreshUser } = useAuth();
-  const { applyPowerUp, getAllChallenges, getChallenge } = useChallenge();
+  const {
+    applyPowerUp,
+    getAllChallenges,
+    getChallenge,
+    notifyShouldRefreshChallenges,
+  } = useChallenge();
   const { user, purchaseItem, searchUser } = useUser();
   const { width } = useWindowSize();
 
@@ -102,6 +107,17 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
       okHandler: undefined,
     }
   );
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const refreshedUserData = await refreshUser();
+    if (refreshedUserData) {
+      setRefreshedUser(refreshedUserData);
+    }
+  };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(
@@ -157,9 +173,13 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
         count: count,
       });
       const refreshedUserData = await refreshUser();
-      setRefreshedUser(refreshedUserData);
+      if (refreshedUserData) {
+        setRefreshedUser(refreshedUserData);
+      }
       setTimeout(() => {
         setState({ isLoading: false });
+        setHasPurchased(true);
+        notifyShouldRefreshChallenges(true);
       }, 1000);
     } catch (error) {
       setState({
@@ -379,6 +399,11 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
               Search results
             </IonText>
             {matchedUsers.map((u) => {
+              const isU2ed =
+                challengeData.participants.accepted.completed
+                  .concat(challengeData.participants.accepted.notCompleted)
+                  .concat(challengeData.participants.accepted.protected)
+                  .findIndex((x) => x.userId === u.userId) !== -1;
               return (
                 <IonRow className='ion-margin' key={u.userId}>
                   <IonCol className='ion-align-item-center' size='2.5'>
@@ -442,13 +467,16 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
                         mode='ios'
                         className='ion-no-padding'
                         color={"main-blue"}
-                        fill='outline'
+                        fill={isU2ed ? "solid" : "outline"}
+                        disabled={isU2ed}
                         style={{ height: "2rem", width: "100%" }}
                         onClick={() => {
                           handleApplyU2(u);
                         }}
                       >
-                        <IonText style={{ fontSize: "0.9rem" }}>Use</IonText>
+                        <IonText style={{ fontSize: "0.9rem" }}>
+                          {isU2ed ? "U2-ed" : "Use"}
+                        </IonText>
                       </IonButton>
                     </IonCol>
                   )}
