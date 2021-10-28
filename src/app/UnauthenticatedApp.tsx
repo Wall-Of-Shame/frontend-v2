@@ -22,6 +22,7 @@ import "@ionic/react/css/display.css";
 import "../theme/variables.scss";
 import "./App.scss";
 import Onboarding from "../pages/onboarding";
+import Landing from "../pages/share";
 
 const redirectToOnboarding = (): React.ReactNode => (
   <Redirect to={"/onboarding"} />
@@ -33,6 +34,7 @@ const UnauthenticatedApp: React.FC = () => {
       <IonReactRouter>
         <IonRouterOutlet id='main'>
           <Switch>
+            <Route path='/share/' component={Landing} />
             <Route exact path='/onboarding' component={Onboarding} />
             <Route render={redirectToOnboarding} />
           </Switch>
