@@ -66,9 +66,6 @@ const Challenges: React.FC = () => {
   } = useChallenge();
   const selectChallenges = (state: RootState): ChallengeDux => state.challenges;
 
-  const [tab, setTab] = useState("ongoing");
-  const [showModal, setShowModal] = useState(false);
-
   const [ongoing, setOngoing] = useState<ChallengeData[]>(
     useSelector(selectChallenges).ongoing
   );
@@ -81,6 +78,11 @@ const Challenges: React.FC = () => {
   const [pendingStart, setPendingStart] = useState<ChallengeData[]>(
     useSelector(selectChallenges).pendingStart
   );
+
+  const [tab, setTab] = useState(
+    voting.length > 0 ? "voting" : ongoing.length > 0 ? "ongoing" : "pending"
+  );
+  const [showModal, setShowModal] = useState(false);
 
   const [state, setState] = useReducer(
     (s: ChallengesState, a: Partial<ChallengesState>) => ({
