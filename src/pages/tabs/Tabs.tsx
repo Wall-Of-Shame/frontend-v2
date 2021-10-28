@@ -33,6 +33,7 @@ import { useWindowSize } from "../../utils/WindowUtils";
 import PastChallenges from "../profile/challenges";
 import { useUser } from "../../contexts/UserContext";
 import { UserList } from "../../interfaces/models/Users";
+import Landing from "../share";
 
 const redirectToChallenges = (): React.ReactNode => (
   <Redirect to={"/challenges"} />
@@ -67,6 +68,7 @@ const Tabs: React.FC = () => {
   return (
     <IonTabs>
       <IonRouterOutlet animated={false}>
+        <Route path='/share/' component={Landing} />
         <Route exact path='/challenges'>
           <Challenges />
         </Route>

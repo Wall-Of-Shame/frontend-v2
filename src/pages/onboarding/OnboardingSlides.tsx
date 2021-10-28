@@ -253,7 +253,7 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
             Take the moral highground.
           </h5>
           <IonRow className='ion-justify-content-center ion-no-padding'>
-            <IonCol sizeXs='12' sizeSm='8' sizeMd='6' sizeLg='4' sizeXl='3'>
+            <IonCol sizeXs='12' sizeSm='8' sizeMd='6' sizeLg='4' sizeXl='3.5'>
               <IonButton
                 mode='ios'
                 expand='block'
@@ -292,7 +292,7 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
             </IonCol>
           </IonRow>
           <IonRow className='ion-justify-content-center ion-no-padding'>
-            <IonCol sizeXs='12' sizeSm='8' sizeMd='6' sizeLg='4' sizeXl='3'>
+            <IonCol sizeXs='12' sizeSm='8' sizeMd='6' sizeLg='4' sizeXl='3.5'>
               <IonButton
                 mode='ios'
                 expand='block'
@@ -340,7 +340,7 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
             className='ion-justify-content-center ion-no-padding'
             style={{ marginBottom: "1rem" }}
           >
-            <IonCol sizeXs='12' sizeSm='8' sizeMd='6' sizeLg='4' sizeXl='3'>
+            <IonCol sizeXs='12' sizeSm='8' sizeMd='6' sizeLg='4' sizeXl='3.5'>
               <IonButton
                 mode='ios'
                 expand='block'

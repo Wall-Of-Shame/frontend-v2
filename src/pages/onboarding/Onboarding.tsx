@@ -1,5 +1,5 @@
 import { IonButton, IonContent, IonFab, IonIcon, IonPage } from "@ionic/react";
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 
 import "./Onboarding.scss";
 import OnboardingSlides from "./OnboardingSlides";
@@ -48,6 +48,18 @@ const Onboarding: React.FC = () => {
     const swiper = await this.getSwiper();
     setSwiper(swiper);
   };
+
+  useEffect(() => {
+    const shareLink = window.localStorage.getItem("share");
+    if (shareLink) {
+      setState({
+        showAlert: true,
+        hasConfirm: false,
+        alertHeader: "Hang on",
+        alertMessage: "Please sign up or log in to join the challenge :)",
+      });
+    }
+  }, []);
 
   return (
     <IonPage>
