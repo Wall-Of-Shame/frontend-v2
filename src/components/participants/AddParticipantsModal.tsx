@@ -22,6 +22,8 @@ import { useUser } from "../../contexts/UserContext";
 import { checkmark, close } from "ionicons/icons";
 import AvatarImg from "../avatar";
 import lodash from "lodash";
+import { RootState } from "../../reducers/RootReducer";
+import { useSelector } from "react-redux";
 
 interface AddParticipantsModalProps {
   users: UserList[];
@@ -33,6 +35,12 @@ interface AddParticipantsModalProps {
 const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
   const { users, showModal, setShowModal, completionCallback } = props;
   const { user, searchUser } = useUser();
+
+  const selectFriends = (state: RootState): UserList[] =>
+    state.misc.friends ?? [];
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [friends, setFriends] = useState<any>(useSelector(selectFriends));
+
   const [searchText, setSearchText] = useState("");
   const [matchedUsers, setMatchedUsers] = useState<UserList[]>([]);
   const [invitedUsers, setInvitedUsers] = useState<UserList[]>(users);
@@ -59,7 +67,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
   const handleInvite = (user: UserList) => {
     const index = invitedUsers.findIndex((u) => u.userId === user.userId);
     if (index !== -1) {
-      var newInvitedUsers = invitedUsers.slice(0);
+      let newInvitedUsers = invitedUsers.slice(0);
       newInvitedUsers = invitedUsers.filter((u) => u.userId !== user.userId);
       setInvitedUsers(newInvitedUsers);
     } else {
@@ -68,6 +76,8 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
       setInvitedUsers(newInvitedUsers);
     }
   };
+
+  const friendsArray = Object.values(friends) as UserList[];
 
   return (
     <IonModal isOpen={showModal} mode='ios' backdropDismiss={false}>
@@ -128,102 +138,209 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
           className='ion-margin-top users-search'
           showClearButton='always'
         ></IonSearchbar>
-        <IonGrid className='ion-margin-top ion-no-padding'>
-          <IonText
-            className='ion-margin'
-            style={{ fontSize: 17, fontWeight: 600 }}
-          >
-            Search results
-          </IonText>
-          {matchedUsers.map((u) => {
-            return (
-              <IonRow className='ion-margin' key={u.userId}>
-                <IonCol className='ion-align-item-center' size='2.5'>
-                  <IonRow className='ion-justify-content-center'>
-                    <IonAvatar
-                      className='user-avatar'
-                      style={{
-                        width: "3rem",
-                        height: "3rem",
-                      }}
-                    >
-                      <AvatarImg avatar={u.avatar} />
-                    </IonAvatar>
-                  </IonRow>
-                </IonCol>
-                <IonCol
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                  }}
-                  size='6'
+        {!!friendsArray && searchText === "" ? (
+          <IonGrid className='ion-margin-top ion-no-padding'>
+            <IonText
+              className='ion-margin'
+              style={{ fontSize: 17, fontWeight: 600 }}
+            >
+              Friends
+            </IonText>
+            {friendsArray.map((u) => {
+              return (
+                <IonRow
+                  className='ion-margin-vertical ion-margin-end'
+                  key={u.userId}
                 >
-                  <IonRow style={{ paddingBottom: "0.25rem" }}>
-                    <IonText style={{ fontSize: 17, fontWeight: 600 }}>
-                      {u.name}
-                    </IonText>
-                  </IonRow>
-                  <IonRow>{`@${u.username}`}</IonRow>
-                </IonCol>
-                {u.userId === user?.userId ? (
-                  <IonCol
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                    size='3.5'
-                  >
-                    <IonButton
-                      mode='ios'
-                      className='ion-no-padding'
-                      color='main-beige'
-                      disabled
-                      fill='solid'
-                      style={{ height: "2rem", width: "100%" }}
-                    >
-                      You
-                    </IonButton>
+                  <IonCol className='ion-align-item-center' size='2.5'>
+                    <IonRow className='ion-justify-content-center'>
+                      <IonAvatar
+                        className='user-avatar'
+                        style={{
+                          width: "3rem",
+                          height: "3rem",
+                        }}
+                      >
+                        <AvatarImg avatar={u.avatar} />
+                      </IonAvatar>
+                    </IonRow>
                   </IonCol>
-                ) : (
                   <IonCol
                     style={{
                       display: "flex",
+                      flexDirection: "column",
                       justifyContent: "center",
-                      alignItems: "center",
                     }}
-                    size='3.5'
+                    size='6'
                   >
-                    <IonButton
-                      mode='ios'
-                      className='ion-no-padding'
-                      color={"main-blue"}
-                      fill={
-                        invitedUsers.findIndex((i) => i.userId === u.userId) ===
-                        -1
-                          ? "outline"
-                          : "solid"
-                      }
-                      style={{ height: "2rem", width: "100%" }}
-                      onClick={() => {
-                        handleInvite(u);
-                      }}
-                    >
-                      <IonText style={{ fontSize: "0.9rem" }}>
-                        {invitedUsers.findIndex(
-                          (i) => i.userId === u.userId
-                        ) === -1
-                          ? "Add"
-                          : "Added"}
+                    <IonRow style={{ paddingBottom: "0.25rem" }}>
+                      <IonText style={{ fontSize: 17, fontWeight: 600 }}>
+                        {u.name}
                       </IonText>
-                    </IonButton>
+                    </IonRow>
+                    <IonRow>{`@${u.username}`}</IonRow>
                   </IonCol>
-                )}
-              </IonRow>
-            );
-          })}
-        </IonGrid>
+                  {u.userId === user?.userId ? (
+                    <IonCol
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                      size='3.5'
+                    >
+                      <IonButton
+                        mode='ios'
+                        className='ion-no-padding'
+                        color='main-beige'
+                        disabled
+                        fill='solid'
+                        style={{ height: "2rem", width: "100%" }}
+                      >
+                        You
+                      </IonButton>
+                    </IonCol>
+                  ) : (
+                    <IonCol
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                      size='3.5'
+                    >
+                      <IonButton
+                        mode='ios'
+                        className='ion-no-padding'
+                        color={"main-blue"}
+                        fill={
+                          invitedUsers.findIndex(
+                            (i) => i.userId === u.userId
+                          ) === -1
+                            ? "outline"
+                            : "solid"
+                        }
+                        style={{ height: "2rem", width: "100%" }}
+                        onClick={() => {
+                          handleInvite(u);
+                        }}
+                      >
+                        <IonText style={{ fontSize: "0.9rem" }}>
+                          {invitedUsers.findIndex(
+                            (i) => i.userId === u.userId
+                          ) === -1
+                            ? "Add"
+                            : "Added"}
+                        </IonText>
+                      </IonButton>
+                    </IonCol>
+                  )}
+                </IonRow>
+              );
+            })}
+          </IonGrid>
+        ) : (
+          <IonGrid className='ion-margin-top ion-no-padding'>
+            <IonText
+              className='ion-margin'
+              style={{ fontSize: 17, fontWeight: 600 }}
+            >
+              Search results
+            </IonText>
+            {matchedUsers.map((u) => {
+              return (
+                <IonRow
+                  className='ion-margin-vertical ion-margin-end'
+                  key={u.userId}
+                >
+                  <IonCol className='ion-align-item-center' size='2.5'>
+                    <IonRow className='ion-justify-content-center'>
+                      <IonAvatar
+                        className='user-avatar'
+                        style={{
+                          width: "3rem",
+                          height: "3rem",
+                        }}
+                      >
+                        <AvatarImg avatar={u.avatar} />
+                      </IonAvatar>
+                    </IonRow>
+                  </IonCol>
+                  <IonCol
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                    }}
+                    size='6'
+                  >
+                    <IonRow style={{ paddingBottom: "0.25rem" }}>
+                      <IonText style={{ fontSize: 17, fontWeight: 600 }}>
+                        {u.name}
+                      </IonText>
+                    </IonRow>
+                    <IonRow>{`@${u.username}`}</IonRow>
+                  </IonCol>
+                  {u.userId === user?.userId ? (
+                    <IonCol
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                      size='3.5'
+                    >
+                      <IonButton
+                        mode='ios'
+                        className='ion-no-padding'
+                        color='main-beige'
+                        disabled
+                        fill='solid'
+                        style={{ height: "2rem", width: "100%" }}
+                      >
+                        You
+                      </IonButton>
+                    </IonCol>
+                  ) : (
+                    <IonCol
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                      size='3.5'
+                    >
+                      <IonButton
+                        mode='ios'
+                        className='ion-no-padding'
+                        color={"main-blue"}
+                        fill={
+                          invitedUsers.findIndex(
+                            (i) => i.userId === u.userId
+                          ) === -1
+                            ? "outline"
+                            : "solid"
+                        }
+                        style={{ height: "2rem", width: "100%" }}
+                        onClick={() => {
+                          handleInvite(u);
+                        }}
+                      >
+                        <IonText style={{ fontSize: "0.9rem" }}>
+                          {invitedUsers.findIndex(
+                            (i) => i.userId === u.userId
+                          ) === -1
+                            ? "Add"
+                            : "Added"}
+                        </IonText>
+                      </IonButton>
+                    </IonCol>
+                  )}
+                </IonRow>
+              );
+            })}
+          </IonGrid>
+        )}
       </IonContent>
       <IonFooter>
         <IonToolbar>
