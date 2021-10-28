@@ -135,8 +135,10 @@ const Challenges: React.FC = () => {
       setPendingResponse(allChallenges.pendingResponse);
       setVoting(allChallenges.votingPeriod);
       notifyShouldRefreshChallenges(false);
+      setState({ isLoading: false });
     } catch (error) {
       console.log(error);
+      setState({ isLoading: false });
     }
   };
 
@@ -530,7 +532,16 @@ const Challenges: React.FC = () => {
         </IonRow>
         {renderChallenges()}
         <IonFab vertical='bottom' horizontal='end' slot='fixed'>
-          <IonFabButton color='main-beige' onClick={fetchData} mode='ios'>
+          <IonFabButton
+            color='main-beige'
+            onClick={() => {
+              setState({ isLoading: true });
+              setTimeout(() => {
+                fetchData();
+              }, 1000);
+            }}
+            mode='ios'
+          >
             <IonIcon icon={refreshOutline} />
           </IonFabButton>
         </IonFab>

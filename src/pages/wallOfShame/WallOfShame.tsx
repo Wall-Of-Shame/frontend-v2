@@ -449,7 +449,7 @@ const WallOfShame: React.FC = () => {
                         }}
                       >
                         <IonRow className='ion-justify-content-center ion-padding-horizontal ion-padding-top'>
-                          <div style={{ maxWidth: "6rem", maxHeight: "6rem" }}>
+                          <div style={{ width: "6rem", height: "6rem" }}>
                             <AvatarImg avatar={s.avatar} />
                           </div>
                         </IonRow>

@@ -99,7 +99,7 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
               style={{ width: width! < 576 ? width! / 2 - 26.5 : "172.7px" }}
             >
               <IonRow className='ion-justify-content-center ion-padding-horizontal ion-padding-top'>
-                <div style={{ maxWidth: "6rem", maxHeight: "6rem" }}>
+                <div style={{ width: "6rem", height: "6rem" }}>
                   <AvatarImg avatar={shame.avatar} />
                 </div>
               </IonRow>
@@ -193,7 +193,7 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
           </IonRow>
           <IonRow
             className='ion-justify-content-center'
-            style={{ paddingTop: "1.5rem" }}
+            style={{ paddingTop: "1.75rem" }}
           >
             <IonRow>
               <IonText>Tap a tool below to shame</IonText>

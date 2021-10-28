@@ -37,7 +37,7 @@ import {
   checkmarkCircle,
   refreshOutline,
 } from "ionicons/icons";
-import { Avatar, UserList } from "../../interfaces/models/Users";
+import { Avatar, UserData, UserList } from "../../interfaces/models/Users";
 import { useHistory, useLocation } from "react-router";
 import { PieChart } from "react-minimal-pie-chart";
 import { useAuth } from "../../contexts/AuthContext";
@@ -53,6 +53,8 @@ import { format, parseISO } from "date-fns";
 import FeedbackModal from "../../components/feedback";
 import Alert from "../../components/alert";
 import { useWindowSize } from "../../utils/WindowUtils";
+import { useChallenge } from "../../contexts/ChallengeContext";
+import LoadingSpinner from "../../components/loadingSpinner";
 
 export interface ProfileState {
   isLoading: boolean;
@@ -76,9 +78,11 @@ const Profile: React.FC = () => {
     acceptRequest,
     rejectRequest,
   } = useUser();
+  const { getAllChallenges } = useChallenge();
   const { isDesktop } = useWindowSize();
   const location = useLocation();
   const history = useHistory();
+  const [refreshedUser, setRefreshedUser] = useState<UserData | null>(user);
   const [popoverState, setShowPopover] = useState({
     showPopover: false,
     event: undefined,
@@ -127,9 +131,18 @@ const Profile: React.FC = () => {
     try {
       const requestsData = await getFriendRequests();
       const friendsData = await getFriends();
+      const refreshedData = await refreshUser();
+      const challengesData = await getAllChallenges();
       setRequests(requestsData);
       setFriends(friendsData);
-    } catch (error) {}
+      setCompleted(challengesData.history);
+      if (refreshedData) {
+        setRefreshedUser(refreshedData);
+      }
+      setState({ isLoading: false });
+    } catch (error) {
+      setState({ isLoading: false });
+    }
   };
 
   const handleAccept = async (userId: string) => {
@@ -140,6 +153,7 @@ const Profile: React.FC = () => {
       notifyShouldRefreshUser(true);
     } catch (error) {}
   };
+
   const handleReject = async (userId: string) => {
     try {
       await rejectRequest(userId);
@@ -414,7 +428,7 @@ const Profile: React.FC = () => {
           <IonCol>
             <IonRow className='ion-justify-content-center'>
               <IonAvatar id='profile-avatar'>
-                <AvatarImg avatar={user?.avatar ?? null} />
+                <AvatarImg avatar={refreshedUser?.avatar ?? null} />
               </IonAvatar>
             </IonRow>
           </IonCol>
@@ -429,7 +443,7 @@ const Profile: React.FC = () => {
               marginRight: "0.5rem",
             }}
           >
-            {user?.name ?? "Display name not set"}
+            {refreshedUser?.name ?? "Display name not set"}
           </IonText>
         </IonRow>
         <IonRow className='ion-justify-content-center'>
@@ -441,16 +455,16 @@ const Profile: React.FC = () => {
             }}
             color='medium'
           >
-            {`@${user?.username ?? "Username not set"}`}
+            {`@${refreshedUser?.username ?? "Username not set"}`}
           </IonText>
         </IonRow>
 
         <IonRow className='ion-justify-content-center'>
           <IonCol sizeXs='12' sizeMd='8' sizeLg='7'>
             <IonCard mode='ios' style={{ marginBottom: "2rem" }}>
-              {(user?.completedChallengeCount ?? 0) +
-                (user?.failedChallengeCount ?? 0) +
-                (user?.vetoedChallengeCount ?? 0) >
+              {(refreshedUser?.completedChallengeCount ?? 0) +
+                (refreshedUser?.failedChallengeCount ?? 0) +
+                (refreshedUser?.vetoedChallengeCount ?? 0) >
                 0 && (
                 <IonRow className='ion-justify-content-center'>
                   <PieChart
@@ -464,17 +478,17 @@ const Profile: React.FC = () => {
                     data={[
                       {
                         title: "Completed",
-                        value: user?.completedChallengeCount ?? 0,
+                        value: refreshedUser?.completedChallengeCount ?? 0,
                         color: "#fdab8f",
                       },
                       {
                         title: "Failures",
-                        value: user?.failedChallengeCount ?? 0,
+                        value: refreshedUser?.failedChallengeCount ?? 0,
                         color: "#7dd7e1",
                       },
                       {
                         title: "Cheats",
-                        value: user?.vetoedChallengeCount ?? 0,
+                        value: refreshedUser?.vetoedChallengeCount ?? 0,
                         color: "#ffc635",
                       },
                     ]}
@@ -505,13 +519,15 @@ const Profile: React.FC = () => {
                             color: "#000000",
                           }}
                         >
-                          {user?.completedChallengeCount ?? 0}
+                          {refreshedUser?.completedChallengeCount ?? 0}
                         </IonText>
                         <IonText
                           style={{ fontSize: "0.9rem", fontWeight: 400 }}
                         >
                           {`Challenge${
-                            user?.completedChallengeCount !== 1 ? "s" : ""
+                            refreshedUser?.completedChallengeCount !== 1
+                              ? "s"
+                              : ""
                           } Completed`}
                         </IonText>
                         <IonBadge
@@ -535,7 +551,7 @@ const Profile: React.FC = () => {
                             color: "#000000",
                           }}
                         >
-                          {user?.failedChallengeCount ?? 0}
+                          {refreshedUser?.failedChallengeCount ?? 0}
                         </IonText>
                         <IonText
                           style={{ fontSize: "0.9rem", fontWeight: 400 }}
@@ -565,13 +581,13 @@ const Profile: React.FC = () => {
                             color: "#000000",
                           }}
                         >
-                          {user?.vetoedChallengeCount ?? 0}
+                          {refreshedUser?.vetoedChallengeCount ?? 0}
                         </IonText>
                         <IonText
                           style={{ fontSize: "0.9rem", fontWeight: 400 }}
                         >
                           {`Shameless Cheat${
-                            user?.vetoedChallengeCount !== 1 ? "s" : ""
+                            refreshedUser?.vetoedChallengeCount !== 1 ? "s" : ""
                           }`}
                         </IonText>
                         <IonBadge
@@ -755,7 +771,10 @@ const Profile: React.FC = () => {
           <IonFabButton
             color='main-blue'
             onClick={() => {
-              notifyShouldRefreshUser(true);
+              setState({ isLoading: true });
+              setTimeout(() => {
+                notifyShouldRefreshUser(true);
+              }, 1000);
             }}
             mode='ios'
           >
@@ -765,6 +784,11 @@ const Profile: React.FC = () => {
         <FeedbackModal
           showModal={showFeedbackModal}
           setShowModal={setShowFeedbackModal}
+        />
+        <LoadingSpinner
+          loading={state.isLoading}
+          message={"Loading"}
+          closeLoading={() => {}}
         />
         <Alert
           showAlert={state.showAlert}
