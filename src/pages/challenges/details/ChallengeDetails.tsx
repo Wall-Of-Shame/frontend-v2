@@ -900,6 +900,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
           }
         />
         <EditParticipantsModal
+          challengeId={challenge.challengeId}
           accepted={challenge.participants.accepted.notCompleted
             .concat(challenge.participants.accepted.completed)
             .concat(challenge.participants.accepted.protected)}
@@ -982,6 +983,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
         />
         <IonToast
           isOpen={state.showToast}
+          mode='ios'
           onDidDismiss={() => setState({ showToast: false })}
           message={state.toastMessage}
           duration={1500}

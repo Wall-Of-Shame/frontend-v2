@@ -348,6 +348,7 @@ const VoteModal: React.FC<VoteModalProps> = (props: VoteModalProps) => {
         />
         <IonToast
           isOpen={state.showToast}
+          mode='ios'
           onDidDismiss={() => setState({ showToast: false })}
           message={state.toastMessage}
           duration={1500}

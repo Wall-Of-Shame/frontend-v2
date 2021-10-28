@@ -77,7 +77,9 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
 ) => {
   const history = useHistory();
   const { isDesktop } = useWindowSize();
-  const { createChallenge, notifyShouldRefreshChallenges } = useChallenge();
+  const { createChallenge, updateChallenge, notifyShouldRefreshChallenges } =
+    useChallenge();
+  const [challengeId, setChallengeId] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [showOfflineToast, setShowOfflineToast] = useState(false);
@@ -107,7 +109,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
     }
   );
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     if (
       !(
         state.title.length > 0 &&
@@ -120,13 +122,42 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
       setHasError(true);
       return;
     }
-    setShowModal(true);
+    setState({ isLoading: true });
+    const data: ChallengePost = {
+      title: state.title,
+      description: state.description,
+      startAt: state.startAt,
+      endAt: state.endAt,
+      type: state.punishmentType,
+      inviteType: state.inviteType,
+      participants: [],
+    };
+    try {
+      const id = await createChallenge(data);
+      setChallengeId(id);
+      setState({
+        isLoading: false,
+      });
+      setShowModal(true);
+    } catch (error) {
+      console.log(error);
+      setState({
+        isLoading: false,
+        showAlert: true,
+        hasConfirm: false,
+        alertHeader: "Ooooops",
+        alertMessage: "Our server is taking a break, come back later please :)",
+      });
+    }
   };
 
   const handleSubmit = async (data: ChallengePost) => {
+    if (challengeId === "") {
+      return;
+    }
     setState({ isLoading: true });
     try {
-      await createChallenge(data);
+      await updateChallenge(challengeId, data);
       setState({
         isLoading: false,
         showAlert: true,
@@ -523,6 +554,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
         </IonGrid>
         <AddParticipantsModal
           users={state.invitedUsers}
+          challengeId={challengeId}
           showModal={showModal}
           setShowModal={setShowModal}
           completionCallback={(invitedUsers) => {
