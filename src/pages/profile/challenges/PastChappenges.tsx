@@ -134,6 +134,7 @@ const PastChallenges: React.FC = () => {
           button
           key={c.challengeId}
           onClick={() => {
+            window.localStorage.setItem("referer", "challenge-history");
             history.push(`challenges/${c.challengeId}/details`, c);
           }}
         >

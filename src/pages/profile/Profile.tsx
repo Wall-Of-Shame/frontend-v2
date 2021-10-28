@@ -187,6 +187,7 @@ const Profile: React.FC = () => {
                 button
                 key={c.challengeId}
                 onClick={() => {
+                  window.localStorage.setItem("referer", "profile");
                   history.push(`challenges/${c.challengeId}/details`, c);
                 }}
               >
