@@ -20,7 +20,6 @@ import { showTabs, hideTabs } from "../../utils/TabsUtils";
 import "./Store.scss";
 import { useUser } from "../../contexts/UserContext";
 import { useWindowSize } from "../../utils/WindowUtils";
-
 import {
   PowerUp,
   PowerUpPostType,
@@ -31,7 +30,9 @@ import { useAuth } from "../../contexts/AuthContext";
 import { UserData } from "../../interfaces/models/Users";
 import LoadingSpinner from "../../components/loadingSpinner";
 import Alert from "../../components/alert";
-import Container from "../../components/container";
+import eggIcon from "../../assets/icons/egg.svg";
+import tomatoIcon from "../../assets/icons/tomato.svg";
+import poopIcon from "../../assets/icons/poop.svg";
 import ProtecImg from "../../assets/powerup/protec.png";
 import U2Img from "../../assets/powerup/u2.png";
 import CoinModal from "./CoinModal";
@@ -48,6 +49,10 @@ interface StoreState {
 }
 
 export interface PowerUpMap {
+  [key: string]: boolean;
+}
+
+export interface EffectMap {
   [key: string]: boolean;
 }
 
@@ -68,6 +73,18 @@ export const powerUps: PowerUp[] = [
   },
 ];
 
+export interface Effect {
+  icon: string;
+  name: string;
+  price: number;
+}
+
+export const effects: Effect[] = [
+  { icon: tomatoIcon, name: "Tomato", price: 0 },
+  { icon: eggIcon, name: "Egg", price: 250 },
+  { icon: poopIcon, name: "Poop", price: 500 },
+];
+
 const Store: React.FC = () => {
   const location = useLocation();
   const { refreshUser } = useAuth();
@@ -85,6 +102,12 @@ const Store: React.FC = () => {
     Protec: false,
     U2: false,
     Buffett: false,
+  });
+
+  const [isEffectFlipped, setIsEffectFlipped] = useState<EffectMap>({
+    Tomato: false,
+    Egg: false,
+    Poop: false,
   });
 
   const [state, setState] = useReducer(
@@ -369,6 +392,182 @@ const Store: React.FC = () => {
     );
   };
 
+  const renderEffects = () => {
+    return (
+      <IonRow
+        style={{
+          marginTop: "1rem",
+          marginLeft: "0.5rem",
+          marginRight: "0.5rem",
+        }}
+      >
+        {effects.map((e) => {
+          return (
+            <IonCol sizeXs='6' sizeSm='4' sizeMd='4' key={e.name}>
+              <IonRow className='ion-justify-content-center'>
+                <ReactCardFlip
+                  isFlipped={isEffectFlipped[e.name]}
+                  flipDirection='horizontal'
+                >
+                  <div key={`${e.name}-front`}>
+                    <IonCard
+                      mode='md'
+                      className='ion-no-margin ion-align-items-center'
+                      style={{
+                        marginLeft: "0.5rem",
+                        marginRight: "0.5rem",
+                        height: width! < 375 ? "14rem" : "15rem",
+                        width: width! < 375 ? "40vw" : "10rem",
+                      }}
+                    >
+                      <IonRow
+                        className='ion-justify-content-end'
+                        style={{
+                          paddingTop: "0.5rem",
+                          paddingLeft: "0.5rem",
+                          paddingRight: "0.5rem",
+                        }}
+                      >
+                        <IonIcon
+                          icon={informationCircle}
+                          color='main-beige'
+                          style={{ fontSize: "1.33rem" }}
+                          onClick={() => {
+                            setIsEffectFlipped({
+                              ...isEffectFlipped,
+                              [e.name]: true,
+                            });
+                          }}
+                        />
+                      </IonRow>
+                      <IonRow
+                        className='ion-justify-content-center'
+                        style={{ marginTop: "0.5rem" }}
+                      >
+                        <img
+                          src={e.icon}
+                          alt='Challenge'
+                          className='store-card-img'
+                          style={{
+                            width: "65%",
+                            height: "65%",
+                          }}
+                        />
+                      </IonRow>
+                      <IonRow className='ion-justify-content-center ion-margin-top'>
+                        <IonText
+                          style={{ fontWeight: "bold", fontSize: "1.05rem" }}
+                          color='black'
+                        >
+                          {e.name}
+                        </IonText>
+                      </IonRow>
+                      <IonRow
+                        className='ion-justify-content-center ion-align-items-center'
+                        style={{ margin: "0.5rem" }}
+                      >
+                        <img
+                          src={coin}
+                          alt=''
+                          style={{
+                            width: "1.5rem",
+                            height: "1.5rem",
+                            marginRight: "0.5rem",
+                          }}
+                        />
+                        <IonText color='black'>{e.price}</IonText>
+                      </IonRow>
+                    </IonCard>
+                  </div>
+                  <div key={`${e.name}-back`}>
+                    <IonCard
+                      mode='md'
+                      className='ion-no-margin ion-align-items-center'
+                      style={{
+                        marginLeft: "0.5rem",
+                        marginRight: "0.5rem",
+                        height: width! < 350 ? "14rem" : "15rem",
+                      }}
+                    >
+                      <IonRow
+                        className='ion-justify-content-end'
+                        style={{
+                          paddingTop: "0.5rem",
+                          paddingLeft: "0.5rem",
+                          paddingRight: "0.5rem",
+                        }}
+                      >
+                        <IonIcon
+                          icon={closeCircle}
+                          color='main-beige'
+                          style={{ fontSize: "1.33rem" }}
+                          onClick={() => {
+                            setIsEffectFlipped({
+                              ...isEffectFlipped,
+                              [e.name]: false,
+                            });
+                          }}
+                        />
+                      </IonRow>
+
+                      <IonRow className='ion-justify-content-center'>
+                        <IonText
+                          style={{ fontWeight: "bold", fontSize: "1.05rem" }}
+                          color='black'
+                        >
+                          {e.name}
+                        </IonText>
+                      </IonRow>
+                      <IonRow
+                        className='ion-justify-content-center'
+                        style={{
+                          marginBottom: "0.5rem",
+                          paddingTop: "0.5rem",
+                          paddingLeft: width! < 350 ? "0.5rem" : "0.75rem",
+                          paddingRight: width! < 350 ? "0.5rem" : "0.75rem",
+                        }}
+                      >
+                        <IonText
+                          color='black'
+                          className='ion-text-center'
+                          style={{
+                            fontSize: width! < 350 ? "0.85rem" : "0.95rem",
+                          }}
+                        >
+                          {e.name === "Tomato"
+                            ? "This effect is free for all! Let's throw some rotten tomatoes at the burdens on the Wall :)"
+                            : "We are making this effect free for early birds! Thank you for using Wall of Shame :)"}
+                        </IonText>
+                      </IonRow>
+                    </IonCard>
+                  </div>
+                </ReactCardFlip>
+              </IonRow>
+              <IonRow style={{ marginTop: "0.25rem" }}>
+                <IonCol>
+                  <IonRow className='ion-justify-content-center'>
+                    <IonButton
+                      color='main-blue'
+                      expand='block'
+                      mode='ios'
+                      disabled
+                      style={{
+                        height: "2rem",
+                        width: width! < 375 ? "40vw" : "10rem",
+                      }}
+                    >
+                      Unlocked
+                    </IonButton>
+                  </IonRow>
+                </IonCol>
+              </IonRow>
+            </IonCol>
+          );
+        })}
+      </IonRow>
+    );
+  };
+
   return (
     <IonPage style={{ background: "#ffffff" }}>
       <IonHeader className='ion-no-border'>
@@ -443,11 +642,7 @@ const Store: React.FC = () => {
             <IonText style={{ fontWeight: "bold" }}>Effects</IonText>
           </IonButton>
         </IonRow>
-        {tab === "powerups" ? (
-          renderPowerUps()
-        ) : (
-          <Container>Coming soon :)</Container>
-        )}
+        {tab === "powerups" ? renderPowerUps() : renderEffects()}
         <CoinModal
           showModal={showCoinInfoModal}
           setShowModal={setShowCoinInfoModal}
