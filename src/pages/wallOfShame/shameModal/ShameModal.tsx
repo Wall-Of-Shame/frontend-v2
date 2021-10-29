@@ -109,10 +109,8 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
                     <IonText
                       style={{
                         fontWeight: "bold",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
                         whiteSpace: "break-spaces",
-                        wordBreak: "break-all",
+                        wordBreak: "break-word",
                       }}
                     >
                       {shame.name}{" "}
@@ -122,10 +120,8 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
                   <h4
                     style={{
                       fontWeight: "bold",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
                       whiteSpace: "break-spaces",
-                      wordBreak: "break-all",
+                      wordBreak: "break-word",
                     }}
                   >
                     {shame.title}

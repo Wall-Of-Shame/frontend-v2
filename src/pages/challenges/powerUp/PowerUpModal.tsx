@@ -41,6 +41,8 @@ import { useChallenge } from "../../../contexts/ChallengeContext";
 import AvatarImg from "../../../components/avatar";
 import { isAfter } from "date-fns";
 import parseISO from "date-fns/parseISO";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../reducers/RootReducer";
 
 interface PowerUpModalProps {
   challengeData: ChallengeData;
@@ -86,6 +88,11 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
   const [isSelectingTargetUser, setIsSelectingTargetUser] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [matchedUsers, setMatchedUsers] = useState<UserList[]>([]);
+  const selectFriends = (state: RootState): UserList[] =>
+    state.misc.friends ?? [];
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [friends, setFriends] = useState<any>(useSelector(selectFriends));
+  const friendsArray = Object.values(friends) as UserList[];
 
   const [isPowerUpFlipped, setIsPowerUpFlipped] = useState<PowerUpMap>({
     Protec: false,
@@ -421,99 +428,198 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
             className='users-search'
             showClearButton='always'
           ></IonSearchbar>
-          <IonGrid className='ion-margin-top ion-no-padding'>
-            <IonText
-              className='ion-margin'
-              style={{ fontSize: 16, fontWeight: 500 }}
-            >
-              Search results
-            </IonText>
-            {matchedUsers.map((u) => {
-              const isU2ed =
-                challengeData.participants.accepted.completed
-                  .concat(challengeData.participants.accepted.notCompleted)
-                  .concat(challengeData.participants.accepted.protected)
-                  .findIndex((x) => x.userId === u.userId) !== -1;
-              return (
-                <IonRow className='ion-margin' key={u.userId}>
-                  <IonCol className='ion-align-item-center' size='2.5'>
-                    <IonRow className='ion-justify-content-cneter'>
-                      <IonAvatar
-                        className='user-avatar'
-                        style={{
-                          width: "3rem",
-                          height: "3rem",
-                        }}
-                      >
-                        <AvatarImg avatar={u.avatar} />
-                      </IonAvatar>
-                    </IonRow>
-                  </IonCol>
-                  <IonCol
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                    }}
-                    size='6'
+          {!!friendsArray && searchText === "" ? (
+            <IonGrid className='ion-margin-top ion-no-padding'>
+              <IonText
+                className='ion-margin'
+                style={{ fontSize: 17, fontWeight: 600 }}
+              >
+                Friends
+              </IonText>
+              {friendsArray.map((u) => {
+                const isU2ed =
+                  challengeData.participants.accepted.completed
+                    .concat(challengeData.participants.accepted.notCompleted)
+                    .concat(challengeData.participants.accepted.protected)
+                    .findIndex((x) => x.userId === u.userId) !== -1;
+                return (
+                  <IonRow
+                    className='ion-margin-vertical ion-margin-end'
+                    key={u.userId}
                   >
-                    <IonRow style={{ paddingBottom: "0.25rem" }}>
-                      <IonText style={{ fontSize: 17, fontWeight: 600 }}>
-                        {u.name}
-                      </IonText>
-                    </IonRow>
-                    <IonRow>{`@${u.username}`}</IonRow>
-                  </IonCol>
-                  {u.userId === user?.userId ? (
-                    <IonCol
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                      size='3.5'
-                    >
-                      <IonButton
-                        mode='ios'
-                        className='ion-no-padding'
-                        color='main-beige'
-                        disabled
-                        fill='solid'
-                        style={{ height: "2rem", width: "100%" }}
-                      >
-                        You
-                      </IonButton>
+                    <IonCol className='ion-align-item-center' size='2.5'>
+                      <IonRow className='ion-justify-content-center'>
+                        <IonAvatar
+                          className='user-avatar'
+                          style={{
+                            width: "3rem",
+                            height: "3rem",
+                          }}
+                        >
+                          <AvatarImg avatar={u.avatar} />
+                        </IonAvatar>
+                      </IonRow>
                     </IonCol>
-                  ) : (
                     <IonCol
                       style={{
                         display: "flex",
+                        flexDirection: "column",
                         justifyContent: "center",
-                        alignItems: "center",
                       }}
-                      size='3.5'
+                      size='6'
                     >
-                      <IonButton
-                        mode='ios'
-                        className='ion-no-padding'
-                        color={"main-blue"}
-                        fill={isU2ed ? "solid" : "outline"}
-                        disabled={isU2ed}
-                        style={{ height: "2rem", width: "100%" }}
-                        onClick={() => {
-                          handleApplyU2(u);
-                        }}
-                      >
-                        <IonText style={{ fontSize: "0.9rem" }}>
-                          {isU2ed ? "U2-ed" : "Use"}
+                      <IonRow style={{ paddingBottom: "0.25rem" }}>
+                        <IonText style={{ fontSize: 17, fontWeight: 600 }}>
+                          {u.name}
                         </IonText>
-                      </IonButton>
+                      </IonRow>
+                      <IonRow>{`@${u.username}`}</IonRow>
                     </IonCol>
-                  )}
-                </IonRow>
-              );
-            })}
-          </IonGrid>
+                    {u.userId === user?.userId ? (
+                      <IonCol
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                        size='3.5'
+                      >
+                        <IonButton
+                          mode='ios'
+                          className='ion-no-padding'
+                          color='main-beige'
+                          disabled
+                          fill='solid'
+                          style={{ height: "2rem", width: "100%" }}
+                        >
+                          You
+                        </IonButton>
+                      </IonCol>
+                    ) : (
+                      <IonCol
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                        size='3.5'
+                      >
+                        <IonButton
+                          mode='ios'
+                          className='ion-no-padding'
+                          color={"main-blue"}
+                          fill={isU2ed ? "solid" : "outline"}
+                          disabled={isU2ed}
+                          style={{ height: "2rem", width: "100%" }}
+                          onClick={() => {
+                            handleApplyU2(u);
+                          }}
+                        >
+                          <IonText style={{ fontSize: "0.9rem" }}>
+                            {isU2ed ? "U2-ed" : "Use"}
+                          </IonText>
+                        </IonButton>
+                      </IonCol>
+                    )}
+                  </IonRow>
+                );
+              })}
+            </IonGrid>
+          ) : (
+            <IonGrid className='ion-margin-top ion-no-padding'>
+              <IonText
+                className='ion-margin'
+                style={{ fontSize: 16, fontWeight: 500 }}
+              >
+                Search results
+              </IonText>
+              {matchedUsers.map((u) => {
+                const isU2ed =
+                  challengeData.participants.accepted.completed
+                    .concat(challengeData.participants.accepted.notCompleted)
+                    .concat(challengeData.participants.accepted.protected)
+                    .findIndex((x) => x.userId === u.userId) !== -1;
+                return (
+                  <IonRow className='ion-margin' key={u.userId}>
+                    <IonCol className='ion-align-item-center' size='2.5'>
+                      <IonRow className='ion-justify-content-cneter'>
+                        <IonAvatar
+                          className='user-avatar'
+                          style={{
+                            width: "3rem",
+                            height: "3rem",
+                          }}
+                        >
+                          <AvatarImg avatar={u.avatar} />
+                        </IonAvatar>
+                      </IonRow>
+                    </IonCol>
+                    <IonCol
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                      }}
+                      size='6'
+                    >
+                      <IonRow style={{ paddingBottom: "0.25rem" }}>
+                        <IonText style={{ fontSize: 17, fontWeight: 600 }}>
+                          {u.name}
+                        </IonText>
+                      </IonRow>
+                      <IonRow>{`@${u.username}`}</IonRow>
+                    </IonCol>
+                    {u.userId === user?.userId ? (
+                      <IonCol
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                        size='3.5'
+                      >
+                        <IonButton
+                          mode='ios'
+                          className='ion-no-padding'
+                          color='main-beige'
+                          disabled
+                          fill='solid'
+                          style={{ height: "2rem", width: "100%" }}
+                        >
+                          You
+                        </IonButton>
+                      </IonCol>
+                    ) : (
+                      <IonCol
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                        size='3.5'
+                      >
+                        <IonButton
+                          mode='ios'
+                          className='ion-no-padding'
+                          color={"main-blue"}
+                          fill={isU2ed ? "solid" : "outline"}
+                          disabled={isU2ed}
+                          style={{ height: "2rem", width: "100%" }}
+                          onClick={() => {
+                            handleApplyU2(u);
+                          }}
+                        >
+                          <IonText style={{ fontSize: "0.9rem" }}>
+                            {isU2ed ? "U2-ed" : "Use"}
+                          </IonText>
+                        </IonButton>
+                      </IonCol>
+                    )}
+                  </IonRow>
+                );
+              })}
+            </IonGrid>
+          )}
         </IonRow>
       );
     } else {
