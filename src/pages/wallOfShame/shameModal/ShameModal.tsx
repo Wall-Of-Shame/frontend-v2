@@ -1,15 +1,21 @@
 import {
   IonButton,
+  IonButtons,
   IonCard,
   IonCol,
   IonContent,
+  IonFab,
+  IonFabButton,
+  IonHeader,
   IonIcon,
   IonLabel,
   IonModal,
   IonRow,
   IonText,
+  IonTitle,
+  IonToolbar,
 } from "@ionic/react";
-import { close } from "ionicons/icons";
+import { arrowBack, waterOutline } from "ionicons/icons";
 import { motion, AnimatePresence } from "framer-motion";
 import "./ShameModal.scss";
 import eggIcon from "../../../assets/icons/egg.svg";
@@ -23,6 +29,9 @@ import { intervalToDuration, parseISO } from "date-fns";
 import { OverlayMap, ShameTool } from "../WallOfShame";
 import { useWindowSize } from "../../../utils/WindowUtils";
 import Container from "../../../components/container";
+import { useState } from "react";
+import { ThrowItemPost } from "../../../interfaces/models/Shame";
+import { formatEffectCount } from "../../../utils/ShameUtils";
 
 interface ShameModalProps {
   shame: Shame | null;
@@ -31,6 +40,7 @@ interface ShameModalProps {
   clearOverlays: () => void;
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
+  shameCallback: (shames: ThrowItemPost[]) => void;
 }
 
 const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
@@ -41,8 +51,13 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
     clearOverlays,
     showModal,
     setShowModal,
+    shameCallback,
   } = props;
   const { width } = useWindowSize();
+
+  const [tomatoCount, setTomatoCount] = useState(0);
+  const [eggCount, setEggCount] = useState(0);
+  const [poopCount, setPoopCount] = useState(0);
 
   if (shame === null) {
     return <></>;
@@ -67,27 +82,80 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
       onDidDismiss={() => setShowModal(false)}
       backdropDismiss={true}
     >
+      <IonHeader className='ion-no-border'>
+        <IonToolbar color='main-yellow' mode='md' className='wall-header'>
+          <IonButtons slot='start'>
+            <IonButton
+              style={{
+                margin: "0.5rem",
+              }}
+              onClick={() => {
+                const splitted = shame.id.split(":");
+                if (splitted.length < 2) {
+                  clearOverlays();
+                  setShowModal(false);
+                  return;
+                }
+                let shames: ThrowItemPost[] = [];
+                if (tomatoCount > 0) {
+                  shames.push({
+                    effect: "TOMATO",
+                    challengeId: splitted[1],
+                    targetUserId: splitted[0],
+                    count: tomatoCount,
+                  });
+                }
+                if (eggCount > 0) {
+                  shames.push({
+                    effect: "EGG",
+                    challengeId: splitted[1],
+                    targetUserId: splitted[0],
+                    count: eggCount,
+                  });
+                }
+                if (poopCount > 0) {
+                  shames.push({
+                    effect: "POOP",
+                    challengeId: splitted[1],
+                    targetUserId: splitted[0],
+                    count: poopCount,
+                  });
+                }
+                if (shames.length > 0) {
+                  shameCallback(shames);
+                }
+                setTomatoCount(0);
+                setEggCount(0);
+                setPoopCount(0);
+                clearOverlays();
+                setShowModal(false);
+              }}
+            >
+              <IonIcon
+                icon={arrowBack}
+                color='white'
+                style={{ fontSize: "1.5rem" }}
+              />
+            </IonButton>
+          </IonButtons>
+          <IonTitle size='large' color='white'>
+            Shame
+          </IonTitle>
+          <IonButton
+            className='placeholder-fab ion-align-items-center'
+            color='main-yellow'
+            mode='ios'
+            shape='round'
+            slot='end'
+            disabled
+            style={{
+              margin: "0.5rem",
+              height: "2.75rem",
+            }}
+          ></IonButton>
+        </IonToolbar>
+      </IonHeader>
       <IonContent fullscreen scrollY={false}>
-        <IonButton
-          color='light'
-          shape='round'
-          mode='ios'
-          className='ion-no-padding'
-          onClick={() => {
-            clearOverlays();
-            setShowModal(false);
-          }}
-          style={{
-            position: "absolute",
-            top: "0.25rem",
-            left: "0.5rem",
-            width: "2.5rem",
-            height: "2.5rem",
-            zIndex: 20000,
-          }}
-        >
-          <IonIcon icon={close} size='large' color='main-yellow' />
-        </IonButton>
         <Container>
           <IonRow
             className='ion-justify-content-center'
@@ -136,7 +204,15 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
                 className='ion-justify-content-center'
                 style={{ paddingBottom: "0.5rem" }}
               >
-                {`🍅 12 🍳 9 💩 5`}
+                {`🍅${formatEffectCount(
+                  (shame.effect.tomato ?? 0) + tomatoCount
+                )}`}
+                &nbsp;
+                {` 🍳${formatEffectCount((shame.effect.egg ?? 0) + eggCount)}`}
+                &nbsp;
+                {` 💩${formatEffectCount(
+                  (shame.effect.poop ?? 0) + poopCount
+                )}`}
               </IonRow>
               <AnimatePresence>
                 {!!overlaysPositions[shame.id] &&
@@ -189,11 +265,16 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
           </IonRow>
           <IonRow
             className='ion-justify-content-center'
-            style={{ paddingTop: "1.75rem" }}
+            style={{ paddingTop: "2.5rem" }}
           >
             <IonRow>
               <IonText>Tap a tool below to shame</IonText>
             </IonRow>
+          </IonRow>
+          <IonRow
+            className='ion-justify-content-center'
+            style={{ paddingTop: "1.5rem" }}
+          >
             <IonRow
               style={{
                 maxWidth: "15rem",
@@ -207,6 +288,7 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
                     style={{ fontSize: "3rem", marginRight: "0.5rem" }}
                     onClick={() => {
                       handleShame(shame.id, "tomato");
+                      setTomatoCount(tomatoCount + 1);
                     }}
                   />
                 </IonRow>
@@ -218,6 +300,7 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
                     style={{ fontSize: "3rem" }}
                     onClick={() => {
                       handleShame(shame.id, "egg");
+                      setEggCount(eggCount + 1);
                     }}
                   />
                 </IonRow>
@@ -229,6 +312,7 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
                     style={{ fontSize: "3rem", marginLeft: "0.5rem" }}
                     onClick={() => {
                       handleShame(shame.id, "poop");
+                      setPoopCount(poopCount + 1);
                     }}
                   />
                 </IonRow>
@@ -236,6 +320,17 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
             </IonRow>
           </IonRow>
         </Container>
+        <IonFab vertical='bottom' horizontal='end' slot='fixed'>
+          <IonFabButton
+            color='main-yellow'
+            onClick={() => {
+              clearOverlays();
+            }}
+            mode='ios'
+          >
+            <IonIcon icon={waterOutline} />
+          </IonFabButton>
+        </IonFab>
       </IonContent>
     </IonModal>
   );

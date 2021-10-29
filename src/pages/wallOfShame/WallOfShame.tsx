@@ -39,6 +39,9 @@ import { useWindowSize } from "../../utils/WindowUtils";
 import intervalToDuration from "date-fns/intervalToDuration";
 import { formatWallTime } from "../../utils/TimeUtils";
 import ShameModal from "./shameModal";
+import { ThrowItemPost } from "../../interfaces/models/Shame";
+import ShameService from "../../services/ShameService";
+import { formatEffectCount } from "../../utils/ShameUtils";
 
 interface WallOfShameState {
   isLoading: boolean;
@@ -488,7 +491,11 @@ const WallOfShame: React.FC = () => {
                           className='ion-justify-content-center'
                           style={{ paddingBottom: "0.5rem" }}
                         >
-                          {`🍅 12 🍳 9 💩 5`}
+                          {`🍅${formatEffectCount(s.effect.tomato ?? 0)}`}
+                          &nbsp;
+                          {` 🍳${formatEffectCount(s.effect.egg ?? 0)}`}
+                          &nbsp;
+                          {` 💩${formatEffectCount(s.effect.poop ?? 0)}`}
                         </IonRow>
                       </IonCard>
                     </IonRow>
@@ -621,6 +628,26 @@ const WallOfShame: React.FC = () => {
             setTimeout(() => {
               setTurn(0);
             }, 500);
+          }}
+          shameCallback={async (shames: ThrowItemPost[]) => {
+            setState({ isLoading: true });
+            try {
+              await ShameService.sendShame(shames);
+              const globalSocket = await connect();
+              globalSocket?.emit("shameListGet", (data: Shame[]) => {
+                setShames(data);
+              });
+              setState({ isLoading: false });
+            } catch (error) {
+              setState({
+                isLoading: false,
+                showAlert: true,
+                hasConfirm: false,
+                alertHeader: "Ooooops",
+                alertMessage:
+                  "Could not sync your thrown stuff to the server at the moment. Please try again later :)",
+              });
+            }
           }}
         />
         <LoadingSpinner
