@@ -265,7 +265,9 @@ const DetailsTab: React.FC<DetailsTabProps> = (props: DetailsTabProps) => {
           className='ion-padding-horizontal ion-padding-bottom'
           style={{ marginBottom: "1rem" }}
         >
-          <IonText>{challenge.description}</IonText>
+          <IonText style={{ whiteSpace: "pre-line" }}>
+            {challenge.description}
+          </IonText>
         </IonRow>
         <IonRow className='ion-padding-horizontal ion-padding-bottom'>
           <IonText style={{ fontWeight: "bold" }}>
