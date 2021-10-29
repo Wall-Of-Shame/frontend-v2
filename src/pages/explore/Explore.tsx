@@ -49,6 +49,7 @@ const Explore: React.FC = () => {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchData = async () => {
@@ -67,15 +68,15 @@ const Explore: React.FC = () => {
       return (
         <div>
           {isDesktop ? (
-            <ul className="featured-horizontal-list">
+            <ul className='featured-horizontal-list'>
               {featured.map((c) => {
                 return (
                   <li
-                    className="featured-horizontal-item"
+                    className='featured-horizontal-item'
                     key={`${c.challengeId}-horizontal`}
                   >
                     <IonCard
-                      mode="ios"
+                      mode='ios'
                       button
                       key={c.challengeId}
                       onClick={() => {
@@ -110,15 +111,15 @@ const Explore: React.FC = () => {
               })}
             </ul>
           ) : (
-            <ul className="featured-horizontal-list mobile">
+            <ul className='featured-horizontal-list mobile'>
               {featured.map((c) => {
                 return (
                   <li
-                    className="featured-horizontal-item"
+                    className='featured-horizontal-item'
                     key={`${c.challengeId}-horizontal`}
                   >
                     <IonCard
-                      mode="ios"
+                      mode='ios'
                       button
                       key={c.challengeId}
                       onClick={() => {
@@ -140,7 +141,7 @@ const Explore: React.FC = () => {
                           {c.title}
                         </IonText>
                       </IonCardHeader>
-                      <IonCardContent className="card-start-time">
+                      <IonCardContent className='card-start-time'>
                         {`Starts ${formatDistanceToNowStrict(
                           parseISO(c.startAt!),
                           { addSuffix: true }
@@ -156,7 +157,7 @@ const Explore: React.FC = () => {
       );
     } else {
       return (
-        <IonRow className="ion-padding">
+        <IonRow className='ion-padding'>
           {"Currently there are no featured challenges!"}
         </IonRow>
       );
@@ -173,16 +174,16 @@ const Explore: React.FC = () => {
             ).length;
             return (
               <IonCard
-                mode="ios"
+                mode='ios'
                 button
                 key={c.challengeId}
                 onClick={() => {
                   history.push(`challenges/${c.challengeId}/details`, c);
                 }}
               >
-                <IonGrid className="ion-no-padding">
-                  <IonRow className="ion-align-items-center">
-                    <IonCol size="12">
+                <IonGrid className='ion-no-padding'>
+                  <IonRow className='ion-align-items-center'>
+                    <IonCol size='12'>
                       <IonCardHeader style={{ paddingBottom: "0.75rem" }}>
                         <IonCardTitle style={{ fontSize: "1.2rem" }}>
                           {c.title}
@@ -210,10 +211,10 @@ const Explore: React.FC = () => {
                         </IonRow>
                         <IonRow
                           style={{ marginTop: "0.5rem" }}
-                          className="ion-align-items-center"
+                          className='ion-align-items-center'
                         >
                           <IonAvatar
-                            className="avatar"
+                            className='avatar'
                             key={c.owner.userId}
                             style={{ marginRight: "0.5rem" }}
                           >
@@ -238,7 +239,7 @@ const Explore: React.FC = () => {
       );
     } else {
       return (
-        <IonRow className="ion-padding">
+        <IonRow className='ion-padding'>
           {"Currently there are no trending challenges!"}
         </IonRow>
       );
@@ -261,16 +262,16 @@ const Explore: React.FC = () => {
 
   return (
     <IonPage style={{ background: "#ffffff" }}>
-      <IonHeader className="ion-no-border">
+      <IonHeader className='ion-no-border'>
         <IonToolbar
-          color="main-blue"
-          mode="md"
-          className="explore-header"
+          color='main-blue'
+          mode='md'
+          className='explore-header'
           style={{ paddingTop: "0.5rem", paddingBottom: "0.25rem" }}
         >
           <IonTitle
-            size="large"
-            color="white"
+            size='large'
+            color='white'
             style={{
               fontWeight: "800",
               fontSize: isDesktop ? "1.5rem" : "2rem",
@@ -279,39 +280,39 @@ const Explore: React.FC = () => {
             Explore
           </IonTitle>
           <IonFabButton
-            className="placeholder-fab"
-            color="main-blue"
-            mode="ios"
-            slot="end"
+            className='placeholder-fab'
+            color='main-blue'
+            mode='ios'
+            slot='end'
             style={{
               margin: "0.5rem",
               width: "2.75rem",
               height: "2.75rem",
             }}
-            routerLink="/explore/search"
+            routerLink='/explore/search'
           >
             <IonIcon icon={search} style={{ fontSize: "1.5rem" }} />
           </IonFabButton>
         </IonToolbar>
-        {!isDesktop && <div className="explore-header-curve" />}
+        {!isDesktop && <div className='explore-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen>
         <IonGrid style={{ marginTop: "2rem" }}>
-          <IonRow className="ion-padding-horizontal ion-padding-top ion-align-items-center">
+          <IonRow className='ion-padding-horizontal ion-padding-top ion-align-items-center'>
             <IonText
               style={{ fontSize: "20px", fontWeight: "bold" }}
-              color="primary"
+              color='primary'
             >
               Featured challenges
             </IonText>
           </IonRow>
           {renderFeaturedChallenges()}
 
-          <IonRow className="ion-padding-horizontal ion-padding-top ion-align-items-center">
+          <IonRow className='ion-padding-horizontal ion-padding-top ion-align-items-center'>
             <IonText
               style={{ fontSize: "20px", fontWeight: "bold" }}
-              color="primary"
+              color='primary'
             >
               Trending challenges
             </IonText>
