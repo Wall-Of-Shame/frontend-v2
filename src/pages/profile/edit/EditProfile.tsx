@@ -17,7 +17,8 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import "./EditProfile.scss";
-import { useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
+import lodash from "lodash";
 import { checkmark, dice, arrowBack } from "ionicons/icons";
 import {
   Avatar,
@@ -77,6 +78,14 @@ const EditProfile: React.FC = () => {
       cancelHandler: () => {},
       okHandler: undefined,
     }
+  );
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedRandomize = useCallback(
+    lodash.debounce(() => {
+      handleRandomize();
+    }, 150),
+    []
   );
 
   const handleRandomize = () => {
@@ -200,7 +209,7 @@ const EditProfile: React.FC = () => {
             shape='round'
             color='medium'
             fill='outline'
-            onClick={handleRandomize}
+            onClick={debouncedRandomize}
           >
             <IonIcon
               color='dark'

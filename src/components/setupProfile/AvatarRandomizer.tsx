@@ -15,6 +15,8 @@ import { ProfileSetUpModalState } from "./ProfileSetUpModal";
 import { arrowBackOutline, dice } from "ionicons/icons";
 import { AvatarAnimal, AvatarColor } from "../../interfaces/models/Users";
 import AvatarImg from "../avatar";
+import lodash from "lodash";
+import { useCallback } from "react";
 
 interface AvatarRandomizerProps {
   state: ProfileSetUpModalState;
@@ -30,6 +32,14 @@ const AvatarRandomizer: React.FC<AvatarRandomizerProps> = (
   const animals = ["CAT", "DOG", "RABBIT"];
   const colors = ["PRIMARY", "SECONDARY", "TERTIARY"];
   const background = ["#cbe8e0", "#c9b2e1", "#c2d5eb"];
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedRandomize = useCallback(
+    lodash.debounce(() => {
+      handleRandomize();
+    }, 150),
+    []
+  );
 
   const handleRandomize = () => {
     const randomAnimal = animals[
@@ -90,7 +100,7 @@ const AvatarRandomizer: React.FC<AvatarRandomizerProps> = (
             shape='round'
             color='medium'
             fill='outline'
-            onClick={handleRandomize}
+            onClick={debouncedRandomize}
           >
             <IonIcon
               icon={dice}
