@@ -103,6 +103,11 @@ export interface Shame {
     color: AvatarColor;
     background: string;
   };
+  effect: {
+    tomato: number;
+    egg: number;
+    poop: number;
+  };
 }
 
 export interface Message {
