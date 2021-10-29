@@ -108,8 +108,11 @@ const Tabs: React.FC = () => {
         <Route exact path='/profile/friends'>
           <Friends />
         </Route>
-        <Route exact path='/challenge-history'>
+        <Route exact path='/profile/challenge-history'>
           <PastChallenges />
+        </Route>
+        <Route exact path='/profile/challenge-history/:id/details'>
+          <ChallengeDetails />
         </Route>
         <Route render={redirectToChallenges} />
       </IonRouterOutlet>

@@ -126,35 +126,50 @@ const AuthenticatedApp: React.FC = () => {
                   <IonTabButton
                     tab='challenges'
                     href='/challenges'
-                    style={{ marginTop: isPlatform("ipad") ? "1.25rem" : 0 }}
+                    style={{
+                      marginTop:
+                        isDesktop && isPlatform("ipad") ? "1.25rem" : 0,
+                    }}
                   >
                     <IonIcon icon={challengeIcon} />
                   </IonTabButton>
                   <IonTabButton
                     tab='explore'
                     href='/explore'
-                    style={{ marginTop: isPlatform("ipad") ? "1.25rem" : 0 }}
+                    style={{
+                      marginTop:
+                        isDesktop && isPlatform("ipad") ? "1.25rem" : 0,
+                    }}
                   >
                     <IonIcon icon={flashlightOutline} />
                   </IonTabButton>
                   <IonTabButton
                     tab='wall-of-shame'
                     href='/wall-of-shame'
-                    style={{ marginTop: isPlatform("ipad") ? "1.25rem" : 0 }}
+                    style={{
+                      marginTop:
+                        isDesktop && isPlatform("ipad") ? "1.25rem" : 0,
+                    }}
                   >
                     <IonIcon icon={shameIcon} />
                   </IonTabButton>
                   <IonTabButton
                     tab='store'
                     href='/store'
-                    style={{ marginTop: isPlatform("ipad") ? "1.25rem" : 0 }}
+                    style={{
+                      marginTop:
+                        isDesktop && isPlatform("ipad") ? "1.25rem" : 0,
+                    }}
                   >
                     <IonIcon icon={storefrontOutline} />
                   </IonTabButton>
                   <IonTabButton
                     tab='profile'
                     href='/profile'
-                    style={{ marginTop: isPlatform("ipad") ? "1.25rem" : 0 }}
+                    style={{
+                      marginTop:
+                        isDesktop && isPlatform("ipad") ? "1.25rem" : 0,
+                    }}
                   >
                     <IonIcon icon={personOutline} />
                     {requests.length > 0 && (
@@ -224,7 +239,12 @@ const AuthenticatedApp: React.FC = () => {
                 : ""
             }`}
             style={{
-              marginTop: isPlatform("ipad") ? "4.5rem" : "3.5rem",
+              marginTop:
+                isDesktop && isPlatform("ipad")
+                  ? "4.5rem"
+                  : isDesktop
+                  ? "3.5rem"
+                  : 0,
             }}
           >
             <Route path='/challenges' render={() => <Tabs />} />

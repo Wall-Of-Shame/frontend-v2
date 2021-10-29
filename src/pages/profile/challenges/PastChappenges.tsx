@@ -135,8 +135,11 @@ const PastChallenges: React.FC = () => {
           button
           key={c.challengeId}
           onClick={() => {
-            window.localStorage.setItem("referer", "challenge-history");
-            history.push(`challenges/${c.challengeId}/details`, c);
+            window.localStorage.setItem("referer", "profile/challenge-history");
+            history.push(
+              `/profile/challenge-history/${c.challengeId}/details`,
+              c
+            );
           }}
         >
           <IonGrid className='ion-no-padding'>
@@ -210,7 +213,7 @@ const PastChallenges: React.FC = () => {
       return (
         <VirtualList
           height={
-            isPlatform("ipad")
+            isDesktop && isPlatform("ipad")
               ? height! - 216
               : isDesktop
               ? height! - 184
@@ -259,7 +262,9 @@ const PastChallenges: React.FC = () => {
               width: "2.75rem",
               height: "2.75rem",
             }}
-            onClick={() => history.goBack()}
+            onClick={() => {
+              history.push("/profile", null);
+            }}
           >
             <IonIcon icon={arrowBack} />
           </IonFabButton>

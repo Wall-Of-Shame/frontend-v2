@@ -188,7 +188,10 @@ const Profile: React.FC = () => {
                 key={c.challengeId}
                 onClick={() => {
                   window.localStorage.setItem("referer", "profile");
-                  history.push(`challenges/${c.challengeId}/details`, c);
+                  history.push(
+                    `/profile/challenge-history/${c.challengeId}/details`,
+                    c
+                  );
                 }}
               >
                 <IonGrid className='ion-no-padding'>
@@ -251,7 +254,7 @@ const Profile: React.FC = () => {
                 mode='ios'
                 color='main-blue'
                 shape='round'
-                onClick={() => history.push("/challenge-history")}
+                onClick={() => history.push("/profile/challenge-history")}
               >
                 Show all
               </IonButton>

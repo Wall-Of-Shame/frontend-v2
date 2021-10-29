@@ -584,12 +584,13 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
               if (state.editMode) {
                 setState({ editMode: false });
               } else {
-                window.history.replaceState({}, "");
                 const referer = window.localStorage.getItem("referer");
-                if (referer) {
-                  history.push(`/${referer}`);
+                if (referer && referer === "share") {
+                  window.location.href = "challenges";
+                } else if (referer) {
+                  history.push(`/${referer}`, null);
                 } else {
-                  history.push("/challenges");
+                  history.push("/challenges", null);
                 }
               }
             }}

@@ -140,7 +140,7 @@ const Friends: React.FC = () => {
               height: "2.75rem",
             }}
             onClick={() => {
-              history.goBack();
+              history.push("/profile", null);
             }}
           >
             <IonIcon icon={arrowBackOutline} />

@@ -149,7 +149,7 @@ const Challenges: React.FC = () => {
     try {
       const sharedChallenge = await getChallenge(challengeId);
       window.localStorage.removeItem("share");
-      window.localStorage.setItem("referer", "challenges");
+      window.localStorage.setItem("referer", "share");
       history.push(`challenges/${challengeId}/details`, sharedChallenge);
     } catch (error) {
       window.localStorage.removeItem("share");
@@ -160,7 +160,7 @@ const Challenges: React.FC = () => {
     fetchData();
     connectToSocket();
     const shareLink = window.localStorage.getItem("share");
-    if (shareLink && user?.name !== undefined && user?.username !== undefined) {
+    if (shareLink && !!user?.username && !!user?.name) {
       redirectIfValid(shareLink);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
