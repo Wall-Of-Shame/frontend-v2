@@ -84,6 +84,9 @@ const Tabs: React.FC = () => {
         <Route exact path='/explore'>
           <Explore />
         </Route>
+        <Route exact path='/explore/challenges/:id/details'>
+          <ChallengeDetails />
+        </Route>
         <Route exact path='/explore/search'>
           <Search />
         </Route>

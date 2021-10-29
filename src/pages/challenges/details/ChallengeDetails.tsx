@@ -383,6 +383,11 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
       return;
     }
     if (!challenge) {
+      const referer = window.localStorage.getItem("referer");
+      if (referer) {
+        window.location.href = referer;
+        return;
+      }
       window.location.href = "challenges";
       return;
     }
@@ -425,6 +430,10 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
 
   const renderHeader = () => {
     if (challenge === null) {
+      const referer = window.localStorage.getItem("referer");
+      if (referer) {
+        <Redirect to={referer} />;
+      }
       return <Redirect to={"challenges"} />;
     }
 
@@ -559,6 +568,10 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   };
 
   if (!challenge) {
+    const referer = window.localStorage.getItem("referer");
+    if (referer) {
+      <Redirect to={referer} />;
+    }
     return <Redirect to={"challenges"} />;
   }
 

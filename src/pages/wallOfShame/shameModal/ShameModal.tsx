@@ -68,6 +68,48 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
     end: Date.now(),
   });
 
+  const handleDismiss = () => {
+    const splitted = shame.id.split(":");
+    if (splitted.length < 2) {
+      clearOverlays();
+      setShowModal(false);
+      return;
+    }
+    let shames: ThrowItemPost[] = [];
+    if (tomatoCount > 0) {
+      shames.push({
+        effect: "TOMATO",
+        challengeId: splitted[1],
+        targetUserId: splitted[0],
+        count: tomatoCount,
+      });
+    }
+    if (eggCount > 0) {
+      shames.push({
+        effect: "EGG",
+        challengeId: splitted[1],
+        targetUserId: splitted[0],
+        count: eggCount,
+      });
+    }
+    if (poopCount > 0) {
+      shames.push({
+        effect: "POOP",
+        challengeId: splitted[1],
+        targetUserId: splitted[0],
+        count: poopCount,
+      });
+    }
+    if (shames.length > 0) {
+      shameCallback(shames);
+    }
+    setTomatoCount(0);
+    setEggCount(0);
+    setPoopCount(0);
+    clearOverlays();
+    setShowModal(false);
+  };
+
   return (
     <IonModal
       cssClass={
@@ -79,7 +121,7 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
       }
       mode='ios'
       isOpen={showModal}
-      onDidDismiss={() => setShowModal(false)}
+      onDidDismiss={handleDismiss}
       backdropDismiss={true}
     >
       <IonHeader className='ion-no-border'>
@@ -89,47 +131,7 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
               style={{
                 margin: "0.5rem",
               }}
-              onClick={() => {
-                const splitted = shame.id.split(":");
-                if (splitted.length < 2) {
-                  clearOverlays();
-                  setShowModal(false);
-                  return;
-                }
-                let shames: ThrowItemPost[] = [];
-                if (tomatoCount > 0) {
-                  shames.push({
-                    effect: "TOMATO",
-                    challengeId: splitted[1],
-                    targetUserId: splitted[0],
-                    count: tomatoCount,
-                  });
-                }
-                if (eggCount > 0) {
-                  shames.push({
-                    effect: "EGG",
-                    challengeId: splitted[1],
-                    targetUserId: splitted[0],
-                    count: eggCount,
-                  });
-                }
-                if (poopCount > 0) {
-                  shames.push({
-                    effect: "POOP",
-                    challengeId: splitted[1],
-                    targetUserId: splitted[0],
-                    count: poopCount,
-                  });
-                }
-                if (shames.length > 0) {
-                  shameCallback(shames);
-                }
-                setTomatoCount(0);
-                setEggCount(0);
-                setPoopCount(0);
-                clearOverlays();
-                setShowModal(false);
-              }}
+              onClick={handleDismiss}
             >
               <IonIcon
                 icon={arrowBack}

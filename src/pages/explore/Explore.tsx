@@ -80,7 +80,11 @@ const Explore: React.FC = () => {
                       button
                       key={c.challengeId}
                       onClick={() => {
-                        history.push(`challenges/${c.challengeId}/details`, c);
+                        window.localStorage.setItem("referer", "explore");
+                        history.push(
+                          `/explore/challenges/${c.challengeId}/details`,
+                          c
+                        );
                       }}
                     >
                       {/* Image height: 200, width: 220 */}
@@ -123,7 +127,10 @@ const Explore: React.FC = () => {
                       button
                       key={c.challengeId}
                       onClick={() => {
-                        history.push(`challenges/${c.challengeId}/details`, c);
+                        history.push(
+                          `/explore/challenges/${c.challengeId}/details`,
+                          c
+                        );
                       }}
                     >
                       <IonImg
@@ -178,7 +185,10 @@ const Explore: React.FC = () => {
                 button
                 key={c.challengeId}
                 onClick={() => {
-                  history.push(`challenges/${c.challengeId}/details`, c);
+                  history.push(
+                    `/explore/challenges/${c.challengeId}/details`,
+                    c
+                  );
                 }}
               >
                 <IonGrid className='ion-no-padding'>
