@@ -17,11 +17,13 @@ import { intervalToDuration, parseISO } from "date-fns";
 import AvatarImg from "../avatar";
 import { formatWallTime } from "../../utils/TimeUtils";
 import { useHistory } from "react-router";
+import PrivacyModal from "../privacyModal";
 
 const RightSection = () => {
   const { connect } = useSocket();
   const history = useHistory();
   const [shames, setShames] = useState<Shame[]>([]);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
   const connectToSocket = async () => {
     const globalSocket = await connect();
@@ -124,6 +126,7 @@ const RightSection = () => {
             color='transparent'
             className='ion-no-padding'
             style={{ height: "2rem" }}
+            onClick={() => setShowPrivacyModal(true)}
           >
             <IonText style={{ fontSize: "0.9rem", color: "#5a5a5a" }}>
               NoPrivacy
@@ -135,6 +138,10 @@ const RightSection = () => {
             &copy; 2021 Wall of Shame
           </IonText>
         </IonRow>
+        <PrivacyModal
+          showModal={showPrivacyModal}
+          setShowModal={setShowPrivacyModal}
+        />
       </IonContent>
     </IonMenu>
   );
