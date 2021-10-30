@@ -128,7 +128,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
       mode='ios'
       isOpen={showModal}
       onDidDismiss={() => setShowModal(false)}
-      backdropDismiss={false}
+      backdropDismiss={true}
     >
       <IonHeader className='ion-no-border'>
         <IonToolbar color='main-blue' mode='md' className='store-header'>
