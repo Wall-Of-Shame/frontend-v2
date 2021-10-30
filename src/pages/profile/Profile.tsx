@@ -16,7 +16,6 @@ import {
   IonText,
   IonToolbar,
   IonPopover,
-  isPlatform,
   IonCardHeader,
   IonCardTitle,
   IonFabButton,
@@ -31,11 +30,10 @@ import {
   createOutline,
   settingsOutline,
   logOutOutline,
-  hammerOutline,
-  bugOutline,
   closeCircle,
   checkmarkCircle,
   refreshOutline,
+  pawOutline,
 } from "ionicons/icons";
 import { Avatar, UserData, UserList } from "../../interfaces/models/Users";
 import { useHistory, useLocation } from "react-router";
@@ -290,7 +288,7 @@ const Profile: React.FC = () => {
             button
             detail={false}
             lines='none'
-            style={{ marginTop: isPlatform("ios") ? "0.5rem" : "0rem" }}
+            style={{ marginTop: "0.5rem" }}
             onClick={() => {
               setShowPopover({ showPopover: false, event: undefined });
               history.push("/profile/edit");
@@ -303,7 +301,7 @@ const Profile: React.FC = () => {
             />
             <IonLabel>Edit profile</IonLabel>
           </IonItem>
-          <IonItem
+          {/*<IonItem
             button
             detail={false}
             lines='none'
@@ -326,6 +324,7 @@ const Profile: React.FC = () => {
             />
             <IonLabel>Tutorial</IonLabel>
           </IonItem>
+          */}
           <IonItem
             button
             detail={false}
@@ -338,7 +337,7 @@ const Profile: React.FC = () => {
           >
             <IonIcon
               slot='start'
-              icon={bugOutline}
+              icon={pawOutline}
               style={{ fontSize: "1.5rem" }}
             />
             <IonLabel>Feedback</IonLabel>
@@ -375,7 +374,7 @@ const Profile: React.FC = () => {
                 },
               });
             }}
-            style={{ marginBottom: isPlatform("ios") ? "0.5rem" : "0rem" }}
+            style={{ marginBottom: "0.5rem" }}
           >
             <IonIcon
               slot='start'
