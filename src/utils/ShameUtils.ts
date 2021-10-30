@@ -16,7 +16,8 @@ export const formatEffectCount = (count: number): string => {
     .find(function (item) {
       return count >= item.value;
     });
+  const divide = item ? count / item?.value : 0;
   return item
-    ? (count / item.value).toFixed(0).replace(rx, "$1") + item.symbol
+    ? divide.toFixed(divide >= 10 ? 0 : 1).replace(rx, "$1") + item.symbol
     : "0";
 };
