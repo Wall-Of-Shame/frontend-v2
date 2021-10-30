@@ -33,7 +33,7 @@ import { RootState } from "../../reducers/RootReducer";
 import { ChallengeDux } from "../../reducers/ChallengeDux";
 import LoadingSpinner from "../../components/loadingSpinner";
 import Alert from "../../components/alert";
-import { addHours, format } from "date-fns";
+import { addHours, format, isAfter } from "date-fns";
 import parseISO from "date-fns/parseISO";
 import AvatarImg from "../../components/avatar";
 import { useSocket } from "../../contexts/SocketContext";
@@ -149,6 +149,25 @@ const Challenges: React.FC = () => {
     try {
       const sharedChallenge = await getChallenge(challengeId);
       window.localStorage.removeItem("share");
+      if (!sharedChallenge?.startAt!) {
+        setState({
+          showAlert: true,
+          hasConfirm: false,
+          alertHeader: "Ooooops",
+          alertMessage: "This invitation is no longer available :(",
+        });
+        return;
+      }
+      if (isAfter(Date.now(), parseISO(sharedChallenge?.startAt!))) {
+        setState({
+          showAlert: true,
+          hasConfirm: false,
+          alertHeader: "Ooooops",
+          alertMessage:
+            "This challenge has already started, try creating one yourself :)",
+        });
+        return;
+      }
       window.localStorage.setItem("referer", "share");
       history.push(`challenges/${challengeId}/details`, sharedChallenge);
     } catch (error) {
