@@ -420,6 +420,7 @@ const EditParticipantsModal: React.FC<EditParticipantsModalProps> = (props) => {
                 }}
               >
                 <IonInput
+                  disabled
                   value={`https://wallofshame.io/share/link=${challengeId}`}
                 />
               </div>

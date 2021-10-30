@@ -10,7 +10,6 @@ import {
   IonCol,
   IonAvatar,
   IonGrid,
-  IonIcon,
   IonSearchbar,
   IonTitle,
   IonButtons,
@@ -21,7 +20,6 @@ import "./AddParticipantsModal.scss";
 import { UserList } from "../../interfaces/models/Users";
 import { useCallback, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
-import { checkmark, close } from "ionicons/icons";
 import AvatarImg from "../avatar";
 import lodash from "lodash";
 import { RootState } from "../../reducers/RootReducer";
@@ -32,13 +30,11 @@ interface AddParticipantsModalProps {
   users: UserList[];
   challengeId: string;
   showModal: boolean;
-  setShowModal: (showModal: boolean) => void;
   completionCallback: (invitedUsers: UserList[]) => void;
 }
 
 const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
-  const { users, challengeId, showModal, setShowModal, completionCallback } =
-    props;
+  const { users, challengeId, showModal, completionCallback } = props;
   const { user, searchUser } = useUser();
   const { isDesktop } = useWindowSize();
 
@@ -89,25 +85,6 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
     <IonModal isOpen={showModal} mode='ios' backdropDismiss={false}>
       <IonHeader className='ion-no-border'>
         <IonToolbar color='main-beige' mode='md' className='store-header'>
-          <IonButtons slot='start'>
-            <IonButton
-              style={{
-                margin: "0.5rem",
-              }}
-              onClick={() => {
-                setShowModal(false);
-                setTimeout(() => {
-                  setInvitedUsers([]);
-                }, 200);
-              }}
-            >
-              <IonIcon
-                icon={close}
-                color='white'
-                style={{ fontSize: "1.5rem" }}
-              />
-            </IonButton>
-          </IonButtons>
           <IonTitle size='large' color='white'>
             Invite participants
           </IonTitle>
@@ -115,16 +92,13 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
             <IonButton
               style={{
                 margin: "0.5rem",
+                fontWeight: "bold",
               }}
               onClick={() => {
                 completionCallback(invitedUsers);
               }}
             >
-              <IonIcon
-                icon={checkmark}
-                color='white'
-                style={{ fontSize: "1.5rem" }}
-              />
+              DONE
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -379,6 +353,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
               >
                 <IonInput
                   value={`https://wallofshame.io/share/link=${challengeId}`}
+                  disabled
                 />
               </div>
             </IonRow>
