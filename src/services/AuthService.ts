@@ -1,5 +1,6 @@
 import store from "../app/store";
 import { UserData } from "../interfaces/models/Users";
+import { clearChallenges } from "../reducers/ChallengeDux";
 import { clearUser, setFriends, setUser } from "../reducers/MiscDux";
 import APIService from "../services/APIService";
 import TokenUtils from "../utils/TokenUtils";
@@ -7,6 +8,7 @@ import TokenUtils from "../utils/TokenUtils";
 const logout = (): Promise<void> => {
   TokenUtils.removeToken();
   store.dispatch(clearUser());
+  store.dispatch(clearChallenges());
   return Promise.resolve();
 };
 

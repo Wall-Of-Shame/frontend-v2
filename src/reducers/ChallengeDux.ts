@@ -114,7 +114,11 @@ const challenges = createSlice({
       state.ongoing = [];
       state.pendingResponse = [];
       state.pendingStart = [];
+      state.votingPeriod = [];
       state.history = [];
+      state.featured = [];
+      state.votes = [];
+      state.others = [];
       state.lastRetrieved = null;
     },
   },
