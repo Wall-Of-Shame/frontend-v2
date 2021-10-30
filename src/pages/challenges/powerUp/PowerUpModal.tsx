@@ -366,13 +366,23 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
                 width: width! < 375 ? "40vw" : "10rem",
               }}
               onClick={() => {
+                if (isAfter(new Date(), parseISO(challengeData.endAt!))) {
+                  setState({
+                    showAlert: true,
+                    hasConfirm: false,
+                    alertHeader: "Notice",
+                    alertMessage:
+                      "This challenge has already ended, U2 can no longer be used :)",
+                  });
+                  return;
+                }
                 if (isAfter(new Date(), parseISO(challengeData.startAt!))) {
                   setState({
                     showAlert: true,
                     hasConfirm: false,
                     alertHeader: "Notice",
                     alertMessage:
-                      "This challenge has already started, U2 is currently disabled :)",
+                      "This challenge has already started, U2 can no longer be used :)",
                   });
                   return;
                 }
