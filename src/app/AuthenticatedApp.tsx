@@ -36,15 +36,14 @@ import "@ionic/react/css/display.css";
 import "../theme/variables.scss";
 
 import "./App.scss";
-import Tabs from "../pages/tabs";
+import Tabs from "./tabs";
 import RightMenu from "../components/rightSection";
 import { isPlatform } from "@ionic/core";
 import {
   flashlightOutline,
   storefrontOutline,
   personOutline,
-  bugOutline,
-  hammerOutline,
+  pawOutline,
 } from "ionicons/icons";
 import logo from "../assets/icon-192x192.png";
 import challengeIcon from "../assets/icons/challenge-icon.svg";
@@ -193,22 +192,13 @@ const AuthenticatedApp: React.FC = () => {
               {width! >= 992 && (
                 <IonCol size='4' className='ion-no-padding ion-no-margin'>
                   <IonRow className='ion-align-items-center ion-justify-content-end'>
-                    <IonButton mode='ios' color='clear'>
-                      <IonIcon
-                        icon={hammerOutline}
-                        color='dark'
-                        style={{
-                          fontSize: "1.5rem",
-                        }}
-                      />
-                    </IonButton>
                     <IonButton
                       mode='ios'
                       color='clear'
                       onClick={() => setShowFeedbackModal(true)}
                     >
                       <IonIcon
-                        icon={bugOutline}
+                        icon={pawOutline}
                         color='dark'
                         style={{
                           fontSize: "1.5rem",
