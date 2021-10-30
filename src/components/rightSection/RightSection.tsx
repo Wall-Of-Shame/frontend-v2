@@ -105,6 +105,9 @@ const RightSection = () => {
             color='transparent'
             className='ion-no-padding'
             style={{ height: "2rem" }}
+            onClick={() => {
+              window.open("https://wallofshame-landing.netlify.app", "_blank");
+            }}
           >
             <IonText
               color='medium'
