@@ -15,7 +15,6 @@ import { ChallengeData, UserMini } from "../../../interfaces/models/Challenges";
 import { useUser } from "../../../contexts/UserContext";
 import { isAfter, parseISO } from "date-fns";
 import AvatarImg from "../../../components/avatar";
-import { trimDisplayName } from "../../../utils/ProfileUtils";
 
 interface ParticipantsProps {
   challenge: ChallengeData;
@@ -84,9 +83,7 @@ const Participants: React.FC<ParticipantsProps> = (
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
                   <IonLabel>
-                    {u.userId === user?.userId
-                      ? "You"
-                      : trimDisplayName(u.name, 7)}
+                    {u.userId === user?.userId ? "You" : u.name}
                   </IonLabel>
 
                   {u.evidenceLink !== undefined && u.evidenceLink !== "" && (
@@ -102,6 +99,38 @@ const Participants: React.FC<ParticipantsProps> = (
                       <IonText style={{ padding: 10 }}>Proof</IonText>
                     </IonButton>
                   )}
+                </IonItem>
+              );
+            })}
+          </IonList>
+        )}
+        {challenge.participants.accepted.protected.length > 0 && (
+          <IonRow
+            className='ion-align-items-center'
+            style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
+          >
+            <IonCol>
+              <IonText>
+                {challenge.participants.accepted.protected.length} participant
+                {challenge.participants.accepted.protected.length !== 1
+                  ? "s have "
+                  : " has "}
+                used Protec
+              </IonText>
+            </IonCol>
+          </IonRow>
+        )}
+        {challenge.participants.accepted.protected.length > 0 && (
+          <IonList>
+            {challenge.participants.accepted.protected.map((u) => {
+              return (
+                <IonItem key={u.userId} lines='none'>
+                  <IonAvatar slot='start'>
+                    <AvatarImg avatar={u.avatar} />
+                  </IonAvatar>
+                  <IonLabel>
+                    {u.userId === user?.userId ? "You" : u.name}
+                  </IonLabel>
                 </IonItem>
               );
             })}
@@ -134,9 +163,7 @@ const Participants: React.FC<ParticipantsProps> = (
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
                   <IonLabel>
-                    {u.userId === user?.userId
-                      ? "You"
-                      : trimDisplayName(u.name, 7)}
+                    {u.userId === user?.userId ? "You" : u.name}
                   </IonLabel>
 
                   {u.evidenceLink !== undefined && u.evidenceLink !== "" && (
@@ -202,9 +229,7 @@ const Participants: React.FC<ParticipantsProps> = (
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
                   <IonLabel>
-                    {u.userId === user?.userId
-                      ? "You"
-                      : trimDisplayName(u.name, 7)}
+                    {u.userId === user?.userId ? "You" : u.name}
                   </IonLabel>
                 </IonItem>
               );
@@ -258,9 +283,7 @@ const Participants: React.FC<ParticipantsProps> = (
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
                   <IonLabel>
-                    {u.userId === user?.userId
-                      ? "You"
-                      : trimDisplayName(u.name, 7)}
+                    {u.userId === user?.userId ? "You" : u.name}
                   </IonLabel>
                   {u.evidenceLink !== undefined && u.evidenceLink !== "" && (
                     <IonButton
@@ -305,9 +328,7 @@ const Participants: React.FC<ParticipantsProps> = (
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
                   <IonLabel>
-                    {u.userId === user?.userId
-                      ? "You"
-                      : trimDisplayName(u.name, 7)}
+                    {u.userId === user?.userId ? "You" : u.name}
                   </IonLabel>
                 </IonItem>
               );
@@ -354,9 +375,7 @@ const Participants: React.FC<ParticipantsProps> = (
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
                   <IonLabel>
-                    {u.userId === user?.userId
-                      ? "You"
-                      : trimDisplayName(u.name, 7)}
+                    {u.userId === user?.userId ? "You" : u.name}
                   </IonLabel>
                 </IonItem>
               );
@@ -410,9 +429,7 @@ const Participants: React.FC<ParticipantsProps> = (
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
                   <IonLabel>
-                    {u.userId === user?.userId
-                      ? "You"
-                      : trimDisplayName(u.name, 7)}
+                    {u.userId === user?.userId ? "You" : u.name}
                   </IonLabel>
                   {u.evidenceLink !== undefined && u.evidenceLink !== "" && (
                     <IonButton
@@ -457,9 +474,7 @@ const Participants: React.FC<ParticipantsProps> = (
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
                   <IonLabel>
-                    {u.userId === user?.userId
-                      ? "You"
-                      : trimDisplayName(u.name, 7)}
+                    {u.userId === user?.userId ? "You" : u.name}
                   </IonLabel>
                 </IonItem>
               );
@@ -495,9 +510,7 @@ const Participants: React.FC<ParticipantsProps> = (
                     <AvatarImg avatar={u.avatar} />
                   </IonAvatar>
                   <IonLabel>
-                    {u.userId === user?.userId
-                      ? "You"
-                      : trimDisplayName(u.name, 7)}
+                    {u.userId === user?.userId ? "You" : u.name}
                   </IonLabel>
                 </IonItem>
               );

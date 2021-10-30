@@ -177,6 +177,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
             endAt: formatISO(addHours(Date.now(), 2)),
             inviteType: "PRIVATE",
             invitedUsers: [],
+            showAlert: false,
           });
           history.push("/challenges");
         },
@@ -556,7 +557,6 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
           users={state.invitedUsers}
           challengeId={challengeId}
           showModal={showModal}
-          setShowModal={setShowModal}
           completionCallback={(invitedUsers) => {
             setState({ invitedUsers: invitedUsers });
             const data: ChallengePost = {
