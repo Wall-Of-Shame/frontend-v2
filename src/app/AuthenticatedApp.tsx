@@ -40,10 +40,10 @@ import Tabs from "./tabs";
 import RightMenu from "../components/rightSection";
 import { isPlatform } from "@ionic/core";
 import {
-  flashlightOutline,
   storefrontOutline,
   personOutline,
   pawOutline,
+  telescopeOutline,
 } from "ionicons/icons";
 import logo from "../assets/icon-192x192.png";
 import challengeIcon from "../assets/icons/challenge-icon.svg";
@@ -140,7 +140,7 @@ const AuthenticatedApp: React.FC = () => {
                         isDesktop && isPlatform("ipad") ? "1.25rem" : 0,
                     }}
                   >
-                    <IonIcon icon={flashlightOutline} />
+                    <IonIcon icon={telescopeOutline} />
                   </IonTabButton>
                   <IonTabButton
                     tab='wall-of-shame'

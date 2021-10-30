@@ -11,7 +11,7 @@ import { Route, Redirect, useLocation } from "react-router";
 import {
   personOutline,
   storefrontOutline,
-  flashlightOutline,
+  telescopeOutline,
 } from "ionicons/icons";
 import challengeIcon from "../../assets/icons/challenge-icon.svg";
 import shameIcon from "../../assets/icons/shame-icon.svg";
@@ -136,7 +136,7 @@ const Tabs: React.FC = () => {
           <IonIcon icon={challengeIcon} />
         </IonTabButton>
         <IonTabButton tab='explore' href='/explore'>
-          <IonIcon icon={flashlightOutline} />
+          <IonIcon icon={telescopeOutline} />
         </IonTabButton>
         <IonTabButton tab='wall-of-shame' href='/wall-of-shame'>
           <IonIcon icon={shameIcon} />

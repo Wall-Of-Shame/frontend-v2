@@ -13,8 +13,8 @@ import {
 } from "@ionic/react";
 import {
   storefrontOutline,
-  flashlightOutline,
   personOutline,
+  telescopeOutline,
 } from "ionicons/icons";
 import challengeIcon from "../../assets/icons/challenge-icon.svg";
 import shameIcon from "../../assets/icons/shame-icon.svg";
@@ -25,7 +25,7 @@ import { useWindowSize } from "../../utils/WindowUtils";
 const routes = {
   appPages: [
     { title: "Challenges", path: "/challenges", icon: challengeIcon },
-    { title: "Explore", path: "/explore", icon: flashlightOutline },
+    { title: "Explore", path: "/explore", icon: telescopeOutline },
     { title: "Wall", path: "/wall-of-shame", icon: shameIcon },
     { title: "Store", path: "/store", icon: storefrontOutline },
     { title: "Profile", path: "/profile", icon: personOutline },
