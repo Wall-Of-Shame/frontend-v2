@@ -11,7 +11,8 @@ import {
   IonText,
 } from "@ionic/react";
 import { add, remove } from "ionicons/icons";
-import challenge from "../../assets/onboarding/challenge.png";
+import ProtecImg from "../../assets/powerup/protec.png";
+import U2Img from "../../assets/powerup/u2.png";
 import "./PurchasePowerUpModal.scss";
 import { PowerUp, PowerUpType } from "../../interfaces/models/Store";
 import { useState } from "react";
@@ -41,7 +42,9 @@ const PurchasePowerUpModal: React.FC<PurchasePowerUpModalProps> = (
 
   return (
     <IonModal
-      cssClass='purhcase-item-modal'
+      cssClass={
+        hasPurchased ? "purchase-item-modal-done" : "purchase-item-modal"
+      }
       mode='ios'
       isOpen={showModal}
       onDidDismiss={() => setShowModal(false)}
@@ -49,7 +52,7 @@ const PurchasePowerUpModal: React.FC<PurchasePowerUpModalProps> = (
     >
       <IonContent fullscreen scrollY={false}>
         {hasPurchased ? (
-          <IonGrid className='ion-padding' style={{ marginTop: "3rem" }}>
+          <IonGrid className='ion-padding' style={{ marginTop: "1rem" }}>
             <IonRow
               className='ion-justify-content-center'
               style={{
@@ -71,7 +74,16 @@ const PurchasePowerUpModal: React.FC<PurchasePowerUpModalProps> = (
                   slot='start'
                   style={{ width: "3.5rem", height: "3.5rem" }}
                 >
-                  <img src={challenge} alt='Challenge' />
+                  <img
+                    src={
+                      powerUp?.type === "Protec"
+                        ? ProtecImg
+                        : powerUp?.type === "U2"
+                        ? U2Img
+                        : undefined
+                    }
+                    alt='PowerUp'
+                  />
                 </IonAvatar>
                 <IonText
                   className='ion-text-center'
@@ -139,7 +151,16 @@ const PurchasePowerUpModal: React.FC<PurchasePowerUpModalProps> = (
                   slot='start'
                   style={{ width: "3.5rem", height: "3.5rem" }}
                 >
-                  <img src={challenge} alt='Challenge' />
+                  <img
+                    src={
+                      powerUp?.type === "Protec"
+                        ? ProtecImg
+                        : powerUp?.type === "U2"
+                        ? U2Img
+                        : undefined
+                    }
+                    alt='PowerUp'
+                  />
                 </IonAvatar>
                 <IonText
                   className='ion-text-center'

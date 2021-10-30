@@ -1,4 +1,4 @@
-.purhcase-item-modal {
+.purchase-item-modal {
   --backdrop-opacity: var(--ion-backdrop-opacity, 0.32);
   --max-height: 23.5rem;
   --max-width: 24rem;
@@ -14,10 +14,43 @@
 }
 
 @media only screen and (min-width: 576px) {
-  .purhcase-item-modal {
+  .purchase-item-modal {
     --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.1);
     --backdrop-opacity: var(--ion-backdrop-opacity, 0.32);
     --max-height: 23.5rem;
+    --max-width: 24.5rem;
+    padding: 7.5vw;
+
+    .modal-wrapper {
+      border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
+    }
+
+    .ion-page {
+      border-radius: inherit;
+    }
+  }
+}
+
+.purchase-item-modal-done {
+  --backdrop-opacity: var(--ion-backdrop-opacity, 0.32);
+  --max-height: 18.5rem;
+  --max-width: 24rem;
+  padding: 7.5vw;
+
+  .modal-wrapper {
+    border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
+  }
+
+  .ion-page {
+    border-radius: inherit;
+  }
+}
+
+@media only screen and (min-width: 576px) {
+  .purchase-item-modal-done {
+    --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.1);
+    --backdrop-opacity: var(--ion-backdrop-opacity, 0.32);
+    --max-height: 18.5rem;
     --max-width: 24.5rem;
     padding: 7.5vw;
 
