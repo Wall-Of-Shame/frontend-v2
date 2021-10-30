@@ -24,9 +24,12 @@ import { useEffect, useReducer, useRef, useState } from "react";
 import StackGrid, { Grid } from "react-stack-grid";
 import uniqid from "uniqid";
 import "./WallOfShame.scss";
-import { hideTabs, showTabs } from "../../utils/TabsUtils";
 import { useLocation } from "react-router";
 import { funnelOutline, trophy } from "ionicons/icons";
+import eggIcon from "../../assets/icons/egg.svg";
+import tomatoIcon from "../../assets/icons/tomato.svg";
+import poopIcon from "../../assets/icons/poop.svg";
+import { hideTabs, showTabs } from "../../utils/TabsUtils";
 import { Shame } from "../../interfaces/models/Challenges";
 import { parseISO } from "date-fns";
 import { UserList } from "../../interfaces/models/Users";
@@ -489,13 +492,70 @@ const WallOfShame: React.FC = () => {
                         </IonRow>
                         <IonRow
                           className='ion-justify-content-center'
-                          style={{ paddingBottom: "0.5rem" }}
+                          style={{
+                            paddingLeft: "0.5rem",
+                            paddingRight: "0.5rem",
+                          }}
                         >
-                          {`🍅${formatEffectCount(s.effect.tomato ?? 0)}`}
-                          &nbsp;
-                          {` 🍳${formatEffectCount(s.effect.egg ?? 0)}`}
-                          &nbsp;
-                          {` 💩${formatEffectCount(s.effect.poop ?? 0)}`}
+                          <IonCol
+                            size='4'
+                            className='ion-no-padding ion-no-margin'
+                          >
+                            <img
+                              src={tomatoIcon}
+                              alt='tomato'
+                              style={{ width: "1.33rem", height: "1.33rem" }}
+                            />
+                          </IonCol>
+                          <IonCol
+                            size='4'
+                            className='ion-no-padding ion-no-margin'
+                          >
+                            <img
+                              src={eggIcon}
+                              alt='egg'
+                              style={{ width: "1.33rem", height: "1.33rem" }}
+                            />
+                          </IonCol>
+                          <IonCol
+                            size='4'
+                            className='ion-no-padding ion-no-margin'
+                          >
+                            <img
+                              src={poopIcon}
+                              alt='poop'
+                              style={{ width: "1.33rem", height: "1.33rem" }}
+                            />
+                          </IonCol>
+                        </IonRow>
+                        <IonRow
+                          className='ion-justify-content-center'
+                          style={{
+                            paddingLeft: "0.5rem",
+                            paddingRight: "0.5rem",
+                            marginBottom: "0.5rem",
+                            fontSize: "0.75rem",
+                            fontWeight: "400",
+                          }}
+                        >
+                          <IonCol
+                            size='4'
+                            className='ion-no-padding ion-no-margin'
+                          >
+                            {formatEffectCount(s.effect.tomato ?? 0)}
+                          </IonCol>
+                          <IonCol
+                            size='4'
+                            className='ion-no-padding ion-no-margin'
+                          >
+                            {formatEffectCount(s.effect.egg ?? 0)}
+                          </IonCol>
+                          <IonCol
+                            size='4'
+                            className='ion-no-padding ion-no-margin'
+                          >
+                            {formatEffectCount(s.effect.poop ?? 0)}
+                          </IonCol>
                         </IonRow>
                       </IonCard>
                     </IonRow>
@@ -652,7 +712,7 @@ const WallOfShame: React.FC = () => {
         />
         <LoadingSpinner
           loading={state.isLoading}
-          message={"Loading"}
+          message={"Syncing"}
           closeLoading={() => {}}
         />
         <Alert

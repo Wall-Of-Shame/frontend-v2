@@ -204,17 +204,52 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
               </IonRow>
               <IonRow
                 className='ion-justify-content-center'
-                style={{ paddingBottom: "0.5rem" }}
+                style={{
+                  paddingLeft: "0.5rem",
+                  paddingRight: "0.5rem",
+                }}
               >
-                {`🍅${formatEffectCount(
-                  (shame.effect.tomato ?? 0) + tomatoCount
-                )}`}
-                &nbsp;
-                {` 🍳${formatEffectCount((shame.effect.egg ?? 0) + eggCount)}`}
-                &nbsp;
-                {` 💩${formatEffectCount(
-                  (shame.effect.poop ?? 0) + poopCount
-                )}`}
+                <IonCol size='4' className='ion-no-padding ion-no-margin'>
+                  <img
+                    src={tomatoIcon}
+                    alt='tomato'
+                    style={{ width: "1.33rem", height: "1.33rem" }}
+                  />
+                </IonCol>
+                <IonCol size='4' className='ion-no-padding ion-no-margin'>
+                  <img
+                    src={eggIcon}
+                    alt='egg'
+                    style={{ width: "1.33rem", height: "1.33rem" }}
+                  />
+                </IonCol>
+                <IonCol size='4' className='ion-no-padding ion-no-margin'>
+                  <img
+                    src={poopIcon}
+                    alt='poop'
+                    style={{ width: "1.33rem", height: "1.33rem" }}
+                  />
+                </IonCol>
+              </IonRow>
+              <IonRow
+                className='ion-justify-content-center'
+                style={{
+                  paddingLeft: "0.5rem",
+                  paddingRight: "0.5rem",
+                  marginBottom: "0.5rem",
+                  fontSize: "0.75rem",
+                  fontWeight: "400",
+                }}
+              >
+                <IonCol size='4' className='ion-no-padding ion-no-margin'>
+                  {formatEffectCount((shame.effect.tomato ?? 0) + tomatoCount)}
+                </IonCol>
+                <IonCol size='4' className='ion-no-padding ion-no-margin'>
+                  {formatEffectCount((shame.effect.egg ?? 0) + eggCount)}
+                </IonCol>
+                <IonCol size='4' className='ion-no-padding ion-no-margin'>
+                  {formatEffectCount((shame.effect.poop ?? 0) + poopCount)}
+                </IonCol>
               </IonRow>
               <AnimatePresence>
                 {!!overlaysPositions[shame.id] &&
