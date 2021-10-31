@@ -73,7 +73,11 @@ const Search: React.FC = () => {
                 button
                 key={c.challengeId}
                 onClick={() => {
-                  history.push(`challenges/${c.challengeId}/details`, c);
+                  window.localStorage.setItem("referer", "explore/search");
+                  history.push(
+                    `/explore/challenges/${c.challengeId}/details`,
+                    c
+                  );
                 }}
               >
                 <IonGrid className='ion-no-padding'>
@@ -158,7 +162,7 @@ const Search: React.FC = () => {
                 height: "2.75rem",
               }}
               onClick={() => {
-                history.goBack();
+                history.push("/explore", {});
               }}
             >
               <IonIcon icon={arrowBack} />
