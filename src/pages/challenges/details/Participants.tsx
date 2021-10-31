@@ -76,7 +76,7 @@ const Participants: React.FC<ParticipantsProps> = (
         )}
         {nonCheaters.length > 0 && (
           <IonList>
-            {challenge.participants.accepted.completed.map((u) => {
+            {nonCheaters.map((u) => {
               return (
                 <IonItem key={u.userId} lines='none'>
                   <IonAvatar slot='start'>
@@ -149,7 +149,7 @@ const Participants: React.FC<ParticipantsProps> = (
                   {cheaters.length !== 1 ? "s" : ""}
                 </strong>
                 {cheaters.length !== 1 ? " have " : " has "}
-                been banished to the Wall of Shame
+                been banished to the Wall of Shame :')
               </IonText>
             </IonCol>
           </IonRow>
