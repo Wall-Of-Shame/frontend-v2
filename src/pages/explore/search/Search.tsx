@@ -15,9 +15,11 @@ import {
   IonText,
   IonToolbar,
   IonSearchbar,
+  IonPage,
 } from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { hideTabs } from "../../../utils/TabsUtils";
 import { useHistory } from "react-router";
 import { useChallenge } from "../../../contexts/ChallengeContext";
 import "../Explore.scss";
@@ -28,12 +30,7 @@ import { format, parseISO } from "date-fns";
 import AvatarImg from "../../../components/avatar";
 import { Avatar } from "../../../interfaces/models/Users";
 
-interface SearchProps {
-  backAction: () => void;
-}
-
-const Search: React.FC<SearchProps> = (props: SearchProps) => {
-  const { backAction } = props;
+const Search: React.FC = () => {
   const history = useHistory();
   const { isDesktop } = useWindowSize();
 
@@ -75,7 +72,7 @@ const Search: React.FC<SearchProps> = (props: SearchProps) => {
                 button
                 key={c.challengeId}
                 onClick={() => {
-                  window.localStorage.setItem("referer", "explore");
+                  window.localStorage.setItem("referer", "explore/search");
                   history.push(
                     `/explore/challenges/${c.challengeId}/details`,
                     c
@@ -141,8 +138,12 @@ const Search: React.FC<SearchProps> = (props: SearchProps) => {
     }
   };
 
+  useEffect(() => {
+    hideTabs();
+  }, []);
+
   return (
-    <>
+    <IonPage>
       <IonHeader className='ion-no-border'>
         <IonToolbar
           color='main-blue'
@@ -159,7 +160,7 @@ const Search: React.FC<SearchProps> = (props: SearchProps) => {
                 width: "2.75rem",
                 height: "2.75rem",
               }}
-              onClick={backAction}
+              onClick={() => history.goBack()}
             >
               <IonIcon icon={arrowBack} />
             </IonFabButton>
@@ -197,7 +198,7 @@ const Search: React.FC<SearchProps> = (props: SearchProps) => {
           {renderChallenges()}
         </IonGrid>
       </IonContent>
-    </>
+    </IonPage>
   );
 };
 

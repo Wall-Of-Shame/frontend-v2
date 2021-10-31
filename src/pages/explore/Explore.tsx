@@ -31,7 +31,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers/RootReducer";
 import { ChallengeDux } from "../../reducers/ChallengeDux";
 import { ChallengeData } from "../../interfaces/models/Challenges";
-import Search from "./search";
 
 const Explore: React.FC = () => {
   const location = useLocation();
@@ -47,8 +46,6 @@ const Explore: React.FC = () => {
   const [others, setOthers] = useState<ChallengeData[]>(
     useSelector(selectChallenges).others
   );
-
-  const [searchMode, setSearchMode] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -277,70 +274,64 @@ const Explore: React.FC = () => {
 
   return (
     <IonPage style={{ background: "#ffffff" }}>
-      {searchMode ? (
-        <Search backAction={() => setSearchMode(false)} />
-      ) : (
-        <>
-          <IonHeader className='ion-no-border'>
-            <IonToolbar
-              color='main-blue'
-              mode='md'
-              className='explore-header'
-              style={{ paddingTop: "0.5rem", paddingBottom: "0.25rem" }}
+      <IonHeader className='ion-no-border'>
+        <IonToolbar
+          color='main-blue'
+          mode='md'
+          className='explore-header'
+          style={{ paddingTop: "0.5rem", paddingBottom: "0.25rem" }}
+        >
+          <IonTitle
+            size='large'
+            color='white'
+            style={{
+              fontWeight: "800",
+              fontSize: isDesktop ? "1.5rem" : "2rem",
+            }}
+          >
+            Explore
+          </IonTitle>
+          <IonFabButton
+            className='placeholder-fab'
+            color='main-blue'
+            mode='ios'
+            slot='end'
+            style={{
+              margin: "0.5rem",
+              width: "2.75rem",
+              height: "2.75rem",
+            }}
+            routerLink='/explore/search'
+          >
+            <IonIcon icon={search} style={{ fontSize: "1.5rem" }} />
+          </IonFabButton>
+        </IonToolbar>
+        {!isDesktop && <div className='explore-header-curve' />}
+      </IonHeader>
+
+      <IonContent fullscreen>
+        <IonGrid style={{ marginTop: "2rem" }}>
+          <IonRow className='ion-padding-horizontal ion-padding-top ion-align-items-center'>
+            <IonText
+              style={{ fontSize: "20px", fontWeight: "bold" }}
+              color='primary'
             >
-              <IonTitle
-                size='large'
-                color='white'
-                style={{
-                  fontWeight: "800",
-                  fontSize: isDesktop ? "1.5rem" : "2rem",
-                }}
-              >
-                Explore
-              </IonTitle>
-              <IonFabButton
-                className='placeholder-fab'
-                color='main-blue'
-                mode='ios'
-                slot='end'
-                style={{
-                  margin: "0.5rem",
-                  width: "2.75rem",
-                  height: "2.75rem",
-                }}
-                onClick={() => setSearchMode(true)}
-              >
-                <IonIcon icon={search} style={{ fontSize: "1.5rem" }} />
-              </IonFabButton>
-            </IonToolbar>
-            {!isDesktop && <div className='explore-header-curve' />}
-          </IonHeader>
+              Featured challenges
+            </IonText>
+          </IonRow>
+          {renderFeaturedChallenges()}
 
-          <IonContent fullscreen>
-            <IonGrid style={{ marginTop: "2rem" }}>
-              <IonRow className='ion-padding-horizontal ion-padding-top ion-align-items-center'>
-                <IonText
-                  style={{ fontSize: "20px", fontWeight: "bold" }}
-                  color='primary'
-                >
-                  Featured challenges
-                </IonText>
-              </IonRow>
-              {renderFeaturedChallenges()}
-
-              <IonRow className='ion-padding-horizontal ion-padding-top ion-align-items-center'>
-                <IonText
-                  style={{ fontSize: "20px", fontWeight: "bold" }}
-                  color='primary'
-                >
-                  Trending challenges
-                </IonText>
-              </IonRow>
-              {renderOtherChallenges()}
-            </IonGrid>
-          </IonContent>
-        </>
-      )}
+          <IonRow className='ion-padding-horizontal ion-padding-top ion-align-items-center'>
+            <IonText
+              style={{ fontSize: "20px", fontWeight: "bold" }}
+              color='primary'
+            >
+              Trending challenges
+            </IonText>
+          </IonRow>
+          {renderOtherChallenges()}
+        </IonGrid>
+      </IonContent>
     </IonPage>
   );
 };
