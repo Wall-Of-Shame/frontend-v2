@@ -32,6 +32,7 @@ import PastChallenges from "../../pages/profile/challenges";
 import { useUser } from "../../contexts/UserContext";
 import { UserList } from "../../interfaces/models/Users";
 import Landing from "../../pages/share";
+import Search from "../../pages/explore/search";
 
 const redirectToChallenges = (): React.ReactNode => (
   <Redirect to={"/challenges"} />
@@ -84,6 +85,9 @@ const Tabs: React.FC = () => {
         </Route>
         <Route exact path='/explore/challenges/:id/details'>
           <ChallengeDetails />
+        </Route>
+        <Route exact path='/explore/search'>
+          <Search />
         </Route>
         <Route exact path='/wall-of-shame'>
           <WallOfShame />
