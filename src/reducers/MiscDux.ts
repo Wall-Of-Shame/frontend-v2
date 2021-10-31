@@ -5,6 +5,7 @@ import { UserData, UserList } from "../interfaces/models/Users";
 export interface MiscDux {
   user?: UserData;
   friends?: UserList[];
+  requests?: UserList[];
   lastRetrieved?: number;
 }
 
@@ -23,6 +24,10 @@ const misc = createSlice({
       state.friends = { ...action.payload };
       state.lastRetrieved = Date.now();
     },
+    setRequests: (state, action: PayloadAction<UserList[]>): void => {
+      state.requests = { ...action.payload };
+      state.lastRetrieved = Date.now();
+    },
     clearUser: (state): void => {
       state.user = undefined;
       state.friends = undefined;
@@ -31,6 +36,6 @@ const misc = createSlice({
   },
 });
 
-export const { setUser, setFriends, clearUser } = misc.actions;
+export const { setUser, setFriends, setRequests, clearUser } = misc.actions;
 
 export default misc.reducer;

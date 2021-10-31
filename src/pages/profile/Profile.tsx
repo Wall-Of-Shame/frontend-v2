@@ -28,7 +28,6 @@ import { useEffect } from "react";
 import {
   ellipsisVertical,
   createOutline,
-  settingsOutline,
   logOutOutline,
   closeCircle,
   checkmarkCircle,
@@ -90,8 +89,23 @@ const Profile: React.FC = () => {
   const [completed, setCompleted] = useState<ChallengeData[]>(
     useSelector(selectChallenges).history
   );
-  const [requests, setRequests] = useState<UserList[]>([]);
-  const [friends, setFriends] = useState<UserList[]>([]);
+
+  const selectFriends = (state: RootState): UserList[] =>
+    state.misc.friends ?? [];
+  const selectRequests = (state: RootState): UserList[] =>
+    state.misc.requests ?? [];
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [friendsObj, setFriendsObj] = useState<any>(useSelector(selectFriends));
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [requestsObj, setRequestsObj] = useState<any>(
+    useSelector(selectRequests)
+  );
+  const [requests, setRequests] = useState<UserList[]>(
+    (Object.values(requestsObj) as UserList[]) ?? []
+  );
+  const [friends, setFriends] = useState<UserList[]>(
+    (Object.values(friendsObj) as UserList[]) ?? []
+  );
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
   const [state, setState] = useReducer(
@@ -342,22 +356,6 @@ const Profile: React.FC = () => {
               style={{ fontSize: "1.5rem" }}
             />
             <IonLabel>Feedback</IonLabel>
-          </IonItem>
-          <IonItem
-            button
-            detail={false}
-            lines='none'
-            onClick={() => {
-              setShowPopover({ showPopover: false, event: undefined });
-              history.push("/profile/settings");
-            }}
-          >
-            <IonIcon
-              slot='start'
-              icon={settingsOutline}
-              style={{ fontSize: "1.5rem" }}
-            />
-            <IonLabel>Settings</IonLabel>
           </IonItem>
           <IonItem
             button
