@@ -20,9 +20,9 @@ import {
 } from "@ionic/react";
 import { useEffect } from "react";
 import { arrowBack } from "ionicons/icons";
+import VirtualList from "react-tiny-virtual-list";
 import { Avatar } from "../../../interfaces/models/Users";
 import { useHistory, useLocation } from "react-router";
-import { VariableSizeList as VirtualList } from "react-window";
 import { hideTabs, showTabs } from "../../../utils/TabsUtils";
 import "./PastChallenges.scss";
 import AvatarImg from "../../../components/avatar";
@@ -48,11 +48,6 @@ interface PastChallengesState {
   okHandler?: () => void;
 }
 
-interface VirtualListProps {
-  index: number;
-  style: any;
-}
-
 const PastChallenges: React.FC = () => {
   const { isDesktop, width, height } = useWindowSize();
   const location = useLocation();
@@ -60,9 +55,6 @@ const PastChallenges: React.FC = () => {
   const selectChallenges = (state: RootState): ChallengeDux => state.challenges;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [completed, setCompleted] = useState<ChallengeData[]>(
-    useSelector(selectChallenges).history
-  );
-  const [filteredChallenges, setFilteredChallenges] = useState<ChallengeData[]>(
     useSelector(selectChallenges).history
   );
 
@@ -96,11 +88,6 @@ const PastChallenges: React.FC = () => {
 
   const handleSearch = async (searchText: string) => {
     setDebouncedSearchText(searchText);
-    const filteredData = completed?.filter(
-      (c) =>
-        c.title.toLowerCase().indexOf(debouncedSearchText.toLowerCase()) !== -1
-    );
-    setFilteredChallenges(filteredData);
   };
 
   useEffect(() => {
@@ -117,93 +104,6 @@ const PastChallenges: React.FC = () => {
     }
   }, [location.pathname]);
 
-  const Row = (props: VirtualListProps) => {
-    const { style, index } = props;
-    if (index === filteredChallenges.length) {
-      return (
-        <div style={style}>
-          <div style={{ margin: "0.5rem" }}></div>
-        </div>
-      );
-    }
-
-    const c = filteredChallenges[index];
-    return (
-      <div style={style}>
-        <IonCard
-          mode='ios'
-          button
-          key={c.challengeId}
-          onClick={() => {
-            window.localStorage.setItem("referer", "profile/challenge-history");
-            history.push(
-              `/profile/challenge-history/${c.challengeId}/details`,
-              c
-            );
-          }}
-        >
-          <IonGrid className='ion-no-padding'>
-            <IonRow className='ion-align-items-center'>
-              <IonCol size='12'>
-                <IonCardHeader style={{ paddingBottom: "0.75rem" }}>
-                  <IonRow>
-                    <IonCardTitle style={{ fontSize: "1.2rem" }}>
-                      <div
-                        style={{
-                          width: width! > 576 ? 536 : width! - 75,
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {c.title}
-                      </div>
-                    </IonCardTitle>
-                  </IonRow>
-                </IonCardHeader>
-                <IonCardContent>
-                  <IonRow>
-                    <IonText
-                      style={{
-                        fontSize: "0.8rem",
-                        fontWeight: "bold",
-                        marginBottom: "0.25rem",
-                      }}
-                    >
-                      {`Ended on ${format(
-                        parseISO(c.endAt),
-                        "dd MMM yyyy, HH:mm"
-                      )}`}
-                    </IonText>
-                  </IonRow>
-                  <IonRow
-                    style={{ marginTop: "0.5rem" }}
-                    className='ion-align-items-center'
-                  >
-                    <IonAvatar
-                      className='avatar'
-                      key={c.owner.userId}
-                      style={{ marginRight: "0.5rem" }}
-                    >
-                      <AvatarImg avatar={c.owner.avatar as Avatar} />
-                    </IonAvatar>
-                    <IonText
-                      style={{
-                        fontSize: "0.8rem",
-                      }}
-                    >
-                      Created by {c.owner.name ?? "Anonymous"}
-                    </IonText>
-                  </IonRow>
-                </IonCardContent>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
-        </IonCard>
-      </div>
-    );
-  };
-
   const renderChallengeHistory = () => {
     const filteredChallenges = completed?.filter(
       (c) =>
@@ -212,25 +112,108 @@ const PastChallenges: React.FC = () => {
     if (filteredChallenges && filteredChallenges.length > 0) {
       return (
         <VirtualList
+          width='100%'
           height={
             isDesktop && isPlatform("ipad")
-              ? height! - 216
+              ? height! - 224
               : isDesktop
-              ? height! - 184
-              : height! - 140
+              ? height! - 200
+              : height! - 148
           }
-          width={width! > 576 ? 576 : width!}
           itemCount={filteredChallenges.length + 1}
           itemSize={(index) => {
             if (index === filteredChallenges.length) {
-              return 24;
+              return 16;
             }
-            return 156;
+            return 160;
           }}
-          style={{ zIndex: 1 }}
-        >
-          {Row}
-        </VirtualList>
+          renderItem={({ index, style }) => {
+            if (index === filteredChallenges.length) {
+              return (
+                <div style={{ margin: "0.5rem" }} key='end-item'>
+                  &nbsp;
+                </div>
+              );
+            }
+            const c = filteredChallenges[index];
+            return (
+              <div style={style} key={c.challengeId}>
+                <IonCard
+                  mode='ios'
+                  button
+                  onClick={() => {
+                    window.localStorage.setItem(
+                      "referer",
+                      "profile/challenge-history"
+                    );
+                    history.push(
+                      `/profile/challenge-history/${c.challengeId}/details`,
+                      c
+                    );
+                  }}
+                >
+                  <IonGrid className='ion-no-padding'>
+                    <IonRow className='ion-align-items-center'>
+                      <IonCol size='12'>
+                        <IonCardHeader style={{ paddingBottom: "0.75rem" }}>
+                          <IonRow>
+                            <IonCardTitle style={{ fontSize: "1.2rem" }}>
+                              <div
+                                style={{
+                                  width: width! > 576 ? 536 : width! - 75,
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
+                                {c.title}
+                              </div>
+                            </IonCardTitle>
+                          </IonRow>
+                        </IonCardHeader>
+                        <IonCardContent>
+                          <IonRow>
+                            <IonText
+                              style={{
+                                fontSize: "0.8rem",
+                                fontWeight: "bold",
+                                marginBottom: "0.25rem",
+                              }}
+                            >
+                              {`Ended on ${format(
+                                parseISO(c.endAt),
+                                "dd MMM yyyy, HH:mm"
+                              )}`}
+                            </IonText>
+                          </IonRow>
+                          <IonRow
+                            style={{ marginTop: "0.5rem" }}
+                            className='ion-align-items-center'
+                          >
+                            <IonAvatar
+                              className='avatar'
+                              key={c.owner.userId}
+                              style={{ marginRight: "0.5rem" }}
+                            >
+                              <AvatarImg avatar={c.owner.avatar as Avatar} />
+                            </IonAvatar>
+                            <IonText
+                              style={{
+                                fontSize: "0.8rem",
+                              }}
+                            >
+                              Created by {c.owner.name ?? "Anonymous"}
+                            </IonText>
+                          </IonRow>
+                        </IonCardContent>
+                      </IonCol>
+                    </IonRow>
+                  </IonGrid>
+                </IonCard>
+              </div>
+            );
+          }}
+        />
       );
     } else {
       return (
