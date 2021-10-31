@@ -528,8 +528,12 @@ const Challenges: React.FC = () => {
           </IonButton>
         </IonRow>
         <IonRow
-          className='ion-justify-content-start ion-padding-horizontal ion-padding-top'
-          style={{ marginBottom: "1rem" }}
+          className='ion-justify-content-start ion-padding-top'
+          style={{
+            marginBottom: "1rem",
+            paddingLeft: "0.5rem",
+            paddingRight: "0.5rem",
+          }}
         >
           <IonButton
             shape='round'
@@ -538,7 +542,7 @@ const Challenges: React.FC = () => {
             color={tab === "voting" ? "main-beige" : "light"}
             onClick={() => setTab("voting")}
             style={{
-              width: "6.5rem",
+              width: "5rem",
               height: "2.5rem",
             }}
           >
@@ -551,7 +555,7 @@ const Challenges: React.FC = () => {
             color={tab === "ongoing" ? "main-beige" : "light"}
             onClick={() => setTab("ongoing")}
             style={{
-              width: "6.5rem",
+              width: "6rem",
               height: "2.5rem",
             }}
           >
@@ -564,7 +568,7 @@ const Challenges: React.FC = () => {
             color={tab === "pending" ? "main-beige" : "light"}
             onClick={() => setTab("pending")}
             style={{
-              width: "7.5rem",
+              width: "7rem",
               height: "2.5rem",
             }}
           >
