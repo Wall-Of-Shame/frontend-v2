@@ -87,7 +87,7 @@ const rejectRequest = async (userId: string): Promise<void> => {
 
 const getFriendsRankings = async (): Promise<UserList[]> => {
   try {
-    const response = await APIService.get(`users/?operation=wallRecents`);
+    const response = await APIService.get(`users/?operation=wallFriends`);
     return response.data;
   } catch (error) {
     return Promise.reject(error);
