@@ -1,33 +1,29 @@
 import React, { useEffect } from "react";
 import { IonPage, IonContent } from "@ionic/react";
-import { useHistory } from "react-router";
-import Container from "../../components/container";
+import { useUser } from "../../contexts/UserContext";
 
 const Landing: React.FC = () => {
-  const history = useHistory();
+  const user = useUser();
 
   useEffect(() => {
-    const params = window.location.pathname.split("link=");
+    const params = window.location.pathname.split("link/");
     const shareLink = params.length > 1 ? params[1] : "";
     if (shareLink !== "") {
       window.localStorage.setItem("share", shareLink);
     } else {
       window.localStorage.removeItem("share");
     }
-    history.replace("/");
+    if (user.user) {
+      window.location.href = "challenges";
+    } else {
+      window.location.href = "onboarding";
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <IonPage style={{ background: "var(--ion-color-main-beige)" }}>
-      <IonContent fullscreen>
-        <Container>
-          <h1 id='wall-of-shame-header'>WALL OF SHAME</h1>
-          <h5 style={{ marginTop: "1rem", marginBottom: "3rem" }}>
-            Take the moral highground.
-          </h5>
-        </Container>
-      </IonContent>
+      <IonContent fullscreen></IonContent>
     </IonPage>
   );
 };
