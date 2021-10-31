@@ -428,6 +428,36 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [didFinish]);
 
+  useEffect(() => {
+    if (location.pathname.indexOf("details") === -1) {
+      return;
+    }
+    const locationChallengeData = location.state as ChallengeData;
+    if (locationChallengeData) {
+      setChallenge(locationChallengeData);
+      setEditState({
+        title: locationChallengeData.title ?? "",
+        description: locationChallengeData.description ?? "",
+        punishmentType: locationChallengeData.type ?? "NOT_COMPLETED",
+        inviteType: locationChallengeData.inviteType ?? "PRIVATE",
+        startAt: locationChallengeData.startAt ?? formatISO(Date.now()),
+        endAt: locationChallengeData.endAt ?? formatISO(Date.now()),
+        participants: locationChallengeData.participants ?? {
+          accepted: {
+            completed: [],
+            notCompleted: [],
+          },
+          pending: [],
+        },
+        invitedUsers:
+          locationChallengeData.participants.accepted.notCompleted.concat(
+            locationChallengeData.participants.pending
+          ) ?? [],
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
+
   const renderHeader = () => {
     if (challenge === null) {
       const referer = window.localStorage.getItem("referer");
@@ -570,7 +600,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   if (!challenge) {
     const referer = window.localStorage.getItem("referer");
     if (referer) {
-      <Redirect to={referer} />;
+      return <Redirect to={referer} />;
     }
     return <Redirect to={"challenges"} />;
   }
@@ -599,12 +629,9 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
               } else {
                 const referer = window.localStorage.getItem("referer");
                 if (referer && referer === "share") {
-                  // window.location.href = "challenges";
-                  history.push("/challenges", null);
-                } else if (referer) {
-                  history.push(`/${referer}`, null);
+                  window.location.href = "challenges";
                 } else {
-                  history.push("/challenges", null);
+                  history.goBack();
                 }
               }
             }}
