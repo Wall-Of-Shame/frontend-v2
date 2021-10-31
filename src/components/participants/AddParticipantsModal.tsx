@@ -375,7 +375,7 @@ const AddParticipantsModal: React.FC<AddParticipantsModalProps> = (props) => {
                 }}
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    `https://wallofshame.io/share/link=${challengeId}`
+                    `https://wallofshame.io/share/link/${challengeId}`
                   );
                   setCopied(true);
                 }}
