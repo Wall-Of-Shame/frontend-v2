@@ -55,7 +55,7 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
 ) => {
   const { challenge, userData, showModal, setShowModal } = props;
   const { connect } = useSocket();
-  const { uploadProof } = useChallenge();
+  const { uploadProof, getChallenge } = useChallenge();
 
   const [state, setState] = useReducer(
     (s: UploadProofModalState, a: Partial<UploadProofModalState>) => ({
@@ -126,7 +126,11 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
           socket.emit("challengeComplete", {
             challengeId: challenge.challengeId,
           });
+          const updatedChallengeData = await getChallenge(
+            challenge.challengeId
+          );
           setState({
+            challenge: updatedChallengeData ?? challenge,
             isLoading: false,
             showAlert: true,
             alertHeader: "Success",
