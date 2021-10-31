@@ -22,6 +22,7 @@ import { ToggleChangeEventDetail } from "@ionic/core";
 import { useHistory } from "react-router";
 import { hideTabs } from "../../../utils/TabsUtils";
 import Alert from "../../../components/alert";
+import { useWindowSize } from "../../../utils/WindowUtils";
 
 export interface SettingsState {
   showAlert: boolean;
@@ -35,6 +36,7 @@ export interface SettingsState {
 
 const Settings: React.FC = () => {
   const history = useHistory();
+  const { isDesktop } = useWindowSize();
   const { user, updateProfile } = useUser();
   const [settings, setSettings] = useState(
     user?.settings ?? {
@@ -149,6 +151,7 @@ const Settings: React.FC = () => {
             </IonFabButton>
           </IonButtons>
         </IonToolbar>
+        {!isDesktop && <div className='profile-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen>
