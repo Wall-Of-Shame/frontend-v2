@@ -45,6 +45,7 @@ import ShameModal from "./shameModal";
 import { ThrowItemPost } from "../../interfaces/models/Shame";
 import ShameService from "../../services/ShameService";
 import { formatEffectCount } from "../../utils/ShameUtils";
+import { useUser } from "../../contexts/UserContext";
 
 interface WallOfShameState {
   isLoading: boolean;
@@ -73,6 +74,7 @@ export interface OverlayMap {
 const WallOfShame: React.FC = () => {
   const location = useLocation();
   const { connect } = useSocket();
+  const { getFriends } = useUser();
   const { width, isDesktop } = useWindowSize();
 
   const [tab, setTab] = useState("live");
@@ -120,6 +122,7 @@ const WallOfShame: React.FC = () => {
     });
     globalSocket?.on("globalLeaderboard", (data: UserList[]) => {
       setGlobalRankings(data);
+      fetchFriendsData();
     });
     globalSocket?.emit("shameListGet", (data: Shame[]) => {
       setShames(data);
@@ -223,8 +226,18 @@ const WallOfShame: React.FC = () => {
     setOverlaysPositions({});
   };
 
+  const fetchFriendsData = async () => {
+    try {
+      const friendsData = await getFriends();
+      setFriendsRankings(friendsData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     connectToSocket();
+    fetchFriendsData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -372,7 +385,7 @@ const WallOfShame: React.FC = () => {
         </IonRow>
         {rankings.length > 3 && (
           <IonCard>
-            <IonList style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+            <IonList>
               {rankings
                 .sort((x, y) => {
                   const xCount =
@@ -395,7 +408,7 @@ const WallOfShame: React.FC = () => {
                       <IonLabel>
                         <h4 style={{ fontWeight: "bold" }}>{r.name}</h4>
                       </IonLabel>
-                      <IonLabel slot='end'>
+                      <IonLabel slot='end' style={{ marginRight: "0.25rem" }}>
                         {r.failedChallengeCount + (r.vetoedChallengeCount ?? 0)}
                       </IonLabel>
                     </IonItem>
