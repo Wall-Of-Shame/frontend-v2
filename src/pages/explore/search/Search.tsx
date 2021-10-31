@@ -11,15 +11,13 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
-  IonPage,
   IonRow,
   IonText,
   IonToolbar,
   IonSearchbar,
 } from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
-import { useCallback, useEffect, useState } from "react";
-import { hideTabs } from "../../../utils/TabsUtils";
+import { useCallback, useState } from "react";
 import { useHistory } from "react-router";
 import { useChallenge } from "../../../contexts/ChallengeContext";
 import "../Explore.scss";
@@ -30,7 +28,12 @@ import { format, parseISO } from "date-fns";
 import AvatarImg from "../../../components/avatar";
 import { Avatar } from "../../../interfaces/models/Users";
 
-const Search: React.FC = () => {
+interface SearchProps {
+  backAction: () => void;
+}
+
+const Search: React.FC<SearchProps> = (props: SearchProps) => {
+  const { backAction } = props;
   const history = useHistory();
   const { isDesktop } = useWindowSize();
 
@@ -48,7 +51,6 @@ const Search: React.FC = () => {
   );
 
   const handleSearch = async (searchText: string) => {
-    console.log("CALLED HANDLESEARCH");
     if (searchText.length <= 0) {
       setChallenges([]);
       return;
@@ -73,7 +75,7 @@ const Search: React.FC = () => {
                 button
                 key={c.challengeId}
                 onClick={() => {
-                  window.localStorage.setItem("referer", "explore/search");
+                  window.localStorage.setItem("referer", "explore");
                   history.push(
                     `/explore/challenges/${c.challengeId}/details`,
                     c
@@ -139,12 +141,8 @@ const Search: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    hideTabs();
-  }, []);
-
   return (
-    <IonPage>
+    <>
       <IonHeader className='ion-no-border'>
         <IonToolbar
           color='main-blue'
@@ -161,9 +159,7 @@ const Search: React.FC = () => {
                 width: "2.75rem",
                 height: "2.75rem",
               }}
-              onClick={() => {
-                history.push("/explore", {});
-              }}
+              onClick={backAction}
             >
               <IonIcon icon={arrowBack} />
             </IonFabButton>
@@ -201,7 +197,7 @@ const Search: React.FC = () => {
           {renderChallenges()}
         </IonGrid>
       </IonContent>
-    </IonPage>
+    </>
   );
 };
 
