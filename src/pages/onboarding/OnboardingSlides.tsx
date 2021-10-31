@@ -26,6 +26,7 @@ interface OnboardingSlidesProps {
   initSwiper: (this: any) => Promise<void>;
   setShowSignUpModal: (showModal: boolean) => void;
   setShowLoginModal: (showModal: boolean) => void;
+  setShowPrivacyModal: (showModal: boolean) => void;
   swipeNext: () => void;
   swiperCallback: () => void;
   state: OnboardingState;
@@ -36,6 +37,7 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
   initSwiper,
   setShowSignUpModal,
   setShowLoginModal,
+  setShowPrivacyModal,
   swipeNext,
   swiperCallback,
   state,
@@ -252,8 +254,18 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
           <h5 style={{ marginTop: "1rem", marginBottom: "3rem" }}>
             Take the moral highground.
           </h5>
-          <IonRow className='ion-justify-content-center ion-no-padding'>
-            <IonCol sizeXs='12' sizeSm='8' sizeMd='6' sizeLg='4' sizeXl='3.5'>
+          <IonRow
+            className='ion-justify-content-center'
+            style={{ paddingBottom: "0.5rem" }}
+          >
+            <IonCol
+              sizeXs='12'
+              sizeSm='8'
+              sizeMd='6'
+              sizeLg='4'
+              sizeXl='3.5'
+              className='ion-no-padding'
+            >
               <IonButton
                 mode='ios'
                 expand='block'
@@ -291,8 +303,18 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
               </IonButton>
             </IonCol>
           </IonRow>
-          <IonRow className='ion-justify-content-center ion-no-padding'>
-            <IonCol sizeXs='12' sizeSm='8' sizeMd='6' sizeLg='4' sizeXl='3.5'>
+          <IonRow
+            className='ion-justify-content-center'
+            style={{ paddingBottom: "0.5rem" }}
+          >
+            <IonCol
+              sizeXs='12'
+              sizeSm='8'
+              sizeMd='6'
+              sizeLg='4'
+              sizeXl='3.5'
+              className='ion-no-padding'
+            >
               <IonButton
                 mode='ios'
                 expand='block'
@@ -337,10 +359,17 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
             {/* <p>or</p> */}
           </div>
           <IonRow
-            className='ion-justify-content-center ion-no-padding'
-            style={{ marginBottom: "1rem" }}
+            className='ion-justify-content-center'
+            style={{ paddingBottom: "0.5rem" }}
           >
-            <IonCol sizeXs='12' sizeSm='8' sizeMd='6' sizeLg='4' sizeXl='3.5'>
+            <IonCol
+              sizeXs='12'
+              sizeSm='8'
+              sizeMd='6'
+              sizeLg='4'
+              sizeXl='3.5'
+              className='ion-no-padding'
+            >
               <IonButton
                 mode='ios'
                 expand='block'
@@ -360,7 +389,10 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
               </IonButton>
             </IonCol>
           </IonRow>
-          <IonRow className='ion-justify-content-center'>
+          <IonRow
+            className='ion-justify-content-center'
+            style={{ paddingTop: "0.5rem" }}
+          >
             <IonText
               className='ion-text-center'
               color='light'
@@ -377,6 +409,27 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
               >
                 <IonText color='light' style={{ fontWeight: "bold" }}>
                   Log in
+                </IonText>
+              </Link>
+            </IonText>
+          </IonRow>
+          <IonRow className='ion-justify-content-center ion-margin-top ion-align-items-center'>
+            <IonText
+              className='ion-text-center'
+              color='light'
+              id='login-options-button-text'
+            >
+              By proceeding, I agree to the&nbsp;
+              <Link
+                to={"#"}
+                color='light'
+                style={{ textDecoration: "none" }}
+                onClick={() => {
+                  setShowPrivacyModal(true);
+                }}
+              >
+                <IonText color='light' style={{ fontWeight: "bold" }}>
+                  Privacy Policy
                 </IonText>
               </Link>
             </IonText>

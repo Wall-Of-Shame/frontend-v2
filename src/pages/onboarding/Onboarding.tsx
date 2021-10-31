@@ -8,6 +8,7 @@ import LoginModal from "./login";
 import { arrowBackOutline } from "ionicons/icons";
 import LoadingSpinner from "../../components/loadingSpinner";
 import Alert from "../../components/alert";
+import PrivacyModal from "../../components/privacyModal";
 
 export interface OnboardingState {
   isLoading: boolean;
@@ -24,6 +25,7 @@ const Onboarding: React.FC = () => {
   const [swiper, setSwiper] = useState<any>(null);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [atStart, setAtStart] = useState(true);
   const [completed, setCompleted] = useState(false);
 
@@ -109,6 +111,7 @@ const Onboarding: React.FC = () => {
           initSwiper={initSwiper}
           setShowSignUpModal={setShowSignUpModal}
           setShowLoginModal={setShowLoginModal}
+          setShowPrivacyModal={setShowPrivacyModal}
           swipeNext={() => {
             if (swiper) {
               swiper.slideNext();
@@ -131,6 +134,11 @@ const Onboarding: React.FC = () => {
         <LoginModal
           showModal={showLoginModal}
           setShowModal={setShowLoginModal}
+        />
+        <PrivacyModal
+          color='main-beige'
+          showModal={showPrivacyModal}
+          setShowModal={setShowPrivacyModal}
         />
         <LoadingSpinner
           loading={state.isLoading}

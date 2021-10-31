@@ -4,7 +4,7 @@
 
 .slide {
   overflow: auto;
-  height: 110vh;
+  height: 105vh;
   &.beige {
     background-color: var(--ion-color-main-beige);
   }
@@ -14,10 +14,6 @@
   &.yellow {
     background-color: var(--ion-color-main-yellow);
   }
-}
-
-.container {
-  max-height: 100%;
 }
 
 .swiper-slide h2 {
