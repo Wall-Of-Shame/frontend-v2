@@ -22,7 +22,6 @@ import Profile from "../../pages/profile";
 import CreateChallenge from "../../pages/challenges/create";
 import ChallengeDetails from "../../pages/challenges/details";
 import EditProfile from "../../pages/profile/edit";
-import Settings from "../../pages/profile/settings";
 import Explore from "../../pages/explore";
 import Store from "../../pages/store";
 import Invitations from "../../pages/challenges/invitations";
@@ -97,9 +96,6 @@ const Tabs: React.FC = () => {
         </Route>
         <Route exact path='/profile/edit'>
           <EditProfile />
-        </Route>
-        <Route exact path='/profile/settings'>
-          <Settings />
         </Route>
         <Route exact path='/profile/user/:id'>
           <OtherProfile />
