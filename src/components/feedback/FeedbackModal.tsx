@@ -152,18 +152,6 @@ const FeedbackModal: React.FC<FeedbackModalProps> = (
           <IonTitle size='large' color='white'>
             Feedback
           </IonTitle>
-          <IonButton
-            className='placeholder-fab ion-align-items-center'
-            color='main-blue'
-            mode='ios'
-            shape='round'
-            slot='end'
-            disabled
-            style={{
-              margin: "0.5rem",
-              height: "2.75rem",
-            }}
-          ></IonButton>
         </IonToolbar>
       </IonHeader>
       <IonContent>
