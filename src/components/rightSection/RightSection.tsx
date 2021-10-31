@@ -129,7 +129,7 @@ const RightSection = () => {
             onClick={() => setShowPrivacyModal(true)}
           >
             <IonText style={{ fontSize: "0.9rem", color: "#5a5a5a" }}>
-              NoPrivacy
+              Privacy
             </IonText>
           </IonButton>
         </IonRow>
@@ -139,6 +139,7 @@ const RightSection = () => {
           </IonText>
         </IonRow>
         <PrivacyModal
+          color='main-blue'
           showModal={showPrivacyModal}
           setShowModal={setShowPrivacyModal}
         />
