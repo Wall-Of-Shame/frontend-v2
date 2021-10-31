@@ -68,7 +68,7 @@ const Tabs: React.FC = () => {
   return (
     <IonTabs>
       <IonRouterOutlet animated={false}>
-        <Route path='/share/' component={Landing} />
+        <Route exact path='/share/link/:id' component={Landing} />
         <Route exact path='/challenges'>
           <Challenges />
         </Route>

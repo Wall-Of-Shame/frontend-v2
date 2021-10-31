@@ -34,7 +34,7 @@ const UnauthenticatedApp: React.FC = () => {
       <IonReactRouter>
         <IonRouterOutlet id='main'>
           <Switch>
-            <Route path='/share/' component={Landing} />
+            <Route exact path='/share/link/:id' component={Landing} />
             <Route exact path='/onboarding' component={Onboarding} />
             <Route render={redirectToOnboarding} />
           </Switch>
