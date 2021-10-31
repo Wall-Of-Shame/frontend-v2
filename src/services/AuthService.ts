@@ -9,6 +9,7 @@ const logout = (): Promise<void> => {
   TokenUtils.removeToken();
   store.dispatch(clearUser());
   store.dispatch(clearChallenges());
+  window.localStorage.removeItem("referer");
   return Promise.resolve();
 };
 
