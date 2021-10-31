@@ -60,7 +60,7 @@ const Invitations: React.FC = () => {
                 height: "2.75rem",
               }}
               onClick={() => {
-                history.goBack();
+                history.push("/challenges");
               }}
             >
               <IonIcon icon={arrowBack} />
@@ -92,6 +92,10 @@ const Invitations: React.FC = () => {
                   button
                   key={c.challengeId}
                   onClick={() => {
+                    window.localStorage.setItem(
+                      "referer",
+                      "challenges/invitations"
+                    );
                     history.push(`/challenges/${c.challengeId}/details`, c);
                   }}
                 >
