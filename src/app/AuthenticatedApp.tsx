@@ -233,7 +233,7 @@ const AuthenticatedApp: React.FC = () => {
                 isDesktop && isPlatform("ipad")
                   ? "4.5rem"
                   : isDesktop
-                  ? "3.5rem"
+                  ? "3.25rem"
                   : 0,
             }}
           >
