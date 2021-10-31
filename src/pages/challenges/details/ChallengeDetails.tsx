@@ -599,7 +599,8 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
               } else {
                 const referer = window.localStorage.getItem("referer");
                 if (referer && referer === "share") {
-                  window.location.href = "challenges";
+                  // window.location.href = "challenges";
+                  history.push("/challenges", null);
                 } else if (referer) {
                   history.push(`/${referer}`, null);
                 } else {
