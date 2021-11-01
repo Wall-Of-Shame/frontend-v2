@@ -522,7 +522,7 @@ const Challenges: React.FC = () => {
             mode='ios'
             fill='solid'
             color='main-yellow'
-            routerLink='challenges/create'
+            routerLink='/challenges/create'
           >
             Create a new challenge
           </IonButton>

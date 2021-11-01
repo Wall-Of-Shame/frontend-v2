@@ -16,12 +16,10 @@ import { Shame } from "../../interfaces/models/Challenges";
 import { intervalToDuration, parseISO } from "date-fns";
 import AvatarImg from "../avatar";
 import { formatWallTime } from "../../utils/TimeUtils";
-import { useHistory } from "react-router";
 import PrivacyModal from "../privacyModal";
 
 const RightSection = () => {
   const { connect } = useSocket();
-  const history = useHistory();
   const [shames, setShames] = useState<Shame[]>([]);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
@@ -60,13 +58,7 @@ const RightSection = () => {
           </IonCol>
           <IonCol>
             <IonRow className='ion-justify-content-end'>
-              <IonButton
-                fill='clear'
-                mode='ios'
-                onClick={() => {
-                  history.push("/wall-of-shame");
-                }}
-              >
+              <IonButton fill='clear' mode='ios' routerLink='/wall-of-shame'>
                 Show all
               </IonButton>
             </IonRow>
