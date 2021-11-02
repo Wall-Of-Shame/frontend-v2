@@ -8,6 +8,7 @@ import Alert from "../alert";
 import AvatarRandomizer from "./AvatarRandomizer";
 import { useUser } from "../../contexts/UserContext";
 import { Avatar, Settings } from "../../interfaces/models/Users";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface ProfileSetUpModalProps {
   showModal: boolean;
@@ -32,6 +33,7 @@ export interface ProfileSetUpModalState {
 const ProfileSetUpModal: React.FC<ProfileSetUpModalProps> = (
   props: ProfileSetUpModalProps
 ) => {
+  const { refreshUser } = useAuth();
   const { user, updateProfile } = useUser();
   const { showModal, setShowModal } = props;
   const [pageNumber, setPageNumber] = useState(0);
@@ -96,11 +98,10 @@ const ProfileSetUpModal: React.FC<ProfileSetUpModalProps> = (
         state.settings,
         state.avatar
       );
+      await refreshUser();
       setState({ isLoading: false });
       setShowModal(false);
-      setTimeout(() => {
-        window.location.reload();
-      }, 300);
+      window.location.reload();
     } catch (error) {
       setState({
         isLoading: false,
