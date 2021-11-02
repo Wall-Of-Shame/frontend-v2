@@ -18,6 +18,7 @@ export interface UserData {
   email: string;
   username?: string;
   name?: string;
+  hasInitialised: boolean;
   completedChallengeCount?: number;
   failedChallengeCount?: number;
   vetoedChallengeCount?: number;
