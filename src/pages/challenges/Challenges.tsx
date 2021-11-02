@@ -179,7 +179,7 @@ const Challenges: React.FC = () => {
     fetchData();
     connectToSocket();
     const shareLink = window.localStorage.getItem("share");
-    if (shareLink && !!user?.username && !!user?.name) {
+    if (shareLink && user?.hasInitialised) {
       redirectIfValid(shareLink);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -187,7 +187,7 @@ const Challenges: React.FC = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      if (!user?.username || !user?.name) {
+      if (!user?.hasInitialised) {
         setShowModal(true);
       }
     }, 1000);
