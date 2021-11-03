@@ -14,7 +14,7 @@ const App: React.FC = () => {
   const user = useUser();
 
   useEffect(() => {
-    if (!isFacebookApp()) {
+    if (false) {
       // skip if not instagram browser
       return;
     }

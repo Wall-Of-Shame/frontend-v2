@@ -96,7 +96,7 @@ const AuthProvider: React.FunctionComponent = (props) => {
     try {
       let token: string;
 
-      if (isFacebookApp()) {
+      if (true) {
         // if instagram browser
         await getRedirectResult(auth).then(async user => {
           if (!user) {
