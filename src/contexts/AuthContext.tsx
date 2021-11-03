@@ -12,6 +12,8 @@ import {
   FacebookAuthProvider,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
 } from "firebase/auth";
 import { auth } from "../firebase";
 import LoadingSpinner from "../components/loadingSpinner/LoadingSpinner";
@@ -22,6 +24,7 @@ import TokenUtils from "../utils/TokenUtils";
 import { UserData } from "../interfaces/models/Users";
 import { getToken } from "@firebase/messaging";
 import { useSocket } from "./SocketContext";
+import { isFacebookApp } from "../utils/BrowserUtils";
 
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
@@ -91,10 +94,24 @@ const AuthProvider: React.FunctionComponent = (props) => {
 
   const continueWithGoogle = async (callback: () => void): Promise<void> => {
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      callback();
-      const token = await result.user.getIdToken();
-      await AuthService.login(token);
+      let token: string;
+
+      if (isFacebookApp()) {
+        // if instagram browser
+        await getRedirectResult(auth).then(async user => {
+          if (!user) {
+            await signInWithRedirect(auth, googleProvider);
+          } else {
+            token = await user.user.getIdToken();
+          }
+        })
+      } else {
+        const result = await signInWithPopup(auth, googleProvider);
+        callback();
+        token = await result.user.getIdToken();
+      }
+
+      await AuthService.login(token!);
       await connect();
       await AuthService.getUser();
     } catch (error) {
