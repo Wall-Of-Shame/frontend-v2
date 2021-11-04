@@ -21,6 +21,8 @@ import "./ShameModal.scss";
 import eggIcon from "../../../assets/icons/egg.svg";
 import tomatoIcon from "../../../assets/icons/tomato.svg";
 import poopIcon from "../../../assets/icons/poop.svg";
+import sooIcon from "../../../assets/icons/sooIcon.png";
+import benIcon from "../../../assets/icons/benIcon.png";
 import { egg, poop, tomato } from "../../../assets/overlay";
 import { Shame } from "../../../interfaces/models/Challenges";
 import AvatarImg from "../../../components/avatar";
@@ -169,7 +171,7 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
               style={{ width: width! < 576 ? width! / 2 - 26.5 : "172.7px" }}
             >
               <IonRow className='ion-justify-content-center ion-padding-horizontal ion-padding-top'>
-                <div style={{ width: "6rem", height: "6rem" }}>
+                <div style={{ width: "5.5rem", height: "5.5rem" }}>
                   <AvatarImg avatar={shame.avatar} />
                 </div>
               </IonRow>
@@ -209,21 +211,33 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
                   paddingRight: "0.5rem",
                 }}
               >
-                <IonCol size='4' className='ion-no-padding ion-no-margin'>
+                <IonCol
+                  size='4'
+                  className='ion-no-padding ion-no-margin'
+                  style={{ height: "1.5rem" }}
+                >
                   <img
                     src={tomatoIcon}
                     alt='tomato'
                     style={{ width: "1.33rem", height: "1.33rem" }}
                   />
                 </IonCol>
-                <IonCol size='4' className='ion-no-padding ion-no-margin'>
+                <IonCol
+                  size='4'
+                  className='ion-no-padding ion-no-margin'
+                  style={{ height: "1.5rem" }}
+                >
                   <img
                     src={eggIcon}
                     alt='egg'
                     style={{ width: "1.33rem", height: "1.33rem" }}
                   />
                 </IonCol>
-                <IonCol size='4' className='ion-no-padding ion-no-margin'>
+                <IonCol
+                  size='4'
+                  className='ion-no-padding ion-no-margin'
+                  style={{ height: "1.5rem" }}
+                >
                   <img
                     src={poopIcon}
                     alt='poop'
@@ -249,6 +263,53 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
                 </IonCol>
                 <IonCol size='4' className='ion-no-padding ion-no-margin'>
                   {formatEffectCount((shame.effect.poop ?? 0) + poopCount)}
+                </IonCol>
+              </IonRow>
+              <IonRow
+                className='ion-justify-content-center'
+                style={{
+                  paddingLeft: "0.5rem",
+                  paddingRight: "0.5rem",
+                }}
+              >
+                <IonCol
+                  size='4'
+                  className='ion-no-padding ion-no-margin'
+                  style={{ height: "1.5rem" }}
+                >
+                  <img
+                    src={sooIcon}
+                    alt='tomato'
+                    style={{ width: "1.33rem", height: "1.33rem" }}
+                  />
+                </IonCol>
+                <IonCol
+                  size='4'
+                  className='ion-no-padding ion-no-margin'
+                  style={{ height: "1.5rem" }}
+                >
+                  <img
+                    src={benIcon}
+                    alt='egg'
+                    style={{ width: "1.33rem", height: "1.33rem" }}
+                  />
+                </IonCol>
+              </IonRow>
+              <IonRow
+                className='ion-justify-content-center ion-no-padding ion-no-margin'
+                style={{
+                  paddingLeft: "0.5rem",
+                  paddingRight: "0.5rem",
+                  marginBottom: "0.5rem",
+                  fontSize: "0.75rem",
+                  fontWeight: "400",
+                }}
+              >
+                <IonCol size='4' className='ion-no-padding ion-no-margin'>
+                  {formatEffectCount(shame.effect.tomato ?? 0)}
+                </IonCol>
+                <IonCol size='4' className='ion-no-padding ion-no-margin'>
+                  {formatEffectCount(shame.effect.egg ?? 0)}
                 </IonCol>
               </IonRow>
               <AnimatePresence>
