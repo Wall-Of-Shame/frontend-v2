@@ -33,6 +33,8 @@ import Alert from "../../components/alert";
 import eggIcon from "../../assets/icons/egg.svg";
 import tomatoIcon from "../../assets/icons/tomato.svg";
 import poopIcon from "../../assets/icons/poop.svg";
+import sooIcon from "../../assets/icons/sooIcon.png";
+import benIcon from "../../assets/icons/benIcon.png";
 import ProtecImg from "../../assets/powerup/protec.png";
 import U2Img from "../../assets/powerup/u2.png";
 import CoinModal from "./CoinModal";
@@ -77,12 +79,45 @@ export interface Effect {
   icon: string;
   name: string;
   price: number;
+  description: string;
 }
 
 export const effects: Effect[] = [
-  { icon: tomatoIcon, name: "Tomato", price: 0 },
-  { icon: eggIcon, name: "Egg", price: 250 },
-  { icon: poopIcon, name: "Poop", price: 500 },
+  {
+    icon: tomatoIcon,
+    name: "Tomato",
+    price: 0,
+    description:
+      "This effect is free for all! Let's throw some rotten tomatoes at the burdens on the Wall :)",
+  },
+  {
+    icon: eggIcon,
+    name: "Egg",
+    price: 250,
+    description:
+      "We are making this effect free for early birds! Thank you for using Wall of Shame :)",
+  },
+  {
+    icon: poopIcon,
+    name: "Poop",
+    price: 500,
+    description:
+      "We are making this effect free for early birds! Thank you for using Wall of Shame :)",
+  },
+  {
+    icon: sooIcon,
+    name: "Uncle Soo",
+    price: 1000,
+    description:
+      "Exclusive effect! Available until 30 November 2021. Throw some Uncle Soos now!",
+  },
+  {
+    icon: benIcon,
+    name: "Prof Ben",
+    price: 1000,
+    description:
+      "Exclusive effect! Available until 30 November 2021. Throw some Prof Bens now!",
+  },
 ];
 
 const Store: React.FC = () => {
@@ -527,17 +562,43 @@ const Store: React.FC = () => {
                           paddingRight: width! < 350 ? "0.5rem" : "0.75rem",
                         }}
                       >
-                        <IonText
-                          color='black'
-                          className='ion-text-center'
-                          style={{
-                            fontSize: width! < 350 ? "0.85rem" : "0.95rem",
-                          }}
-                        >
-                          {e.name === "Tomato"
-                            ? "This effect is free for all! Let's throw some rotten tomatoes at the burdens on the Wall :)"
-                            : "We are making this effect free for early birds! Thank you for using Wall of Shame :)"}
-                        </IonText>
+                        {e.name === "Uncle Soo" && (
+                          <IonText
+                            color='black'
+                            className='ion-text-center'
+                            style={{
+                              fontSize: width! < 350 ? "0.85rem" : "0.95rem",
+                            }}
+                          >
+                            Exclusive effect! Available until 30 November 2021.
+                            Throw some <strong>Uncle Soo</strong>s on the Wall
+                            now!"
+                          </IonText>
+                        )}
+                        {e.name === "Prof Ben" && (
+                          <IonText
+                            color='black'
+                            className='ion-text-center'
+                            style={{
+                              fontSize: width! < 350 ? "0.85rem" : "0.95rem",
+                            }}
+                          >
+                            Exclusive effect! Available until 30 November 2021.
+                            Throw some <strong>Prof Ben</strong>s on the Wall
+                            now!"
+                          </IonText>
+                        )}
+                        {e.name !== "Prof Ben" && e.name !== "Uncle Soo" && (
+                          <IonText
+                            color='black'
+                            className='ion-text-center'
+                            style={{
+                              fontSize: width! < 350 ? "0.85rem" : "0.95rem",
+                            }}
+                          >
+                            {e.description}
+                          </IonText>
+                        )}
                       </IonRow>
                     </IonCard>
                   </div>
