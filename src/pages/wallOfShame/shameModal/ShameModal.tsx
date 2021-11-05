@@ -8,6 +8,7 @@ import {
   IonFabButton,
   IonHeader,
   IonIcon,
+  IonImg,
   IonLabel,
   IonModal,
   IonRow,
@@ -23,12 +24,12 @@ import tomatoIcon from "../../../assets/icons/tomato.svg";
 import poopIcon from "../../../assets/icons/poop.svg";
 import sooIcon from "../../../assets/icons/sooIcon.png";
 import benIcon from "../../../assets/icons/benIcon.png";
-import { egg, poop, tomato } from "../../../assets/overlay";
+import { egg, poop, tomato, ben, soo } from "../../../assets/overlay";
 import { Shame } from "../../../interfaces/models/Challenges";
 import AvatarImg from "../../../components/avatar";
 import { formatWallTime } from "../../../utils/TimeUtils";
 import { intervalToDuration, parseISO } from "date-fns";
-import { OverlayMap, ShameTool } from "../WallOfShame";
+import { Overlay, OverlayMap, ShameTool } from "../WallOfShame";
 import { useWindowSize } from "../../../utils/WindowUtils";
 import Container from "../../../components/container";
 import { useState } from "react";
@@ -60,6 +61,8 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
   const [tomatoCount, setTomatoCount] = useState(0);
   const [eggCount, setEggCount] = useState(0);
   const [poopCount, setPoopCount] = useState(0);
+  const [sooCount, setSooCount] = useState(0);
+  const [benCount, setBenCount] = useState(0);
 
   if (shame === null) {
     return <></>;
@@ -102,14 +105,62 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
         count: poopCount,
       });
     }
+    if (sooCount > 0) {
+      shames.push({
+        effect: "SOO",
+        challengeId: splitted[1],
+        targetUserId: splitted[0],
+        count: sooCount,
+      });
+    }
+    if (benCount > 0) {
+      shames.push({
+        effect: "BEN",
+        challengeId: splitted[1],
+        targetUserId: splitted[0],
+        count: benCount,
+      });
+    }
     if (shames.length > 0) {
       shameCallback(shames);
     }
     setTomatoCount(0);
     setEggCount(0);
     setPoopCount(0);
+    setSooCount(0);
+    setBenCount(0);
     clearOverlays();
     setShowModal(false);
+  };
+
+  const computeType = (type: Overlay["type"]): string => {
+    switch (type) {
+      case "egg":
+        return egg;
+      case "tomato":
+        return tomato;
+      case "poop":
+        return poop;
+      case "soo":
+        return soo;
+      case "ben":
+        return ben;
+    }
+  };
+
+  const computeOpacity = (type: Overlay["type"]): number => {
+    switch (type) {
+      case "egg":
+        return 0.95;
+      case "tomato":
+        return 0.7;
+      case "poop":
+        return 0.7;
+      case "soo":
+        return 1;
+      case "ben":
+        return 1;
+    }
   };
 
   return (
@@ -250,7 +301,6 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
                 style={{
                   paddingLeft: "0.5rem",
                   paddingRight: "0.5rem",
-                  marginBottom: "0.5rem",
                   fontSize: "0.75rem",
                   fontWeight: "400",
                 }}
@@ -306,10 +356,10 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
                 }}
               >
                 <IonCol size='4' className='ion-no-padding ion-no-margin'>
-                  {formatEffectCount(shame.effect.tomato ?? 0)}
+                  {formatEffectCount((shame.effect.soo ?? 0) + sooCount)}
                 </IonCol>
                 <IonCol size='4' className='ion-no-padding ion-no-margin'>
-                  {formatEffectCount(shame.effect.egg ?? 0)}
+                  {formatEffectCount((shame.effect.ben ?? 0) + benCount)}
                 </IonCol>
               </IonRow>
               <AnimatePresence>
@@ -324,12 +374,7 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
                           y: 100,
                         }}
                         animate={{
-                          opacity:
-                            overlay.type === "tomato"
-                              ? 0.7
-                              : overlay.type === "egg"
-                              ? 0.9
-                              : 0.7,
+                          opacity: computeOpacity(overlay.type),
                           scale: 1,
                           y: 0,
                         }}
@@ -340,13 +385,7 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
                             duration: 2,
                           },
                         }}
-                        src={
-                          overlay.type === "tomato"
-                            ? tomato
-                            : overlay.type === "egg"
-                            ? egg
-                            : poop
-                        }
+                        src={computeType(overlay.type)}
                         style={{
                           position: "absolute",
                           top: `calc(${overlay.top}% - 2.5rem)`,
@@ -375,15 +414,18 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
           >
             <IonRow
               style={{
-                maxWidth: "15rem",
                 marginTop: "0.5rem",
               }}
             >
               <IonCol>
                 <IonRow className='throwing-icon'>
-                  <IonIcon
+                  <IonImg
                     src={tomatoIcon}
-                    style={{ fontSize: "3rem", marginRight: "0.5rem" }}
+                    style={{
+                      width: width! < 350 ? "2.5rem" : "3rem",
+                      height: width! < 350 ? "2.5rem" : "3rem",
+                      marginLeft: "0.5rem",
+                    }}
                     onClick={() => {
                       handleShame(shame.id, "tomato");
                       setTomatoCount(tomatoCount + 1);
@@ -393,9 +435,13 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
               </IonCol>
               <IonCol>
                 <IonRow className='throwing-icon'>
-                  <IonIcon
+                  <IonImg
                     src={eggIcon}
-                    style={{ fontSize: "3rem" }}
+                    style={{
+                      width: width! < 350 ? "2.5rem" : "3rem",
+                      height: width! < 350 ? "2.5rem" : "3rem",
+                      marginLeft: "0.5rem",
+                    }}
                     onClick={() => {
                       handleShame(shame.id, "egg");
                       setEggCount(eggCount + 1);
@@ -405,12 +451,48 @@ const ShameModal: React.FC<ShameModalProps> = (props: ShameModalProps) => {
               </IonCol>
               <IonCol>
                 <IonRow className='throwing-icon'>
-                  <IonIcon
+                  <IonImg
                     src={poopIcon}
-                    style={{ fontSize: "3rem", marginLeft: "0.5rem" }}
+                    style={{
+                      width: width! < 350 ? "2.5rem" : "3rem",
+                      height: width! < 350 ? "2.5rem" : "3rem",
+                      marginLeft: "0.5rem",
+                    }}
                     onClick={() => {
                       handleShame(shame.id, "poop");
                       setPoopCount(poopCount + 1);
+                    }}
+                  />
+                </IonRow>
+              </IonCol>
+              <IonCol>
+                <IonRow className='throwing-icon'>
+                  <IonImg
+                    src={sooIcon}
+                    style={{
+                      width: width! < 350 ? "2.5rem" : "3rem",
+                      height: width! < 350 ? "2.5rem" : "3rem",
+                      marginLeft: "0.5rem",
+                    }}
+                    onClick={() => {
+                      handleShame(shame.id, "soo");
+                      setSooCount(sooCount + 1);
+                    }}
+                  />
+                </IonRow>
+              </IonCol>
+              <IonCol>
+                <IonRow className='throwing-icon'>
+                  <IonImg
+                    src={benIcon}
+                    style={{
+                      width: width! < 350 ? "2.5rem" : "3rem",
+                      height: width! < 350 ? "2.5rem" : "3rem",
+                      marginLeft: "0.5rem",
+                    }}
+                    onClick={() => {
+                      handleShame(shame.id, "ben");
+                      setBenCount(benCount + 1);
                     }}
                   />
                 </IonRow>

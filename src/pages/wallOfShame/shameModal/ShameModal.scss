@@ -11,3 +11,24 @@
   margin-top: 15%;
   margin-bottom: 15%;
 }
+
+.horizontal-list {
+  display: flex;
+  margin-top: 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  list-style-type: none;
+}
+
+.horizontal-item {
+  height: 5.5rem;
+  width: 4rem;
+  flex-shrink: 0;
+}
+
+.horizontal-item:not(:last-child) {
+  margin-right: 10px;
+}
