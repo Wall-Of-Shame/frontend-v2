@@ -134,7 +134,7 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
             isLoading: false,
             showAlert: true,
             alertHeader: "Success",
-            alertMessage: "Your proof has been uploaded successfully",
+            alertMessage: "Your proof has been uploaded successfully!",
             hasConfirm: false,
             uploadMode: false,
           });
@@ -147,7 +147,7 @@ const UploadProofModal: React.FC<UploadProofModalProps> = (
         isLoading: false,
         showAlert: true,
         alertHeader: "Error processing the image you uploaded",
-        alertMessage: "Please refresh and try again later",
+        alertMessage: "Please refresh and try again later :)",
       });
     }
   };
