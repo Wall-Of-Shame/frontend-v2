@@ -107,6 +107,8 @@ export interface Shame {
     tomato: number;
     egg: number;
     poop: number;
+    ben: number;
+    soo: number;
   };
 }
 

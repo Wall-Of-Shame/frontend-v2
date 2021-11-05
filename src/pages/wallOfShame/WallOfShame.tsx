@@ -29,6 +29,8 @@ import { funnelOutline, trophy } from "ionicons/icons";
 import eggIcon from "../../assets/icons/egg.svg";
 import tomatoIcon from "../../assets/icons/tomato.svg";
 import poopIcon from "../../assets/icons/poop.svg";
+import sooIcon from "../../assets/icons/sooIcon.png";
+import benIcon from "../../assets/icons/benIcon.png";
 import { hideTabs, showTabs } from "../../utils/TabsUtils";
 import { Shame } from "../../interfaces/models/Challenges";
 import { parseISO } from "date-fns";
@@ -58,11 +60,11 @@ interface WallOfShameState {
   okHandler?: () => void;
 }
 
-export type ShameTool = "tomato" | "egg" | "poop";
+export type ShameTool = "tomato" | "egg" | "poop" | "soo" | "ben";
 
 export interface Overlay {
   id: string;
-  type: "tomato" | "egg" | "poop";
+  type: "tomato" | "egg" | "poop" | "soo" | "ben";
   top: number;
   left: number;
 }
@@ -174,6 +176,32 @@ const WallOfShame: React.FC = () => {
           setOverlaysPositions({
             [key]: newPoopOverlays,
           });
+          return;
+        case "soo":
+          const newSooPosition: Overlay = {
+            id: uniqid(),
+            type: "soo",
+            top: 10 + Math.round(Math.random() * 80),
+            left: 10 + Math.round(Math.random() * 80),
+          };
+          let newSooOverlays = overlaysPositions[key] ?? [];
+          newSooOverlays.push(newSooPosition);
+          setOverlaysPositions({
+            [key]: newSooOverlays,
+          });
+          return;
+        case "ben":
+          const newBenPosition: Overlay = {
+            id: uniqid(),
+            type: "ben",
+            top: 10 + Math.round(Math.random() * 80),
+            left: 10 + Math.round(Math.random() * 80),
+          };
+          let newBenOverlays = overlaysPositions[key] ?? [];
+          newBenOverlays.push(newBenPosition);
+          setOverlaysPositions({
+            [key]: newBenOverlays,
+          });
       }
     } else {
       switch (tool) {
@@ -217,6 +245,34 @@ const WallOfShame: React.FC = () => {
           setOverlaysPositions({
             ...overlaysPositions,
             [key]: newPoopOverlays,
+          });
+          return;
+        case "soo":
+          const newSooPosition: Overlay = {
+            id: uniqid(),
+            type: "soo",
+            top: Math.round(Math.random() * 100),
+            left: Math.round(Math.random() * 100),
+          };
+          let newSooOverlays = overlaysPositions[key] ?? [];
+          newSooOverlays.push(newSooPosition);
+          setOverlaysPositions({
+            ...overlaysPositions,
+            [key]: newSooOverlays,
+          });
+          return;
+        case "ben":
+          const newBenPosition: Overlay = {
+            id: uniqid(),
+            type: "ben",
+            top: Math.round(Math.random() * 100),
+            left: Math.round(Math.random() * 100),
+          };
+          let newBenOverlays = overlaysPositions[key] ?? [];
+          newBenOverlays.push(newBenPosition);
+          setOverlaysPositions({
+            ...overlaysPositions,
+            [key]: newBenOverlays,
           });
       }
     }
@@ -444,7 +500,7 @@ const WallOfShame: React.FC = () => {
               horizontal={false}
               gridRef={(r) => (grid.current = r)}
             >
-              {shames.map((s, index) => {
+              {shames.slice(0, 40).map((s, index) => {
                 const duration = intervalToDuration({
                   start: parseISO(s.time),
                   end: Date.now(),
@@ -468,7 +524,7 @@ const WallOfShame: React.FC = () => {
                         }}
                       >
                         <IonRow className='ion-justify-content-center ion-padding-horizontal ion-padding-top'>
-                          <div style={{ width: "6rem", height: "6rem" }}>
+                          <div style={{ width: "5.5rem", height: "5.5rem" }}>
                             <AvatarImg avatar={s.avatar} />
                           </div>
                         </IonRow>
@@ -513,6 +569,7 @@ const WallOfShame: React.FC = () => {
                           <IonCol
                             size='4'
                             className='ion-no-padding ion-no-margin'
+                            style={{ height: "1.5rem" }}
                           >
                             <img
                               src={tomatoIcon}
@@ -523,6 +580,7 @@ const WallOfShame: React.FC = () => {
                           <IonCol
                             size='4'
                             className='ion-no-padding ion-no-margin'
+                            style={{ height: "1.5rem" }}
                           >
                             <img
                               src={eggIcon}
@@ -533,6 +591,7 @@ const WallOfShame: React.FC = () => {
                           <IonCol
                             size='4'
                             className='ion-no-padding ion-no-margin'
+                            style={{ height: "1.5rem" }}
                           >
                             <img
                               src={poopIcon}
@@ -546,7 +605,6 @@ const WallOfShame: React.FC = () => {
                           style={{
                             paddingLeft: "0.5rem",
                             paddingRight: "0.5rem",
-                            marginBottom: "0.5rem",
                             fontSize: "0.75rem",
                             fontWeight: "400",
                           }}
@@ -568,6 +626,59 @@ const WallOfShame: React.FC = () => {
                             className='ion-no-padding ion-no-margin'
                           >
                             {formatEffectCount(s.effect.poop ?? 0)}
+                          </IonCol>
+                        </IonRow>
+                        <IonRow
+                          className='ion-justify-content-center'
+                          style={{
+                            paddingLeft: "0.5rem",
+                            paddingRight: "0.5rem",
+                          }}
+                        >
+                          <IonCol
+                            size='4'
+                            className='ion-no-padding ion-no-margin'
+                            style={{ height: "1.5rem" }}
+                          >
+                            <img
+                              src={sooIcon}
+                              alt='tomato'
+                              style={{ width: "1.33rem", height: "1.33rem" }}
+                            />
+                          </IonCol>
+                          <IonCol
+                            size='4'
+                            className='ion-no-padding ion-no-margin'
+                            style={{ height: "1.5rem" }}
+                          >
+                            <img
+                              src={benIcon}
+                              alt='egg'
+                              style={{ width: "1.33rem", height: "1.33rem" }}
+                            />
+                          </IonCol>
+                        </IonRow>
+                        <IonRow
+                          className='ion-justify-content-center ion-no-padding ion-no-margin'
+                          style={{
+                            paddingLeft: "0.5rem",
+                            paddingRight: "0.5rem",
+                            marginBottom: "0.5rem",
+                            fontSize: "0.75rem",
+                            fontWeight: "400",
+                          }}
+                        >
+                          <IonCol
+                            size='4'
+                            className='ion-no-padding ion-no-margin'
+                          >
+                            {formatEffectCount(s.effect.soo ?? 0)}
+                          </IonCol>
+                          <IonCol
+                            size='4'
+                            className='ion-no-padding ion-no-margin'
+                          >
+                            {formatEffectCount(s.effect.ben ?? 0)}
                           </IonCol>
                         </IonRow>
                       </IonCard>

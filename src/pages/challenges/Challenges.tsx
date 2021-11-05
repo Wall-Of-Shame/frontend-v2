@@ -187,7 +187,10 @@ const Challenges: React.FC = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      if (!user?.hasInitialised) {
+      if (
+        user?.hasInitialised !== undefined &&
+        user?.hasInitialised === false
+      ) {
         setShowModal(true);
       }
     }, 1000);
