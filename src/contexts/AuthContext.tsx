@@ -121,10 +121,24 @@ const AuthProvider: React.FunctionComponent = (props) => {
 
   const continueWithFacebook = async (callback: () => void): Promise<void> => {
     try {
-      const result = await signInWithPopup(auth, facebookProvider);
-      callback();
-      const token = await result.user.getIdToken();
-      await AuthService.login(token);
+      let token: string;
+
+      if (isInstagramBrowser()) {
+        // if instagram browser
+        await getRedirectResult(auth).then(async user => {
+          if (!user) {
+            await signInWithRedirect(auth, facebookProvider);
+          } else {
+            token = await user.user.getIdToken();
+          }
+        })
+      } else {
+        const result = await signInWithPopup(auth, facebookProvider);
+        callback();
+        token = await result.user.getIdToken();
+      }
+
+      await AuthService.login(token!);
       await connect();
       await AuthService.getUser();
     } catch (error) {
