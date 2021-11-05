@@ -60,11 +60,11 @@ interface WallOfShameState {
   okHandler?: () => void;
 }
 
-export type ShameTool = "tomato" | "egg" | "poop";
+export type ShameTool = "tomato" | "egg" | "poop" | "soo" | "ben";
 
 export interface Overlay {
   id: string;
-  type: "tomato" | "egg" | "poop";
+  type: "tomato" | "egg" | "poop" | "soo" | "ben";
   top: number;
   left: number;
 }
@@ -176,6 +176,32 @@ const WallOfShame: React.FC = () => {
           setOverlaysPositions({
             [key]: newPoopOverlays,
           });
+          return;
+        case "soo":
+          const newSooPosition: Overlay = {
+            id: uniqid(),
+            type: "soo",
+            top: 10 + Math.round(Math.random() * 80),
+            left: 10 + Math.round(Math.random() * 80),
+          };
+          let newSooOverlays = overlaysPositions[key] ?? [];
+          newSooOverlays.push(newSooPosition);
+          setOverlaysPositions({
+            [key]: newSooOverlays,
+          });
+          return;
+        case "ben":
+          const newBenPosition: Overlay = {
+            id: uniqid(),
+            type: "ben",
+            top: 10 + Math.round(Math.random() * 80),
+            left: 10 + Math.round(Math.random() * 80),
+          };
+          let newBenOverlays = overlaysPositions[key] ?? [];
+          newBenOverlays.push(newBenPosition);
+          setOverlaysPositions({
+            [key]: newBenOverlays,
+          });
       }
     } else {
       switch (tool) {
@@ -219,6 +245,34 @@ const WallOfShame: React.FC = () => {
           setOverlaysPositions({
             ...overlaysPositions,
             [key]: newPoopOverlays,
+          });
+          return;
+        case "soo":
+          const newSooPosition: Overlay = {
+            id: uniqid(),
+            type: "soo",
+            top: Math.round(Math.random() * 100),
+            left: Math.round(Math.random() * 100),
+          };
+          let newSooOverlays = overlaysPositions[key] ?? [];
+          newSooOverlays.push(newSooPosition);
+          setOverlaysPositions({
+            ...overlaysPositions,
+            [key]: newSooOverlays,
+          });
+          return;
+        case "ben":
+          const newBenPosition: Overlay = {
+            id: uniqid(),
+            type: "ben",
+            top: Math.round(Math.random() * 100),
+            left: Math.round(Math.random() * 100),
+          };
+          let newBenOverlays = overlaysPositions[key] ?? [];
+          newBenOverlays.push(newBenPosition);
+          setOverlaysPositions({
+            ...overlaysPositions,
+            [key]: newBenOverlays,
           });
       }
     }
@@ -446,7 +500,7 @@ const WallOfShame: React.FC = () => {
               horizontal={false}
               gridRef={(r) => (grid.current = r)}
             >
-              {shames.map((s, index) => {
+              {shames.slice(0, 40).map((s, index) => {
                 const duration = intervalToDuration({
                   start: parseISO(s.time),
                   end: Date.now(),
@@ -618,13 +672,13 @@ const WallOfShame: React.FC = () => {
                             size='4'
                             className='ion-no-padding ion-no-margin'
                           >
-                            {formatEffectCount(s.effect.tomato ?? 0)}
+                            {formatEffectCount(s.effect.soo ?? 0)}
                           </IonCol>
                           <IonCol
                             size='4'
                             className='ion-no-padding ion-no-margin'
                           >
-                            {formatEffectCount(s.effect.egg ?? 0)}
+                            {formatEffectCount(s.effect.ben ?? 0)}
                           </IonCol>
                         </IonRow>
                       </IonCard>
