@@ -24,7 +24,7 @@ import TokenUtils from "../utils/TokenUtils";
 import { UserData } from "../interfaces/models/Users";
 import { getToken } from "@firebase/messaging";
 import { useSocket } from "./SocketContext";
-import { isFacebookApp } from "../utils/BrowserUtils";
+import { isInstagramBrowser } from "../utils/BrowserUtils";
 
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
@@ -96,7 +96,7 @@ const AuthProvider: React.FunctionComponent = (props) => {
     try {
       let token: string;
 
-      if (true) {
+      if (isInstagramBrowser()) {
         // if instagram browser
         await getRedirectResult(auth).then(async user => {
           if (!user) {

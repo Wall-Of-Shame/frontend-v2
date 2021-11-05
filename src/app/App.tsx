@@ -8,13 +8,13 @@ import UnauthenticatedApp from "./UnauthenticatedApp";
 import "./App.scss";
 import { auth } from "../firebase";
 import AuthService from "../services/AuthService";
-import { isFacebookApp } from "../utils/BrowserUtils";
+import { isInstagramBrowser } from "../utils/BrowserUtils";
 
 const App: React.FC = () => {
   const user = useUser();
 
   useEffect(() => {
-    if (false) {
+    if (!isInstagramBrowser()) {
       // skip if not instagram browser
       return;
     }
