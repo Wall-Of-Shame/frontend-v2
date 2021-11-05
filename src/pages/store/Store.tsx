@@ -107,14 +107,14 @@ export const effects: Effect[] = [
   {
     icon: sooIcon,
     name: "Uncle Soo",
-    price: Infinity,
+    price: 999999,
     description:
       "Exclusive effect! Available until 23:59 10 Nov 2021. Throw some Uncle Soos now!",
   },
   {
     icon: benIcon,
     name: "Prof Ben",
-    price: Infinity,
+    price: 999999,
     description:
       "Exclusive effect! Available until 23:59 10 Nov 2021. Throw some Prof Bens now!",
   },
