@@ -23,12 +23,46 @@ import "../theme/variables.scss";
 import "./App.scss";
 import Onboarding from "../pages/onboarding";
 import Landing from "../pages/share";
+import { getRedirectResult } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { auth } from "../firebase";
+import AuthService from "../services/AuthService";
+import { isInstagramBrowser } from "../utils/BrowserUtils";
+import LoadingSpinner from "../components/loadingSpinner";
 
 const redirectToOnboarding = (): React.ReactNode => (
   <Redirect to={"/onboarding"} />
 );
 
 const UnauthenticatedApp: React.FC = () => {
+  const [isLoading, setIsLoadingVisible] = useState(false);
+
+  useEffect(() => {
+    if (!isInstagramBrowser()) {
+      // skip if not instagram browser
+      return;
+    }
+    setIsLoadingVisible(true);
+    getRedirectResult(auth).then(async user => {
+      if (!user) {
+        setIsLoadingVisible(false);
+        return;
+      }
+      const token = await user.user.getIdToken();
+      await AuthService.login(token);
+      setIsLoadingVisible(false);
+      window.location.href = '';
+    });
+  }, []);
+  
+  if (isLoading) {
+    return <LoadingSpinner
+      loading={true}
+      closeLoading={() => {}}
+      message='Loading' 
+    />
+  }
+
   return (
     <IonApp className='unauthenticated-app'>
       <IonReactRouter>
