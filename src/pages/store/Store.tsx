@@ -11,7 +11,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { closeCircle, informationCircle } from "ionicons/icons";
+import { closeCircle, flame, informationCircle } from "ionicons/icons";
 import { useEffect, useReducer, useState } from "react";
 import { useLocation } from "react-router";
 import ReactCardFlip from "react-card-flip";
@@ -107,16 +107,16 @@ export const effects: Effect[] = [
   {
     icon: sooIcon,
     name: "Uncle Soo",
-    price: 1000,
+    price: Infinity,
     description:
-      "Exclusive effect! Available until 30 November 2021. Throw some Uncle Soos now!",
+      "Exclusive effect! Available until 23:59 10 Nov 2021. Throw some Uncle Soos now!",
   },
   {
     icon: benIcon,
     name: "Prof Ben",
-    price: 1000,
+    price: Infinity,
     description:
-      "Exclusive effect! Available until 30 November 2021. Throw some Prof Bens now!",
+      "Exclusive effect! Available until 23:59 10 Nov 2021. Throw some Prof Bens now!",
   },
 ];
 
@@ -464,8 +464,16 @@ const Store: React.FC = () => {
                         }}
                       >
                         <IonIcon
-                          icon={informationCircle}
-                          color='main-beige'
+                          icon={
+                            e.name === "Uncle Soo" || e.name === "Prof Ben"
+                              ? flame
+                              : informationCircle
+                          }
+                          color={
+                            e.name === "Uncle Soo" || e.name === "Prof Ben"
+                              ? "accent-beige"
+                              : "main-beige"
+                          }
                           style={{ fontSize: "1.33rem" }}
                           onClick={() => {
                             setIsEffectFlipped({
@@ -534,7 +542,11 @@ const Store: React.FC = () => {
                       >
                         <IonIcon
                           icon={closeCircle}
-                          color='main-beige'
+                          color={
+                            e.name === "Uncle Soo" || e.name === "Prof Ben"
+                              ? "accent-beige"
+                              : "main-beige"
+                          }
                           style={{ fontSize: "1.33rem" }}
                           onClick={() => {
                             setIsEffectFlipped({
@@ -570,9 +582,9 @@ const Store: React.FC = () => {
                               fontSize: width! < 350 ? "0.85rem" : "0.95rem",
                             }}
                           >
-                            Exclusive effect! Available until 30 November 2021.
+                            Exclusive effect! Available until 23:59 10 Nov 2021.
                             Throw some <strong>Uncle Soo</strong>s on the Wall
-                            now!"
+                            now!
                           </IonText>
                         )}
                         {e.name === "Prof Ben" && (
@@ -583,9 +595,9 @@ const Store: React.FC = () => {
                               fontSize: width! < 350 ? "0.85rem" : "0.95rem",
                             }}
                           >
-                            Exclusive effect! Available until 30 November 2021.
+                            Exclusive effect! Available until 23:59 10 Nov 2021.
                             Throw some <strong>Prof Ben</strong>s on the Wall
-                            now!"
+                            now!
                           </IonText>
                         )}
                         {e.name !== "Prof Ben" && e.name !== "Uncle Soo" && (
