@@ -3,7 +3,6 @@
 }
 
 .separator {
-  max-width: 24rem;
   text-align: center;
   border-bottom: 1px solid #ffffff;
   line-height: 0.1em;
@@ -13,12 +12,10 @@
 .separator span {
   color: #ffffff;
   background: var(--ion-color-main-beige);
-  padding: 0 10px;
 }
 
 @media screen and (min-width: 480px) {
   .separator {
-    max-width: 25rem;
     margin: auto;
     text-align: center;
     border-bottom: 1px solid rgb(255, 255, 255);

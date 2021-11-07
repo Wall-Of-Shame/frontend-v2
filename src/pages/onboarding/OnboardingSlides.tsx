@@ -8,7 +8,7 @@ import {
   IonText,
 } from "@ionic/react";
 import React from "react";
-import { logoGoogle, logoFacebook } from "ionicons/icons";
+import { logoGoogle } from "ionicons/icons";
 
 import "./Onboarding.scss";
 import { Link } from "react-router-dom";
@@ -43,7 +43,7 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
   state,
   setState,
 }) => {
-  const { continueWithGoogle, continueWithFacebook } = useAuth();
+  const { continueWithGoogle } = useAuth();
 
   return (
     <IonSlides
@@ -303,61 +303,13 @@ const OnboardingSlides: React.FC<OnboardingSlidesProps> = ({
               </IonButton>
             </IonCol>
           </IonRow>
-          <IonRow
-            className='ion-justify-content-center'
-            style={{ paddingBottom: "0.5rem" }}
-          >
-            <IonCol
-              sizeXs='12'
-              sizeSm='8'
-              sizeMd='6'
-              sizeLg='4'
-              sizeXl='3.5'
-              className='ion-no-padding'
-            >
-              <IonButton
-                mode='ios'
-                expand='block'
-                fill='solid'
-                shape='round'
-                color='light'
-                style={{ marginLeft: "1rem", marginRight: "1rem" }}
-                onClick={async () => {
-                  setState({ isLoading: true });
-                  continueWithFacebook(() => {})
-                    .then(() => {
-                      window.location.reload();
-                    })
-                    .catch((error) => {
-                      console.log(error);
-                      setState({
-                        isLoading: false,
-                        hasConfirm: false,
-                        showAlert: true,
-                        alertHeader: "Ooooops",
-                        alertMessage:
-                          "Our server is taking a break, come back later please :)",
-                      });
-                    });
-                }}
-              >
-                <IonIcon color='accent-beige' src={logoFacebook} />
-                <IonText
-                  color='accent-beige'
-                  style={{ fontWeight: "bold", marginLeft: 10 }}
-                  id='login-options-button-text'
-                >
-                  &nbsp;&nbsp;Continue with Facebook
-                </IonText>
-              </IonButton>
+          <IonRow className='ion-justify-content-center ion-padding'>
+            <IonCol sizeXs='12' sizeSm='8' sizeMd='6' sizeLg='4' sizeXl='3.5'>
+              <h4 className='separator'>
+                <span>or</span>
+              </h4>
             </IonCol>
           </IonRow>
-          <div style={{ margin: "1rem" }}>
-            <h4 className='separator'>
-              <span>or</span>
-            </h4>
-            {/* <p>or</p> */}
-          </div>
           <IonRow
             className='ion-justify-content-center'
             style={{ paddingBottom: "0.5rem" }}
