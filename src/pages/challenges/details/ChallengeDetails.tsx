@@ -13,7 +13,6 @@ import {
   IonText,
   IonToast,
   IonToolbar,
-  isPlatform,
 } from "@ionic/react";
 import { useReducer, useState } from "react";
 import {
@@ -54,6 +53,7 @@ import DetailsTab from "./DetailsTab";
 import Chat from "./Chat";
 import PowerUpModal from "../powerUp";
 import { useSocket } from "../../../contexts/SocketContext";
+import { useWindowSize } from "../../../utils/WindowUtils";
 
 interface ChallengeDetailsProps {}
 
@@ -108,6 +108,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
   const location = useLocation();
   const history = useHistory();
   const { connect } = useSocket();
+  const { isDesktop } = useWindowSize();
   const { user } = useUser()!;
   const {
     notifyShouldRefreshChallenges,
@@ -849,7 +850,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
           </div>
         )}
 
-        {!isPlatform("desktop") && <div className='challenges-header-curve' />}
+        {!isDesktop && <div className='challenges-header-curve' />}
       </IonHeader>
 
       <IonContent fullscreen>
