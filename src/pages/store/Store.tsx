@@ -582,7 +582,7 @@ const Store: React.FC = () => {
                               fontSize: width! < 350 ? "0.85rem" : "0.95rem",
                             }}
                           >
-                            Exclusive effect! Available until 23:59 10 Nov 2021.
+                            Exclusive effect! Available until 23:59 31 Dec 2021.
                             Throw some <strong>Uncle Soo</strong>s on the Wall
                             now!
                           </IonText>
@@ -595,7 +595,7 @@ const Store: React.FC = () => {
                               fontSize: width! < 350 ? "0.85rem" : "0.95rem",
                             }}
                           >
-                            Exclusive effect! Available until 23:59 10 Nov 2021.
+                            Exclusive effect! Available until 23:59 31 Dec 2021.
                             Throw some <strong>Prof Ben</strong>s on the Wall
                             now!
                           </IonText>
