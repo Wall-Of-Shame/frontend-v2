@@ -24,7 +24,11 @@ import {
 import { arrowBack, chevronForward } from "ionicons/icons";
 import { useState, useReducer, useEffect } from "react";
 import {
+  addDays,
   addHours,
+  addMinutes,
+  addMonths,
+  addSeconds,
   addYears,
   formatDuration,
   formatISO,
@@ -49,7 +53,7 @@ import LoadingSpinner from "../../../components/loadingSpinner";
 import Alert from "../../../components/alert";
 import OfflineToast from "../../../components/offlineToast";
 import { useHistory } from "react-router";
-import { intervalToDuration } from "date-fns/esm";
+import { addWeeks, intervalToDuration } from "date-fns/esm";
 import { useWindowSize } from "../../../utils/WindowUtils";
 
 interface CreateChallengeProps {}
@@ -464,10 +468,7 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
             <IonItem lines='none'>
               <IonLabel
                 color={
-                  !(
-                    isAfter(parseISO(state.startAt), Date.now()) &&
-                    isAfter(parseISO(state.endAt), parseISO(state.startAt))
-                  )
+                  !isAfter(parseISO(state.startAt), Date.now())
                     ? "danger"
                     : "primary"
                 }
@@ -479,7 +480,63 @@ const CreateChallenge: React.FC<CreateChallengeProps> = (
                 min={formatISO(Date.now()).slice(0, -6)}
                 max={formatISO(addYears(Date.now(), 1)).slice(0, -6)}
                 value={state.startAt}
-                onIonChange={(e) => setState({ startAt: e.detail.value! })}
+                onIonChange={(e) => {
+                  const newStartAt = parseISO(e.detail.value!);
+                  const oldStartAt = parseISO(state.startAt);
+                  let endAt = parseISO(state.endAt);
+
+                  if (isBefore(newStartAt, oldStartAt)) {
+                    const duration = intervalToDuration({
+                      start: oldStartAt,
+                      end: newStartAt,
+                    });
+                    endAt = addYears(
+                      endAt,
+                      duration.years ? -duration.years : 0
+                    );
+                    endAt = addMonths(
+                      endAt,
+                      duration.months ? -duration.months : 0
+                    );
+                    endAt = addWeeks(
+                      endAt,
+                      duration.weeks ? -duration.weeks : 0
+                    );
+                    endAt = addDays(endAt, duration.days ? -duration.days : 0);
+                    endAt = addHours(
+                      endAt,
+                      duration.hours ? -duration.hours : 0
+                    );
+                    endAt = addMinutes(
+                      endAt,
+                      duration.minutes ? -duration.minutes : 0
+                    );
+                    endAt = addSeconds(
+                      endAt,
+                      duration.seconds ? -duration.seconds : 0
+                    );
+                    setState({
+                      startAt: e.detail.value!,
+                      endAt: endAt.toISOString(),
+                    });
+                  } else {
+                    const duration = intervalToDuration({
+                      start: oldStartAt,
+                      end: newStartAt,
+                    });
+                    endAt = addYears(endAt, duration.years ?? 0);
+                    endAt = addMonths(endAt, duration.months ?? 0);
+                    endAt = addWeeks(endAt, duration.weeks ?? 0);
+                    endAt = addDays(endAt, duration.days ?? 0);
+                    endAt = addHours(endAt, duration.hours ?? 0);
+                    endAt = addMinutes(endAt, duration.minutes ?? 0);
+                    endAt = addSeconds(endAt, duration.seconds ?? 0);
+                    setState({
+                      startAt: e.detail.value!,
+                      endAt: endAt.toISOString(),
+                    });
+                  }
+                }}
               ></IonDatetime>
             </IonItem>
             <IonItem lines='none'>
