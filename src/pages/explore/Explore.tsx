@@ -72,7 +72,7 @@ const Explore: React.FC = () => {
           {isDesktop ? (
             <ul className='featured-horizontal-list'>
               {featured.map((c) => {
-                const hasStarted = isAfter(parseISO(c.startAt!), new Date());
+                const hasStarted = !isAfter(parseISO(c.startAt!), new Date());
                 return (
                   <li
                     className='featured-horizontal-item'
@@ -121,7 +121,7 @@ const Explore: React.FC = () => {
           ) : (
             <ul className='featured-horizontal-list mobile'>
               {featured.map((c) => {
-                const hasStarted = isAfter(parseISO(c.startAt!), new Date());
+                const hasStarted = !isAfter(parseISO(c.startAt!), new Date());
                 return (
                   <li
                     className='featured-horizontal-item'
