@@ -372,9 +372,9 @@ const Challenges: React.FC = () => {
           return (
             <>
               {pendingStart?.map((c) => {
-                const acceptedCount = c.participants.accepted.completed.concat(
-                  c.participants.accepted.notCompleted
-                ).length;
+                const acceptedCount = c.participants.accepted.completed
+                  .concat(c.participants.accepted.notCompleted)
+                  .concat(c.participants.accepted.protected).length;
                 return (
                   <IonCard
                     mode='ios'
@@ -430,7 +430,10 @@ const Challenges: React.FC = () => {
                                   fontSize: "0.8rem",
                                 }}
                               >
-                                Created by {c.owner.name ?? "Anonymous"}
+                                Created by{" "}
+                                {c.owner.userId === user?.userId
+                                  ? "You"
+                                  : c.owner.name ?? "Anonymous"}
                               </IonText>
                             </IonRow>
                           </IonCardContent>
