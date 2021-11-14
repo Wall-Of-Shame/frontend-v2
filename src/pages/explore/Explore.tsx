@@ -17,7 +17,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { format, formatDistanceToNowStrict, parseISO } from "date-fns";
+import { format, formatDistanceToNowStrict, isAfter, parseISO } from "date-fns";
 import { search } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router";
@@ -31,11 +31,13 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers/RootReducer";
 import { ChallengeDux } from "../../reducers/ChallengeDux";
 import { ChallengeData } from "../../interfaces/models/Challenges";
+import { useUser } from "../../contexts/UserContext";
 
 const Explore: React.FC = () => {
   const location = useLocation();
   const history = useHistory();
   const { isDesktop } = useWindowSize();
+  const { user } = useUser();
   const { getExplore } = useChallenge();
   const selectChallenges = (state: RootState): ChallengeDux => state.challenges;
 
@@ -70,6 +72,7 @@ const Explore: React.FC = () => {
           {isDesktop ? (
             <ul className='featured-horizontal-list'>
               {featured.map((c) => {
+                const hasStarted = isAfter(parseISO(c.startAt!), new Date());
                 return (
                   <li
                     className='featured-horizontal-item'
@@ -104,10 +107,11 @@ const Explore: React.FC = () => {
                         </IonText>
                       </IonCardHeader>
                       <IonCardContent>
-                        {`Starts ${formatDistanceToNowStrict(
-                          parseISO(c.startAt!),
-                          { addSuffix: true }
-                        )}`}
+                        {`${
+                          hasStarted ? "Started" : "Starts"
+                        } ${formatDistanceToNowStrict(parseISO(c.startAt!), {
+                          addSuffix: true,
+                        })}`}
                       </IonCardContent>
                     </IonCard>
                   </li>
@@ -117,6 +121,7 @@ const Explore: React.FC = () => {
           ) : (
             <ul className='featured-horizontal-list mobile'>
               {featured.map((c) => {
+                const hasStarted = isAfter(parseISO(c.startAt!), new Date());
                 return (
                   <li
                     className='featured-horizontal-item'
@@ -150,10 +155,11 @@ const Explore: React.FC = () => {
                         </IonText>
                       </IonCardHeader>
                       <IonCardContent className='card-start-time'>
-                        {`Starts ${formatDistanceToNowStrict(
-                          parseISO(c.startAt!),
-                          { addSuffix: true }
-                        )}`}
+                        {`${
+                          hasStarted ? "Started" : "Starts"
+                        } ${formatDistanceToNowStrict(parseISO(c.startAt!), {
+                          addSuffix: true,
+                        })}`}
                       </IonCardContent>
                     </IonCard>
                   </li>
@@ -237,7 +243,10 @@ const Explore: React.FC = () => {
                               fontSize: "0.8rem",
                             }}
                           >
-                            Created by {c.owner.name ?? "Anonymous"}
+                            Created by{" "}
+                            {c.owner.userId === user?.userId
+                              ? "You"
+                              : c.owner.name ?? "Anonymous"}
                           </IonText>
                         </IonRow>
                       </IonCardContent>
