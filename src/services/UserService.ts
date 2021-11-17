@@ -1,4 +1,3 @@
-import { PurchasePost } from "../interfaces/models/Store";
 import { Avatar, Settings, UserList } from "../interfaces/models/Users";
 import APIService from "../services/APIService";
 import AuthService from "./AuthService";
@@ -103,14 +102,6 @@ const getGlobalRankings = async (): Promise<UserList[]> => {
   }
 };
 
-const purchaseItem = async (order: PurchasePost): Promise<void> => {
-  try {
-    await APIService.post(`store`, order);
-  } catch (error) {
-    return Promise.reject(error);
-  }
-};
-
 const sendFeedback = async (
   email: string,
   description: string,
@@ -139,6 +130,5 @@ export default {
   rejectRequest,
   getFriendsRankings,
   getGlobalRankings,
-  purchaseItem,
   sendFeedback,
 };

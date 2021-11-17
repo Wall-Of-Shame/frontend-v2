@@ -43,6 +43,7 @@ import { isAfter } from "date-fns";
 import parseISO from "date-fns/parseISO";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../reducers/RootReducer";
+import { useStore } from "../../../contexts/StoreContext";
 
 interface PowerUpModalProps {
   challengeData: ChallengeData;
@@ -74,7 +75,8 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
     getChallenge,
     notifyShouldRefreshChallenges,
   } = useChallenge();
-  const { user, purchaseItem, searchUser } = useUser();
+  const { user, searchUser } = useUser();
+  const { purchaseItem } = useStore();
   const { width } = useWindowSize();
 
   const [refreshedUser, setRefreshedUser] = useState<UserData | null>(user);

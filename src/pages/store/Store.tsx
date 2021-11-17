@@ -38,6 +38,7 @@ import benIcon from "../../assets/icons/benIcon.png";
 import ProtecImg from "../../assets/powerup/protec.png";
 import U2Img from "../../assets/powerup/u2.png";
 import CoinModal from "./CoinModal";
+import { useStore } from "../../contexts/StoreContext";
 
 interface StoreState {
   isLoading: boolean;
@@ -123,7 +124,8 @@ export const effects: Effect[] = [
 const Store: React.FC = () => {
   const location = useLocation();
   const { refreshUser } = useAuth();
-  const { user, purchaseItem, shouldRefreshUser } = useUser();
+  const { user, shouldRefreshUser } = useUser();
+  const { purchaseItem } = useStore();
   const { width, isDesktop } = useWindowSize();
 
   const [refreshedUser, setRefreshedUser] = useState<UserData | null>(user);
