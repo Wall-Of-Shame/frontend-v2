@@ -5,6 +5,7 @@ import { ChallengeProvider } from "./ChallengeContext";
 import { SocketProvider } from "./SocketContext";
 import { UserProvider } from "./UserContext";
 import { CacheProvider } from "./CacheContext";
+import { StoreProvider } from "./StoreContext";
 
 // eslint-disable-next-line react/prop-types
 const AppProviders: React.FC = ({ children }) => {
@@ -13,7 +14,9 @@ const AppProviders: React.FC = ({ children }) => {
       <SocketProvider>
         <AuthProvider>
           <UserProvider>
-            <ChallengeProvider>{children}</ChallengeProvider>
+            <ChallengeProvider>
+              <StoreProvider>{children}</StoreProvider>
+            </ChallengeProvider>
           </UserProvider>
         </AuthProvider>
       </SocketProvider>

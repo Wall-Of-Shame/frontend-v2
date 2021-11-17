@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import UserContextInterface from "../interfaces/contexts/UserContext";
-import { PurchasePost } from "../interfaces/models/Store";
 import { Avatar, Settings, UserList } from "../interfaces/models/Users";
 import UserService from "../services/UserService";
 
@@ -112,14 +111,6 @@ const UserProvider: React.FunctionComponent = (props) => {
     }
   };
 
-  const purchaseItem = async (order: PurchasePost): Promise<void> => {
-    try {
-      await UserService.purchaseItem(order);
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  };
-
   const sendFeedback = async (
     email: string,
     description: string,
@@ -148,7 +139,6 @@ const UserProvider: React.FunctionComponent = (props) => {
         rejectRequest,
         getFriendsRankings,
         getGlobalRankings,
-        purchaseItem,
         sendFeedback,
       }}
       {...props}
