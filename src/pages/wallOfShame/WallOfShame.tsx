@@ -25,6 +25,7 @@ import StackGrid, { Grid } from "react-stack-grid";
 import uniqid from "uniqid";
 import "./WallOfShame.scss";
 import { useLocation } from "react-router";
+import { useWall } from "../../contexts/WallContext";
 import { funnelOutline, trophy } from "ionicons/icons";
 import eggIcon from "../../assets/icons/egg.svg";
 import tomatoIcon from "../../assets/icons/tomato.svg";
@@ -47,7 +48,6 @@ import ShameModal from "./shameModal";
 import { ThrowItemPost } from "../../interfaces/models/Shame";
 import ShameService from "../../services/ShameService";
 import { formatEffectCount } from "../../utils/ShameUtils";
-import { useUser } from "../../contexts/UserContext";
 
 interface WallOfShameState {
   isLoading: boolean;
@@ -76,7 +76,7 @@ export interface OverlayMap {
 const WallOfShame: React.FC = () => {
   const location = useLocation();
   const { connect } = useSocket();
-  const { getFriends } = useUser();
+  const { getFriendsRankings } = useWall();
   const { width, isDesktop } = useWindowSize();
 
   const [tab, setTab] = useState("live");
@@ -284,7 +284,7 @@ const WallOfShame: React.FC = () => {
 
   const fetchFriendsData = async () => {
     try {
-      const friendsData = await getFriends();
+      const friendsData = await getFriendsRankings();
       setFriendsRankings(friendsData);
     } catch (error) {
       console.log(error);

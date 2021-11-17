@@ -84,24 +84,6 @@ const rejectRequest = async (userId: string): Promise<void> => {
   }
 };
 
-const getFriendsRankings = async (): Promise<UserList[]> => {
-  try {
-    const response = await APIService.get(`users/?operation=wallFriends`);
-    return response.data;
-  } catch (error) {
-    return Promise.reject(error);
-  }
-};
-
-const getGlobalRankings = async (): Promise<UserList[]> => {
-  try {
-    const response = await APIService.get(`users/?operation=wallGlobal`);
-    return response.data;
-  } catch (error) {
-    return Promise.reject(error);
-  }
-};
-
 const sendFeedback = async (
   email: string,
   description: string,
@@ -128,7 +110,6 @@ export default {
   getFriends,
   acceptRequest,
   rejectRequest,
-  getFriendsRankings,
-  getGlobalRankings,
+
   sendFeedback,
 };
