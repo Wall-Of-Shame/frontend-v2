@@ -17,8 +17,6 @@ export default interface UserContextInterface {
   getFriends(): Promise<UserList[]>;
   acceptRequest(userId: string): Promise<void>;
   rejectRequest(userId: string): Promise<void>;
-  getFriendsRankings(): Promise<UserList[]>;
-  getGlobalRankings(): Promise<UserList[]>;
   sendFeedback(
     email: string,
     description: string,

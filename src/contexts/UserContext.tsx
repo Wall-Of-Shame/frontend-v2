@@ -93,24 +93,6 @@ const UserProvider: React.FunctionComponent = (props) => {
     }
   };
 
-  const getFriendsRankings = async (): Promise<UserList[]> => {
-    try {
-      const data = await UserService.getFriendsRankings();
-      return data;
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  };
-
-  const getGlobalRankings = async (): Promise<UserList[]> => {
-    try {
-      const data = await UserService.getGlobalRankings();
-      return data;
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  };
-
   const sendFeedback = async (
     email: string,
     description: string,
@@ -137,8 +119,6 @@ const UserProvider: React.FunctionComponent = (props) => {
         getFriends,
         acceptRequest,
         rejectRequest,
-        getFriendsRankings,
-        getGlobalRankings,
         sendFeedback,
       }}
       {...props}
