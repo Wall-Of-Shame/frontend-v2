@@ -25,7 +25,7 @@ import Alert from "../../../components/alert";
 import LoadingSpinner from "../../../components/loadingSpinner";
 
 interface AddFriendsModalProps {
-  users: UserList[];
+  friends: UserList[];
   requested: UserList[];
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
@@ -45,13 +45,13 @@ interface AddFriendsModalState {
 
 const AddFriendsModal: React.FC<AddFriendsModalProps> = (props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { users, requested, showModal, setShowModal, completionCallback } =
+  const { friends, requested, showModal, setShowModal, completionCallback } =
     props;
   const { user, searchUser, addFriend } = useUser();
 
   const [searchText, setSearchText] = useState("");
   const [matchedUsers, setMatchedUsers] = useState<UserList[]>([]);
-  const [invitedUsers, setInvitedUsers] = useState<UserList[]>(users);
+  const [invitedUsers, setInvitedUsers] = useState<UserList[]>(requested);
 
   const [state, setState] = useReducer(
     (s: AddFriendsModalState, a: Partial<AddFriendsModalState>) => ({
@@ -90,11 +90,11 @@ const AddFriendsModal: React.FC<AddFriendsModalProps> = (props) => {
   };
 
   const handleInvite = async (u: UserList) => {
-    let index = invitedUsers.indexOf(u);
+    let index = requested.findIndex((r) => r.userId === u.userId) ?? -1;
     if (index !== -1) {
       return;
     }
-    index = user?.friends.pendingAccept.indexOf(u.userId) ?? -1;
+    index = friends.findIndex((f) => f.userId === u.userId) ?? -1;
     if (index !== -1) {
       return;
     }
@@ -162,10 +162,11 @@ const AddFriendsModal: React.FC<AddFriendsModalProps> = (props) => {
             Search results
           </IonText>
           {matchedUsers.map((u) => {
-            const isFriend = user?.friends.accepted.indexOf(u.userId) !== -1;
+            const isFriend =
+              friends.findIndex((f) => f.userId === u.userId) !== -1;
             const hasRequested =
               invitedUsers.findIndex((i) => i.userId === u.userId) !== -1 ||
-              user?.friends.pendingAccept.indexOf(u.userId) !== -1;
+              friends.findIndex((f) => f.userId === u.userId) !== -1;
             return (
               <IonRow className='ion-margin' key={u.userId}>
                 <IonCol className='ion-align-item-center' size='2.5'>

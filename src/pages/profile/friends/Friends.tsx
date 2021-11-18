@@ -397,8 +397,8 @@ const Friends: React.FC = () => {
           <Container>{"There's nothing here >_<"}</Container>
         )}
         <AddFriendsModal
-          users={[]}
-          requested={[]}
+          friends={friends}
+          requested={requests}
           showModal={showModal}
           setShowModal={setShowModal}
           completionCallback={() => {}}
