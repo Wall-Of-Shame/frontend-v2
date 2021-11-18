@@ -178,6 +178,7 @@ const Friends: React.FC = () => {
               });
               if (unfriendTarget) {
                 setState({
+                  isLoading: true,
                   showAlert: true,
                   hasConfirm: true,
                   alertHeader: "Hold on...",
