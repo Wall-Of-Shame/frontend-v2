@@ -236,7 +236,7 @@ const Store: React.FC = () => {
       setTimeout(() => {
         setState({ isLoading: false });
         setHasPurchased(true);
-      }, 1000);
+      }, 500);
     } catch (error) {
       setState({
         isLoading: false,

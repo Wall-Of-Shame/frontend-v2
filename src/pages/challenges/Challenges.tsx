@@ -589,7 +589,7 @@ const Challenges: React.FC = () => {
               setState({ isLoading: true });
               setTimeout(() => {
                 fetchData();
-              }, 1000);
+              }, 500);
             }}
             mode='ios'
           >

@@ -367,7 +367,7 @@ const ChallengeDetails: React.FC<ChallengeDetailsProps> = () => {
           alertHeader: "Success!",
           alertMessage: `You have successfully edited <strong>${challenge.title}</strong> :)`,
         });
-      }, 1000);
+      }, 500);
     } catch (error) {
       setState({
         isLoading: false,

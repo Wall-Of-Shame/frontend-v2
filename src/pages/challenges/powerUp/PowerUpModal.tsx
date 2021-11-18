@@ -192,7 +192,7 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
         setState({ isLoading: false });
         setHasPurchased(true);
         notifyShouldRefreshChallenges(true);
-      }, 1000);
+      }, 500);
     } catch (error) {
       setState({
         isLoading: false,
@@ -237,7 +237,7 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
           alertMessage:
             "You have successfully activated <strong>Protec</strong> for this challenge! You are safe from the Wall of Shame :)",
         });
-      }, 1000);
+      }, 500);
     } catch (error) {
       setTimeout(() => {
         setState({
@@ -248,7 +248,7 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
           alertMessage:
             "Our server is taking a break, come back later please :)",
         });
-      }, 1000);
+      }, 500);
     }
   };
 
@@ -285,7 +285,7 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
           alertMessage: `You have successfully activated <strong>U2</strong> for ${u.name}! Now they will suffer with you together :')`,
           okHandler: () => setIsSelectingTargetUser(false),
         });
-      }, 1000);
+      }, 500);
     } catch (error) {
       setTimeout(() => {
         setState({
@@ -296,7 +296,7 @@ const PowerUpModal: React.FC<PowerUpModalProps> = (
           alertMessage:
             "Our server is taking a break, come back later please :)",
         });
-      }, 1000);
+      }, 500);
     }
   };
 
