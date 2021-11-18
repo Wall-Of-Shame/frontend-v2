@@ -6,7 +6,11 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
   IonPage,
+  IonPopover,
   IonRow,
   IonText,
   IonTitle,
@@ -16,7 +20,9 @@ import {
   arrowBackOutline,
   checkmarkCircle,
   closeCircle,
+  ellipsisHorizontal,
   personAddOutline,
+  trashBinOutline,
 } from "ionicons/icons";
 import { useEffect, useReducer, useState } from "react";
 import { hideTabs } from "../../../utils/TabsUtils";
@@ -62,6 +68,13 @@ const Friends: React.FC = () => {
   } = useUser();
 
   const [showModal, setShowModal] = useState(false);
+  const [popoverState, setShowPopover] = useState({
+    showPopover: false,
+    event: undefined,
+  });
+  const [unfriendTarget, setUnfriendTarget] = useState<UserList | undefined>(
+    undefined
+  );
   const [requests, setRequests] = useState<UserList[]>(
     (location.state as FriendsPushState)?.requests ?? []
   );
@@ -124,6 +137,48 @@ const Friends: React.FC = () => {
 
   return (
     <IonPage style={{ background: "#ffffff" }}>
+      <IonPopover
+        cssClass='popover'
+        mode='ios'
+        event={popoverState.event}
+        isOpen={popoverState.showPopover}
+        onDidDismiss={() => {
+          setShowPopover({ showPopover: false, event: undefined });
+          setUnfriendTarget(undefined);
+        }}
+      >
+        <IonList>
+          <IonItem
+            button
+            detail={false}
+            lines='none'
+            onClick={() => {
+              setShowPopover({
+                showPopover: false,
+                event: undefined,
+              });
+              if (unfriendTarget) {
+                setState({
+                  showAlert: true,
+                  hasConfirm: true,
+                  alertHeader: "Hold on...",
+                  alertMessage: `Are you sure you would like to unfriend with ${unfriendTarget.name}?`,
+                  confirmHandler: () => handleReject(unfriendTarget.userId),
+                });
+              }
+              setUnfriendTarget(undefined);
+            }}
+          >
+            <IonIcon
+              slot='start'
+              color='danger'
+              icon={trashBinOutline}
+              style={{ fontSize: "1.5rem" }}
+            />
+            <IonLabel color='danger'>Unfriend</IonLabel>
+          </IonItem>
+        </IonList>
+      </IonPopover>
       <IonHeader className='ion-no-border'>
         <IonToolbar
           color='main-blue'
@@ -292,7 +347,7 @@ const Friends: React.FC = () => {
                     </IonRow>
                     <IonRow>{`@${u.username}`}</IonRow>
                   </IonCol>
-                  {/*<IonCol
+                  <IonCol
                     style={{
                       display: "flex",
                       justifyContent: "center",
@@ -304,9 +359,13 @@ const Friends: React.FC = () => {
                       icon={ellipsisHorizontal}
                       color='main-blue'
                       style={{ fontSize: "2.5rem" }}
-                      onClick={() => handleReject(u.userId)}
+                      onClick={(e: any) => {
+                        e.persist();
+                        setUnfriendTarget(u);
+                        setShowPopover({ showPopover: true, event: e });
+                      }}
                     />
-                  </IonCol>*/}
+                  </IonCol>
                 </IonRow>
               );
             })}
