@@ -66,6 +66,7 @@ const Friends: React.FC = () => {
     rejectRequest,
     deleteFriend,
     notifyShouldRefreshUser,
+    shouldRefreshUser,
   } = useUser();
 
   const [showModal, setShowModal] = useState(false);
@@ -114,6 +115,13 @@ const Friends: React.FC = () => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    // Fetch requests
+    fetchData();
+    notifyShouldRefreshUser(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shouldRefreshUser]);
 
   useEffect(() => {
     hideTabs();

@@ -682,7 +682,10 @@ const Profile: React.FC = () => {
                           hasConfirm: true,
                           alertHeader: "Hold on...",
                           alertMessage: `Are you sure you would like to reject ${u.name}'s friend request?`,
-                          confirmHandler: () => handleReject(u.userId),
+                          confirmHandler: () => {
+                            setState({ isLoading: true });
+                            handleReject(u.userId);
+                          },
                         });
                       }}
                     />
@@ -690,7 +693,10 @@ const Profile: React.FC = () => {
                       icon={checkmarkCircle}
                       color='main-blue'
                       style={{ fontSize: "2.5rem" }}
-                      onClick={() => handleAccept(u.userId)}
+                      onClick={async () => {
+                        setState({ isLoading: true });
+                        handleAccept(u.userId);
+                      }}
                     />
                   </IonCol>
                 </IonRow>
@@ -776,7 +782,7 @@ const Profile: React.FC = () => {
               setState({ isLoading: true });
               setTimeout(() => {
                 notifyShouldRefreshUser(true);
-              }, 1000);
+              }, 500);
             }}
             mode='ios'
           >
