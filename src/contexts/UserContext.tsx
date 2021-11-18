@@ -93,6 +93,14 @@ const UserProvider: React.FunctionComponent = (props) => {
     }
   };
 
+  const deleteFriend = async (userId: string): Promise<void> => {
+    try {
+      await UserService.deleteFriend(userId);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
   const sendFeedback = async (
     email: string,
     description: string,
@@ -119,6 +127,7 @@ const UserProvider: React.FunctionComponent = (props) => {
         getFriends,
         acceptRequest,
         rejectRequest,
+        deleteFriend,
         sendFeedback,
       }}
       {...props}

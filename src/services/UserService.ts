@@ -84,6 +84,14 @@ const rejectRequest = async (userId: string): Promise<void> => {
   }
 };
 
+const deleteFriend = async (userId: string): Promise<void> => {
+  try {
+    await APIService.delete("friends", { data: { userId: userId } });
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 const sendFeedback = async (
   email: string,
   description: string,
@@ -110,6 +118,6 @@ export default {
   getFriends,
   acceptRequest,
   rejectRequest,
-
+  deleteFriend,
   sendFeedback,
 };

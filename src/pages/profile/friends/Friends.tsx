@@ -64,6 +64,7 @@ const Friends: React.FC = () => {
     getFriends,
     acceptRequest,
     rejectRequest,
+    deleteFriend,
     notifyShouldRefreshUser,
   } = useUser();
 
@@ -126,9 +127,19 @@ const Friends: React.FC = () => {
       notifyShouldRefreshUser(true);
     } catch (error) {}
   };
+
   const handleReject = async (userId: string) => {
     try {
       await rejectRequest(userId);
+      await fetchData();
+      await refreshUser();
+      notifyShouldRefreshUser(true);
+    } catch (error) {}
+  };
+
+  const handleDelete = async (userId: string) => {
+    try {
+      await deleteFriend(userId);
       await fetchData();
       await refreshUser();
       notifyShouldRefreshUser(true);
@@ -163,7 +174,7 @@ const Friends: React.FC = () => {
                   hasConfirm: true,
                   alertHeader: "Hold on...",
                   alertMessage: `Are you sure you would like to unfriend with ${unfriendTarget.name}?`,
-                  confirmHandler: () => handleReject(unfriendTarget.userId),
+                  confirmHandler: () => handleDelete(unfriendTarget.userId),
                 });
               }
               setUnfriendTarget(undefined);

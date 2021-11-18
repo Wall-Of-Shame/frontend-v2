@@ -17,6 +17,7 @@ export default interface UserContextInterface {
   getFriends(): Promise<UserList[]>;
   acceptRequest(userId: string): Promise<void>;
   rejectRequest(userId: string): Promise<void>;
+  deleteFriend(userId: string): Promise<void>;
   sendFeedback(
     email: string,
     description: string,
