@@ -107,6 +107,7 @@ const Friends: React.FC = () => {
       const friendsData = await getFriends();
       setRequests(requestsData);
       setFriends(friendsData);
+      setState({ isLoading: false });
     } catch (error) {}
   };
 
@@ -119,7 +120,6 @@ const Friends: React.FC = () => {
   useEffect(() => {
     // Fetch requests
     fetchData();
-    notifyShouldRefreshUser(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shouldRefreshUser]);
 
@@ -178,12 +178,14 @@ const Friends: React.FC = () => {
               });
               if (unfriendTarget) {
                 setState({
-                  isLoading: true,
                   showAlert: true,
                   hasConfirm: true,
                   alertHeader: "Hold on...",
                   alertMessage: `Are you sure you would like to unfriend with ${unfriendTarget.name}?`,
-                  confirmHandler: () => handleDelete(unfriendTarget.userId),
+                  confirmHandler: () => {
+                    setState({ isLoading: true });
+                    handleDelete(unfriendTarget.userId);
+                  },
                 });
               }
               setUnfriendTarget(undefined);
